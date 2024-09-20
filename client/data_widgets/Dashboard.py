@@ -3,18 +3,14 @@ import json
 from PyQt6 import QtWebSockets, QtNetwork
 from PyQt6.QtCore import (
     Qt,
-    pyqtSignal,
     QUrl,
     QByteArray,
     )
 from PyQt6.QtWidgets import (
-    QLabel,
     QPushButton,
     QWidget,
     QVBoxLayout,
-    QHBoxLayout,
     QSplitter,
-    QTabWidget,
     QListWidget,
     QListWidgetItem,
     QTextEdit,
@@ -62,28 +58,9 @@ class ProductsInWork(ItemTree):
 class ChatMessagesList(QListWidget):
     def __init__(self):
         super().__init__()
-        # self.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum))
-        # self.setMaximumHeight(30)
-
-    # def setDataset(self, dataset):
-    #     self.clear()
-    #     self.setMaximumHeight(25*len(dataset))
-    #     for v in dataset:
-    #         listItem = QListWidgetItem(v[1], self)
-    #         listItem.setData(FULL_VALUE_ROLE, v[0])
-    #         listItem.setCheckState(Qt.CheckState.Checked if v[2] else Qt.CheckState.Unchecked)
-
+    
     def add_message(self, message):
         listItem = QListWidgetItem(message, self)
-
-
-    # def get_checked(self):
-    #     res = []
-    #     for i in range(self.count()):
-    #         li = self.item(i)
-    #         if li.checkState() == Qt.CheckState.Checked:
-    #             res.append(li.data(FULL_VALUE_ROLE))
-    #     return res
 
 
 class Chat(QWidget):
@@ -106,7 +83,6 @@ class Chat(QWidget):
         self.wsapp = QtWebSockets.QWebSocket("", QtWebSockets.QWebSocketProtocol.Version(13), None)
         self.wsapp.error.connect(self.error)
         req = QtNetwork.QNetworkRequest(QUrl(url))
-        # req.setCookieHeader()
         req.setHeader(
             QtNetwork.QNetworkRequest.KnownHeaders.CookieHeader, 
             QtNetwork.QNetworkCookie(
@@ -151,7 +127,6 @@ class Chat(QWidget):
         print('wrec', message)
         mess = json.loads(message)
         self.mes_list.add_message(f'{mess["username"]} >> {mess["message"]}')
-        # self.TextRecieved.emit(message)
 
 
 class Dashboard(QWidget):

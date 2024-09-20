@@ -130,19 +130,16 @@ class ProjectViewer(QSplitter):
         if not project_value:
             error('Оберіть проект')
             return
-        # app = App()
         
         if project_value['project_group_id'] == 4 or project_value['project_group_id'] == 5:
             res = ok_cansel_dlg("Перенести теку на новий сервер?")
             if not res:
                 return
-            # base_dir = app.config['makets_path']
             project_value['project_group_id'] = 3
         else:
             res = ok_cansel_dlg("Перенести теку на старий сервер?")
             if not res:
                 return
-            # base_dir = app.config['bs_makets_path']
             project_value['project_group_id'] = 5
         
         project = Item('project')
@@ -157,8 +154,6 @@ class ProjectViewer(QSplitter):
             return
         
         messbox(f'{project.value["name"]} скопійовано')
-        # old_path = self.make_project_path(project_value, base_dir)
-        # subprocess.run([app.config['program'], old_path])
 
     def to_folder(self):
         project = self.table.table.get_selected_value()
@@ -185,7 +180,6 @@ class ProjectViewer(QSplitter):
                 project['number_dir'],
             )
         return path
-        
 
     def to_client(self, id=0):
         if not id:
@@ -224,7 +218,3 @@ class ProjectViewer(QSplitter):
         if err:
             error(err)
             
-        
-        
-        
-    

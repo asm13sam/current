@@ -64,10 +64,6 @@ class MatherialExtra:
         m2o.value["ordering_id"] = ordering_id
         m2o.value["matherial_id"] = self.value['matherial']['id']
         m2o.value["matherial"] = self.value['matherial']['name']
-        # m2o.value["width"] = 0
-        # m2o.value["length"] = 0
-        # m2o.value["pieces"] = 1
-        # m2o.value["color_id"] = 0
         m2o.value["price"] = self.value['matherial']['cost']
         m2o.value["cost"] = self.value['matherial']['cost']
         m2o.value["product_to_ordering_id"] = 0
@@ -196,16 +192,10 @@ class ProductExtra:
         p2o = Item('product_to_ordering')
         p2o.create_default_w()
         p2o.value["id"] = next(fake_id)
-        # p2o.value["name"] = 
         p2o.value["ordering_id"] = self.ordering_id
         p2o.value["product_id"] = v['product']['id']
         p2o.value["product"] = v['product']['name']
         p2o.value["user_id"] = v['product']["user_id"]
-        # p2o.value["width"] = 0
-        # p2o.value["length"] = 0
-        # p2o.value["pieces"] = 1
-        # p2o.value["number"] = 1
-        
         p2o.value["price"] = v['product']['cost']
         p2o.value["cost"] = v['product']['cost']
         p2o.value["product_to_ordering_id"] = p2o_id
@@ -219,11 +209,6 @@ class ProductExtra:
         m2o.value["matherial_id"] = v['matherial']['id']
         m2o.value["matherial"] = v['matherial']['name']
         m2o.value["user_id"] = p2o_value["user_id"]
-
-        # m2o.value["width"] = 0
-        # m2o.value["length"] = 0
-        # m2o.value["pieces"] = 1
-        # m2o.value["color_id"] = 0
         p2o_num = p2o_value['number']
         m2o.value["number"] = v['matherial_to_product']['number'] * p2o_num
         m2o.value["price"] = v['matherial_to_product']['cost']
@@ -242,8 +227,6 @@ class ProductExtra:
         o2o.value["number"] = v['operation_to_product']['number']
         o2o.value["price"] = v['operation_to_product']['cost']
         o2o.value["user_id"] = v['operation_to_product']['user_id']
-        # o2o.value["user"] = v['operation_to_product']['user']
-        
         o2o.value["user_sum"] = v['operation']['price'] * v['operation_to_product']['number']
         o2o.value["cost"] = v['operation_to_product']['cost']
         o2o.value["equipment_id"] = v['operation_to_product']['equipment_id']
@@ -476,6 +459,7 @@ class ProductExtra:
                         return
                     v['product_extra']['product_to_ordering'] = p2o.value
                     self.create_used(ordering_id, v)        
+
 
 class ProductView(QWidget):
     productChanged = pyqtSignal()
@@ -1215,4 +1199,3 @@ class CalculatorTab(QWidget):
             error(err)
         self.ordering = ordering
         return ordering
-        # self.details_tree.tree.clear()

@@ -1,8 +1,6 @@
 import os
 import subprocess
 from PyQt6.QtWidgets import (
-    QWidget,
-    QHBoxLayout,
     QPushButton,
     )
 

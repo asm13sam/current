@@ -36,8 +36,7 @@ class App(metaclass=SingletonMeta):
                         self.model_w[m][table_name]['def'] = self.model[table_name]['name']['def']
                         self.model_w[m][table_name]['form'] = self.model[table_name]['name']['form']
                         self.model_w[m][table_name]['hum'] = v['hum']
-                    # self.model_w[m][table_name]['hum'] = self.model['models'][table_name]['hum']
-                # else:
+                    
                 self.model_w[m][k] = {}
                 self.model_w[m][k]['def'] = v['def']
                 self.model_w[m][k]['form'] = v['form']

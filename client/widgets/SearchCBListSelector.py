@@ -60,6 +60,5 @@ if __name__ == '__main__':
         sl.reload(values)
     sl.cbSelectionChanged.connect(cb_changed)
 
-
     window.show()
     sys.exit(qt_app.exec())

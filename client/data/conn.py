@@ -20,7 +20,6 @@ class Data:
         print(url)
         response = requests.post(url, json={'login': login, 'password': password})
         print(response.status_code)
-        # print(response.json())
         print(response.text)
         if response.status_code != 200:
             return {'error': 'Помилка при авторизації, спробуйте ще.', 'value': None}
@@ -176,12 +175,6 @@ class Data:
         # print('WGET_BETWEEN_UP', url)
         response = requests.get(url, cookies=self.cookie_jar)
         return self.format_response(response)
-
-    # def get_filter_by_doc_w(self, model_name, filter_field, filter_value):
-    #     url = f'{self.base_url}w_{model_name}_by_{filter_field}/{filter_value}'
-    #     # print('WGET_FILTER_BY_DOC', url)
-    #     response = requests.get(url, cookies=self.cookie_jar)
-    #     return self.format_response(response)
 
     # "find": [{"project": ["info"], "contragent":["-search"], "contact":["-search"]}]
     # "/find_project_project_info_contragent_no_search_contact_no_search/{fs}"

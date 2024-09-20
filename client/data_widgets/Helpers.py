@@ -225,14 +225,11 @@ class ProductToOrderingForm(CustomForm):
         self.item = Item('product_to_ordering')
         super().__init__(self.item.model, fields, value)
         self.numbers_to_product = Item('numbers_to_product')
-        # print(value['product'], value['product_id'])
         err = self.numbers_to_product.get_filter('product_id', value['product_id'])
         if err:
             error(err)
-            # print(err)
         else:
             self.numbers_to_product.values.sort(key=lambda v: v['number'], reverse=True)
-            # print(self.numbers_to_product.values)
             
         self.widgets['width'].setVisible(False) 
         self.widgets['length'].setVisible(False)

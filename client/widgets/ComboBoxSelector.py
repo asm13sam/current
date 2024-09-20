@@ -18,7 +18,6 @@ class ComboBoxSelector(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         self.caption = 'Не обрано'
         if title:
-            # layout.addWidget(QLabel(title))
             self.caption = title
         self.cb = QComboBox()
         layout.addWidget(self.cb)

@@ -24,7 +24,6 @@ class SearchListSelector(QWidget):
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         if title:
             self.main_layout.addWidget(QLabel(title))
-        # self.main_layout.addWidget(QLabel('Пошук'))
         self.search_entry = QLineEdit()
         self.search_entry.setPlaceholderText('Пошук')
         self.main_layout.addWidget(self.search_entry)
@@ -62,7 +61,6 @@ class SearchListSelector(QWidget):
             return
         value = current.data(FULL_VALUE_ROLE)
         self.valueDoubleClicked.emit(value)
-
 
     def get_current_value(self):
         current = self.list.currentItem()

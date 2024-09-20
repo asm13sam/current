@@ -57,8 +57,6 @@ class Window(QWidget):
         self.controls.setLayout(self.controls_layout)
         self.controls_layout.setContentsMargins(0, 5, 0, 0)
         self.main_layout.insertWidget(0, self.controls, stretch=0)
-        # user = Item('user')
-        # user.get_all()
         user_values = [
             {'id': 2, 'login': 'Serhii' , 'name': 'Сергій'},
             {'id': 3, 'login': 'Svitlana' , 'name': 'Світлана'},
@@ -175,17 +173,10 @@ class Window(QWidget):
 
         self.test_tabs = TabGroup()
         self.main_tabs.addTab(self.test_tabs, 'Test')
-        # calc1 = CalculatorTab()
-        # self.test_tabs.addTab(calc1, 'Калькуляtor')
-        # orders = ProductsTab(self.check)
-        # self.test_tabs.addTab(orders, 'Замовлення')
-        # ord2_cr = OrderingSimpleCreator()
-        # self.test_tabs.addTab(ord2_cr, 'Замовлення2')
         p2os_work = Dashboard()
         self.test_tabs.addTab(p2os_work, 'В роботі')
         admin = AdminTab()
         self.test_tabs.addTab(admin, "Адміністрування")
-
 
     def reload_tab(self, index):
         w = self.main_tabs.widget(index)
@@ -246,9 +237,6 @@ class Window(QWidget):
 class MainWindow():
     def __init__(self):
         self.qt_app = QApplication(sys.argv)
-        # self.app = App()
-        # res = self.app.repository.signing('Vadim', '123')
-        # print('login', res)
         screen = self.qt_app.primaryScreen()
         print('Screen: %s' % screen.name())
         size = screen.size()
@@ -256,8 +244,6 @@ class MainWindow():
         rect = screen.availableGeometry()
         print('Available: %d x %d' % (rect.width(), rect.height()))
         self.window = Window()
-        # self.window.showFullScreen()
-        # self.window.showMaximized()
         color = "#99BCBC"
         qss = """
         QToolTip {
@@ -271,7 +257,6 @@ class MainWindow():
 
         QApplication.instance().setFont(font)
         font.setPointSize(10)
-
 
     def run(self):
         self.window.show()

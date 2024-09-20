@@ -143,9 +143,6 @@ class Item:
 
     def create_p2o_defaults(self):
         res = self.repo.create_default(self.value)
-        # if not res['error'] and self.op_model['message']:
-        #     mess = f"створив документи за замовчуванням до {self.hum} {self.value['name'] if 'name' in self.value else ''} [#{self.value['id']}]"
-        #     self.repo.send_ws_message(json.dumps({'user_id': self.user_id, 'username': self.username, 'message': mess}))
         return self.process_result(res)
 
     def delete(self, id, cause=''):

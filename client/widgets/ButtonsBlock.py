@@ -67,7 +67,6 @@ if __name__ == '__main__':
     
     bb = ButtonsBlock('TestBlock', bb_values)
     layout.addWidget(bb)
-    # bb.buttonClicked.connect(lambda value: print(value))
     reload_btn = QPushButton('Reload')
     layout.insertWidget(0, reload_btn)
     reload_btn.clicked.connect(lambda: bb.reload(new_bb_values))
