@@ -1,9 +1,5 @@
 import json
 
-# with open ('models.json', "r") as f:
-#     model = json.loads(f.read())
-
-# tables = model['models'].keys()
 
 def to_go(k):
     return ''.join(s.title() for s in k.split("_"))
@@ -237,14 +233,6 @@ def create_go_models(model, tables):
         h += create_go_decode(table)
         g += make_field_validation(table, keys)
 
-        # if 'filter' in model['models'][table]:
-            # filters = model['models'][table]['filter']
-            # for filter in filters:
-                # g1, h1, m1 = create_go_filter(table, keys, filter)
-                # g += g1
-                # h += h1
-                # m += m1
-
         if 'find' in model['models'][table]:
             finds = model['models'][table]['find']
             for find in finds:
@@ -317,15 +305,6 @@ def create_go_models_w(model, tables):
         g += g1
         h += h1
         m += m1
-
-
-        # if 'filter' in model['models'][table]:
-            # filters = model['models'][table]['filter']
-            # for filter in filters:
-                # g1, h1, m1 = create_go_filter_w(table, keys, filter)
-                # g += g1
-                # h += h1
-                # m += m1
 
         if 'find' in model['models'][table]:
             finds = model['models'][table]['find']
@@ -490,23 +469,6 @@ def create_go_decode(type):
         '''
     return g
 
-# def create_go_create_if_registers(registers, gv):
-    # r_get = ''
-    # counter = 0
-    # for register in registers:
-        # reg_table, reg_field = register["reg_field"].split(".")
-        # g_reg_field = to_go(reg_field)
-        # g_reg_table = to_go(reg_table)
-        # if counter:
-            # r_get += f'else if {gv}.{g_reg_table}Id != 0 {{'
-        # else:
-            # r_get += f'if {gv}.{g_reg_table}Id != 0 {{'
-        # r_get += create_go_create_registers(register, gv)
-        # r_get += '}'
-        # counter += 1
-
-    # return r_get
-
 def create_go_create_registers(register, gv):
     reg_table, reg_field = register["reg_field"].split(".")
     g_reg_field = to_go(reg_field)
@@ -570,10 +532,6 @@ def create_go_create(table, keys, model):
         registers = model['models'][table]['register']
         for register in registers:
             reg_get += create_go_create_registers(register, gv)
-
-    # if 'if_register' in model['models'][table]:
-        # registers = model['models'][table]['if_register']
-        # reg_get += create_go_create_if_registers(registers, gv)
 
     create_doc = ''
     doc_update_name = ''
@@ -1094,8 +1052,6 @@ func {gtype}GetSumByFilter(field string, id int, field2 string, id2 int) (map[st
 '''
     return g, h, m
 
-
-
 def create_go_between(table, keys, between, model):
     right = model['models'][table]['rights'] + '_READ'
     gtype = to_go(table)
@@ -1155,60 +1111,6 @@ func {gtype}GetBetween{gbetween}({between}1, {between}2 {between_type}, withDele
 }}
 '''
     return g, h, m
-
-# def create_go_sum(table, keys, sum_code):
-#     right = model['models'][table]['rights'] + '_READ'
-#     gtype = to_go(table)
-#     gbetween = to_go(between)
-#     gv = table[0]
-#     d = model[table][between]['def']
-#     between_query1 = '{fs}'
-#     between_query2 = '{fs2}'
-#     between_param1 = 'req.StrParam'
-#     between_param2 = 'req.Str2Param'
-#     if type(d) == int:
-#         between_type = 'int'
-#         between_query1 = '{id:[0-9]+}'
-#         between_query2 = '{id:[0-9]+}'
-#         between_param1 = 'req.IntParam'
-#         between_param2 = 'req.Int2Param'
-#     else:
-#         between_type = 'string'
-
-#     m = f'''
-#         r.HandleFunc("/{table}_between_{between}/{between_query1}/{between_query2}",
-#             WrapAuth(Get{gtype}Between{gbetween}, {right})).Methods("GET")
-#     '''
-
-#     h = f'''
-# func Get{gtype}Between{gbetween}(req Req) {{
-#     req.Respond({gtype}GetBetween{gbetween}({between_param1}, {between_param2}))
-# }}
-#     '''
-
-#     g = f'''
-
-# func {gtype}GetBetween{gbetween}({between}1, {between}2 {between_type}) ([]{gtype}, error) {{
-#     rows, err := db.Query("SELECT * FROM {table} WHERE {between} BETWEEN ? and ?", {between}1, {between}2)
-#     if err != nil {{
-#         return nil, err
-#     }}
-#     defer rows.Close()
-#     res := []{gtype}{{}}
-#     for rows.Next() {{
-#         var {gv} {gtype}
-#         if err := rows.Scan(
-#     {list_of_pointers(keys, gv)}
-#         ); err != nil {{
-#             return nil, err
-#         }}
-#         res = append(res, {gv})
-#     }}
-#     return res, nil
-# }}
-# '''
-#     return g, h, m
-
 
 def create_joins(table, find):
     if len(find.keys()) == 1:
@@ -1362,63 +1264,6 @@ func {func_name}(fs string) ([]{gtype}, error) {{
 '''
     return g, h, m
 
-
-
-# def create_go_find(table, keys, find):
-    # gtype = to_go(table)
-    # gfind = ''
-    # fnd = ''
-    # for k, v in find.items():
-        # gfind += to_go(k)
-        # fnd += f"_{k}"
-        # for i in v:
-            # gfind += ('No' + to_go(i[1:]) if i.startswith('-') else to_go(i))
-            # fnd += f"_{'no_' + i[1:] if i.startswith('-') else i}"
-
-    # gv = table[0]
-
-    # m = f'''
-        # r.HandleFunc("/find_{table}{fnd}/{{fs}}",
-            # WrapAuth(Get{gtype}FindBy{gfind})).Methods("GET")
-    # '''
-
-    # h = f'''
-# func Get{gtype}FindBy{gfind}(req Req) {{
-    # req.Respond({gtype}FindBy{gfind}(req.StrParam))
-# }}
-    # '''
-
-    # g = f'''
-
-# func {gtype}FindBy{gfind}(fs string) ([]{gtype}, error) {{
-    # fs = "%" + fs + "%"
-
-    # query := `SELECT * FROM {table}
-                # {create_joins(table, find)}
-                # {create_search(find)}
-                # {create_not_search(find)};`
-
-    # rows, err := db.Query(query{(', fs'*len(find))})
-
-    # if err != nil {{
-        # return nil, err
-    # }}
-    # defer rows.Close()
-
-    # res := []{gtype}{{}}
-    # for rows.Next() {{
-        # var {gv} {gtype}
-        # if err := rows.Scan(
-    # {list_of_pointers(keys, gv)}
-        # ); err != nil {{
-            # return nil, err
-        # }}
-        # res = append(res, {gv})
-    # }}
-    # return res, nil
-# }}
-# '''
-    # return g, h, m
 
 # -------------------------WWWWWWWWWWWWWWWWWW-----------------------------
 
@@ -1761,60 +1606,6 @@ def create_go_filter_w(table, keys, gv, gtype):
     return res, nil
     '''
     return f
-
-
-# def create_go_filter_w(table, keys, filter):
-    # right = model['models'][table]['rights'] + '_READ'
-    # gtype = to_go(table)
-    # gfilter = to_go(filter)
-    # gv = table[0]
-    # d = model[table][filter]['def']
-    # filter_query = '{fs}'
-    # filter_param = 'req.StrParam'
-    # if type(d) == int:
-        # filter_type = 'int'
-        # filter_query = '{id:[0-9]+}'
-        # filter_param = 'req.IntParam'
-    # elif type(d) == bool:
-        # filter_type = 'int'
-        # filter_query = '{id:[0-1]}'
-        # filter_param = 'req.IntParam'
-    # else:
-        # filter_type = 'string'
-
-    # m = f'''
-        # r.HandleFunc("/w_{table}_by_{filter}/{filter_query}",
-            # WrapAuth(GetW{gtype}By{gfilter}, {right})).Methods("GET")
-    # '''
-
-    # h = f'''
-# func GetW{gtype}By{gfilter}(req Req) {{
-    # req.Respond(W{gtype}GetBy{gfilter}({filter_param}))
-# }}
-    # '''
-    # add_sel, add_join = create_add_joins(table, keys)
-    # g = f'''
-
-# func W{gtype}GetBy{gfilter}({filter} {filter_type}) ([]W{gtype}, error) {{
-    # rows, err := db.Query(`SELECT {table}.*{add_sel} FROM {table}{add_join} WHERE {table}.{filter}=? AND {table}.is_active = 1`, {filter})
-    # if err != nil {{
-        # return nil, err
-    # }}
-    # defer rows.Close()
-    # res := []W{gtype}{{}}
-    # for rows.Next() {{
-        # var {gv} W{gtype}
-        # if err := rows.Scan(
-    # {list_of_pointers_w(keys, gv)}
-        # ); err != nil {{
-            # return nil, err
-        # }}
-        # res = append(res, {gv})
-    # }}
-    # return res, nil
-# }}
-# '''
-    # return g, h, m
 
 def create_add_joins_for_find(type, keys, find_keys):
     add_sel = ''

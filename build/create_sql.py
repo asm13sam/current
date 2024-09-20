@@ -2,18 +2,6 @@ import json
 import sqlite3
 from barcode import EAN13
 
-# with open ('changes.json', "r") as f:
-#     changes = json.loads(f.read())
-
-# with open ('models_bk.json', "r") as f:
-#     model_bk = json.loads(f.read())
-
-# with open ('models.json', "r") as f:
-#     model = json.loads(f.read())
-
-# tables_bk = list(model_bk['models'].keys())
-# tables = list(model['models'].keys())
-
 class SqlCreator:
     def __init__(self, changes, model, model_bk) -> None:
         self.changes = changes
@@ -110,9 +98,6 @@ class SqlCreator:
                 cur_to.executescript(s)
                 self.reload_table(table_name, cur_update, cur_to)
 
-        # self.add_operations_barcodes(cur_to, cur_update)
-        # self.add_products_barcodes(cur_to, cur_update)
-
         for table_name in self.tables:
             if table_name in self.changes['fields_for_clearing']:
                 fields = self.changes['fields_for_clearing'][table_name]
@@ -142,58 +127,3 @@ class SqlCreator:
             cur_to.execute(
                 "UPDATE product SET barcode=? WHERE id=?", (barcode, p['id'])
             )
-
-
-# ~ def create_sql():
-    # ~ s = ''
-    # ~ for table in tables:
-        # ~ # if table not in changes:
-            # ~ # continue
-        # ~ # print(table)
-        # ~ # print(sts[table])
-        # ~ s += f'DROP TABLE IF EXISTS {table};\nCREATE TABLE IF NOT EXISTS {table}\n('
-        # ~ for k, v in model[table].items():
-            # ~ #print(k, v)
-            # ~ d = v['def']
-            # ~ if k == 'id':
-                # ~ s += '\n\tid INTEGER PRIMARY KEY AUTOINCREMENT,'
-            # ~ elif type(d) == int:
-                # ~ s += f'\n\t{k} INT NOT NULL,'
-            # ~ elif type(d) == float:
-                # ~ s += f'\n\t{k} REAL NOT NULL,'
-            # ~ elif type(d) == bool:
-                # ~ s += f'\n\t{k} BOOL NOT NULL,'
-            # ~ else:
-                # ~ s += f'\n\t{k} TEXT NOT NULL,'
-        # ~ s = s[:-1] + '\n);\n'
-
-
-    # ~ # with open ('sql/bases.sql', 'w') as f:
-    # ~ #     f.write(s)
-
-    # ~ with open ('sql/make_bases.py', 'w') as f:
-        # ~ b = '''
-# ~ import sqlite3
-
-# ~ def recreate_table(cur):
-    # ~ s = """
-        # ~ '''
-        # ~ e = '''
-    # ~ """
-    # ~ cur.executescript(s)
-
-
-# ~ if __name__ == '__main__':
-    # ~ import shutil
-
-    # ~ shutil.copyfile('base.db', 'base.bk')
-
-    # ~ con = sqlite3.connect('base.db')
-    # ~ cur = con.cursor()
-
-    # ~ recreate_table(cur)
-        # ~ '''
-        # ~ f.write(b + s + e)
-
-# ~ if __name__ == '__main__':
-    # ~ create_sql()

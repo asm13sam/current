@@ -5,8 +5,6 @@ import os
 
 import create_srvr
 import create_sql
-# from .create_srvr import create_go_models
-# from .create_sql import SqlCreator
 
 with open ('changes.json', "r") as f:
     changes = json.loads(f.read())
@@ -20,7 +18,6 @@ with open ('models.json', "r") as f:
 tables = list(model['models'].keys())
 shutil.copyfile('../target_cc', 'base.db')
 shutil.copyfile('../base.db', 'update.db')
-#shutil.copyfile('../base.db', 'update.db')
 shutil.copyfile('base.db', 'base.bk')
 
 con_from = sqlite3.connect('base.bk')
@@ -38,8 +35,6 @@ sql_creator.recreate_tables(cur_to, cur_from, cur_update)
 con_to.commit()
 shutil.copyfile('base.db', '../server/base.db')
 shutil.copyfile('models.json', '../client/models.json')
-# os.remove('base.db')
-# os.remove('base.bk')
 
 create_srvr.create_go_models(model, tables)
 
