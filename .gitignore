@@ -5,3 +5,8 @@ config*
 tgtsrv*
 *.bk
 check.json
+__pycache__
+main.spec
+client/build
+client/dist
+*.exe
