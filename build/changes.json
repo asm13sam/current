@@ -1,0 +1,51 @@
+{
+    "tables_for_clearing": [
+        "document",
+        "ordering",
+        "product_to_ordering",
+        "cash_in",
+        "cash_out",
+        "whs_in",
+        "whs_out",
+        "cbox_check",
+        "matherial_to_whs_in",
+        "matherial_to_whs_out",
+        "matherial_to_ordering",
+        "wmc_number",
+        "operation_to_ordering",
+        "record_to_counter"
+    ],
+    "fields_for_clearing": {
+        "matherial": ["total"],
+        "color": ["total"],
+        "cash": ["total"],
+        "equipment": ["total"],
+        "contragent": ["total"],
+        "contact": ["total"],
+        "owner": ["total"],
+        "counter": ["total"]
+    },
+    "update": [
+        "cash",
+        "color",
+        "color_group",
+        "equipment",
+        "equipment_group",
+        "matherial",
+        "matherial_group",
+        "matherial_to_product",
+        "operation",
+        "operation_group",
+        "operation_to_product",
+        "ordering_status",
+        "product",
+        "product_group",
+        "product_to_ordering_status",
+        "product_to_product",
+        "user",
+        "user_group",
+        "whs",
+        "owner",
+        "counter"
+    ]
+}
