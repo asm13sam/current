@@ -25,13 +25,10 @@ class TableModel(QStandardItemModel):
         self.set_fields(field_names)
         self.setHorizontalHeaderLabels(self.headers)
         self.setSortRole(SORT_ROLE)
-        # print(data_model, field_names)
 
     def set_fields(self, field_names: str):
         self.field_names = field_names if field_names else self.data_model.keys()
         self.field_names = [name for name in self.field_names if not name in self.data_model or (not name.endswith('_id') and self.data_model[name]['def'] != [])]
-        # for i, f in enumerate(field_names):
-        #     if 
         header_fields = [name[:-1] if name.endswith('2') else name for name in self.field_names]
         self.headers = [self.data_model[name]['hum'] for name in header_fields if name in self.data_model]
         
@@ -40,15 +37,6 @@ class TableModel(QStandardItemModel):
         self.setHorizontalHeaderLabels(self.headers)
         for value in values:
             self.append(value)
-
-    # def search(self, field, text):
-        
-    #     values = []
-    #     for i in range(self.rowCount()):
-    #         val = self.get_row_value(i)
-    #         if text in val[field]:
-    #             values.append(val)
-    #     self.reload(values)
 
     def make_item(self, value, name):
         v = value[name]
@@ -112,7 +100,6 @@ class Table(QTableView):
 
         self._model = TableModel(data_model, table_fields)
         self.setModel(self._model)
-        # self.clicked[QModelIndex].connect(self.value_selected)
         self.doubleClicked[QModelIndex].connect(self.value_dblclicked)
         self.setSortingEnabled(True)
         self.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
@@ -150,18 +137,9 @@ class Table(QTableView):
             res += v[field]
         return res
             
-
-        
-    # def set_values(self, values):
-    #     self.reload(values)
-
-    # def add_value(self, value):
-    #     self._model.append(value)
-
     def delete_values(self):
         while True:
             selected_rows = self.get_selected_rows()
-            # print(selected_rows)
             if not selected_rows:
                 return
             self._model.removeRow(selected_rows[0])
@@ -183,7 +161,6 @@ class Table(QTableView):
     def get_selected_value(self):
         selected_values = self.get_selected_values()
         if not selected_values or len(selected_values) > 1:
-            # error('Оберіть один елемент')
             return
         return selected_values[0]
 
@@ -194,17 +171,7 @@ class Table(QTableView):
         selected_rows = list(set(index.row() for index in indexes))
         return selected_rows
 
-    # def get_selected_row(self) -> int:
-    #     rows = self.get_selected_rows()
-    #     if len(rows) != 1:
-    #         error('Оберіть один елемент')
-    #         return -1
-    #     return rows[0]
-
     def value_selected(self, index):
-        # value = self._model.get_row_value(index.row())
-        # if value:
-        #     self.valueSelected.emit(value)
         pass
 
     def value_dblclicked(self, index):
@@ -364,3 +331,4 @@ class EditTable(QWidget):
 
     def values(self):
         return self.table.values()    
+    

@@ -3,16 +3,9 @@
 from PyQt6.QtGui import QPixmap
 import requests
 import json
-#from PIL import Image
 
 from io import BytesIO
 
-# ddiz61578@gmail.com
-# Nhfrnjh55
-
-
-
-# BASE_URL = 'https://api.checkbox.ua/api/v1/'
 
 class CheckBoxFS:
     def __init__(self, base_url, license_key='', cashier_pin=''):
@@ -32,8 +25,6 @@ class CheckBoxFS:
             'X-License-Key': self.license_key,
             'Content-Type': 'application/json',
         })
-        # if self.auth_key:
-        #     self.session.headers.update({'Authorization': self.auth_key})
 
     def close(self):
         self.session.close()
@@ -105,8 +96,6 @@ class CheckBoxFS:
             return False
         # print(res)
         return res['status']
-
-        
 
     # 4.3. Отримання нових офлайн кодів.
     # Отримання нових офлайн фіскальних кодів з сервера ДПС
@@ -477,29 +466,3 @@ class CheckBoxFS:
 # Перевірка статусу каси (онлайн/офлайн).
 # Переведення каси у онлайн режим (якщо каса у офлайні), що означатиме, що всі офлайн транзакції успішно передані до податкової.
 # Завершення сесії (за необхідності).
-
-
-
-
-# cb = CheckBoxFS(BASE_URL, 'test3e3f6dc789547d23a26003a5', "9207718872", a_key)
-# cb.sign_in()
-# print(cb.session.headers)
-# print('Отримання інформації про стан каси.')
-# cb.get_cash_state()
-#print('Ініціалізація переходу ПРРО у онлайн режим.')
-#cb.work_online()
-#print('Перевірка зв`язку з сервером ДПС.')
-#cb.ping_FS()
-#print('Відкриття зміни.')
-#cb.shifts()
-# print('Перевірка статусу поточної зміни')
-# cb.get_shift()
-# print("Створення службового чеку внесення готівки")
-# cb.cash_service(50000)
-# print('Створення чеку/чеків')
-# cb.create_receipt()
-# print('get png')
-#cb.get_png('2023da54-c39c-4305-bd78-074afc520700')
-#cb.shift_close()
-# cb.get_txt('2023da54-c39c-4305-bd78-074afc520700')
-

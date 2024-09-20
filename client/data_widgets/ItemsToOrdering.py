@@ -100,7 +100,6 @@ class OrderingTable(MainItemTable):
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
         if res and dlg.value:
-            # dlg.value['cost'] = round(dlg.value['cost'], 1)
             i.value = dlg.value
             err = i.save()
             if err:
@@ -221,7 +220,6 @@ class ProductView(QWidget):
     def multilist_changed(self, item, name):
         item_name, list_name = name.split('@')
         index = self.multiselects[name].indexFromItem(item).row()
-        # print('mselect', index)
 
     def get_lists(self, name):
         n2p = Item(name)
@@ -258,36 +256,6 @@ class ProductView(QWidget):
             item_name = k.split('@')[0]
             applied[item_name] += s.get_checked()
         return applied
-
-
-# class ProductRecursiveView(QWidget):
-#     def __init__(self, product_value: dict):
-#         super().__init__()
-#         self.prod_val = product_value
-#         self.box = QVBoxLayout()
-#         self.setLayout(self.box)
-#         self.main_pw = ProductView(product_value)
-#         self.box.addWidget(self.main_pw)
-        
-#         p2p_values = self.get_default_products()
-#         for v in p2p_values:
-#             pw = ProductRecursiveView(v)
-#             if pw.main_pw.has_lists():
-#                 self.box.insertWidget(0, pw)
-
-#     def get_default_products(self):
-#         p2p = Item('product_to_product')
-#         err = p2p.get_filter_w('product_id', self.prod_val['id'])
-#         if err:
-#             error(err)
-#             return None, None
-        
-#         p2p_values = []
-        
-#         for v in p2p.values:
-#             if v['list_name'] == 'default':
-#                 p2p_values.append(v)
-#         return p2p_values  
 
 
 class ColorDialog(CustomDialog):
@@ -843,7 +811,6 @@ class ItemsToOrdering(QSplitter):
         self.grid = QGridLayout()
         self.grid.setContentsMargins(0, 0, 0, 0)
         self.grid.setVerticalSpacing(1)
-        # self.grid.setLabelAlignment( Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop )
         btns_grid.setLayout(self.grid)
         self.aside_box.addWidget(btns_grid)
 
@@ -1700,7 +1667,6 @@ class ItemsToOrdering(QSplitter):
         if applied:
             total += self.create_p2o(applied['product_to_product'], p2o, p2o_value)
         
-        # total = round(total)
         p2o_value['price'] = round(total / p2o_value['number'], 2)
         p2o_value['cost'] = round(total + p2o_value['profit'] * p2o_value['number'], 2)
         p2o_item = Item('product_to_ordering')
@@ -1722,14 +1688,11 @@ class TreeItemToOrdering(QSplitter):
             ('operation', 'Операція'),
             ('product', 'Виріб'),
         )
-        # tree_widget = QWidget()
         self.tree_box = QSplitter(Qt.Orientation.Vertical)
-        # tree_widget.setLayout(self.tree_box)
         self.tree_box.setContentsMargins(0, 0, 0, 0)
         self.addWidget(self.tree_box)
         self.tree = Tree('product_to_ordering', fields=['name', 'cost'], headers=['Назва', 'Вартість'])
         
-        # self.tree.actionInvoked.connect(self.action)
         self.tree.valueDoubleCklicked.connect(self.on_double_click)
         self.tree_box.addWidget(self.tree)
         if not show_info:
@@ -1778,7 +1741,6 @@ class TreeItemToOrdering(QSplitter):
         if ordering_id:
             self.ordering_id = ordering_id
         else:
-            # print('reload without ordering id')
             self.tree.reload()
             return
         values = []
@@ -1797,17 +1759,14 @@ class TreeItemToOrdering(QSplitter):
             error(err)
             return
         for v in item.values:
-            # if v["cost"] <= 0:
-            #     continue
             if name == 'operation':
-                cost = v["cost"] #+ v["equipment_cost"]
+                cost = v["cost"]
             else:
                 cost = v["cost"]
             values.append({
                 "id": v["id"],
                 "product_to_ordering_id": v['product_to_ordering_id'],
                 "name": v['name'] if 'name' in v else v[name],
-                # "number": v["number"],
                 "cost": round(cost, 2),
                 "type": name_type,
                 "type_hum": hum,
@@ -1821,7 +1780,6 @@ class TreeItemToOrdering(QSplitter):
                 "id": item.value["id"],
                 "product_to_ordering_id": item.value['product_to_ordering_id'],
                 "name": item.value['name'] if 'name' in item.value else item.value[name],
-                # "number": item.value["number"],
                 "cost": item.value["cost"],
                 "type": item.name,
                 "type_hum": item.hum,
@@ -1854,10 +1812,8 @@ class TreeItemToOrdering(QSplitter):
         else:
             form = ProductToOrderingForm(value=item.value)
             form.widgets['product_id'].setDisabled(True)
-        # form.widgets['number'].setDisabled(True)
         dlg = CustomFormDialog(title, form)
 
-        # dlg = FormDialog(title, item.model, item.value)
         res = dlg.exec()
         if res and dlg.value:
             item.value = self.prepare_value_to_save(dlg.value)
@@ -1866,12 +1822,9 @@ class TreeItemToOrdering(QSplitter):
                 error(err)
                 return
             self.reload(item.value['ordering_id'])
-            # print('new_value', item.value)
             self.orderingChanged.emit()
     
     def prepare_value_to_save(self, value):
-        # if value['type'] == "product_to_ordering":
-        #     pass # if number changed, remove previous m2o and o2o
         return value
     
     def del_dialog(self, value={}):
@@ -1908,16 +1861,13 @@ class TreeItemToOrdering(QSplitter):
 
     def calc_sum(self):
         total = 0
-        # print(self.tree.dataset)
         for child in self.tree.dataset[0]:
             total += child['cost']
         return total
     
     def deep_calc_sum(self, parent_id=0):
-        # print('call deep calc', parent_id)
         total = 0
         if not len(self.tree.dataset):
-            # print('dataset empty')
             return 0
         for child in self.tree.dataset[parent_id]:
             if child['type'] == 'product_to_ordering' and child['id'] in self.tree.dataset:
@@ -1928,15 +1878,12 @@ class TreeItemToOrdering(QSplitter):
                     child['value']['cost'] = child['cost']
                     prod_item = Item('product_to_ordering')
                     prod_item.value = child['value']
-                    # print('before save', prod_item.value['cost'])
                     err = prod_item.save()
                     if err: 
                         error(err)
                         total += old_cost
                         continue
             total += child['cost']
-            # print('total=', total, child['type'])
-        # print('deep_calc', total)
         return total
     
     
@@ -1997,12 +1944,10 @@ class ToOrdering(QSplitter):
     def update_sum(self):
         self.details_tree.reload()
         new_sum = self.details_tree.deep_calc_sum()
-        # print('new_sum is here ->', new_sum)
         self.ordering.value = self.ordering_table.current_value
         self.ordering.value['price'] = new_sum
         self.ordering.value['profit'] = round(new_sum * self.ordering.value['persent']/100, 2)
         self.ordering.value['cost'] = round(new_sum + self.ordering.value['profit'], 2)
-        # print('new_sum in order ->', self.ordering.value['id'], self.ordering.value['name'], self.ordering.value['price'], self.ordering.value['cost'])
         err = self.ordering.save()
         if err:
             error(err)

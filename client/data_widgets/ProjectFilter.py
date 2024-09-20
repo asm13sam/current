@@ -40,13 +40,11 @@ class ByProjectFilter(QWidget):
         layout.addWidget(self.project_group)
         self.project_group.selectionChanged.connect(self.project_group_changed)
 
-        # layout.addWidget(QLabel('За номером'))
         self.project_id = QLineEdit()
         self.project_id.setPlaceholderText('За номером')
         layout.addWidget(self.project_id)
         self.project_id.returnPressed.connect(self.project_id_entered)
 
-        # layout.addWidget(QLabel('Пошук'))
         self.project_search = QLineEdit()
         self.project_search.setPlaceholderText('Пошук')
         layout.addWidget(self.project_search)
@@ -99,8 +97,6 @@ class ByContragentFilter(QWidget):
         reload = QPushButton('Оновити')
         ext_box.addWidget(reload)
         reload.clicked.connect(self.refresh)
-
-        # layout.addWidget(QLabel('За номером'))
         self.contragent_id = QLineEdit()
         self.contragent_id.setPlaceholderText('За номером')
         self.box.addWidget(self.contragent_id)
@@ -111,7 +107,6 @@ class ByContragentFilter(QWidget):
         self.contragent_selector.cbSelectionChanged.connect(self.contragent_group_changed)
         self.contragent_selector.searchStringChanged.connect(self.contragent_search_changed)
         self.contragent_selector.selectionChanged.connect(self.contragent_changed)
-        # layout.addStretch()
         self.append_widget()
         
     def append_widget(self):    
@@ -121,9 +116,6 @@ class ByContragentFilter(QWidget):
         edit_btn = QPushButton('Редагувати')
         self.box.addWidget(edit_btn)
         edit_btn.clicked.connect(lambda: self.action_invoked('edit'))
-        # create_btn = QPushButton('Створити')
-        # self.box.addWidget(create_btn)
-        # create_btn.clicked.connect(lambda: self.action_invoked('create'))
         
     def contragent_group_changed(self, value):
         if not value['id']:
@@ -151,7 +143,6 @@ class ByContragentFilter(QWidget):
     def contragent_search_changed(self, text):
         if len(text) < MIN_SEARCH_STR_LEN:
             return
-        # text = self.prepare_search_string(text)
         err = self.contragent.get_find_w(self.contragent.find[0], text.lower())
         if err:
             return
@@ -161,19 +152,6 @@ class ByContragentFilter(QWidget):
         self.contragentChanged.emit(value)
         
     def get_from_table(self):
-        # contragent = Item('contragent')
-        # err = contragent.get_all_w()
-        # if err:
-        #     error(err)
-        #     return
-        # fields = ['id', 'name', 'contragent_group', 'phone', 'email', 'comm']
-        # table = Table(data_model=contragent.model_w, table_fields= fields, values=contragent.values)
-        # dlg = CustomDialog(table, 'Оберіть контрагента')
-        # res = dlg.exec()
-        # if not res:
-        #     return
-        # v = dlg.widget.get_selected_value()
-        
         dlg = SingleSelectDialog('contragent')
         res = dlg.exec()
         if not res:
@@ -272,7 +250,6 @@ class ProjectFilter(QTabWidget):
         err = self.project.get_find_w(self.project.find[0], text)
         if err:
             return
-        # self.values_changed(self.project.values)
         self.valuesReloaded.emit(self.project.values)
 
     def contragent_changed(self, value):

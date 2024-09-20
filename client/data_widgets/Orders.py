@@ -33,13 +33,9 @@ from data_widgets.Calculation import ProductExtra, ProductView, MatherialExtra, 
 from data_widgets.ItemsToOrdering import ProductToOrderingForm
 from data_widgets.Helpers import (
     OrdTree, 
-    PMOInfo, 
     MatherialToOrderingForm, 
     OperationToOrderingForm, 
     ProductToOrderingForm,
-    ComboBox,
-    ComplexList,
-    OrderingForm,
     )
 from common.funcs import fake_id
 
@@ -334,12 +330,10 @@ class ProductFormDialog(PMODialog):
         p2o['length'] = length
         p2o['pieces'] = pieces
         p2o['number'] = number
-        # persent = self.form.widgets['persent'].value()
         self.item.recalc_num()
         total, *_ = self.item.recalc()
         if total is not None:
             self.form.widgets['cost'].setValue(round(total, 1))
-            # self.form.widgets['persent'].set_value(persent)
             self.form.persent_changed()
 
 
@@ -508,15 +502,6 @@ class ProductsButtonsBlock(QWidget):
         tl = QVBoxLayout()
         tab.setLayout(tl)
 
-        # for k in range(j+1, len(self.prod_groups.values)):
-        #     values = self.get_values(self.prod_groups.values[k]['id'])
-        #     if not values:
-        #         continue
-        #     group = ProductGroupBox(self.prod_groups.values[k]['name'], values, self.create_value)
-        #     tl.addWidget(group)
-        # tl.addStretch()
-        # tabs.addTab(tab, f'Додаток {i+1}')
-
     def get_values(self, prod_group_id):
         err = self.item.get_filter_w('product_group_id', prod_group_id)
         if err:
@@ -569,15 +554,6 @@ class PMOSelector(QTabWidget):
         self.mat_tree.reload()
         self.op_tree.reload()
 
-    # def reload_price_info(self, result):
-    #     if result is None:
-    #         return
-    #     _, mat, op, am = result
-    #     tot = mat + op + am
-    #     self.price_info.setText(
-    #         self.price_info_text.format(mat=mat, op=op, am=am, tot=tot)
-    #         )
-    
     def show_form_dlg(self, item_value, item_type):
         if not 'cost' in item_value:
             return
@@ -601,7 +577,6 @@ class PMOSelector(QTabWidget):
         if item_type == 'matherial':
             matherial = MatherialExtra()
             matherial.set_value(item_value)
-            # self.current_item = matherial
             dlg = MatherialFormDialog(matherial)
             res = dlg.exec()
             if res:
@@ -612,7 +587,6 @@ class PMOSelector(QTabWidget):
         if item_type == 'operation':
             operation = OperationExtra()
             operation.set_value(item_value)
-            # self.current_item = operation
             dlg = OperationFormDialog(operation)
             res = dlg.exec()
             if res:
@@ -620,149 +594,6 @@ class PMOSelector(QTabWidget):
                 summa = dlg.form.widgets['cost'].value()
                 self.o2oCreated.emit(operation, cash, summa)
         
-        # if self.form:
-        #     w = QWidget()
-        #     box = QVBoxLayout()
-        #     w.setLayout(box)
-        #     if self.pw:
-        #         box.addWidget(self.pw)
-        #     box.addWidget(self.form)
-        #     self.form_plaseholder.setWidget(w)
-        #     self.form.saveRequested.connect(
-        #         lambda v:self.add_position(v, self.form.item.name)
-        #     )
-
-    # def add_edit_form(self, item_value, type_name, uid=0):
-    #     self.pw = None
-       
-    #     if type_name == 'matherial_to_ordering':
-    #         self.add_matherial_to_ordering(item_value)
-
-    #     if type_name == 'operation_to_ordering':
-    #         self.add_operation_to_ordering(item_value)
-
-    #     if type_name == 'product_to_ordering':
-    #         self.add_product_to_ordering(item_value)
-
-    #     if self.form:
-    #         w = QWidget()
-    #         box = QVBoxLayout()
-    #         w.setLayout(box)
-    #         if self.pw:
-    #             box.addWidget(self.pw)
-    #         box.addWidget(self.form)
-    #         self.form_plaseholder.setWidget(w)
-    #         self.form.saveRequested.connect(
-    #             lambda v, uid=uid:self.edit_position(v, self.form.item.name, uid)
-    #         )
-
-    # def form_size_changed(self, width, length, pieces, number):
-    #     p2o = self.current_item.value['product_extra']['product_to_ordering']
-    #     p2o['width'] = width
-    #     p2o['length'] = length
-    #     p2o['pieces'] = pieces
-    #     p2o['number'] = number
-    #     self.current_item.recalc_num()
-    #     res = self.current_item.recalc()
-    #     self.reload_price_info(res)
-    #     if res is not None:
-    #         total = res[0]
-    #         self.form.widgets['price'].setValue(total/number)
-    #         profit = round(total * self.form.widgets['persent'].value() / 100 / number, 2)
-    #         self.form.widgets['profit'].set_value(profit)
-    #         self.form.widgets['cost'].set_value(total + profit*number)
-
-    # def product_changed(self):
-    #     self.pw.reload()
-    #     self.form.reload(self.current_item.value['product_extra']['product_to_ordering'])
-
-    # def add_position(self, value, name):
-    #     self.details_tree.dataset.append(self.current_item)
-    #     self.details_tree.reload()
-    #     self.positionAdded.emit()
-
-    # def edit_position(self, form_value, type_name, uid):
-    #     if not uid:
-    #         self.current_item.value[type_name] = form_value
-    #     else:
-    #         res = self.current_item.replace(uid, form_value)
-    #         if not res:
-    #             return
-    #         if not form_value['product_to_ordering_id']:
-    #             self.current_item.recalc_num()
-    #         result = self.current_item.recalc()
-    #         self.reload_price_info(result)
-    #     self.details_tree.reload()
-
-    # def add_matherial(self):
-    #     fields = ["matherial_id", "width", "length", "pieces", 
-    #                   "color_id", "number", "price", "persent", 
-    #                   "profit", "cost", "comm", "user_id"]
-    #     self.form = MatherialToOrderingForm(
-    #         fields=fields, 
-    #         value=self.current_item.value['matherial_to_ordering']
-    #         )
-        
-    # def add_matherial_to_ordering(self, value):
-    #     fields = ["matherial_id", "width", "length", "pieces", 
-    #                   "color_id", "number", "price", "persent", 
-    #                   "profit", "cost", "comm", "user_id"]
-    #     self.form = MatherialToOrderingForm(
-    #         fields=fields, 
-    #         value=value,
-    #         )
-
-    # def add_operation(self):
-    #     fields = ["operation_id", "number", 
-    #                   "price", "user_sum", "cost", "equipment_id", 
-    #                   "equipment_cost", "comm", "user_id"]
-    #     self.form = OperationToOrderingForm(
-    #         fields=fields, 
-    #         value=self.current_item.value['operation_to_ordering']
-    #         )
-    
-    # def add_operation_to_ordering(self, value):
-    #     fields = ["operation_id", "number", 
-    #                   "price", "user_sum", "cost", "equipment_id", 
-    #                   "equipment_cost", "comm", "user_id"]
-    #     self.form = OperationToOrderingForm(
-    #         fields=fields, 
-    #         value=value,
-    #         )
-
-    # def add_product(self):
-    #     fields = ["name", "product_id", "width", "length", "pieces", "number", 
-    #             "price", "persent", "profit", "cost", "info", "user_id"]
-    #     self.form = ProductToOrderingForm(
-    #         fields=fields, 
-    #         value=self.current_item.value['product_extra']['product_to_ordering']
-    #         )
-    #     self.form.sizeChanged.connect(self.form_size_changed)
-
-    # def add_product_to_ordering(self, value):
-    #     fields = ["name", "product_id", "width", "length", "pieces", "number", 
-    #             "price", "persent", "profit", "cost", "info", "user_id"]
-    #     self.form = ProductToOrderingForm(
-    #         fields=fields, 
-    #         value=value,
-    #         )
-    #     self.form.sizeChanged.connect(self.form_size_changed)
-
-    # def show_info(self, tree_value):
-    #     self.current_item = tree_value['item']
-    #     type_name = tree_value['type']
-    #     uid = tree_value['uid']
-    #     if not uid:
-    #         self.tree_info.reload(self.current_item.value[type_name], type_name)
-    #         self.add_edit_form(self.current_item.value[type_name], type_name)
-    #     else:
-    #         value = self.current_item.get_by_uid(uid)
-    #         self.tree_info.reload(value[type_name], type_name)
-    #         self.add_edit_form(value[type_name], type_name, uid)
-    
-    # def get_total_cost(self):
-    #     return self.details_tree.recalc_cost()
-
 
 class ProductsTab(QWidget):
     def __init__(self, check: CheckBoxFS):
@@ -1219,96 +1050,6 @@ class ProductsTab(QWidget):
         return True        
     
     
-    # def create_documents(self, product=None, cash_qr='', summa=0.0, summa_qr=0.0):
-    #     app = App()
-    #     cbox_check = Item('cbox_check')
-    #     cbox_check.create_default()
-               
-    #     cbox_check.value["user_id"] = self.user['id']
-    #     cbox_check.value["created_at"] = datetime.now().isoformat(timespec='seconds')
-    #     cbox_check.value["contragent_id"] = app.config["contragent copycenter default"]
-    #     cbox_check.value["ordering_id"] = self.current_ordering.value['id']
-    #     cbox_check.value["based_on"] = self.current_ordering.value['document_uid']
-        
-    #     receipt = self.create_receipt(product, summa=summa, summa_qr=summa_qr)
-    #     if receipt is None:
-    #         return
-        
-    #     res = self.check.create_receipt(receipt)
-    #     if not res:
-    #         error("Помилка при створенні чеку в Checkbox")
-    #         return
-    #     if 'error' in res:
-    #         error(f"При створенні чеку в Checkbox: {res['error']}")
-    #         return
-    #     cbox_check.value["checkbox_uid"] = res['id']
-        
-    #     cin_item_qr = None
-    #     cin_item_cash = None
-    #     products_to_order = []
-    #     if product is None: #multiposition order
-    #         products_to_order = self.create_products_to_order()
-    #         if not products_to_order:
-    #             return
-    #         if summa:
-    #             sm = self.summa - summa_qr
-    #             cin_item_cash = self.create_cash_in(summa=sm)
-    #         if summa_qr:
-    #             cin_item_qr = self.create_cash_in(cash_qr=cash_qr, summa=summa_qr)
-    #     else: #one position order
-    #         res = self.create_product_to_order(product)
-    #         if not res:
-    #             return
-    #         self.summa = res['product_extra']['product_to_ordering']['cost']
-    #         cin_item_cash = self.create_cash_in(self.summa, cash_qr=cash_qr)
-    #         products_to_order.append(res)
-            
-    #     if not cin_item_cash and not cin_item_qr:
-    #         return
-    #     cbox_check.value["cash_sum"] = self.summa
-
-    #     self.current_ordering.value['price'] += self.summa
-    #     self.current_ordering.value['cost'] += self.summa
-    #     err = self.current_ordering.save()
-    #     if err:
-    #         error(err)
-
-    #     err = cbox_check.save()
-    #     if err:
-    #         error(err)
-    #     else:
-    #         cbox_check.value['name'] = f'Чек {cbox_check.value["id"]}'
-    #         err = cbox_check.save()
-    #         if err:
-    #             error(err)
-    #         if cin_item_cash is not None:
-    #             cin_item_cash.value['cbox_check_id'] = cbox_check.value["id"]
-    #             err = cin_item_cash.save()
-    #             if err:
-    #                 error(err)
-    #         if cin_item_qr is not None:
-    #             cin_item_qr.value['cbox_check_id'] = cbox_check.value["id"]
-    #             err = cin_item_qr.save()
-    #             if err:
-    #                 error(err)
-
-    #     if product is None: #multiposition order
-    #         self.create_check_items(cbox_check)
-    #     else: #one position order
-    #         self.create_check_item(product, cbox_check)
-
-    #     png_res = self.get_check_png(cbox_check.value['checkbox_uid'])
-    #     fs_res = self.get_check_fs_code(cbox_check)        
-        
-    #     if not png_res:
-    #         png_res = self.get_check_png(cbox_check.value['checkbox_uid'])
-    #         if not png_res:
-    #             error("Не можу отримати png чеку")
-    #     if png_res and not fs_res:
-    #         self.get_check_fs_code(cbox_check)
-
-    #     return True
-
     def get_check_fs_code(self, cbox_check):
         c = self.check.get_check(cbox_check.value['checkbox_uid'])
         if 'error' in c:
@@ -1531,8 +1272,6 @@ class ProductsTab(QWidget):
         if 'operation' in value:
             return 'operation'
         return ''
-
-                
 
     def create_check_item(self, value, check):
         item_type = self.get_type_of_value(value)

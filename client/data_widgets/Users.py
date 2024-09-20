@@ -35,9 +35,7 @@ class UserOrderingDetailsTable(DetailsItemTable):
         if err:
             error(err)
             return
-        
         values = self.item.values
-        
         return values
     
     def reload(self, values=None):

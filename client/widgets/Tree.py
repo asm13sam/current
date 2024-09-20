@@ -55,7 +55,6 @@ class Tree(QTreeWidget):
             if parent_item is None:
                 parent_item = self.invisibleRootItem()
             data_item = QTreeWidgetItem()
-            # data_item = QTreeWidgetItem(self if parent_item is None else None)
             if not self.fields:
                 data_item.setText(0, td['name'])
             else:
@@ -192,13 +191,6 @@ class ExtTree(Tree):
                 # data_item.setIcon(0, QIcon.fromTheme("list-add"))
                 data_item.setIcon(0, icon)
 
-                
-            # if parent_item is not None:
-            #     parent_item.addChild(data_item)
-            # if 'type' in td and td['type'] != self.name or td['id'] not in self.dataset:
-            #     continue    
-            # self.add_childs(td['id'], data_item)
-
     def value_dblclicked(self, index):
         is_ext = self.currentItem().data(1, IS_EXT_ROLE)
         if not is_ext:
@@ -244,7 +236,6 @@ class TreeWControls(QWidget):
                 btn.clicked.connect(lambda _,action=b: self.action(action))
                 self.hbox.addWidget(btn)
         
-
     def action(self, action):
         if action == 'create' or action == 'reload':
             self.actionInvoked.emit(action, {})
@@ -362,13 +353,6 @@ class DatasetTree(QTreeWidget):
         current_dataset_item = self.dataset.get(current.data(1, ID_ROLE))
         self.itemSelected.emit(current_dataset_item.value)
 
-    # def delete_current(self, id):
-    #     current_widget_item = self.currentItem()
-    #     root = self.invisibleRootItem()
-    #     current_dataset_key = current_widget_item.data(1, ID_ROLE)
-    #     (current_widget_item.parent() or root).removeChild(current_widget_item)
-    #     self.dataset[current_dataset_key[0]].pop(i)
-        
     def value(self):
         i = self.currentItem()
         if not i:
@@ -384,9 +368,7 @@ class DatasetTree(QTreeWidget):
             self.valueDoubleCklicked.disconnect()
         except Exception: 
             pass
-
         
-
     def value_dblclicked(self, index):
         value = self.currentItem().data(1, FULL_VALUE_ROLE)
         if value:
@@ -476,7 +458,6 @@ class DatasetItemsTree(QTreeWidget):
         header = self.header()
         header.setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
         self.currentItemChanged.connect(self.current_changed)
-        # self.itemDoubleClicked.connect(self.value_dblclicked)
         self.dataset: ItemsTreeDataset = None
         
     def reload(self, dataset: ItemsTreeDataset=None):
@@ -487,7 +468,6 @@ class DatasetItemsTree(QTreeWidget):
         self.add_childs(0, self.invisibleRootItem())
     
     def add_childs(self, current_tree_key_value: int|str, parent_item: QTreeWidgetItem):
-        # print('add_childs', current_tree_key_value)
         for item in self.dataset.get_by_key(current_tree_key_value):
             item_widget = QTreeWidgetItem()
             if not self.fields:
@@ -502,7 +482,6 @@ class DatasetItemsTree(QTreeWidget):
             
             if tree_key.endswith('_id'):
                 tree_key = tree_key[:-3]
-            # print('tree_key', tree_key, item.type, item.value['id'])
             if item.type != tree_key or dataset_key not in self.dataset.data:
                 continue    
             self.add_childs(item.value['id'], item_widget)

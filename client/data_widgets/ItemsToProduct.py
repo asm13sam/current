@@ -51,7 +51,6 @@ class ProductTable(MainItemTable):
 
     def dialog(self, value, title):
         i = Item(self.item.name)
-        # print(self.item.name, '====>', i.model.keys())
         form = ProductForm(value=value)
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
@@ -76,7 +75,6 @@ class ProductToProductForm(CustomForm):
         self.widgets['product2_id'].valChanged.connect(self.product_selected)
         self.widgets['cost'].valChanged.connect(self.cost_changed)
         self.widgets['number'].valChanged.connect(self.number_changed)
-        # self.widgets['coeff'].valChanged.connect(self.number_changed)
 
         self.labels['coeff'].setVisible(False)
         self.labels['is_multiselect'].setVisible(False)
@@ -100,7 +98,6 @@ class ProductToProductForm(CustomForm):
     def number_changed(self):
         number = self.widgets['number'].value()
         if not number:
-            # error("Кількість має бути більшою за 0!")
             return
         coeff = self.widgets['coeff'].value()
         self.widgets['cost'].set_value(round(self.price * number * coeff, 2))
@@ -155,7 +152,6 @@ class DetailsProductToProductTable(DetailsItemTable):
     
     def dialog(self, value, title):
         i = Item(self.item.name)
-        # print(self.item.name, '====>', i.model.keys())
         form = ProductToProductForm(value=value)
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
@@ -191,14 +187,6 @@ class MatherialToProductForm(CustomForm):
     def __init__(self, fields: list = [], value: dict = {}):
         self.item = Item('matherial_to_product')
         self.price = 0
-        # if value:
-        #     if value['matherial_id']:
-        #         m = Item('matherial')
-        #         err = m.get(value['matherial_id'])
-        #         if err:
-        #             error(err)
-        #             return
-        #         self.price = m.value['cost']
         super().__init__(self.item.model, fields, value)
         mat =  self.widgets['matherial_id'].full_value()
         if mat:
@@ -206,8 +194,6 @@ class MatherialToProductForm(CustomForm):
         self.widgets['matherial_id'].valChanged.connect(self.matherial_selected)
         self.widgets['cost'].valChanged.connect(self.cost_changed)
         self.widgets['number'].valChanged.connect(self.number_changed)
-        # self.widgets['coeff'].valChanged.connect(self.number_changed)
-        
         self.labels['coeff'].setVisible(False)
         self.labels['is_multiselect'].setVisible(False)
         self.widgets['coeff'].setVisible(False)
@@ -230,7 +216,6 @@ class MatherialToProductForm(CustomForm):
     def number_changed(self):
         number = self.widgets['number'].value()
         if not number:
-            # error("Кількість має бути більшою за 0!")
             return
         coeff = self.widgets['coeff'].value()
         self.widgets['cost'].set_value(round(self.price * number * coeff, 2))
@@ -314,8 +299,6 @@ class DetailsMatherialToProductTable(DetailsItemTable):
             self.actionResolved.emit()
 
 
-
-
 class OperationToProductForm(CustomForm):
     def __init__(self, fields: list = [], value: dict = {}):
         self.item = Item('operation_to_product')
@@ -331,8 +314,6 @@ class OperationToProductForm(CustomForm):
         self.widgets['cost'].valChanged.connect(self.cost_changed)
         self.widgets['equipment_cost'].valChanged.connect(self.cost_changed)
         self.widgets['number'].valChanged.connect(self.number_changed)
-        # self.widgets['coeff'].valChanged.connect(self.number_changed)
-
         self.labels['coeff'].setVisible(False)
         self.labels['is_multiselect'].setVisible(False)
         self.widgets['coeff'].setVisible(False)
@@ -366,7 +347,6 @@ class OperationToProductForm(CustomForm):
     def number_changed(self):
         number = self.widgets['number'].value()
         if not number:
-            # error("Кількість має бути більшою за 0!")
             return
         coeff = self.widgets['coeff'].value()
         self.widgets['cost'].set_value(round(self.price * number * coeff, 2))
@@ -483,8 +463,6 @@ class DetailsNumbersToProductTable(DetailsItemTable):
     
     def dialog(self, value, title):
         i = Item(self.item.name)
-        # i.create_default_w()
-        # form = MatherialToProductForm(value=value)
         form = CustomForm(i.model, value=value)
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
@@ -602,7 +580,6 @@ def create_details_table(item_name: str, **kvargs):
     if item_name == 'numbers_to_product':
         return DetailsNumbersToProductTable(**kvargs)
     
-
 
 class ItemsToProduct(QSplitter):
     def __init__(self) -> None:
@@ -763,7 +740,6 @@ class ItemsToProduct(QSplitter):
                 error(err)
                 continue
             update_counter += 1
-            # print('updated', item.hum, v[id_name], 'to ordering', v['id'])
         messbox(f"{item.hum.title()} - ціни оновлено у {update_counter} позиціях")
         return update_counter
     
@@ -809,12 +785,6 @@ class ItemsToProduct(QSplitter):
         self.o2ps.reload(value['id'])
         self.p2ps.reload(value['id'])
         self.n2ps.reload(value['id'])
-        # o2p = Item('operation_to_ordering')
-        # err = o2p.get_filter_w('ordering_id', value['id'])
-        # if err:
-        #     error(err)
-        #     return
-        # self.o2ps.reload(o2p.values)
         
     def update_sum(self):
         rows = self.products.table.table.get_selected_rows()
@@ -835,7 +805,6 @@ class ItemsToProduct(QSplitter):
         for v in m2p.values:
             if v['list_name'] == 'default':
                 prod_sum += v['cost']
-        # print('mat', mat_sum)
         o2p = Item('operation_to_product')
         err = o2p.get_filter_w('product_id', prod_value['id'])
         if err:
@@ -844,7 +813,6 @@ class ItemsToProduct(QSplitter):
         for v in o2p.values:
             if v['list_name'] == 'default':
                 prod_sum += v['cost']
-        # print('+oper', mat_sum)
         p2p = Item('product_to_product')
         err = p2p.get_filter_w('product_id', prod_value['id'])
         if err:
@@ -874,7 +842,6 @@ class ItemsToProduct(QSplitter):
     def revers_product_price(self, value=None):
         if not value:
             prod_value = self.products.current_value
-            # print('prod_value', prod_value)
         else:
             prod_value = value
         
@@ -886,7 +853,6 @@ class ItemsToProduct(QSplitter):
         if not calc_price or price == calc_price:
             return
         k = price / calc_price
-        # print('k=', k)
         for name in ('matherial_to_product', 'operation_to_product', 'product_to_product'):
             i2p = Item(name)
             err = i2p.get_filter_w('product_id', prod_value['id'])

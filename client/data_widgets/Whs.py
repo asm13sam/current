@@ -19,17 +19,13 @@ from widgets.Form import (
 
 from data_widgets.Documents import DocsTable
 
-# class MatherialToWhsInFormDialog(FormDialog):
-#     def __init__(self, title, data_model, value):
-#         super().__init__(title, data_model, value)
-
 class MatherialToWhsInForm(CustomForm):
     def __init__(self, fields: list = [], value: dict = {}):
         self.item = Item('matherial_to_whs_in')
         super().__init__(self.item.model, fields, value)
-        self.widgets['color_id'].setVisible(False) #.setDisabled(True)
-        self.widgets['width'].setVisible(False) #.setDisabled(True)
-        self.widgets['length'].setVisible(False) #.setDisabled(True)
+        self.widgets['color_id'].setVisible(False)
+        self.widgets['width'].setVisible(False)
+        self.widgets['length'].setVisible(False)
         self.labels['color_id'].setVisible(False)
         self.labels['width'].setVisible(False)
         self.labels['length'].setVisible(False)
@@ -39,15 +35,15 @@ class MatherialToWhsInForm(CustomForm):
         matherial_value = self.widgets['matherial_id'].full_value()
         if matherial_value['measure'] == 'мп.':
             self.labels['length'].setVisible(True)
-            self.widgets['length'].setVisible(True) #.setDisabled(False)
+            self.widgets['length'].setVisible(True)
         if matherial_value['measure'] == 'м2':
             self.labels['length'].setVisible(True)
             self.labels['width'].setVisible(True)
-            self.widgets['width'].setVisible(True) #.setDisabled(False)
-            self.widgets['length'].setVisible(True) #.setDisabled(False)
+            self.widgets['width'].setVisible(True)
+            self.widgets['length'].setVisible(True)
         if matherial_value['color_group_id']:
             self.labels['color_id'].setVisible(True)
-            self.widgets['color_id'].setVisible(True) #.setDisabled(False)
+            self.widgets['color_id'].setVisible(True)
             self.widgets['color_id'].group_id = matherial_value['color_group_id']
             
 
@@ -85,7 +81,6 @@ class DetailsMatherialToWhsInTable(DetailsItemTable):
     
     def dialog(self, value, title):
         i = Item(self.item.name)
-        # print(self.item.name, '====>', i.model.keys())
         form = MatherialToWhsInForm(value=value)
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
@@ -107,21 +102,21 @@ class MatherialToWhsOutForm(CustomForm):
     def __init__(self, fields: list = [], value: dict = {}):
         self.item = Item('matherial_to_whs_out')
         super().__init__(self.item.model, fields, value)
-        self.widgets['color_id'].setVisible(False) #.setDisabled(True)
-        self.widgets['width'].setVisible(False) #.setDisabled(True)
-        self.widgets['length'].setVisible(False) #.setDisabled(True)
+        self.widgets['color_id'].setVisible(False)
+        self.widgets['width'].setVisible(False)
+        self.widgets['length'].setVisible(False)
         self.widgets['matherial_id'].valChanged.connect(self.matherial_selected)
 
     def matherial_selected(self):
         matherial_value = self.widgets['matherial_id'].full_value()
         self.widgets['price'].setValue(matherial_value['price'])
         if matherial_value['measure'] == 'мп.':
-            self.widgets['length'].setVisible(True) #.setDisabled(False)
+            self.widgets['length'].setVisible(True)
         if matherial_value['measure'] == 'м2':
-            self.widgets['width'].setVisible(True) #.setDisabled(False)
-            self.widgets['length'].setVisible(True) #.setDisabled(False)
+            self.widgets['width'].setVisible(True)
+            self.widgets['length'].setVisible(True)
         if matherial_value['color_group_id']:
-            self.widgets['color_id'].setVisible(True) #.setDisabled(False)
+            self.widgets['color_id'].setVisible(True)
             self.widgets['color_id'].group_id = matherial_value['color_group_id']
 
 
@@ -292,17 +287,6 @@ class WhsInTab(WhsTab):
                 error(err)
             
         self.doc_table.reload(cur_value)
-
-    # def reload_details(self, value):
-    #     super().reload_details(value)
-    #     self.doc_table.reload_docs(value)
-                
-        
-    # def calc_sum(self):
-    #     cur_value = self.main_table.table.table.get_selected_value()
-    #     new_sum = self.details_table.calc_sum('cost')
-    #     return new_sum + cur_value['delivery']
-        
 
 
 class WhsOutTab(WhsTab):

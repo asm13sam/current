@@ -60,7 +60,6 @@ class InfoBlock(QWidget):
         self.grid = QGridLayout()
         self.grid.setContentsMargins(0, 0, 0, 0)
         self.grid.setVerticalSpacing(1)
-        # self.grid.setLabelAlignment( Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop )
         self.setLayout(self.grid)
 
         info_names_color = self.cfg['info_names_color'] if 'info_names_color' in self.cfg else 'lightgreen'
@@ -72,8 +71,6 @@ class InfoBlock(QWidget):
         k = len(fields) // columns
         if len(fields) % columns:
             k += 1
-        # if 'info' in fields:
-        #     k -= 1
         
         align = Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignTop
         for field, header in zip(fields, headers):
@@ -81,7 +78,6 @@ class InfoBlock(QWidget):
             if data_model[field]['def'] == '\n':
                 self.lables[field] = TextWidget()
                 self.lables[field].set_value("---" if not value else value[field] if field in value else '')
-                # self.grid.addWidget(field_name, row, col, align)
                 self.grid.addWidget(self.lables[field], k, 0, 1, 2*columns)
                 self.grid.setRowStretch(k, 10)
                 self.lables[field].setStyleSheet(f'color:{info_values_color}; padding: 2px; background-color: {info_bg_color};')
@@ -108,7 +104,6 @@ class InfoBlock(QWidget):
             if row >= k:
                 row = 0
                 col += 2
-        # self.grid.addWidget(QLabel(''), k+2, 0)
         if not 'info' in fields:
             self.grid.setRowStretch(k+5, 10)
             
@@ -153,7 +148,6 @@ class InfoBlock(QWidget):
         return v, ttp
 
 
-
 class CustomForm(QWidget):
     formChanged = pyqtSignal(bool)
     saveRequested = pyqtSignal(dict)
@@ -191,11 +185,9 @@ class CustomForm(QWidget):
         self.save_but.setVisible(False)
 
     def set_changed(self, changed=True):
-        # print('calling set changed', changed)
         if changed == self.is_changed:
             return
         self.is_changed = changed
-        # print('==call form set changed==')
         self.formChanged.emit(changed)
 
     def changed(self):
@@ -227,8 +219,6 @@ class CustomForm(QWidget):
             
             if def_value == '\n':
                 self.grid.addWidget(self.widgets[field], k, 0, 1, 2*columns)
-                # self.grid.addWidget(self.labels[field], 0, 2*columns, align)
-                # self.grid.addWidget(self.widgets[field], 0, 2*columns+1, k+1, 1)
                 continue    
 
             self.grid.addWidget(self.labels[field], row, col, align)
@@ -298,10 +288,6 @@ class CustomForm(QWidget):
             w = ProfitWidget()
         else:
             w = CostWidget()
-        # elif field == 'cost':
-        #     w = CostWidget()
-        # else:
-        #     w = QDoubleSpinBox()
         w.setValue(cur_value)
         return w
 
@@ -313,21 +299,16 @@ class CustomForm(QWidget):
     def get_value(self):
         for k in self.widgets:
             v = self.widgets[k].value()
-            # print(self.model[k]['form'], v)
             if self.model[k]['form'] == 2 and not v:
                 error(f'Не обрано {self.model[k]["hum"]}')
                 return False
             self.value[k] = v
-            # print('>|', k, self.value[k])
         self.saveRequested.emit(self.value)
         return True
         
     def reload(self, value):
-        # print('start reload')
         self.value = value
-        # print(value)
         for k, w in self.widgets.items():
-            # print(k, value[k])
             w.setValue(value[k])
             
         self.set_changed(False)
@@ -342,13 +323,11 @@ class TimeWidget(QWidget):
         elif with_time:
             self.date = datetime.now().isoformat(timespec='seconds')
         else:
-            self.date = date.today().isoformat() #.now().isoformat(timespec='hours')
+            self.date = date.today().isoformat() 
         self.layout = QHBoxLayout()
         self.setLayout(self.layout)
-        # self.label = QLabel()
         self.btn = QPushButton('Обрати')
         self.btn.clicked.connect(self.act)
-        # self.layout.addWidget(self.label)
         self.layout.addWidget(self.btn)
         self.btn.setText(self.date)
 
@@ -570,12 +549,8 @@ class FormDialog(CustomDialog):
         self.form.set_changed(False)
 
     def accept(self) -> None:
-        # if self.form.changed():
         if not self.form.get_value():
             return
-            # mess = "Відкинути не збережені зміни?"
-            # if not ok_cansel_dlg(mess):
-            #     return
         return super().accept()
 
 
@@ -603,12 +578,8 @@ class CustomFormDialog(CustomDialog):
         self.form.set_changed(False)
 
     def accept(self) -> None:
-        # if self.form.changed():
         if not self.form.get_value():
             return
-            # mess = "Відкинути не збережені зміни?"
-            # if not ok_cansel_dlg(mess):
-            #     return
         return super().accept()
 
 
@@ -626,11 +597,6 @@ class SelectDialog(CustomDialog):
         if item_name == 'contragent':
             self.search_field = 'search'
                 
-        # if self.item.name + '_id' in self.item.model:
-        #     widget = GroupTree(self.item.name, self.item.hum, values, group_id)
-        #     if self.form_value:
-        #         widget.tree.delete_by_id(self.form_value['id'])
-        # else:
         widget = ItemTable(
             self.item.name, 
             search_field=self.search_field, 
@@ -654,7 +620,6 @@ class SelectDialog(CustomDialog):
 class ContactSelectDialog(SelectDialog):
     def __init__(self, contragent_id):
         self.contragent_id = contragent_id
-        # print('contragent id in contact selector', contragent_id)
         super().__init__('contact')
         self.widget.table.table.valueDoubleCklicked.disconnect()
         self.widget.table.table.valueDoubleCklicked.connect(self.accept_value)
@@ -732,26 +697,6 @@ class NumWidget(QDoubleSpinBox):
         self.blockSignals(False)
         
 
-# price do not sets by user, only calculates, so it is label with interface of spinbox
-# class PriceWidget(QLabel):
-#     valChanged = pyqtSignal()
-#     def __init__(self):
-#         super().__init__()
-#         self.val = 0.0
-#         self.init_val = 0.0
-#         #self.setSuffix(measure)
-
-#     def setValue(self, value):
-#         self.val = value
-#         self.setText(str(self.val))
-        
-#     def set_value(self, value):
-#         self.setValue(value)
-#         self.valChanged.emit()
-
-#     def value(self):
-#         return self.val
-
 class PriceWidget(QDoubleSpinBox):
     valChanged = pyqtSignal()
     def __init__(self):
@@ -767,7 +712,6 @@ class PriceWidget(QDoubleSpinBox):
         self.blockSignals(True)
         self.setValue(value)
         self.blockSignals(False)
-        # self.valChanged.emit()
 
 
 class PersentWidget(QDoubleSpinBox):
@@ -904,14 +848,8 @@ class ItemTable(QSplitter):
         group_name = item_name + '_group' 
         if group_name + '_id' in self.item.model:
             self.make_group_selector(group_name, group_id)
-            # reload_group_btn = QPushButton()
-            # reload_group_btn.setIcon(QtGui.QIcon(f'images/icons/reload.png'))
-            # reload_group_btn.setToolTip('Оновити групи')
-            # reload_group_btn.clicked.connect(self.reload_group)
-            # self.table.hbox.insertWidget(0, reload_group_btn)
 
         self.period = None
-        # if 'created_at' in self.item.model and show_period:
         if ('between' in self.item.op_model or 'between_up' in self.item.op_model) and show_period:
             self.period = PeriodWidget()
             self.table.hbox.insertWidget(0, self.period)
@@ -998,20 +936,6 @@ class ItemTable(QSplitter):
             self.groups.setMaximumWidth(300)
             self.insertWidget(0, self.groups)
         self.groups.set_current_id(group_id)
-        # self.setStretchFactor(0, 1)
-        # self.setStretchFactor(1, 10)
-        
-    # def reload_group(self):
-    #     group_value = self.groups.value()
-
-    #     group = Item(self.group_name)
-    #     err = group.get_all()
-    #     if err:
-    #         error(err)
-    #         return
-    #     self.groups.reload(group.values)
-    #     if group_value:
-    #         self.groups.set_current_id(group_value['id'])
     
     def get_group_values(self, all=''):
         group = self.groups.value()
@@ -1091,7 +1015,6 @@ class ItemTable(QSplitter):
         self.table.table.reload(self.item.values)
 
     def action(self, action:str, value:dict=None):
-        # print('action', action)
         if action == 'reload':
             self.reload()
             return
@@ -1116,7 +1039,6 @@ class ItemTable(QSplitter):
 
     def dialog(self, value, title):
         i = Item(self.item.name)
-        # print(self.item.name, '====>', i.model.keys())
         dlg = FormDialog(title, i.model, value)
         res = dlg.exec()
         if res and dlg.value:
@@ -1190,7 +1112,6 @@ class MainItemTable(ItemTable):
         self.details_table = table
 
     def del_dialog(self, value):
-        # if self.details_table.
         return super().del_dialog(value)
     
     def add_doc_table(self, doc_table, is_bottom=False):
@@ -1210,11 +1131,9 @@ class MainItemTable(ItemTable):
                 self.addWidget(doc_table)
     
     def on_value_selected(self, value):
-        # print('on value main table selected')
         self.current_value = value
         if self.doc_table:
             self.doc_table.reload(value)
-        # print('on value main table selected end')
         return super().on_value_selected(value)
     
     def reload(self, values=None):
@@ -1365,7 +1284,6 @@ class ItemTree(QSplitter):
         self.tree.tree.reload(values)
 
     def perform_action(self, action:str, value:dict=None):
-        # print('action', action, value)
         if action == 'reload':
             self.reload()
             return
