@@ -37,52 +37,52 @@ class AdminTab(QWidget):
             error('Оберіть збережену базу')
             return
         q = ok_cansel_dlg(f'Ви дійсно хочете відновити базу {current["name"]} за {current["created_at"]}?')
-        if q:
-            res = self.repo.restore_base(f'{current["name"]}_{current["created_at"]}')
-            if res['error']:
-                error(res['error'])
-                return
-            if res['value']:
-                print(res['value'])
-                messbox(f'База під назвою {current["name"]} успішно відновлена')
+        if not q:
+            return
+        res = self.repo.restore_base(f'{current["name"]}_{current["created_at"]}')
+        if res['error']:
+            error(res['error'])
+            return
+        messbox(f'База під назвою {current["name"]} успішно відновлена')
 
     def delete_base(self):
         current = self.backups.table.get_selected_value()
         if not current:
             error('Оберіть збережену базу')
-            return
+            return False
         q = ok_cansel_dlg(f'Ви дійсно хочете видалити базу {current["name"]} за {current["created_at"]}?')
-        if q:
-            res = self.repo.delete_base(f'{current["name"]}_{current["created_at"]}')
-            if res['error']:
-                error(res['error'])
-                return
-            if res['value']:
-                print(res['value'])
-                messbox(f'База під назвою {current["name"]} успішно видалена')
+        if not q:
+            return False
+        res = self.repo.delete_base(f'{current["name"]}_{current["created_at"]}')
+        if res['error']:
+            error(res['error'])
+            return False
+        messbox(f'База під назвою {current["name"]} успішно видалена')
+        return True
 
+    def create(self):
+        name = askdlg('Задайте назву для збереженої бази')
+        if not name:
+            return False
+        name = name.strip().replace(' ', '-').replace('_', '-')
+        res = self.repo.create_base_backup(name)
+        if res['error']:
+            error(res['error'])
+            return
+        messbox(f'База успішно збережена під назвою {name}')
+        return True
+    
     def action(self, action_name, value):
-        print('action', action_name, value)
+        result = False
         if action_name == 'create':
-            name = askdlg('Задайте назву для збереженої бази')
-            if name:
-                res = self.repo.create_base_backup(name)
-                if res['error']:
-                    error(res['error'])
-                    return
-                if res['value']:
-                    print(res['value'])
-                    messbox(f'База успішно збережена під назвою {name}')
-                    self.reload()
-        if action_name == 'reload':
-            self.reload()
+            result = self.create()                
         if action_name == 'delete':
-            self.delete_base()
+            result = self.delete_base()
+        if action_name == 'reload' or result:
             self.reload()
 
     def reload(self):
         res = self.repo.get_base_backups()
-        print(res)
         if res['error']:
             error(res['error'])
             return
@@ -93,4 +93,3 @@ class AdminTab(QWidget):
             name, date = v.split('_')
             values.append({'id': i, 'name': name, 'created_at': date})
         self.backups.table.reload(values)
-

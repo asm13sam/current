@@ -10,3 +10,4 @@ main.spec
 client/build
 client/dist
 *.exe
+state.json
