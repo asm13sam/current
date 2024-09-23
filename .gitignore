@@ -1,7 +1,7 @@
 try*
 *_cc
 *.db
-config*
+config.json
 tgtsrv*
 *.bk
 check.json

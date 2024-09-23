@@ -1,23 +1,144 @@
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QWidget,
     QHBoxLayout,
     QPushButton,
+    QGridLayout,
+    QLabel,
+    QSplitter,
+    QComboBox,
     )
+
+import json
 
 from data.model import Item
 from data.app import App
 from data.conn import Data
 from widgets.Dialogs import error, askdlg, messbox, ok_cansel_dlg
-from widgets.Form import ItemTable
-from widgets.Table import TableWControls 
+from widgets.Form import (
+    LineEditWidget,
+    IntWidget,
+    Selector,
+    PersentWidget,
+    )
+from widgets.Table import TableWControls
 
-class AdminTab(QWidget):
+
+class PathSelector(QPushButton):
     def __init__(self):
         super().__init__()
+        self.path = ''
+
+    def set_value(self, value):
+        self.path = value
+        self.setText(str(value))
+
+
+class ColorSelector(QPushButton):
+    def __init__(self):
+        super().__init__()
+        self.color = ''
+
+    def set_value(self, value):
+        self.color = value
+        self.setText(str(value))
+
+
+class ProductPlacesConfig(QPushButton):
+    def __init__(self):
+        super().__init__()
+        self.places = []
+
+    def set_value(self, value):
+        self.places = value
+        self.setText(str(len(value)))
+
+
+class ThemeSelector(QComboBox):
+    def __init__(self):
+        super().__init__()
+        self.addItem('Темна')
+        self.addItem('Світла')
+
+    def set_value(self, value):
+        self.setCurrentText('Темна' if value == 'dark' else 'Світла')
+
+
+class ConfigEditor(QWidget):
+    def __init__(self) -> None:
+        super().__init__()
+        self.cfg = {}
+        self.hum = {}
+        self.widgets = {}
+        self.grid = QGridLayout()
+        self.setLayout(self.grid)
+        self.grid.setContentsMargins(0, 0, 0, 0)
+
+    def make_gui(self):
+        self.make_widgets()
+        self.make_form()
+
+    def read_config(self):
+        with open ('config.json', "r") as f:
+            self.cfg = json.loads(f.read())
+        with open ('config_hum.json', "r") as f:
+            self.hum = json.loads(f.read())
+
+    def make_widgets(self):
+        self.widgets["host"] = LineEditWidget()
+        self.widgets["port"] = LineEditWidget()
+
+        self.widgets["makets_path"] = PathSelector()
+        self.widgets["bs_makets_path"] = PathSelector()
+        self.widgets["new_makets_path"] = PathSelector()
+        self.widgets["program"] = PathSelector()
+
+        self.widgets["theme"] = ThemeSelector()
+        self.widgets["font_size"] = IntWidget()
+        self.widgets["color"] = ColorSelector()
+        self.widgets["form_names_color"] = ColorSelector()
+        self.widgets["form_values_color"] = ColorSelector()
+        self.widgets["form_bg_color"] = ColorSelector()
+        self.widgets["info_names_color"] = ColorSelector()
+        self.widgets["info_values_color"] = ColorSelector()
+        self.widgets["info_bg_color"] = ColorSelector()
+
+        self.widgets["license_key"] = LineEditWidget()
+        self.widgets["cashier_pin"] = LineEditWidget()
+        self.widgets["checkbox_url"] = LineEditWidget()
+
+        self.widgets["warehouse persent"] = PersentWidget()
+        self.widgets["copycenter warehouse id"] = Selector('whs')
+        self.widgets["measure pieces"] = Selector('measure')
+        self.widgets["measure linear"] = Selector('measure')
+        self.widgets["measure square"] = Selector('measure')
+        self.widgets["contragent to production"] = Selector('contragent')
+        self.widgets["contact to production"] = Selector('contact')
+        self.widgets["contragent copycenter default"] = Selector('contragent')
+        self.widgets["contact copycenter default"] = Selector('contact')
+        self.widgets["ordering state in work"] = Selector('ordering_status')
+        self.widgets["ordering state ready"] = Selector('ordering_status')
+        self.widgets["ordering state taken"] = Selector('ordering_status')
+        self.widgets["ordering state canceled"] = Selector('ordering_status')
+        self.widgets["product_to_ordering state ready"] = Selector('ordering_status')
+
+        self.widgets["product_groups"] = ProductPlacesConfig()
+
+    def make_form(self):
+        row = 0
+        for k, v in self.cfg.items():
+            self.grid.addWidget(QLabel(self.hum[k]), row, 0)
+            self.grid.addWidget(self.widgets[k], row, 1)
+            self.widgets[k].set_value(v)
+            row += 1
+        
+
+
+class AdminTab(QSplitter):
+    def __init__(self):
+        super().__init__(Qt.Orientation.Horizontal)
         app = App()
         self.repo: Data = app.repository
-        box = QHBoxLayout()
-        self.setLayout(box)
         data_model = {
             "id": {"def": 0, "hum": "Номер", "form": 0},
             "name": {"def": "", "hum": "Назва", "form": 2},
@@ -25,11 +146,15 @@ class AdminTab(QWidget):
         }
         btns = {'reload':'Оновити', 'create':'Створити', 'delete':'Видалити'}
         self.backups = TableWControls(data_model, ['id', 'name', 'created_at'], buttons=btns)
-        box.addWidget(self.backups)
+        self.addWidget(self.backups)
         self.backups.actionInvoked.connect(self.action)
         rest_btn = QPushButton('Відновити')
         self.backups.hbox.insertWidget(0, rest_btn)
         rest_btn.clicked.connect(self.restore_base)
+        config_editor = ConfigEditor()
+        self.addWidget(config_editor)
+        config_editor.read_config()
+        config_editor.make_gui()
 
     def restore_base(self):
         current = self.backups.table.get_selected_value()
@@ -93,3 +218,5 @@ class AdminTab(QWidget):
             name, date = v.split('_')
             values.append({'id': i, 'name': name, 'created_at': date})
         self.backups.table.reload(values)
+
+
