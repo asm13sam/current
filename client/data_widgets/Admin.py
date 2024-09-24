@@ -220,7 +220,8 @@ class ThemeSelector(QComboBox):
         self.setCurrentText('Темна' if value == 'dark' else 'Світла')
 
     def value(self):
-        return 'dark' if self.currentText == 'Темна' else 'light'
+        print('self.currentText', self.currentText)
+        return 'dark' if self.currentText() == 'Темна' else 'light'
 
 
 class ConfigEditor(QWidget):

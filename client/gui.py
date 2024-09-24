@@ -244,7 +244,10 @@ class MainWindow():
         rect = screen.availableGeometry()
         print('Available: %d x %d' % (rect.width(), rect.height()))
         self.window = Window()
-        color = "#99BCBC"
+        app = App()
+        color = app.config['color'] # "#99BCBC"
+        font_size = app.config['font_size'] # 10
+        theme = app.config['theme']
         qss = """
         QToolTip {
             background-color: black;
@@ -252,11 +255,11 @@ class MainWindow():
             border: black solid 1px
                 }
         """
-        qdarktheme.setup_theme(custom_colors={'primary': color}, additional_qss=qss)
+        qdarktheme.setup_theme(theme=theme, custom_colors={'primary': color}, additional_qss=qss)
         font = QFont()
 
         QApplication.instance().setFont(font)
-        font.setPointSize(10)
+        font.setPointSize(font_size)
 
     def run(self):
         self.window.show()
