@@ -1,0 +1,42 @@
+{
+    "host": "Сервер (ім'я або IP)",
+    "port": "Порт",
+
+    "makets_path": "Тека старих макетів",
+    "bs_makets_path": "Тека макетів з 2023 р.",
+    "new_makets_path": "Тека нових макетів",
+    "program": "Програма для відкриття теки",
+
+    "theme": "Тема",
+    "font_size": "Розмір шрифту",
+    "color": "Колір тексту",
+    "form_names_color": "Колір заголовків форми",
+    "form_values_color": "Колір значень форми",
+    "form_bg_color": "Колір тла форми",
+    "info_names_color": "Колір заголовків інфо",
+    "info_values_color": "Колір значень інфо",
+    "info_bg_color": "Колір тла інфо",
+
+
+    "license_key": "Ключ ліцензії чекбокс",
+    "cashier_pin": "ПІН касира",
+    "checkbox_url": "URL API чекбокс",
+
+
+    "warehouse persent": "Націнка складу, %",
+    "copycenter warehouse id": "Склад копіцентра",
+    "measure pieces": "Одиниця виміру шт.",
+    "measure linear": "Одиниця виміру м.п.",
+    "measure square": "Одиниця виміру м2",
+    "contragent to production": "Контрагент Виробництво",
+    "contact to production": "Контакт Виробництво",
+    "contragent copycenter default": "Контрагент Копіцентру",
+    "contact copycenter default": "Контакт Копіцентру",
+    "ordering state in work": "Стан замовлення 'в роботі'",
+    "ordering state ready": "Стан замовлення 'готове'",
+    "ordering state taken": "Стан замовлення 'забране'",
+    "ordering state canceled": "Стан замовлення 'відмінене'",
+    "product_to_ordering state ready": "Стан виробу 'готовий'",
+
+    "product_groups": "Групи виробів"
+}

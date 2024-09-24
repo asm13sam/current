@@ -1,7 +1,7 @@
 try*
 *_cc
 *.db
-config*
+config.json
 tgtsrv*
 *.bk
 check.json
@@ -11,3 +11,4 @@ client/build
 client/dist
 *.exe
 state.json
+prew_config.json
