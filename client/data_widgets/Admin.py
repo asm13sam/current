@@ -25,6 +25,7 @@ from widgets.Form import (
     IntWidget,
     Selector,
     PersentWidget,
+    ContactSelector,
     )
 from widgets.Table import TableWControls
 from data_widgets.Helpers import OrdTree
@@ -274,9 +275,11 @@ class ConfigEditor(QWidget):
         self.widgets["measure linear"] = Selector('measure')
         self.widgets["measure square"] = Selector('measure')
         self.widgets["contragent to production"] = Selector('contragent')
-        self.widgets["contact to production"] = Selector('contact')
+        self.widgets["contact to production"] = ContactSelector(self.widgets["contragent to production"])
+        self.widgets["contact to production"].remove_phone()
         self.widgets["contragent copycenter default"] = Selector('contragent')
-        self.widgets["contact copycenter default"] = Selector('contact')
+        self.widgets["contact copycenter default"] = ContactSelector(self.widgets["contragent copycenter default"])
+        self.widgets["contact copycenter default"].remove_phone()
         self.widgets["ordering state in work"] = Selector('ordering_status')
         self.widgets["ordering state ready"] = Selector('ordering_status')
         self.widgets["ordering state taken"] = Selector('ordering_status')

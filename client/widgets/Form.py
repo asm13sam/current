@@ -46,6 +46,7 @@ class TabGroup(QTabWidget):
         w = self.widget(index)
         w.reload()
 
+
 class InfoBlock(QWidget):
     def __init__(self, data_model: dict, field_names: list = [], value:dict={}, columns=1, is_full=False):
         super().__init__()
@@ -668,16 +669,6 @@ class SingleSelectDialog(SelectDialog):
         return super().accept()
 
 
-class MultiSelectDialog(SelectDialog):
-    def __init__(self, item_name: str):
-        super().__init__(item_name)
-        self.values = []
-
-    def accept(self) -> None:
-        self.values = self.widget.table.table.get_selected_values()
-        return super().accept()
-
-
 class NumWidget(QDoubleSpinBox):
     valChanged = pyqtSignal()
     def __init__(self, measure: str=''):
@@ -1200,44 +1191,6 @@ class ItemTableWithDetails(QSplitter):
         self.table.reload(values)
         if values:
             self.reload_details(values[0])
-
-
-class GroupItemTable(ItemTable):
-    def __init__(
-                self, 
-                item_name: str, 
-                fields: list = [], 
-                values: list = None, 
-                buttons=TABLE_BUTTONS, 
-                group_id=0,
-                current_id=0,
-                ):
-        super().__init__(
-            item_name, 
-            '', 
-            fields, 
-            values, 
-            buttons, 
-            group_id, 
-            True,
-            False,
-            False,
-            )
-        self.current_id = current_id
-        self.id_name = item_name + '_id'
-
-    def reload(self, values=None):
-        if values is None:
-            values = self.get_values()
-        if self.current_id:
-            values = self.filter_childs(values, self.current_id)
-        self.table.table.reload(values)
-
-    def filter_childs(self, values, id):
-        res = []
-        for v in values:
-            if v[self.id_name] != id:
-                res.append(v)
 
 
 class ItemTree(QSplitter):

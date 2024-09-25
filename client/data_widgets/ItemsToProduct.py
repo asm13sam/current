@@ -110,7 +110,6 @@ class ProductToProductForm(CustomForm):
         self.widgets['cost'].set_value(round(self.price * number * coeff, 2))
 
 
-
 class DetailsProductToProductTable(DetailsItemTable):
     def __init__(self, fields: list = [], values: list = None, list_name='default', is_multiselect=False):
         self.list_name = list_name
@@ -180,7 +179,6 @@ class DetailsProductToProductTable(DetailsItemTable):
                     continue
             self.reload()
             self.actionResolved.emit()
-
 
 
 class MatherialToProductForm(CustomForm):
@@ -352,7 +350,6 @@ class OperationToProductForm(CustomForm):
         self.widgets['cost'].set_value(round(self.price * number * coeff, 2))
         self.widgets['equipment_cost'].set_value(round(self.eq_price * number, 2))
 
-    
     
 class DetailsOperationToProductTable(DetailsItemTable):
     def __init__(self, fields: list = [], values: list = None, list_name='default', is_multiselect=False):

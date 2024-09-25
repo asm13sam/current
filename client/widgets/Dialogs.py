@@ -12,10 +12,8 @@ from PyQt6.QtWidgets import (
 def error(text):
     MB(MB.Icon.Critical, "Помилка", text).exec()
 
-
 def messbox(text, title="Повідомлення"):
     MB(MB.Icon.Information, title, text).exec()
-
 
 def askdlg(question: str):
     dlg = AskDialog(question)
@@ -24,20 +22,9 @@ def askdlg(question: str):
         return ''
     return dlg.entry.text()
 
-
 def ok_cansel_dlg(question: str, title: str='Запитання'):
     dlg = CustomDialog(QLabel(question), title)
     return dlg.exec()
-
-
-def on_close_dlg():
-    buttons = MB.StandardButton.Save | MB.StandardButton.Discard | MB.StandardButton.Cancel
-    dialog = MB(
-        MB.Icon.Critical,
-        "Текст змінено", "Текст змінено. Зберегти зміни?",
-        buttons,
-        )
-    return dialog.exec()
 
 
 # widget - widget to show on dialog
@@ -74,6 +61,7 @@ class AskDialog(CustomDialog):
         wl.addWidget(self.entry)
         w.setLayout(wl)
         super().__init__(w, 'Запитання')
+
 
 class DeleteDialog(CustomDialog):
     def __init__(self, value, with_prompt=True):
