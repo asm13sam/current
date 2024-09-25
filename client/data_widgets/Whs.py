@@ -49,7 +49,6 @@ class MatherialToWhsInForm(CustomForm):
             self.widgets['color_id'].group_id = matherial_value['color_group_id']
             
 
-
 class DetailsMatherialToWhsInTable(DetailsItemTable):
     def __init__(self, fields: list = [], values: list = None, buttons=TABLE_BUTTONS, group_id=0):
         super().__init__('matherial_to_whs_in', 'name', fields, values, buttons, group_id)
@@ -121,7 +120,6 @@ class MatherialToWhsOutForm(CustomForm):
         if matherial_value['color_group_id']:
             self.widgets['color_id'].setVisible(True)
             self.widgets['color_id'].group_id = matherial_value['color_group_id']
-
 
 
 class DetailsMatherialToWhsOutTable(DetailsItemTable):

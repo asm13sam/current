@@ -19,7 +19,7 @@ from widgets.Dialogs import CustomDialog, ok_cansel_dlg, messbox
 from widgets.Form import ContactSelectDialog, FormDialog, CustomForm
 
 
-class ContragentGreateFormDialog(CustomDialog):
+class ContragentCreateFormDialog(CustomDialog):
     def __init__(self, contragent: Item, contact: Item) -> None:
         self.contact_value = {}
         self.value = {}

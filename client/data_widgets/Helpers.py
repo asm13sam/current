@@ -164,7 +164,6 @@ class MatherialToOrderingForm(CustomForm):
             self.widgets['color_id'].group_id = matherial_value['color_group_id']
 
 
-
 class OperationToOrderingForm(CustomForm):
     def __init__(self, fields: list = [], value: dict = {}):
         self.item = Item('operation_to_ordering')

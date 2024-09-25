@@ -410,30 +410,6 @@ class CasheFormDialog(CustomDialog):
         return super().accept()
 
 
-class ProductsButtonsGrid(QWidget):
-    def __init__(self, item):
-        super().__init__()
-        self.item = item
-        box = QGridLayout()
-        self.setStyleSheet('padding: 1px')
-        err = item.get_all()
-        if err:
-            error(err)
-            return
-        width = 3
-        x = 0
-        y = 0
-        for v in item.values:
-            b = QPushButton(v['name'])
-            b.clicked.connect(lambda _, value=v: self.create_value(value))
-            box.addWidget(b, y, x)
-            x += 1
-            if x >= width:
-                x = 0
-                y += 1
-        self.setLayout(box)
-
-
 class ProductGroupBox(QGroupBox):
     def __init__(self, name, values, callback):
         super().__init__(name)
