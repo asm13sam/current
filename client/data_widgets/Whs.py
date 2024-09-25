@@ -18,6 +18,7 @@ from widgets.Form import (
     )
 
 from data_widgets.Documents import DocsTable
+from data.app import App
 
 class MatherialToWhsInForm(CustomForm):
     def __init__(self, fields: list = [], value: dict = {}):
@@ -33,10 +34,11 @@ class MatherialToWhsInForm(CustomForm):
 
     def matherial_selected(self):
         matherial_value = self.widgets['matherial_id'].full_value()
-        if matherial_value['measure'] == 'мп.':
+        app = App()
+        if matherial_value['measure'] == app.config['measure linear']:
             self.labels['length'].setVisible(True)
             self.widgets['length'].setVisible(True)
-        if matherial_value['measure'] == 'м2':
+        if matherial_value['measure'] == app.config['measure square']:
             self.labels['length'].setVisible(True)
             self.labels['width'].setVisible(True)
             self.widgets['width'].setVisible(True)
@@ -110,9 +112,10 @@ class MatherialToWhsOutForm(CustomForm):
     def matherial_selected(self):
         matherial_value = self.widgets['matherial_id'].full_value()
         self.widgets['price'].setValue(matherial_value['price'])
-        if matherial_value['measure'] == 'мп.':
+        app = App()
+        if matherial_value['measure'] == app.config['measure linear']:
             self.widgets['length'].setVisible(True)
-        if matherial_value['measure'] == 'м2':
+        if matherial_value['measure'] == app.config['measure square']:
             self.widgets['width'].setVisible(True)
             self.widgets['length'].setVisible(True)
         if matherial_value['color_group_id']:

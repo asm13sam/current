@@ -16,6 +16,7 @@ from widgets.Form import (
     CustomForm,
     InfoBlock,
     )
+from data.app import App
 from data.model import Item
 from widgets.Dialogs import error
 from common.params import FULL_VALUE_ROLE
@@ -144,12 +145,13 @@ class MatherialToOrderingForm(CustomForm):
             self.widgets['price'].setValue(matherial_value['cost'])
         self.measure = matherial_value['measure']
         self.widgets['number'].setSuffix(' ' + self.measure)
-        if self.measure == 'мп.':
+        app = App()
+        if self.measure == app.config['measure linear']:
             self.labels['length'].setVisible(True)
             self.widgets['length'].setVisible(True)
             self.labels['pieces'].setVisible(True)
             self.widgets['pieces'].setVisible(True)
-        if self.measure == 'м2':
+        if self.measure == app.config['measure square']:
             self.labels['length'].setVisible(True)
             self.labels['width'].setVisible(True)
             self.widgets['width'].setVisible(True)
@@ -257,7 +259,8 @@ class ProductToOrderingForm(CustomForm):
         length = self.widgets['length'].value()
         pieces = self.widgets['pieces'].value()
         length_m = length/1000
-        if self.product_value['measure'] == 'мп.':
+        app = App()
+        if self.product_value['measure'] == app.config['measure linear']:
             self.widgets['number'].setValue(length_m*pieces)
             size = 0.0
             for v in self.numbers_to_product.values:
@@ -272,7 +275,7 @@ class ProductToOrderingForm(CustomForm):
                     self.widgets['persent'].set_value(v['persent'])
                     break
             
-        elif self.product_value['measure'] == 'м2':
+        elif self.product_value['measure'] == app.config['measure square']:
             width = self.widgets['width'].value()
             width_m = width/1000
             square = length_m * width_m
@@ -351,12 +354,13 @@ class ProductToOrderingForm(CustomForm):
             self.widgets['product_id'].setDisabled(True)
             self.widgets['price'].setValue(self.product_value['cost'])
             self.widgets['name'].setValue(f"{self.product_value['short_name']} до зам.{self.value['ordering_id']}") 
-        if self.measure == 'мп.':
+        app = App()
+        if self.measure == app.config['measure linear']:
             self.labels['length'].setVisible(True)
             self.widgets['length'].setVisible(True) 
             self.labels['pieces'].setVisible(True)
             self.widgets['pieces'].setVisible(True)
-        if self.measure == 'м2':
+        if self.measure == app.config['measure square']:
             self.labels['length'].setVisible(True)
             self.labels['width'].setVisible(True)
             self.widgets['width'].setVisible(True)
