@@ -597,19 +597,21 @@ class SelectDialog(CustomDialog):
         self.search_field = ''
         if item_name == 'contragent':
             self.search_field = 'search'
-                
+        widget = self.create_widget(group_id, values)
+        widget.setMinimumWidth(1000)
+        widget.setMinimumHeight(600)
+        
+        super().__init__(widget, f"Обрати {self.item.hum}")
+        
+    def create_widget(self, group_id, values):
         widget = ItemTable(
             self.item.name, 
             search_field=self.search_field, 
             values=values,
             group_id=group_id,
         )
-
-        widget.setMinimumWidth(1000)
-        widget.setMinimumHeight(600)
-        
-        super().__init__(widget, f"Обрати {self.item.hum}")
-        
+        return widget
+    
     def set_values(self):    
         err = self.item.get_all_w()
         if err:
@@ -625,6 +627,15 @@ class ContactSelectDialog(SelectDialog):
         self.widget.table.table.valueDoubleCklicked.disconnect()
         self.widget.table.table.valueDoubleCklicked.connect(self.accept_value)
         self.widget.setMinimumWidth(1000)
+
+    def create_widget(self, _, values):
+        print('create_contact_item_table')
+        widget = ContactItemTable(
+            contragent_id=self.contragent_id,
+            search_field=self.search_field, 
+            values=values,
+        )
+        return widget
 
     def do_action(self, action: str, value: dict):
         if action == 'create':
@@ -1068,7 +1079,18 @@ class ItemTable(QSplitter):
 
     def on_double_click(self, value):
         self.action('edit', value)
-    
+
+
+class ContactItemTable(ItemTable):
+    def __init__(self, contragent_id=0, search_field: str = '', fields: list = [], values: list = None, buttons=TABLE_BUTTONS, is_vertical_inner=True, is_info_bottom=False):
+        super().__init__('contact', search_field, fields, values, buttons, is_vertical_inner, is_info_bottom)
+        self.contragent_id = contragent_id
+
+    def prepare_value_to_action(self):
+        value = super().prepare_value_to_action()
+        value['contragent_id'] = self.contragent_id
+        return value
+
 
 class MainItemTable(ItemTable):
     def __init__(self, 
