@@ -21,6 +21,9 @@ from PyQt6.QtWidgets import (
     QApplication,
     QGridLayout,
     QTabWidget,
+    QListWidget,
+    QListWidgetItem,
+    QSizePolicy,
     )
 
 from datetime import datetime, date
@@ -29,7 +32,7 @@ from data.app import App
 from widgets.Dialogs import CustomDialog, error, DeleteDialog
 from widgets.Table import TableWControls
 from widgets.ComboBoxSelector import ComboBoxSelector
-from common.params import MIN_SEARCH_STR_LEN, TABLE_BUTTONS
+from common.params import MIN_SEARCH_STR_LEN, TABLE_BUTTONS, ACCESS
 from widgets.Tree import TreeWControls
 
 from common.funcs import phonef
@@ -271,6 +274,8 @@ class CustomForm(QWidget):
             name = '_'.join(field.split('_')[:-1])   # "matherial_id" split to material and id
             # as it is foring key, need to select other item wich id is here
             w = Selector(name, group_id=group_id, form_value=self.value)
+        elif field.endswith('_access'):
+            w = AccessSelector()
         else:
             # if it is simple integer value
             w = IntWidget()
@@ -778,7 +783,59 @@ class IntWidget(QSpinBox):
         self.blockSignals(True)
         self.setValue(value)
         self.blockSignals(False)
-        
+
+
+class AccessSelector(QPushButton):
+    valChanged = pyqtSignal()
+    def __init__(self, access_value: int = 1):
+        self.access = access_value
+        super().__init__(str(access_value))
+        self.clicked.connect(self.dialog)
+
+    def dialog(self):
+        w = AccessList()
+        w.set_dataset(self.access)
+        dlg = CustomDialog(w, f'Редагувати права')
+        res = dlg.exec()
+        if res:
+            self.setValue(w.get_checked())
+
+    def setValue(self, value):
+        self.access = value
+        self.setText(str(value))
+        self.valChanged.emit()
+
+    def set_value(self, value):
+        self.blockSignals(True)
+        self.setValue(value)
+        self.blockSignals(False)
+
+    def value(self):
+        return self.access
+
+
+class AccessList(QListWidget):
+    def __init__(self):
+        super().__init__()
+        self.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum))
+        self.setMaximumHeight(30)
+
+    def set_dataset(self, access_value: int = 1):
+        self.clear()
+        self.setMaximumHeight(25*len(ACCESS))
+        for i, v in enumerate(ACCESS):
+            listItem = QListWidgetItem(v, self)
+            access = access_value & (1 << i)
+            listItem.setCheckState(Qt.CheckState.Checked if access else Qt.CheckState.Unchecked)
+
+    def get_checked(self):
+        res = 0
+        for i in range(self.count()):
+            li = self.item(i)
+            if li.checkState() == Qt.CheckState.Checked:
+                res += 1 << i
+        return res
+
 
 class PeriodWidget(QWidget):
     periodSelected = pyqtSignal(str, str)
@@ -988,6 +1045,8 @@ class ItemTable(QSplitter):
     def reload(self, values=None):
         if values is None:
             values = self.get_values()
+            if not values:
+                return
         self.table.table.reload(values)
         self.info.reload()
 
