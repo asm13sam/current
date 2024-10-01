@@ -66,6 +66,7 @@ class CheckBoxFS:
         url = self.base_url + 'cash-registers/info'
         r = self.session.get(url)
         if r.status_code > 299:
+            print(r.text)
             res = r.json()
             print(res)
             if 'message' in res:
