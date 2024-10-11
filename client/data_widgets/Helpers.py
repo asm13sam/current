@@ -303,12 +303,7 @@ class ProductToOrderingForm(CustomForm):
         number = self.widgets['number'].value()
         if not number:
             return
-        self.numbers_to_product.values.sort(key=lambda v: v['number'], reverse=True)
-        for v in self.numbers_to_product.values:
-            if v['number'] and number >= v['number']:
-                self.widgets['persent'].set_value(v['persent'])
-                break
-        
+                
         cost = self.widgets['price'].value() * number
         profit = round(cost * self.widgets['persent'].value() / 100 / number, 1)
         self.widgets['profit'].set_value(profit)
