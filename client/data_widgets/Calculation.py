@@ -365,6 +365,43 @@ class ProductExtra:
             return 0
         if not numbers_to_product.values:
             return 0
+        
+        app = App()
+        size = 0.0
+        persent = 0
+        if value['product_extra']['product']['measure_id'] == app.config['measure linear']:
+            numbers_to_product.values.sort(key=lambda v: v['size'], reverse=True)
+            length_m = value['product_extra']['product_to_ordering']['length']/1000
+            for v in numbers_to_product.values:
+                if v['size'] and length_m >= v['size']:
+                    persent = v['persent']
+                    size = v['size']
+                    break
+            pieces_values = [v for v in numbers_to_product.values if v['size'] == size]
+            pieces_values.sort(key=lambda v: v['pieces'], reverse=True)
+            pieces = value['product_extra']['product_to_ordering']['pieces']
+            for v in pieces_values:
+                if v['pieces'] and pieces >= v['pieces']:
+                    return v['persent']
+            return persent        
+        if value['product_extra']['product']['measure_id'] == app.config['measure square']:
+            length_m = value['product_extra']['product_to_ordering']['length']/1000
+            width_m = value['product_extra']['product_to_ordering']['width']/1000
+            square = length_m * width_m
+            numbers_to_product.values.sort(key=lambda v: v['size'], reverse=True)
+            for v in numbers_to_product.values:
+                if v['size'] and square >= v['size']:
+                    persent = v['persent']
+                    size = v['size']
+                    break
+            pieces_values = [v for v in numbers_to_product.values if v['size'] == size]
+            pieces_values.sort(key=lambda v: v['pieces'], reverse=True)
+            pieces = value['product_extra']['product_to_ordering']['pieces']
+            for v in pieces_values:
+                if v['pieces'] and pieces >= v['pieces']:
+                    return v['persent']
+            return persent   
+
         numbers_to_product.values.sort(key=lambda v: v['number'], reverse=True)
         number = value['product_extra']['product_to_ordering']['number']
         for v in numbers_to_product.values:
