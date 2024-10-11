@@ -96,7 +96,6 @@ class CboxCheck(ItemTableWithDetails):
                     })
                 
                 receipt = {
-                    # "cashier_name": "Олег",
                     "department": "Копіцентр",
                     "goods": [],
                     "payments": payments,

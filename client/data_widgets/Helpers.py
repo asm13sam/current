@@ -346,6 +346,7 @@ class ProductToOrderingForm(CustomForm):
         if not self.product_value:
             return
         self.measure = self.product_value['measure']
+        self.measure_id = self.product_value['measure_id']
         self.widgets['number'].setSuffix(' ' + self.measure)
         if 'name' in self.widgets:
             self.widgets['name'].setValue(self.product_value['name'])
@@ -354,12 +355,13 @@ class ProductToOrderingForm(CustomForm):
             self.widgets['price'].setValue(self.product_value['cost'])
             self.widgets['name'].setValue(f"{self.product_value['short_name']} до зам.{self.value['ordering_id']}") 
         app = App()
-        if self.measure == app.config['measure linear']:
+        print('>>>>>>', self.measure_id, app.config['measure square'])
+        if self.measure_id == app.config['measure linear']:
             self.labels['length'].setVisible(True)
             self.widgets['length'].setVisible(True) 
             self.labels['pieces'].setVisible(True)
             self.widgets['pieces'].setVisible(True)
-        if self.measure == app.config['measure square']:
+        if self.measure_id == app.config['measure square']:
             self.labels['length'].setVisible(True)
             self.labels['width'].setVisible(True)
             self.widgets['width'].setVisible(True)
