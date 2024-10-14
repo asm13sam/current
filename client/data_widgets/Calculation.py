@@ -443,7 +443,7 @@ class ProductExtra:
                     value['product_extra']['product_to_ordering']['cost'] = cost
                     return cost, matherials_price, operations_price, amortisation
         persent = self.get_persent_by_number()
-        cost = round((total + total * persent / 100) * number)
+        cost = (total + total * persent / 100) * number
         value['product_extra']['product_to_ordering']['cost'] = cost
         return cost, matherials_price, operations_price, amortisation
     
