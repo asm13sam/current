@@ -261,37 +261,12 @@ class ProductToOrderingForm(CustomForm):
         app = App()
         if self.product_value['measure_id'] == app.config['measure linear']:
             self.widgets['number'].setValue(length_m*pieces)
-            # size = 0.0
-            # for v in self.numbers_to_product.values:
-            #     if v['size'] and length_m >= v['size']:
-            #         self.widgets['persent'].set_value(v['persent'])
-            #         size = v['size']
-            #         break
-            # pieces_values = [v for v in self.numbers_to_product.values if v['size'] == size]
-            # pieces_values.sort(key=lambda v: v['pieces'], reverse=True)
-            # for v in pieces_values:
-            #     if v['pieces'] and pieces >= v['pieces']:
-            #         self.widgets['persent'].set_value(v['persent'])
-            #         break
-            
         elif self.product_value['measure_id'] == app.config['measure square']:
             width = self.widgets['width'].value()
             width_m = width/1000
             square = length_m * width_m
             self.widgets['number'].setValue(square * pieces)
-            # size = 0.0
-            # for v in self.numbers_to_product.values:
-            #     if v['size'] and square >= v['size']:
-            #         self.widgets['persent'].set_value(v['persent'])
-            #         size = v['size']
-            #         break
-            # pieces_values = [v for v in self.numbers_to_product.values if v['size'] == size]
-            # pieces_values.sort(key=lambda v: v['pieces'], reverse=True)
-            # for v in pieces_values:
-            #     if v['pieces'] and pieces >= v['pieces']:
-            #         self.widgets['persent'].set_value(v['persent'])
-            #         break
-        
+                   
         self.sizeChanged.emit(
             self.widgets['width'].value(),
             self.widgets['length'].value(),
@@ -350,7 +325,6 @@ class ProductToOrderingForm(CustomForm):
             self.widgets['price'].setValue(self.product_value['cost'])
             self.widgets['name'].setValue(f"{self.product_value['short_name']} до зам.{self.value['ordering_id']}") 
         app = App()
-        print('>>>>>>', self.measure_id, app.config['measure square'])
         if self.measure_id == app.config['measure linear']:
             self.labels['length'].setVisible(True)
             self.widgets['length'].setVisible(True) 

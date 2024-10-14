@@ -367,13 +367,19 @@ class ProductExtra:
             return 0
         
         app = App()
-        size = 0.0
-        persent = 0
-        if value['product_extra']['product']['measure_id'] == app.config['measure linear']:
+        is_linear = value['product_extra']['product']['measure_id'] == app.config['measure linear']
+        is_square = value['product_extra']['product']['measure_id'] == app.config['measure square']
+        if is_linear or is_square:
+            size = 0.0
+            persent = 0
             numbers_to_product.values.sort(key=lambda v: v['size'], reverse=True)
-            length_m = value['product_extra']['product_to_ordering']['length']/1000
+            size_m = value['product_extra']['product_to_ordering']['length']/1000
+            if is_square:
+                width_m = value['product_extra']['product_to_ordering']['width']/1000
+                size_m *= width_m
+        
             for v in numbers_to_product.values:
-                if v['size'] and length_m >= v['size']:
+                if v['size'] and size_m >= v['size']:
                     persent = v['persent']
                     size = v['size']
                     break
@@ -384,24 +390,7 @@ class ProductExtra:
                 if v['pieces'] and pieces >= v['pieces']:
                     return v['persent']
             return persent        
-        if value['product_extra']['product']['measure_id'] == app.config['measure square']:
-            length_m = value['product_extra']['product_to_ordering']['length']/1000
-            width_m = value['product_extra']['product_to_ordering']['width']/1000
-            square = length_m * width_m
-            numbers_to_product.values.sort(key=lambda v: v['size'], reverse=True)
-            for v in numbers_to_product.values:
-                if v['size'] and square >= v['size']:
-                    persent = v['persent']
-                    size = v['size']
-                    break
-            pieces_values = [v for v in numbers_to_product.values if v['size'] == size]
-            pieces_values.sort(key=lambda v: v['pieces'], reverse=True)
-            pieces = value['product_extra']['product_to_ordering']['pieces']
-            for v in pieces_values:
-                if v['pieces'] and pieces >= v['pieces']:
-                    return v['persent']
-            return persent   
-
+        
         numbers_to_product.values.sort(key=lambda v: v['number'], reverse=True)
         number = value['product_extra']['product_to_ordering']['number']
         for v in numbers_to_product.values:
@@ -454,7 +443,7 @@ class ProductExtra:
                     value['product_extra']['product_to_ordering']['cost'] = cost
                     return cost, matherials_price, operations_price, amortisation
         persent = self.get_persent_by_number()
-        cost = (total + total * persent / 100) * number
+        cost = round((total + total * persent / 100) * number)
         value['product_extra']['product_to_ordering']['cost'] = cost
         return cost, matherials_price, operations_price, amortisation
     
