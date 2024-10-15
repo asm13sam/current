@@ -1116,13 +1116,20 @@ class ItemTable(QSplitter):
         return value
     
     def del_dialog(self, value):
-        dlg = DeleteDialog(value)
+        values = self.table.table.get_selected_values()
+        if len(values) > 1:
+            dlg = DeleteDialog()
+        else:
+            dlg = DeleteDialog(value)
         res = dlg.exec()
-        if res:
-            i = Item(self.item.name)
-            i.value = value
-            cause = dlg.entry.text()
+        if not res:
+            return
+        
+        i = Item(self.item.name)
+        cause = dlg.entry.text()
+        for v in values:
             if cause:
+                i.value = v
                 if 'comm' in value:
                     i.value['comm'] = f'del: {cause}' + value['comm']
                     i.save()
@@ -1130,7 +1137,7 @@ class ItemTable(QSplitter):
                     i.value['info'] = f'\nПричина видалення:\n{cause}\n' + value['info']
                     i.save()
                 
-            err = i.delete(value['id'], cause)
+            err = i.delete(v['id'], cause)
             if err:
                 error(err)
                 return

@@ -733,7 +733,6 @@ class ItemsToProduct(QSplitter):
         prod_updated = 0
         for v in product.values:
             new_price = self.update_product_price(v)
-            # print(v['name'], v['cost'], new_price)
             if not new_price or v['cost'] == new_price:
                 continue
             v['cost'] = new_price

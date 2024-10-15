@@ -160,7 +160,7 @@ class Table(QTableView):
         
     def get_selected_value(self):
         selected_values = self.get_selected_values()
-        if not selected_values or len(selected_values) > 1:
+        if not selected_values: #or len(selected_values) > 1:
             return
         return selected_values[0]
 
