@@ -147,7 +147,7 @@ class ProductExtra:
         self.name = 'product'
         self.value = {}
         self.ordering_id = 0
-
+        
     def set_value(self, product:dict|int, ordering_id):
         self.ordering_id = ordering_id
         if type(product) == dict:
@@ -186,7 +186,6 @@ class ProductExtra:
             for v in val:
                 v['product_extra']['product_to_ordering'] = self.make_p2o(v['product_extra'], p2o_id).value
                 self.make_to_ordering_items(v)
-
     
     def make_p2o(self, v, p2o_id=0):
         p2o = Item('product_to_ordering')
@@ -356,6 +355,49 @@ class ProductExtra:
                     v['product_extra']['product_to_ordering']['cost'] = prod_number * v['product_extra']['product_to_ordering']['price']
                     self.recalc_num(v)
 
+    def get_persent_by_number(self, value=None):
+        if value is None:
+            value = self.value
+        numbers_to_product = Item('numbers_to_product')
+        err = numbers_to_product.get_filter('product_id', value['product_extra']['product']['id'])
+        if err:
+            error(err)
+            return 0
+        if not numbers_to_product.values:
+            return 0
+        
+        app = App()
+        is_linear = value['product_extra']['product']['measure_id'] == app.config['measure linear']
+        is_square = value['product_extra']['product']['measure_id'] == app.config['measure square']
+        if is_linear or is_square:
+            size = 0.0
+            persent = 0
+            numbers_to_product.values.sort(key=lambda v: v['size'], reverse=True)
+            size_m = value['product_extra']['product_to_ordering']['length']/1000
+            if is_square:
+                width_m = value['product_extra']['product_to_ordering']['width']/1000
+                size_m *= width_m
+        
+            for v in numbers_to_product.values:
+                if v['size'] and size_m >= v['size']:
+                    persent = v['persent']
+                    size = v['size']
+                    break
+            pieces_values = [v for v in numbers_to_product.values if v['size'] == size]
+            pieces_values.sort(key=lambda v: v['pieces'], reverse=True)
+            pieces = value['product_extra']['product_to_ordering']['pieces']
+            for v in pieces_values:
+                if v['pieces'] and pieces >= v['pieces']:
+                    return v['persent']
+            return persent        
+        
+        numbers_to_product.values.sort(key=lambda v: v['number'], reverse=True)
+        number = value['product_extra']['product_to_ordering']['number']
+        for v in numbers_to_product.values:
+            if v['number'] and number >= v['number']:
+                return v['persent']
+        return 0
+
     def recalc(self, value=None):
         is_top = False
         if value is None:
@@ -385,7 +427,8 @@ class ProductExtra:
             for v in val:
                 if k == 'default' or v['product_extra']['product_to_product']['is_used']:
                     total_sum, mat_price, op_price, amort = self.recalc(v)
-                    total += total_sum / number
+                    persent = self.get_persent_by_number(v)
+                    total += (total_sum + total_sum * persent / 100) / number
                     matherials_price += mat_price
                     operations_price += op_price
                     amortisation += amort
@@ -399,8 +442,10 @@ class ProductExtra:
                     cost = total_price * value['product_extra']['product_to_ordering']['pieces']
                     value['product_extra']['product_to_ordering']['cost'] = cost
                     return cost, matherials_price, operations_price, amortisation
-        
-        cost = total * number
+        persent = self.get_persent_by_number()
+        price = round(total + total * persent / 100, 2)
+        value['product_extra']['product_to_ordering']['price'] = price
+        cost = price * number
         value['product_extra']['product_to_ordering']['cost'] = cost
         return cost, matherials_price, operations_price, amortisation
     
