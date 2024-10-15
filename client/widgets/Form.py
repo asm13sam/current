@@ -881,6 +881,7 @@ class ItemTable(QSplitter):
             is_vertical_inner=True,
             is_info_bottom=False,
             show_period=True,
+            deleted_buttons=True,
             ):
         if is_vertical_inner:
             super().__init__()
@@ -938,7 +939,7 @@ class ItemTable(QSplitter):
         self.table.table.valueDoubleCklicked.connect(self.on_double_click)
         self.table.table.valueSelected.connect(self.on_value_selected)
 
-        if buttons:
+        if buttons and deleted_buttons:
             all_btn = QPushButton('Усі')
             self.table.hbox.addWidget(all_btn)
             all_btn.clicked.connect(self.show_all)

@@ -114,7 +114,7 @@ class DetailsProductToProductTable(DetailsItemTable):
     def __init__(self, fields: list = [], values: list = None, list_name='default', is_multiselect=False):
         self.list_name = list_name
         self.is_multiselect = is_multiselect
-        super().__init__('product_to_product', '', fields, values)
+        super().__init__('product_to_product', '', fields, values, deleted_buttons=False)
         btn = QPushButton()
         pixmapi = QStyle.StandardPixmap.SP_FileDialogListView
         icon = self.style().standardIcon(pixmapi)
@@ -230,7 +230,7 @@ class DetailsMatherialToProductTable(DetailsItemTable):
     def __init__(self, fields: list = [], values: list = None, list_name='default', is_multiselect=False):
         self.list_name = list_name
         self.is_multiselect = is_multiselect
-        super().__init__('matherial_to_product', '', fields, values)
+        super().__init__('matherial_to_product', '', fields, values, deleted_buttons=False)
         btn = QPushButton()
         pixmapi = QStyle.StandardPixmap.SP_FileDialogListView
         icon = self.style().standardIcon(pixmapi)
@@ -355,7 +355,7 @@ class DetailsOperationToProductTable(DetailsItemTable):
     def __init__(self, fields: list = [], values: list = None, list_name='default', is_multiselect=False):
         self.list_name = list_name
         self.is_multiselect = is_multiselect
-        super().__init__('operation_to_product', '', fields, values)
+        super().__init__('operation_to_product', '', fields, values, deleted_buttons=False)
         btn = QPushButton()
         pixmapi = QStyle.StandardPixmap.SP_FileDialogListView
         icon = self.style().standardIcon(pixmapi)
@@ -423,14 +423,7 @@ class DetailsNumbersToProductTable(DetailsItemTable):
     def __init__(self, fields: list = [], values: list = None, list_name='default', is_multiselect=False):
         self.list_name = list_name
         self.is_multiselect = is_multiselect
-        super().__init__('numbers_to_product', '', fields, values)
-        btn = QPushButton()
-        pixmapi = QStyle.StandardPixmap.SP_FileDialogListView
-        icon = self.style().standardIcon(pixmapi)
-        btn.setIcon(icon)
-        btn.setToolTip('Додати декілька')
-        btn.clicked.connect(lambda _,action='add_many': self.action(action))
-        self.table.hbox.addWidget(btn)
+        super().__init__('numbers_to_product', '', fields, values, deleted_buttons=False)
         
     def action(self, action: str, value: dict=None):
         if action == 'add_many':
@@ -455,7 +448,6 @@ class DetailsNumbersToProductTable(DetailsItemTable):
             if err:
                 error(err)
                 return
-            
         return super().reload(item.values)
     
     def dialog(self, value, title):
@@ -472,22 +464,6 @@ class DetailsNumbersToProductTable(DetailsItemTable):
             self.reload()
             self.actionResolved.emit()
 
-    def add_many_dialog(self, value):
-        i = Item(self.item.name)
-        dlg = SelectDialog('matherial')
-        res = dlg.exec()
-        if res:
-            values = dlg.widget.table.table.get_selected_values()
-            for v in values:
-                i.value = self.prepare_value_to_action()
-                i.value['matherial_id'] = v['id']
-                i.value['cost'] = v['cost']
-                err = i.save()
-                if err:
-                    error(err)
-                    continue
-            self.reload()
-            self.actionResolved.emit()
 
 class DetailsToProductsTab(QWidget):
     def __init__(self, item: Item, main_table=None, fields=[]):
