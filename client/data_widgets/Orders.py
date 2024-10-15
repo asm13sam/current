@@ -332,9 +332,11 @@ class ProductFormDialog(PMODialog):
         p2o['number'] = number
         self.item.recalc_num()
         total, *_ = self.item.recalc()
+        print('------>', total)
         if total is not None:
-            self.form.widgets['cost'].setValue(round(total, 1))
-            self.form.persent_changed()
+            self.form.reload(self.item.value['product_extra']['product_to_ordering'])
+            # self.form.widgets['cost'].setValue(round(total, 1))
+            # self.form.persent_changed()
 
 
 class MatherialFormDialog(PMODialog):
