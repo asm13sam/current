@@ -1218,8 +1218,29 @@ class MainItemTable(ItemTable):
 
 
 class DetailsItemTable(ItemTable):
-    def __init__(self, item_name: str, search_field: str = '', fields: list = [], values: list = None, buttons=TABLE_BUTTONS, group_id=0, show_period=False):
-        super().__init__(item_name, search_field, fields, values, buttons, group_id, False, True, show_period)
+    def __init__(
+            self, 
+            item_name: str, 
+            search_field: str = '', 
+            fields: list = [], 
+            values: list = None, 
+            buttons=TABLE_BUTTONS, 
+            group_id=0, 
+            show_period=False,
+            deleted_buttons=True,
+            ):
+        super().__init__(
+            item_name, 
+            search_field, 
+            fields, 
+            values, 
+            buttons, 
+            group_id, 
+            False, 
+            True, 
+            show_period,
+            deleted_buttons,
+            )
         self.main_table = None
 
     def set_main_table(self, table: ItemTable):
