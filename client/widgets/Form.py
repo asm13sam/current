@@ -881,6 +881,7 @@ class ItemTable(QSplitter):
             is_vertical_inner=True,
             is_info_bottom=False,
             show_period=True,
+            deleted_buttons=True,
             ):
         if is_vertical_inner:
             super().__init__()
@@ -938,7 +939,7 @@ class ItemTable(QSplitter):
         self.table.table.valueDoubleCklicked.connect(self.on_double_click)
         self.table.table.valueSelected.connect(self.on_value_selected)
 
-        if buttons:
+        if buttons and deleted_buttons:
             all_btn = QPushButton('Усі')
             self.table.hbox.addWidget(all_btn)
             all_btn.clicked.connect(self.show_all)
@@ -1115,13 +1116,20 @@ class ItemTable(QSplitter):
         return value
     
     def del_dialog(self, value):
-        dlg = DeleteDialog(value)
+        values = self.table.table.get_selected_values()
+        if len(values) > 1:
+            dlg = DeleteDialog()
+        else:
+            dlg = DeleteDialog(value)
         res = dlg.exec()
-        if res:
-            i = Item(self.item.name)
-            i.value = value
-            cause = dlg.entry.text()
+        if not res:
+            return
+        
+        i = Item(self.item.name)
+        cause = dlg.entry.text()
+        for v in values:
             if cause:
+                i.value = v
                 if 'comm' in value:
                     i.value['comm'] = f'del: {cause}' + value['comm']
                     i.save()
@@ -1129,7 +1137,7 @@ class ItemTable(QSplitter):
                     i.value['info'] = f'\nПричина видалення:\n{cause}\n' + value['info']
                     i.save()
                 
-            err = i.delete(value['id'], cause)
+            err = i.delete(v['id'], cause)
             if err:
                 error(err)
                 return
@@ -1217,8 +1225,29 @@ class MainItemTable(ItemTable):
 
 
 class DetailsItemTable(ItemTable):
-    def __init__(self, item_name: str, search_field: str = '', fields: list = [], values: list = None, buttons=TABLE_BUTTONS, group_id=0, show_period=False):
-        super().__init__(item_name, search_field, fields, values, buttons, group_id, False, True, show_period)
+    def __init__(
+            self, 
+            item_name: str, 
+            search_field: str = '', 
+            fields: list = [], 
+            values: list = None, 
+            buttons=TABLE_BUTTONS, 
+            group_id=0, 
+            show_period=False,
+            deleted_buttons=True,
+            ):
+        super().__init__(
+            item_name, 
+            search_field, 
+            fields, 
+            values, 
+            buttons, 
+            group_id, 
+            False, 
+            True, 
+            show_period,
+            deleted_buttons,
+            )
         self.main_table = None
 
     def set_main_table(self, table: ItemTable):

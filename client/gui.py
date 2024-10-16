@@ -236,30 +236,30 @@ class Window(QWidget):
 
 class MainWindow():
     def __init__(self):
-        self.qt_app = QApplication(sys.argv)
-        screen = self.qt_app.primaryScreen()
-        print('Screen: %s' % screen.name())
-        size = screen.size()
-        print('Size: %d x %d' % (size.width(), size.height()))
-        rect = screen.availableGeometry()
-        print('Available: %d x %d' % (rect.width(), rect.height()))
-        self.window = Window()
         app = App()
         color = app.config['color'] # "#99BCBC"
         font_size = app.config['font_size'] # 10
         theme = app.config['theme']
-        qss = """
-        QToolTip {
-            background-color: black;
-            color: white;
-            border: black solid 1px
-                }
+        self.qt_app = QApplication(sys.argv)
+        # screen = self.qt_app.primaryScreen()
+        # print('Screen: %s' % screen.name())
+        # size = screen.size()
+        # print('Size: %d x %d' % (size.width(), size.height()))
+        # rect = screen.availableGeometry()
+        # print('Available: %d x %d' % (rect.width(), rect.height()))
+        
+        qss = f"""
+        QToolTip {{
+                background-color: black;
+                color: white;
+                border: black solid 1px;
+                }}
+        QWidget {{
+                font-size: {font_size}px;
+                }}
         """
         qdarktheme.setup_theme(theme=theme, custom_colors={'primary': color}, additional_qss=qss)
-        font = QFont()
-
-        QApplication.instance().setFont(font)
-        font.setPointSize(font_size)
+        self.window = Window()
 
     def run(self):
         self.window.show()

@@ -64,9 +64,12 @@ class AskDialog(CustomDialog):
 
 
 class DeleteDialog(CustomDialog):
-    def __init__(self, value, with_prompt=True):
-        name = value["name"] if 'name' in value else value["id"]
-        label_text = f'Ви дійсно бажаєте видалити {name}?'
+    def __init__(self, value=None, with_prompt=True):
+        if not value:
+            label_text = f'Ви дійсно бажаєте видалити групу?'
+        else:    
+            name = value["name"] if 'name' in value else value["id"]
+            label_text = f'Ви дійсно бажаєте видалити {name}?'
         w = QWidget()
         wl = QVBoxLayout()
         wl.addWidget(QLabel(label_text))
