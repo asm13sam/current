@@ -784,6 +784,7 @@ type ColorGroup struct {
 	Id           int    `json:"id"`
 	Name         string `json:"name"`
 	ColorGroupId int    `json:"color_group_id"`
+	Position     int    `json:"position"`
 	IsActive     bool   `json:"is_active"`
 }
 
@@ -800,6 +801,7 @@ func ColorGroupGet(id int, tx *sql.Tx) (ColorGroup, error) {
 		&c.Id,
 		&c.Name,
 		&c.ColorGroupId,
+		&c.Position,
 		&c.IsActive,
 	)
 	return c, err
@@ -831,6 +833,7 @@ func ColorGroupGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]ColorGr
 			&c.Id,
 			&c.Name,
 			&c.ColorGroupId,
+			&c.Position,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -854,12 +857,13 @@ func ColorGroupCreate(c ColorGroup, tx *sql.Tx) (ColorGroup, error) {
 	}
 
 	sql := `INSERT INTO color_group
-            (name, color_group_id, is_active)
-            VALUES(?, ?, ?);`
+            (name, color_group_id, position, is_active)
+            VALUES(?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		c.Name,
 		c.ColorGroupId,
+		c.Position,
 		c.IsActive,
 	)
 	if err != nil {
@@ -893,13 +897,14 @@ func ColorGroupUpdate(c ColorGroup, tx *sql.Tx) (ColorGroup, error) {
 	}
 
 	sql := `UPDATE color_group SET
-                    name=?, color_group_id=?, is_active=?
+                    name=?, color_group_id=?, position=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
 		c.Name,
 		c.ColorGroupId,
+		c.Position,
 		c.IsActive,
 		c.Id,
 	)
@@ -978,6 +983,7 @@ func ColorGroupGetByFilterInt(field string, param int, withDeleted bool, deleted
 			&c.Id,
 			&c.Name,
 			&c.ColorGroupId,
+			&c.Position,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -1018,6 +1024,7 @@ func ColorGroupGetByFilterStr(field string, param string, withDeleted bool, dele
 			&c.Id,
 			&c.Name,
 			&c.ColorGroupId,
+			&c.Position,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -1029,7 +1036,7 @@ func ColorGroupGetByFilterStr(field string, param string, withDeleted bool, dele
 }
 
 func ColorGroupTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "color_group_id", "is_active"}
+	fields := []string{"id", "name", "color_group_id", "position", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -1307,6 +1314,7 @@ type MatherialGroup struct {
 	Id               int    `json:"id"`
 	Name             string `json:"name"`
 	MatherialGroupId int    `json:"matherial_group_id"`
+	Position         int    `json:"position"`
 	IsActive         bool   `json:"is_active"`
 }
 
@@ -1323,6 +1331,7 @@ func MatherialGroupGet(id int, tx *sql.Tx) (MatherialGroup, error) {
 		&m.Id,
 		&m.Name,
 		&m.MatherialGroupId,
+		&m.Position,
 		&m.IsActive,
 	)
 	return m, err
@@ -1354,6 +1363,7 @@ func MatherialGroupGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Mat
 			&m.Id,
 			&m.Name,
 			&m.MatherialGroupId,
+			&m.Position,
 			&m.IsActive,
 		); err != nil {
 			return nil, err
@@ -1377,12 +1387,13 @@ func MatherialGroupCreate(m MatherialGroup, tx *sql.Tx) (MatherialGroup, error) 
 	}
 
 	sql := `INSERT INTO matherial_group
-            (name, matherial_group_id, is_active)
-            VALUES(?, ?, ?);`
+            (name, matherial_group_id, position, is_active)
+            VALUES(?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		m.Name,
 		m.MatherialGroupId,
+		m.Position,
 		m.IsActive,
 	)
 	if err != nil {
@@ -1416,13 +1427,14 @@ func MatherialGroupUpdate(m MatherialGroup, tx *sql.Tx) (MatherialGroup, error) 
 	}
 
 	sql := `UPDATE matherial_group SET
-                    name=?, matherial_group_id=?, is_active=?
+                    name=?, matherial_group_id=?, position=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
 		m.Name,
 		m.MatherialGroupId,
+		m.Position,
 		m.IsActive,
 		m.Id,
 	)
@@ -1501,6 +1513,7 @@ func MatherialGroupGetByFilterInt(field string, param int, withDeleted bool, del
 			&m.Id,
 			&m.Name,
 			&m.MatherialGroupId,
+			&m.Position,
 			&m.IsActive,
 		); err != nil {
 			return nil, err
@@ -1541,6 +1554,7 @@ func MatherialGroupGetByFilterStr(field string, param string, withDeleted bool, 
 			&m.Id,
 			&m.Name,
 			&m.MatherialGroupId,
+			&m.Position,
 			&m.IsActive,
 		); err != nil {
 			return nil, err
@@ -1552,7 +1566,7 @@ func MatherialGroupGetByFilterStr(field string, param string, withDeleted bool, 
 }
 
 func MatherialGroupTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "matherial_group_id", "is_active"}
+	fields := []string{"id", "name", "matherial_group_id", "position", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -2165,6 +2179,7 @@ type UserGroup struct {
 	Id          int    `json:"id"`
 	Name        string `json:"name"`
 	UserGroupId int    `json:"user_group_id"`
+	Position    int    `json:"position"`
 	IsActive    bool   `json:"is_active"`
 }
 
@@ -2181,6 +2196,7 @@ func UserGroupGet(id int, tx *sql.Tx) (UserGroup, error) {
 		&u.Id,
 		&u.Name,
 		&u.UserGroupId,
+		&u.Position,
 		&u.IsActive,
 	)
 	return u, err
@@ -2212,6 +2228,7 @@ func UserGroupGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]UserGrou
 			&u.Id,
 			&u.Name,
 			&u.UserGroupId,
+			&u.Position,
 			&u.IsActive,
 		); err != nil {
 			return nil, err
@@ -2235,12 +2252,13 @@ func UserGroupCreate(u UserGroup, tx *sql.Tx) (UserGroup, error) {
 	}
 
 	sql := `INSERT INTO user_group
-            (name, user_group_id, is_active)
-            VALUES(?, ?, ?);`
+            (name, user_group_id, position, is_active)
+            VALUES(?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		u.Name,
 		u.UserGroupId,
+		u.Position,
 		u.IsActive,
 	)
 	if err != nil {
@@ -2274,13 +2292,14 @@ func UserGroupUpdate(u UserGroup, tx *sql.Tx) (UserGroup, error) {
 	}
 
 	sql := `UPDATE user_group SET
-                    name=?, user_group_id=?, is_active=?
+                    name=?, user_group_id=?, position=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
 		u.Name,
 		u.UserGroupId,
+		u.Position,
 		u.IsActive,
 		u.Id,
 	)
@@ -2359,6 +2378,7 @@ func UserGroupGetByFilterInt(field string, param int, withDeleted bool, deletedO
 			&u.Id,
 			&u.Name,
 			&u.UserGroupId,
+			&u.Position,
 			&u.IsActive,
 		); err != nil {
 			return nil, err
@@ -2399,6 +2419,7 @@ func UserGroupGetByFilterStr(field string, param string, withDeleted bool, delet
 			&u.Id,
 			&u.Name,
 			&u.UserGroupId,
+			&u.Position,
 			&u.IsActive,
 		); err != nil {
 			return nil, err
@@ -2410,7 +2431,7 @@ func UserGroupGetByFilterStr(field string, param string, withDeleted bool, delet
 }
 
 func UserGroupTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "user_group_id", "is_active"}
+	fields := []string{"id", "name", "user_group_id", "position", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -2744,6 +2765,7 @@ type EquipmentGroup struct {
 	Id               int    `json:"id"`
 	Name             string `json:"name"`
 	EquipmentGroupId int    `json:"equipment_group_id"`
+	Position         int    `json:"position"`
 	IsActive         bool   `json:"is_active"`
 }
 
@@ -2760,6 +2782,7 @@ func EquipmentGroupGet(id int, tx *sql.Tx) (EquipmentGroup, error) {
 		&e.Id,
 		&e.Name,
 		&e.EquipmentGroupId,
+		&e.Position,
 		&e.IsActive,
 	)
 	return e, err
@@ -2791,6 +2814,7 @@ func EquipmentGroupGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Equ
 			&e.Id,
 			&e.Name,
 			&e.EquipmentGroupId,
+			&e.Position,
 			&e.IsActive,
 		); err != nil {
 			return nil, err
@@ -2814,12 +2838,13 @@ func EquipmentGroupCreate(e EquipmentGroup, tx *sql.Tx) (EquipmentGroup, error) 
 	}
 
 	sql := `INSERT INTO equipment_group
-            (name, equipment_group_id, is_active)
-            VALUES(?, ?, ?);`
+            (name, equipment_group_id, position, is_active)
+            VALUES(?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		e.Name,
 		e.EquipmentGroupId,
+		e.Position,
 		e.IsActive,
 	)
 	if err != nil {
@@ -2853,13 +2878,14 @@ func EquipmentGroupUpdate(e EquipmentGroup, tx *sql.Tx) (EquipmentGroup, error) 
 	}
 
 	sql := `UPDATE equipment_group SET
-                    name=?, equipment_group_id=?, is_active=?
+                    name=?, equipment_group_id=?, position=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
 		e.Name,
 		e.EquipmentGroupId,
+		e.Position,
 		e.IsActive,
 		e.Id,
 	)
@@ -2938,6 +2964,7 @@ func EquipmentGroupGetByFilterInt(field string, param int, withDeleted bool, del
 			&e.Id,
 			&e.Name,
 			&e.EquipmentGroupId,
+			&e.Position,
 			&e.IsActive,
 		); err != nil {
 			return nil, err
@@ -2978,6 +3005,7 @@ func EquipmentGroupGetByFilterStr(field string, param string, withDeleted bool, 
 			&e.Id,
 			&e.Name,
 			&e.EquipmentGroupId,
+			&e.Position,
 			&e.IsActive,
 		); err != nil {
 			return nil, err
@@ -2989,7 +3017,7 @@ func EquipmentGroupGetByFilterStr(field string, param string, withDeleted bool, 
 }
 
 func EquipmentGroupTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "equipment_group_id", "is_active"}
+	fields := []string{"id", "name", "equipment_group_id", "position", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -3281,6 +3309,7 @@ type OperationGroup struct {
 	Id               int    `json:"id"`
 	Name             string `json:"name"`
 	OperationGroupId int    `json:"operation_group_id"`
+	Position         int    `json:"position"`
 	IsActive         bool   `json:"is_active"`
 }
 
@@ -3297,6 +3326,7 @@ func OperationGroupGet(id int, tx *sql.Tx) (OperationGroup, error) {
 		&o.Id,
 		&o.Name,
 		&o.OperationGroupId,
+		&o.Position,
 		&o.IsActive,
 	)
 	return o, err
@@ -3328,6 +3358,7 @@ func OperationGroupGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Ope
 			&o.Id,
 			&o.Name,
 			&o.OperationGroupId,
+			&o.Position,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -3351,12 +3382,13 @@ func OperationGroupCreate(o OperationGroup, tx *sql.Tx) (OperationGroup, error) 
 	}
 
 	sql := `INSERT INTO operation_group
-            (name, operation_group_id, is_active)
-            VALUES(?, ?, ?);`
+            (name, operation_group_id, position, is_active)
+            VALUES(?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		o.Name,
 		o.OperationGroupId,
+		o.Position,
 		o.IsActive,
 	)
 	if err != nil {
@@ -3390,13 +3422,14 @@ func OperationGroupUpdate(o OperationGroup, tx *sql.Tx) (OperationGroup, error) 
 	}
 
 	sql := `UPDATE operation_group SET
-                    name=?, operation_group_id=?, is_active=?
+                    name=?, operation_group_id=?, position=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
 		o.Name,
 		o.OperationGroupId,
+		o.Position,
 		o.IsActive,
 		o.Id,
 	)
@@ -3475,6 +3508,7 @@ func OperationGroupGetByFilterInt(field string, param int, withDeleted bool, del
 			&o.Id,
 			&o.Name,
 			&o.OperationGroupId,
+			&o.Position,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -3515,6 +3549,7 @@ func OperationGroupGetByFilterStr(field string, param string, withDeleted bool, 
 			&o.Id,
 			&o.Name,
 			&o.OperationGroupId,
+			&o.Position,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -3526,7 +3561,7 @@ func OperationGroupGetByFilterStr(field string, param string, withDeleted bool, 
 }
 
 func OperationGroupTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "operation_group_id", "is_active"}
+	fields := []string{"id", "name", "operation_group_id", "position", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -3853,6 +3888,7 @@ type ProductGroup struct {
 	Id             int    `json:"id"`
 	Name           string `json:"name"`
 	ProductGroupId int    `json:"product_group_id"`
+	Position       int    `json:"position"`
 	IsActive       bool   `json:"is_active"`
 }
 
@@ -3869,6 +3905,7 @@ func ProductGroupGet(id int, tx *sql.Tx) (ProductGroup, error) {
 		&p.Id,
 		&p.Name,
 		&p.ProductGroupId,
+		&p.Position,
 		&p.IsActive,
 	)
 	return p, err
@@ -3900,6 +3937,7 @@ func ProductGroupGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Produ
 			&p.Id,
 			&p.Name,
 			&p.ProductGroupId,
+			&p.Position,
 			&p.IsActive,
 		); err != nil {
 			return nil, err
@@ -3923,12 +3961,13 @@ func ProductGroupCreate(p ProductGroup, tx *sql.Tx) (ProductGroup, error) {
 	}
 
 	sql := `INSERT INTO product_group
-            (name, product_group_id, is_active)
-            VALUES(?, ?, ?);`
+            (name, product_group_id, position, is_active)
+            VALUES(?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		p.Name,
 		p.ProductGroupId,
+		p.Position,
 		p.IsActive,
 	)
 	if err != nil {
@@ -3962,13 +4001,14 @@ func ProductGroupUpdate(p ProductGroup, tx *sql.Tx) (ProductGroup, error) {
 	}
 
 	sql := `UPDATE product_group SET
-                    name=?, product_group_id=?, is_active=?
+                    name=?, product_group_id=?, position=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
 		p.Name,
 		p.ProductGroupId,
+		p.Position,
 		p.IsActive,
 		p.Id,
 	)
@@ -4047,6 +4087,7 @@ func ProductGroupGetByFilterInt(field string, param int, withDeleted bool, delet
 			&p.Id,
 			&p.Name,
 			&p.ProductGroupId,
+			&p.Position,
 			&p.IsActive,
 		); err != nil {
 			return nil, err
@@ -4087,6 +4128,7 @@ func ProductGroupGetByFilterStr(field string, param string, withDeleted bool, de
 			&p.Id,
 			&p.Name,
 			&p.ProductGroupId,
+			&p.Position,
 			&p.IsActive,
 		); err != nil {
 			return nil, err
@@ -4098,7 +4140,7 @@ func ProductGroupGetByFilterStr(field string, param string, withDeleted bool, de
 }
 
 func ProductGroupTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "product_group_id", "is_active"}
+	fields := []string{"id", "name", "product_group_id", "position", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -4425,6 +4467,7 @@ type ContragentGroup struct {
 	Id                int    `json:"id"`
 	Name              string `json:"name"`
 	ContragentGroupId int    `json:"contragent_group_id"`
+	Position          int    `json:"position"`
 	IsActive          bool   `json:"is_active"`
 }
 
@@ -4441,6 +4484,7 @@ func ContragentGroupGet(id int, tx *sql.Tx) (ContragentGroup, error) {
 		&c.Id,
 		&c.Name,
 		&c.ContragentGroupId,
+		&c.Position,
 		&c.IsActive,
 	)
 	return c, err
@@ -4472,6 +4516,7 @@ func ContragentGroupGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Co
 			&c.Id,
 			&c.Name,
 			&c.ContragentGroupId,
+			&c.Position,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -4495,12 +4540,13 @@ func ContragentGroupCreate(c ContragentGroup, tx *sql.Tx) (ContragentGroup, erro
 	}
 
 	sql := `INSERT INTO contragent_group
-            (name, contragent_group_id, is_active)
-            VALUES(?, ?, ?);`
+            (name, contragent_group_id, position, is_active)
+            VALUES(?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		c.Name,
 		c.ContragentGroupId,
+		c.Position,
 		c.IsActive,
 	)
 	if err != nil {
@@ -4534,13 +4580,14 @@ func ContragentGroupUpdate(c ContragentGroup, tx *sql.Tx) (ContragentGroup, erro
 	}
 
 	sql := `UPDATE contragent_group SET
-                    name=?, contragent_group_id=?, is_active=?
+                    name=?, contragent_group_id=?, position=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
 		c.Name,
 		c.ContragentGroupId,
+		c.Position,
 		c.IsActive,
 		c.Id,
 	)
@@ -4619,6 +4666,7 @@ func ContragentGroupGetByFilterInt(field string, param int, withDeleted bool, de
 			&c.Id,
 			&c.Name,
 			&c.ContragentGroupId,
+			&c.Position,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -4659,6 +4707,7 @@ func ContragentGroupGetByFilterStr(field string, param string, withDeleted bool,
 			&c.Id,
 			&c.Name,
 			&c.ContragentGroupId,
+			&c.Position,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -4670,7 +4719,7 @@ func ContragentGroupGetByFilterStr(field string, param string, withDeleted bool,
 }
 
 func ContragentGroupTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "contragent_group_id", "is_active"}
+	fields := []string{"id", "name", "contragent_group_id", "position", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -14614,6 +14663,7 @@ type ProjectGroup struct {
 	Id             int    `json:"id"`
 	Name           string `json:"name"`
 	ProjectGroupId int    `json:"project_group_id"`
+	Position       int    `json:"position"`
 	IsActive       bool   `json:"is_active"`
 }
 
@@ -14630,6 +14680,7 @@ func ProjectGroupGet(id int, tx *sql.Tx) (ProjectGroup, error) {
 		&p.Id,
 		&p.Name,
 		&p.ProjectGroupId,
+		&p.Position,
 		&p.IsActive,
 	)
 	return p, err
@@ -14661,6 +14712,7 @@ func ProjectGroupGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Proje
 			&p.Id,
 			&p.Name,
 			&p.ProjectGroupId,
+			&p.Position,
 			&p.IsActive,
 		); err != nil {
 			return nil, err
@@ -14684,12 +14736,13 @@ func ProjectGroupCreate(p ProjectGroup, tx *sql.Tx) (ProjectGroup, error) {
 	}
 
 	sql := `INSERT INTO project_group
-            (name, project_group_id, is_active)
-            VALUES(?, ?, ?);`
+            (name, project_group_id, position, is_active)
+            VALUES(?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		p.Name,
 		p.ProjectGroupId,
+		p.Position,
 		p.IsActive,
 	)
 	if err != nil {
@@ -14723,13 +14776,14 @@ func ProjectGroupUpdate(p ProjectGroup, tx *sql.Tx) (ProjectGroup, error) {
 	}
 
 	sql := `UPDATE project_group SET
-                    name=?, project_group_id=?, is_active=?
+                    name=?, project_group_id=?, position=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
 		p.Name,
 		p.ProjectGroupId,
+		p.Position,
 		p.IsActive,
 		p.Id,
 	)
@@ -14808,6 +14862,7 @@ func ProjectGroupGetByFilterInt(field string, param int, withDeleted bool, delet
 			&p.Id,
 			&p.Name,
 			&p.ProjectGroupId,
+			&p.Position,
 			&p.IsActive,
 		); err != nil {
 			return nil, err
@@ -14848,6 +14903,7 @@ func ProjectGroupGetByFilterStr(field string, param string, withDeleted bool, de
 			&p.Id,
 			&p.Name,
 			&p.ProjectGroupId,
+			&p.Position,
 			&p.IsActive,
 		); err != nil {
 			return nil, err
@@ -14859,7 +14915,7 @@ func ProjectGroupGetByFilterStr(field string, param string, withDeleted bool, de
 }
 
 func ProjectGroupTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "project_group_id", "is_active"}
+	fields := []string{"id", "name", "project_group_id", "position", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -17327,6 +17383,7 @@ type WColorGroup struct {
 	Id           int    `json:"id"`
 	Name         string `json:"name"`
 	ColorGroupId int    `json:"color_group_id"`
+	Position     int    `json:"position"`
 	IsActive     bool   `json:"is_active"`
 	ColorGroup   string `json:"color_group"`
 }
@@ -17339,6 +17396,7 @@ func WColorGroupGet(id int) (WColorGroup, error) {
 		&c.Id,
 		&c.Name,
 		&c.ColorGroupId,
+		&c.Position,
 		&c.IsActive,
 		&c.ColorGroup,
 	)
@@ -17366,6 +17424,7 @@ func WColorGroupGetAll(withDeleted bool, deletedOnly bool) ([]WColorGroup, error
 			&c.Id,
 			&c.Name,
 			&c.ColorGroupId,
+			&c.Position,
 			&c.IsActive,
 			&c.ColorGroup,
 		); err != nil {
@@ -17400,6 +17459,7 @@ func WColorGroupGetByFilterInt(field string, param int, withDeleted bool, delete
 			&c.Id,
 			&c.Name,
 			&c.ColorGroupId,
+			&c.Position,
 			&c.IsActive,
 			&c.ColorGroup,
 		); err != nil {
@@ -17435,6 +17495,7 @@ func WColorGroupGetByFilterStr(field string, param string, withDeleted bool, del
 			&c.Id,
 			&c.Name,
 			&c.ColorGroupId,
+			&c.Position,
 			&c.IsActive,
 			&c.ColorGroup,
 		); err != nil {
@@ -17578,6 +17639,7 @@ type WMatherialGroup struct {
 	Id               int    `json:"id"`
 	Name             string `json:"name"`
 	MatherialGroupId int    `json:"matherial_group_id"`
+	Position         int    `json:"position"`
 	IsActive         bool   `json:"is_active"`
 	MatherialGroup   string `json:"matherial_group"`
 }
@@ -17590,6 +17652,7 @@ func WMatherialGroupGet(id int) (WMatherialGroup, error) {
 		&m.Id,
 		&m.Name,
 		&m.MatherialGroupId,
+		&m.Position,
 		&m.IsActive,
 		&m.MatherialGroup,
 	)
@@ -17617,6 +17680,7 @@ func WMatherialGroupGetAll(withDeleted bool, deletedOnly bool) ([]WMatherialGrou
 			&m.Id,
 			&m.Name,
 			&m.MatherialGroupId,
+			&m.Position,
 			&m.IsActive,
 			&m.MatherialGroup,
 		); err != nil {
@@ -17651,6 +17715,7 @@ func WMatherialGroupGetByFilterInt(field string, param int, withDeleted bool, de
 			&m.Id,
 			&m.Name,
 			&m.MatherialGroupId,
+			&m.Position,
 			&m.IsActive,
 			&m.MatherialGroup,
 		); err != nil {
@@ -17686,6 +17751,7 @@ func WMatherialGroupGetByFilterStr(field string, param string, withDeleted bool,
 			&m.Id,
 			&m.Name,
 			&m.MatherialGroupId,
+			&m.Position,
 			&m.IsActive,
 			&m.MatherialGroup,
 		); err != nil {
@@ -18025,6 +18091,7 @@ type WUserGroup struct {
 	Id          int    `json:"id"`
 	Name        string `json:"name"`
 	UserGroupId int    `json:"user_group_id"`
+	Position    int    `json:"position"`
 	IsActive    bool   `json:"is_active"`
 	UserGroup   string `json:"user_group"`
 }
@@ -18037,6 +18104,7 @@ func WUserGroupGet(id int) (WUserGroup, error) {
 		&u.Id,
 		&u.Name,
 		&u.UserGroupId,
+		&u.Position,
 		&u.IsActive,
 		&u.UserGroup,
 	)
@@ -18064,6 +18132,7 @@ func WUserGroupGetAll(withDeleted bool, deletedOnly bool) ([]WUserGroup, error) 
 			&u.Id,
 			&u.Name,
 			&u.UserGroupId,
+			&u.Position,
 			&u.IsActive,
 			&u.UserGroup,
 		); err != nil {
@@ -18098,6 +18167,7 @@ func WUserGroupGetByFilterInt(field string, param int, withDeleted bool, deleted
 			&u.Id,
 			&u.Name,
 			&u.UserGroupId,
+			&u.Position,
 			&u.IsActive,
 			&u.UserGroup,
 		); err != nil {
@@ -18133,6 +18203,7 @@ func WUserGroupGetByFilterStr(field string, param string, withDeleted bool, dele
 			&u.Id,
 			&u.Name,
 			&u.UserGroupId,
+			&u.Position,
 			&u.IsActive,
 			&u.UserGroup,
 		); err != nil {
@@ -18325,6 +18396,7 @@ type WEquipmentGroup struct {
 	Id               int    `json:"id"`
 	Name             string `json:"name"`
 	EquipmentGroupId int    `json:"equipment_group_id"`
+	Position         int    `json:"position"`
 	IsActive         bool   `json:"is_active"`
 	EquipmentGroup   string `json:"equipment_group"`
 }
@@ -18337,6 +18409,7 @@ func WEquipmentGroupGet(id int) (WEquipmentGroup, error) {
 		&e.Id,
 		&e.Name,
 		&e.EquipmentGroupId,
+		&e.Position,
 		&e.IsActive,
 		&e.EquipmentGroup,
 	)
@@ -18364,6 +18437,7 @@ func WEquipmentGroupGetAll(withDeleted bool, deletedOnly bool) ([]WEquipmentGrou
 			&e.Id,
 			&e.Name,
 			&e.EquipmentGroupId,
+			&e.Position,
 			&e.IsActive,
 			&e.EquipmentGroup,
 		); err != nil {
@@ -18398,6 +18472,7 @@ func WEquipmentGroupGetByFilterInt(field string, param int, withDeleted bool, de
 			&e.Id,
 			&e.Name,
 			&e.EquipmentGroupId,
+			&e.Position,
 			&e.IsActive,
 			&e.EquipmentGroup,
 		); err != nil {
@@ -18433,6 +18508,7 @@ func WEquipmentGroupGetByFilterStr(field string, param string, withDeleted bool,
 			&e.Id,
 			&e.Name,
 			&e.EquipmentGroupId,
+			&e.Position,
 			&e.IsActive,
 			&e.EquipmentGroup,
 		); err != nil {
@@ -18586,6 +18662,7 @@ type WOperationGroup struct {
 	Id               int    `json:"id"`
 	Name             string `json:"name"`
 	OperationGroupId int    `json:"operation_group_id"`
+	Position         int    `json:"position"`
 	IsActive         bool   `json:"is_active"`
 	OperationGroup   string `json:"operation_group"`
 }
@@ -18598,6 +18675,7 @@ func WOperationGroupGet(id int) (WOperationGroup, error) {
 		&o.Id,
 		&o.Name,
 		&o.OperationGroupId,
+		&o.Position,
 		&o.IsActive,
 		&o.OperationGroup,
 	)
@@ -18625,6 +18703,7 @@ func WOperationGroupGetAll(withDeleted bool, deletedOnly bool) ([]WOperationGrou
 			&o.Id,
 			&o.Name,
 			&o.OperationGroupId,
+			&o.Position,
 			&o.IsActive,
 			&o.OperationGroup,
 		); err != nil {
@@ -18659,6 +18738,7 @@ func WOperationGroupGetByFilterInt(field string, param int, withDeleted bool, de
 			&o.Id,
 			&o.Name,
 			&o.OperationGroupId,
+			&o.Position,
 			&o.IsActive,
 			&o.OperationGroup,
 		); err != nil {
@@ -18694,6 +18774,7 @@ func WOperationGroupGetByFilterStr(field string, param string, withDeleted bool,
 			&o.Id,
 			&o.Name,
 			&o.OperationGroupId,
+			&o.Position,
 			&o.IsActive,
 			&o.OperationGroup,
 		); err != nil {
@@ -18899,6 +18980,7 @@ type WProductGroup struct {
 	Id             int    `json:"id"`
 	Name           string `json:"name"`
 	ProductGroupId int    `json:"product_group_id"`
+	Position       int    `json:"position"`
 	IsActive       bool   `json:"is_active"`
 	ProductGroup   string `json:"product_group"`
 }
@@ -18911,6 +18993,7 @@ func WProductGroupGet(id int) (WProductGroup, error) {
 		&p.Id,
 		&p.Name,
 		&p.ProductGroupId,
+		&p.Position,
 		&p.IsActive,
 		&p.ProductGroup,
 	)
@@ -18938,6 +19021,7 @@ func WProductGroupGetAll(withDeleted bool, deletedOnly bool) ([]WProductGroup, e
 			&p.Id,
 			&p.Name,
 			&p.ProductGroupId,
+			&p.Position,
 			&p.IsActive,
 			&p.ProductGroup,
 		); err != nil {
@@ -18972,6 +19056,7 @@ func WProductGroupGetByFilterInt(field string, param int, withDeleted bool, dele
 			&p.Id,
 			&p.Name,
 			&p.ProductGroupId,
+			&p.Position,
 			&p.IsActive,
 			&p.ProductGroup,
 		); err != nil {
@@ -19007,6 +19092,7 @@ func WProductGroupGetByFilterStr(field string, param string, withDeleted bool, d
 			&p.Id,
 			&p.Name,
 			&p.ProductGroupId,
+			&p.Position,
 			&p.IsActive,
 			&p.ProductGroup,
 		); err != nil {
@@ -19203,6 +19289,7 @@ type WContragentGroup struct {
 	Id                int    `json:"id"`
 	Name              string `json:"name"`
 	ContragentGroupId int    `json:"contragent_group_id"`
+	Position          int    `json:"position"`
 	IsActive          bool   `json:"is_active"`
 	ContragentGroup   string `json:"contragent_group"`
 }
@@ -19215,6 +19302,7 @@ func WContragentGroupGet(id int) (WContragentGroup, error) {
 		&c.Id,
 		&c.Name,
 		&c.ContragentGroupId,
+		&c.Position,
 		&c.IsActive,
 		&c.ContragentGroup,
 	)
@@ -19242,6 +19330,7 @@ func WContragentGroupGetAll(withDeleted bool, deletedOnly bool) ([]WContragentGr
 			&c.Id,
 			&c.Name,
 			&c.ContragentGroupId,
+			&c.Position,
 			&c.IsActive,
 			&c.ContragentGroup,
 		); err != nil {
@@ -19276,6 +19365,7 @@ func WContragentGroupGetByFilterInt(field string, param int, withDeleted bool, d
 			&c.Id,
 			&c.Name,
 			&c.ContragentGroupId,
+			&c.Position,
 			&c.IsActive,
 			&c.ContragentGroup,
 		); err != nil {
@@ -19311,6 +19401,7 @@ func WContragentGroupGetByFilterStr(field string, param string, withDeleted bool
 			&c.Id,
 			&c.Name,
 			&c.ContragentGroupId,
+			&c.Position,
 			&c.IsActive,
 			&c.ContragentGroup,
 		); err != nil {
@@ -24503,6 +24594,7 @@ type WProjectGroup struct {
 	Id             int    `json:"id"`
 	Name           string `json:"name"`
 	ProjectGroupId int    `json:"project_group_id"`
+	Position       int    `json:"position"`
 	IsActive       bool   `json:"is_active"`
 	ProjectGroup   string `json:"project_group"`
 }
@@ -24515,6 +24607,7 @@ func WProjectGroupGet(id int) (WProjectGroup, error) {
 		&p.Id,
 		&p.Name,
 		&p.ProjectGroupId,
+		&p.Position,
 		&p.IsActive,
 		&p.ProjectGroup,
 	)
@@ -24542,6 +24635,7 @@ func WProjectGroupGetAll(withDeleted bool, deletedOnly bool) ([]WProjectGroup, e
 			&p.Id,
 			&p.Name,
 			&p.ProjectGroupId,
+			&p.Position,
 			&p.IsActive,
 			&p.ProjectGroup,
 		); err != nil {
@@ -24576,6 +24670,7 @@ func WProjectGroupGetByFilterInt(field string, param int, withDeleted bool, dele
 			&p.Id,
 			&p.Name,
 			&p.ProjectGroupId,
+			&p.Position,
 			&p.IsActive,
 			&p.ProjectGroup,
 		); err != nil {
@@ -24611,6 +24706,7 @@ func WProjectGroupGetByFilterStr(field string, param string, withDeleted bool, d
 			&p.Id,
 			&p.Name,
 			&p.ProjectGroupId,
+			&p.Position,
 			&p.IsActive,
 			&p.ProjectGroup,
 		); err != nil {

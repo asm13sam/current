@@ -51,7 +51,11 @@ class Tree(QTreeWidget):
         self.add_childs(0)
     
     def add_childs(self, group_id, parent_item=None):
-        for td in self.dataset[group_id]:
+        if self.dataset[group_id] is None:
+            return
+        tds = self.dataset[group_id]
+        tds.sort(key=lambda v: v['id'], reverse=True)
+        for td in tds:
             if parent_item is None:
                 parent_item = self.invisibleRootItem()
             data_item = QTreeWidgetItem()
