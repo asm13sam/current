@@ -427,23 +427,24 @@ class ProductExtra:
             for v in val:
                 if k == 'default' or v['product_extra']['product_to_product']['is_used']:
                     total_sum, mat_price, op_price, amort = self.recalc(v)
+                    total_sum *= v['product_extra']['product_to_product']['coeff']
                     persent = self.get_persent_by_number(v)
-                    total += (total_sum + total_sum * persent / 100) / number
+                    total += round((total_sum + total_sum * persent / 100) / number, 2)
                     matherials_price += mat_price
                     operations_price += op_price
                     amortisation += amort
         value['product_extra']['product_to_ordering']['price'] = total
         
-        if is_top:
-            if value['product_extra']['product_to_ordering']['length']:
-                total_price = total * number / value['product_extra']['product_to_ordering']['pieces']
-                if total_price < value['product_extra']['product']['min_cost']:
-                    total_price = value['product_extra']['product']['min_cost']
-                    cost = total_price * value['product_extra']['product_to_ordering']['pieces']
-                    value['product_extra']['product_to_ordering']['cost'] = cost
-                    return cost, matherials_price, operations_price, amortisation
+        # if is_top:
+        #     if value['product_extra']['product_to_ordering']['length']:
+        #         total_price = total * number / value['product_extra']['product_to_ordering']['pieces']
+        #         if total_price < value['product_extra']['product']['min_cost']:
+        #             total_price = value['product_extra']['product']['min_cost']
+        #             cost = total_price * value['product_extra']['product_to_ordering']['pieces']
+        #             value['product_extra']['product_to_ordering']['cost'] = cost
+        #             return cost, matherials_price, operations_price, amortisation
         persent = self.get_persent_by_number()
-        price = round(total + total * persent / 100, 2)
+        price = round(total + total * persent / 100, 1)
         value['product_extra']['product_to_ordering']['price'] = price
         cost = price * number
         value['product_extra']['product_to_ordering']['cost'] = cost
