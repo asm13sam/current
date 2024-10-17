@@ -609,12 +609,19 @@ class SelectDialog(CustomDialog):
         super().__init__(widget, f"Обрати {self.item.hum}")
         
     def create_widget(self, group_id, values):
-        widget = ItemTable(
-            self.item.name, 
-            search_field=self.search_field, 
-            values=values,
-            group_id=group_id,
-        )
+        if self.item.name.endswith('_group'):
+            widget = ItemTree(
+                self.item.name,
+                self.item.name,
+                values=values,
+                )
+        else:
+            widget = ItemTable(
+                self.item.name, 
+                search_field=self.search_field, 
+                values=values,
+                group_id=group_id,
+            )
         return widget
     
     def set_values(self):    
@@ -1412,6 +1419,15 @@ class ItemTree(QSplitter):
                 return
             self.reload()
             self.actionResolved.emit()
+
+    def remove_dblclick_cb(self):
+        self.tree.remove_dblclick_cb()
+        
+    def set_dblclick_cb(self, callback):
+        self.tree.set_dblclick_cb(callback)
+
+    def value(self):
+        return self.tree.value()
         
 
 class GroupTree(ItemTree):
