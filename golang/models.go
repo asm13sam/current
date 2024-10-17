@@ -2162,9 +2162,10 @@ func CashTestForExistingField(fieldName string) bool {
 }
 
 type UserGroup struct {
-	Id       int    `json:"id"`
-	Name     string `json:"name"`
-	IsActive bool   `json:"is_active"`
+	Id          int    `json:"id"`
+	Name        string `json:"name"`
+	UserGroupId int    `json:"user_group_id"`
+	IsActive    bool   `json:"is_active"`
 }
 
 func UserGroupGet(id int, tx *sql.Tx) (UserGroup, error) {
@@ -2179,6 +2180,7 @@ func UserGroupGet(id int, tx *sql.Tx) (UserGroup, error) {
 	err := row.Scan(
 		&u.Id,
 		&u.Name,
+		&u.UserGroupId,
 		&u.IsActive,
 	)
 	return u, err
@@ -2209,6 +2211,7 @@ func UserGroupGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]UserGrou
 		if err := rows.Scan(
 			&u.Id,
 			&u.Name,
+			&u.UserGroupId,
 			&u.IsActive,
 		); err != nil {
 			return nil, err
@@ -2232,11 +2235,12 @@ func UserGroupCreate(u UserGroup, tx *sql.Tx) (UserGroup, error) {
 	}
 
 	sql := `INSERT INTO user_group
-            (name, is_active)
-            VALUES(?, ?);`
+            (name, user_group_id, is_active)
+            VALUES(?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		u.Name,
+		u.UserGroupId,
 		u.IsActive,
 	)
 	if err != nil {
@@ -2270,12 +2274,13 @@ func UserGroupUpdate(u UserGroup, tx *sql.Tx) (UserGroup, error) {
 	}
 
 	sql := `UPDATE user_group SET
-                    name=?, is_active=?
+                    name=?, user_group_id=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
 		u.Name,
+		u.UserGroupId,
 		u.IsActive,
 		u.Id,
 	)
@@ -2353,6 +2358,7 @@ func UserGroupGetByFilterInt(field string, param int, withDeleted bool, deletedO
 		if err := rows.Scan(
 			&u.Id,
 			&u.Name,
+			&u.UserGroupId,
 			&u.IsActive,
 		); err != nil {
 			return nil, err
@@ -2392,6 +2398,7 @@ func UserGroupGetByFilterStr(field string, param string, withDeleted bool, delet
 		if err := rows.Scan(
 			&u.Id,
 			&u.Name,
+			&u.UserGroupId,
 			&u.IsActive,
 		); err != nil {
 			return nil, err
@@ -2403,7 +2410,7 @@ func UserGroupGetByFilterStr(field string, param string, withDeleted bool, delet
 }
 
 func UserGroupTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "is_active"}
+	fields := []string{"id", "name", "user_group_id", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -4415,9 +4422,10 @@ func ProductTestForExistingField(fieldName string) bool {
 }
 
 type ContragentGroup struct {
-	Id       int    `json:"id"`
-	Name     string `json:"name"`
-	IsActive bool   `json:"is_active"`
+	Id                int    `json:"id"`
+	Name              string `json:"name"`
+	ContragentGroupId int    `json:"contragent_group_id"`
+	IsActive          bool   `json:"is_active"`
 }
 
 func ContragentGroupGet(id int, tx *sql.Tx) (ContragentGroup, error) {
@@ -4432,6 +4440,7 @@ func ContragentGroupGet(id int, tx *sql.Tx) (ContragentGroup, error) {
 	err := row.Scan(
 		&c.Id,
 		&c.Name,
+		&c.ContragentGroupId,
 		&c.IsActive,
 	)
 	return c, err
@@ -4462,6 +4471,7 @@ func ContragentGroupGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Co
 		if err := rows.Scan(
 			&c.Id,
 			&c.Name,
+			&c.ContragentGroupId,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -4485,11 +4495,12 @@ func ContragentGroupCreate(c ContragentGroup, tx *sql.Tx) (ContragentGroup, erro
 	}
 
 	sql := `INSERT INTO contragent_group
-            (name, is_active)
-            VALUES(?, ?);`
+            (name, contragent_group_id, is_active)
+            VALUES(?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		c.Name,
+		c.ContragentGroupId,
 		c.IsActive,
 	)
 	if err != nil {
@@ -4523,12 +4534,13 @@ func ContragentGroupUpdate(c ContragentGroup, tx *sql.Tx) (ContragentGroup, erro
 	}
 
 	sql := `UPDATE contragent_group SET
-                    name=?, is_active=?
+                    name=?, contragent_group_id=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
 		c.Name,
+		c.ContragentGroupId,
 		c.IsActive,
 		c.Id,
 	)
@@ -4606,6 +4618,7 @@ func ContragentGroupGetByFilterInt(field string, param int, withDeleted bool, de
 		if err := rows.Scan(
 			&c.Id,
 			&c.Name,
+			&c.ContragentGroupId,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -4645,6 +4658,7 @@ func ContragentGroupGetByFilterStr(field string, param string, withDeleted bool,
 		if err := rows.Scan(
 			&c.Id,
 			&c.Name,
+			&c.ContragentGroupId,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -4656,7 +4670,7 @@ func ContragentGroupGetByFilterStr(field string, param string, withDeleted bool,
 }
 
 func ContragentGroupTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "is_active"}
+	fields := []string{"id", "name", "contragent_group_id", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -14597,9 +14611,10 @@ func MatherialPartSliceGetBetweenCreatedAt(created_at1, created_at2 string, with
 }
 
 type ProjectGroup struct {
-	Id       int    `json:"id"`
-	Name     string `json:"name"`
-	IsActive bool   `json:"is_active"`
+	Id             int    `json:"id"`
+	Name           string `json:"name"`
+	ProjectGroupId int    `json:"project_group_id"`
+	IsActive       bool   `json:"is_active"`
 }
 
 func ProjectGroupGet(id int, tx *sql.Tx) (ProjectGroup, error) {
@@ -14614,6 +14629,7 @@ func ProjectGroupGet(id int, tx *sql.Tx) (ProjectGroup, error) {
 	err := row.Scan(
 		&p.Id,
 		&p.Name,
+		&p.ProjectGroupId,
 		&p.IsActive,
 	)
 	return p, err
@@ -14644,6 +14660,7 @@ func ProjectGroupGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Proje
 		if err := rows.Scan(
 			&p.Id,
 			&p.Name,
+			&p.ProjectGroupId,
 			&p.IsActive,
 		); err != nil {
 			return nil, err
@@ -14667,11 +14684,12 @@ func ProjectGroupCreate(p ProjectGroup, tx *sql.Tx) (ProjectGroup, error) {
 	}
 
 	sql := `INSERT INTO project_group
-            (name, is_active)
-            VALUES(?, ?);`
+            (name, project_group_id, is_active)
+            VALUES(?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		p.Name,
+		p.ProjectGroupId,
 		p.IsActive,
 	)
 	if err != nil {
@@ -14705,12 +14723,13 @@ func ProjectGroupUpdate(p ProjectGroup, tx *sql.Tx) (ProjectGroup, error) {
 	}
 
 	sql := `UPDATE project_group SET
-                    name=?, is_active=?
+                    name=?, project_group_id=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
 		p.Name,
+		p.ProjectGroupId,
 		p.IsActive,
 		p.Id,
 	)
@@ -14788,6 +14807,7 @@ func ProjectGroupGetByFilterInt(field string, param int, withDeleted bool, delet
 		if err := rows.Scan(
 			&p.Id,
 			&p.Name,
+			&p.ProjectGroupId,
 			&p.IsActive,
 		); err != nil {
 			return nil, err
@@ -14827,6 +14847,7 @@ func ProjectGroupGetByFilterStr(field string, param string, withDeleted bool, de
 		if err := rows.Scan(
 			&p.Id,
 			&p.Name,
+			&p.ProjectGroupId,
 			&p.IsActive,
 		); err != nil {
 			return nil, err
@@ -14838,7 +14859,7 @@ func ProjectGroupGetByFilterStr(field string, param string, withDeleted bool, de
 }
 
 func ProjectGroupTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "is_active"}
+	fields := []string{"id", "name", "project_group_id", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -18001,24 +18022,30 @@ func WCashGetByFilterStr(field string, param string, withDeleted bool, deletedOn
 }
 
 type WUserGroup struct {
-	Id       int    `json:"id"`
-	Name     string `json:"name"`
-	IsActive bool   `json:"is_active"`
+	Id          int    `json:"id"`
+	Name        string `json:"name"`
+	UserGroupId int    `json:"user_group_id"`
+	IsActive    bool   `json:"is_active"`
+	UserGroup   string `json:"user_group"`
 }
 
 func WUserGroupGet(id int) (WUserGroup, error) {
 	var u WUserGroup
-	row := db.QueryRow(`SELECT user_group.* FROM user_group WHERE user_group.id=?`, id)
+	row := db.QueryRow(`SELECT user_group.*, IFNULL(us.name, "") FROM user_group
+	LEFT JOIN user_group AS us ON user_group.user_group_id = us.id WHERE user_group.id=?`, id)
 	err := row.Scan(
 		&u.Id,
 		&u.Name,
+		&u.UserGroupId,
 		&u.IsActive,
+		&u.UserGroup,
 	)
 	return u, err
 }
 
 func WUserGroupGetAll(withDeleted bool, deletedOnly bool) ([]WUserGroup, error) {
-	query := `SELECT user_group.* FROM user_group`
+	query := `SELECT user_group.*, IFNULL(us.name, "") FROM user_group
+	LEFT JOIN user_group AS us ON user_group.user_group_id = us.id`
 	if deletedOnly {
 		query += "  WHERE user_group.is_active = 0"
 	} else if !withDeleted {
@@ -18036,7 +18063,9 @@ func WUserGroupGetAll(withDeleted bool, deletedOnly bool) ([]WUserGroup, error) 
 		if err := rows.Scan(
 			&u.Id,
 			&u.Name,
+			&u.UserGroupId,
 			&u.IsActive,
+			&u.UserGroup,
 		); err != nil {
 			return nil, err
 		}
@@ -18050,7 +18079,8 @@ func WUserGroupGetByFilterInt(field string, param int, withDeleted bool, deleted
 	if !UserGroupTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT user_group.* FROM user_group WHERE user_group.%s=?`, field)
+	query := fmt.Sprintf(`SELECT user_group.*, IFNULL(us.name, "") FROM user_group
+	LEFT JOIN user_group AS us ON user_group.user_group_id = us.id WHERE user_group.%s=?`, field)
 	if deletedOnly {
 		query += "  AND user_group.is_active = 0"
 	} else if !withDeleted {
@@ -18067,7 +18097,9 @@ func WUserGroupGetByFilterInt(field string, param int, withDeleted bool, deleted
 		if err := rows.Scan(
 			&u.Id,
 			&u.Name,
+			&u.UserGroupId,
 			&u.IsActive,
+			&u.UserGroup,
 		); err != nil {
 			return nil, err
 		}
@@ -18082,7 +18114,8 @@ func WUserGroupGetByFilterStr(field string, param string, withDeleted bool, dele
 	if !UserGroupTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT user_group.* FROM user_group WHERE user_group.%s=?`, field)
+	query := fmt.Sprintf(`SELECT user_group.*, IFNULL(us.name, "") FROM user_group
+	LEFT JOIN user_group AS us ON user_group.user_group_id = us.id WHERE user_group.%s=?`, field)
 	if deletedOnly {
 		query += "  AND user_group.is_active = 0"
 	} else if !withDeleted {
@@ -18099,7 +18132,9 @@ func WUserGroupGetByFilterStr(field string, param string, withDeleted bool, dele
 		if err := rows.Scan(
 			&u.Id,
 			&u.Name,
+			&u.UserGroupId,
 			&u.IsActive,
+			&u.UserGroup,
 		); err != nil {
 			return nil, err
 		}
@@ -19165,24 +19200,30 @@ func WProductGetByFilterStr(field string, param string, withDeleted bool, delete
 }
 
 type WContragentGroup struct {
-	Id       int    `json:"id"`
-	Name     string `json:"name"`
-	IsActive bool   `json:"is_active"`
+	Id                int    `json:"id"`
+	Name              string `json:"name"`
+	ContragentGroupId int    `json:"contragent_group_id"`
+	IsActive          bool   `json:"is_active"`
+	ContragentGroup   string `json:"contragent_group"`
 }
 
 func WContragentGroupGet(id int) (WContragentGroup, error) {
 	var c WContragentGroup
-	row := db.QueryRow(`SELECT contragent_group.* FROM contragent_group WHERE contragent_group.id=?`, id)
+	row := db.QueryRow(`SELECT contragent_group.*, IFNULL(co.name, "") FROM contragent_group
+	LEFT JOIN contragent_group AS co ON contragent_group.contragent_group_id = co.id WHERE contragent_group.id=?`, id)
 	err := row.Scan(
 		&c.Id,
 		&c.Name,
+		&c.ContragentGroupId,
 		&c.IsActive,
+		&c.ContragentGroup,
 	)
 	return c, err
 }
 
 func WContragentGroupGetAll(withDeleted bool, deletedOnly bool) ([]WContragentGroup, error) {
-	query := `SELECT contragent_group.* FROM contragent_group`
+	query := `SELECT contragent_group.*, IFNULL(co.name, "") FROM contragent_group
+	LEFT JOIN contragent_group AS co ON contragent_group.contragent_group_id = co.id`
 	if deletedOnly {
 		query += "  WHERE contragent_group.is_active = 0"
 	} else if !withDeleted {
@@ -19200,7 +19241,9 @@ func WContragentGroupGetAll(withDeleted bool, deletedOnly bool) ([]WContragentGr
 		if err := rows.Scan(
 			&c.Id,
 			&c.Name,
+			&c.ContragentGroupId,
 			&c.IsActive,
+			&c.ContragentGroup,
 		); err != nil {
 			return nil, err
 		}
@@ -19214,7 +19257,8 @@ func WContragentGroupGetByFilterInt(field string, param int, withDeleted bool, d
 	if !ContragentGroupTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT contragent_group.* FROM contragent_group WHERE contragent_group.%s=?`, field)
+	query := fmt.Sprintf(`SELECT contragent_group.*, IFNULL(co.name, "") FROM contragent_group
+	LEFT JOIN contragent_group AS co ON contragent_group.contragent_group_id = co.id WHERE contragent_group.%s=?`, field)
 	if deletedOnly {
 		query += "  AND contragent_group.is_active = 0"
 	} else if !withDeleted {
@@ -19231,7 +19275,9 @@ func WContragentGroupGetByFilterInt(field string, param int, withDeleted bool, d
 		if err := rows.Scan(
 			&c.Id,
 			&c.Name,
+			&c.ContragentGroupId,
 			&c.IsActive,
+			&c.ContragentGroup,
 		); err != nil {
 			return nil, err
 		}
@@ -19246,7 +19292,8 @@ func WContragentGroupGetByFilterStr(field string, param string, withDeleted bool
 	if !ContragentGroupTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT contragent_group.* FROM contragent_group WHERE contragent_group.%s=?`, field)
+	query := fmt.Sprintf(`SELECT contragent_group.*, IFNULL(co.name, "") FROM contragent_group
+	LEFT JOIN contragent_group AS co ON contragent_group.contragent_group_id = co.id WHERE contragent_group.%s=?`, field)
 	if deletedOnly {
 		query += "  AND contragent_group.is_active = 0"
 	} else if !withDeleted {
@@ -19263,7 +19310,9 @@ func WContragentGroupGetByFilterStr(field string, param string, withDeleted bool
 		if err := rows.Scan(
 			&c.Id,
 			&c.Name,
+			&c.ContragentGroupId,
 			&c.IsActive,
+			&c.ContragentGroup,
 		); err != nil {
 			return nil, err
 		}
@@ -24451,24 +24500,30 @@ func WMatherialPartSliceGetBetweenCreatedAt(created_at1, created_at2 string, wit
 }
 
 type WProjectGroup struct {
-	Id       int    `json:"id"`
-	Name     string `json:"name"`
-	IsActive bool   `json:"is_active"`
+	Id             int    `json:"id"`
+	Name           string `json:"name"`
+	ProjectGroupId int    `json:"project_group_id"`
+	IsActive       bool   `json:"is_active"`
+	ProjectGroup   string `json:"project_group"`
 }
 
 func WProjectGroupGet(id int) (WProjectGroup, error) {
 	var p WProjectGroup
-	row := db.QueryRow(`SELECT project_group.* FROM project_group WHERE project_group.id=?`, id)
+	row := db.QueryRow(`SELECT project_group.*, IFNULL(pr.name, "") FROM project_group
+	LEFT JOIN project_group AS pr ON project_group.project_group_id = pr.id WHERE project_group.id=?`, id)
 	err := row.Scan(
 		&p.Id,
 		&p.Name,
+		&p.ProjectGroupId,
 		&p.IsActive,
+		&p.ProjectGroup,
 	)
 	return p, err
 }
 
 func WProjectGroupGetAll(withDeleted bool, deletedOnly bool) ([]WProjectGroup, error) {
-	query := `SELECT project_group.* FROM project_group`
+	query := `SELECT project_group.*, IFNULL(pr.name, "") FROM project_group
+	LEFT JOIN project_group AS pr ON project_group.project_group_id = pr.id`
 	if deletedOnly {
 		query += "  WHERE project_group.is_active = 0"
 	} else if !withDeleted {
@@ -24486,7 +24541,9 @@ func WProjectGroupGetAll(withDeleted bool, deletedOnly bool) ([]WProjectGroup, e
 		if err := rows.Scan(
 			&p.Id,
 			&p.Name,
+			&p.ProjectGroupId,
 			&p.IsActive,
+			&p.ProjectGroup,
 		); err != nil {
 			return nil, err
 		}
@@ -24500,7 +24557,8 @@ func WProjectGroupGetByFilterInt(field string, param int, withDeleted bool, dele
 	if !ProjectGroupTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT project_group.* FROM project_group WHERE project_group.%s=?`, field)
+	query := fmt.Sprintf(`SELECT project_group.*, IFNULL(pr.name, "") FROM project_group
+	LEFT JOIN project_group AS pr ON project_group.project_group_id = pr.id WHERE project_group.%s=?`, field)
 	if deletedOnly {
 		query += "  AND project_group.is_active = 0"
 	} else if !withDeleted {
@@ -24517,7 +24575,9 @@ func WProjectGroupGetByFilterInt(field string, param int, withDeleted bool, dele
 		if err := rows.Scan(
 			&p.Id,
 			&p.Name,
+			&p.ProjectGroupId,
 			&p.IsActive,
+			&p.ProjectGroup,
 		); err != nil {
 			return nil, err
 		}
@@ -24532,7 +24592,8 @@ func WProjectGroupGetByFilterStr(field string, param string, withDeleted bool, d
 	if !ProjectGroupTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT project_group.* FROM project_group WHERE project_group.%s=?`, field)
+	query := fmt.Sprintf(`SELECT project_group.*, IFNULL(pr.name, "") FROM project_group
+	LEFT JOIN project_group AS pr ON project_group.project_group_id = pr.id WHERE project_group.%s=?`, field)
 	if deletedOnly {
 		query += "  AND project_group.is_active = 0"
 	} else if !withDeleted {
@@ -24549,7 +24610,9 @@ func WProjectGroupGetByFilterStr(field string, param string, withDeleted bool, d
 		if err := rows.Scan(
 			&p.Id,
 			&p.Name,
+			&p.ProjectGroupId,
 			&p.IsActive,
+			&p.ProjectGroup,
 		); err != nil {
 			return nil, err
 		}
