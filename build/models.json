@@ -409,7 +409,7 @@
         "measure_id": {"def": 0, "hum": "Од. виміру", "form": 2},
         "color_group_id": {"def": 0, "hum": "Група кольору", "form": 1},
         "price": {"def": 0.0, "hum": "Ціна", "form": 1},
-        "cost": {"def": 0.0, "hum": "Вартість", "form": 2},
+        "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
         "total": {"def": 0.0, "hum": "В наявності", "form": 0},
         "barcode": {"def": "", "hum": "Штрихкод", "form": 0},
         "count_type_id": {"def": 0, "hum": "Тип обліку", "form": 1},
@@ -528,6 +528,7 @@
     "user_group": {
         "id": {"def": 0, "hum": "Номер", "form": 0},
         "name": {"def": "", "hum": "Назва", "form": 2},
+        "user_group_id": {"def": 0, "hum": "Група користувачів", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -818,6 +819,7 @@
     "contragent_group": {
         "id": {"def": 0, "hum": "Номер", "form": 0},
         "name": {"def": "", "hum": "Назва", "form": 2},
+        "contragent_group_id": {"def": 0, "hum": "Група контрагентів", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -912,6 +914,7 @@
     "project_group": {
         "id": {"def": 0, "hum": "Номер", "form": 0},
         "name": {"def": "", "hum": "Назва", "form": 1},
+        "project_group_id": {"def": 0, "hum": "Група проектів", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 1}
     },
 
