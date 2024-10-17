@@ -398,6 +398,7 @@
         "id": {"def": 0, "hum": "Номер", "form": 0},
         "name": {"def": "", "hum": "Назва", "form": 2},
         "matherial_group_id": {"def": 0, "hum": "Група матеріалів", "form": 1},
+        "position": {"def": 0, "hum": "Номер", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -420,6 +421,7 @@
         "id": {"def": 0, "hum": "Номер", "form": 0},
         "name": {"def": "", "hum": "Назва", "form": 2},
         "operation_group_id": {"def": 0, "hum": "Група операцій", "form": 1},
+        "position": {"def": 0, "hum": "Номер", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -475,6 +477,7 @@
         "id": {"def": 0, "hum": "Номер", "form": 0},
         "name": {"def": "", "hum": "Назва", "form": 2},
         "equipment_group_id": {"def": 0, "hum": "Група обладнання", "form": 1},
+        "position": {"def": 0, "hum": "Номер", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -492,6 +495,7 @@
         "id": {"def": 0, "hum": "Номер", "form": 0},
         "name": {"def": "", "hum": "Назва", "form": 2},
         "product_group_id": {"def": 0, "hum": "Група виробів", "form": 1},
+        "position": {"def": 0, "hum": "Номер", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -529,6 +533,7 @@
         "id": {"def": 0, "hum": "Номер", "form": 0},
         "name": {"def": "", "hum": "Назва", "form": 2},
         "user_group_id": {"def": 0, "hum": "Група користувачів", "form": 1},
+        "position": {"def": 0, "hum": "Номер", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -805,6 +810,7 @@
         "id": {"def": 0, "hum": "Номер", "form": 0},
         "name": {"def": "", "hum": "Назва", "form": 2},
         "color_group_id": {"def": 0, "hum": "Група кольорів", "form": 1},
+        "position": {"def": 0, "hum": "Номер", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -820,6 +826,7 @@
         "id": {"def": 0, "hum": "Номер", "form": 0},
         "name": {"def": "", "hum": "Назва", "form": 2},
         "contragent_group_id": {"def": 0, "hum": "Група контрагентів", "form": 1},
+        "position": {"def": 0, "hum": "Номер", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -915,6 +922,7 @@
         "id": {"def": 0, "hum": "Номер", "form": 0},
         "name": {"def": "", "hum": "Назва", "form": 1},
         "project_group_id": {"def": 0, "hum": "Група проектів", "form": 1},
+        "position": {"def": 0, "hum": "Номер", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 1}
     },
 
