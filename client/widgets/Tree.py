@@ -39,6 +39,10 @@ class Tree(QTreeWidget):
             self.reload(values)
 
     def reload(self, values: list=[]):
+        id = 0
+        cur = self.currentItem()
+        if cur:
+            id = cur.data(1, FULL_VALUE_ROLE)['id']
         self.clear()
         self.dataset = {}
         if not values:
@@ -49,12 +53,14 @@ class Tree(QTreeWidget):
                 self.dataset[v[self.key_name]] = []    
             self.dataset[v[self.key_name]].append(v)
         self.add_childs(0)
+        self.set_current_id(id)
     
     def add_childs(self, group_id, parent_item=None):
-        if self.dataset[group_id] is None:
+        if not self.dataset[group_id]:
             return
         tds = self.dataset[group_id]
-        tds.sort(key=lambda v: v['id'], reverse=True)
+        key = 'position' if 'position' in tds[0] else 'id' 
+        tds.sort(key=lambda v: v[key])
         for td in tds:
             if parent_item is None:
                 parent_item = self.invisibleRootItem()
