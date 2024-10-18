@@ -233,7 +233,7 @@ class Item:
         for k, v in self.model.items():
             if k == 'user_id' and app.user:
                 self.value[k] = app.user['id']
-            elif v['def'] == 'date':
+            if k == 'created_at':
                 self.value[k] = datetime.now().isoformat(timespec='seconds')
             else:
                 self.value[k] = v['def']
@@ -243,10 +243,7 @@ class Item:
         for k, v in self.model_w.items():
             if k in self.value:
                 continue
-            if v['def'] == 'date':
-                self.value[k] = datetime.now().isoformat(timespec='seconds')
-            else:
-                self.value[k] = v['def']
+            self.value[k] = v['def']
 
     def cross(self, other_item):
        for k, v in self.model.items():
@@ -288,4 +285,3 @@ class Item:
             return {'error': res['detail'][0]['msg']}
         else:
             return res
-

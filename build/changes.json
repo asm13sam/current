@@ -37,6 +37,7 @@
         "operation",
         "operation_group",
         "operation_to_product",
+        "numbers_to_product",
         "ordering_status",
         "product",
         "product_group",
