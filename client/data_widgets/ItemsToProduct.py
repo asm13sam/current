@@ -498,7 +498,7 @@ class DetailsToProductsTab(QWidget):
         i = self.tabs.currentIndex()
         title = self.tabs.tabText(i)
         list_tab_name = title[3:] if title.startswith('[+]') else title
-        res = askdlg("Вкажіть нову назву для списка '{list_tab_name}':")
+        res = askdlg(f"Вкажіть нову назву для списка '{list_tab_name}':")
         if not res:
             return
         err = self.item.get_filter_w('product_id', self.product_id)
