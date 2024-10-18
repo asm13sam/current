@@ -1,3 +1,4 @@
+from datetime import datetime
 import webbrowser
 import os
 import subprocess
@@ -93,14 +94,28 @@ class OrderingTable(MainItemTable):
             self.is_info_position_vertical = True
             self.pos_btn.setText('_')
     
+    def prepare_value_to_save(self, value, prev_state):
+        app=App()
+        new_state = value['ordering_status_id']
+        if (
+            prev_state != new_state
+            and (
+                new_state == app.config['ordering state taken']    
+                or  new_state == app.config['ordering state canceled']
+            )
+            ):
+            value['finished_at'] = datetime.now().isoformat(timespec='seconds')
+        return value
+    
     def dialog(self, value, title):
         creation = not value['id']
+        prev_state = value['ordering_status_id']
         i = Item('ordering')
         form = OrderingForm(value=value)
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
         if res and dlg.value:
-            i.value = dlg.value
+            i.value = self.prepare_value_to_save(dlg.value, prev_state)
             err = i.save()
             if err:
                 error(err)
@@ -813,7 +828,6 @@ class ItemsToOrdering(QSplitter):
         self.grid.setVerticalSpacing(1)
         btns_grid.setLayout(self.grid)
         self.aside_box.addWidget(btns_grid)
-
 
         fields = [
             "id",
