@@ -471,6 +471,7 @@ class DetailsToProductsTab(QWidget):
         self.main_table = main_table
         self.item = item
         self.fields = fields
+        self.product_id = 0
 
         self.box = QVBoxLayout()
         self.box.setContentsMargins(0,0,0,0)
@@ -491,6 +492,27 @@ class DetailsToProductsTab(QWidget):
 
         self.tabs = QTabWidget()
         self.box.addWidget(self.tabs, 30)
+        self.tabs.tabBarDoubleClicked.connect(self.edit_tab_title)
+
+    def edit_tab_title(self):
+        i = self.tabs.currentIndex()
+        title = self.tabs.tabText(i)
+        list_tab_name = title[3:] if title.startswith('[+]') else title
+        res = askdlg("Вкажіть нову назву для списка '{list_tab_name}':")
+        if not res:
+            return
+        err = self.item.get_filter_w('product_id', self.product_id)
+        if err:
+            error(err)
+            return
+        for v in self.item.values:
+            if v['list_name'] == list_tab_name:
+                v['list_name'] = res
+                self.item.value = v
+                err = self.item.save()
+                if err:
+                    error(err)
+        self.reload()
         
     def add_list(self):
         res = askdlg("Назва списку:")
@@ -517,7 +539,14 @@ class DetailsToProductsTab(QWidget):
             self.tabs.addTab(table, '[+]'+res)
             self.tabs.setCurrentWidget(table)
 
-    def reload(self, product_id):    
+    def reload(self, product_id=None):
+        if product_id is None:
+            if self.product_id:
+                product_id = self.product_id
+            else:
+                return
+        else:
+            self.product_id = product_id    
         err = self.item.get_filter_w('product_id', product_id)
         if err:
             error(err)
