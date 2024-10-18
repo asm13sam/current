@@ -466,28 +466,31 @@ class DetailsNumbersToProductTable(DetailsItemTable):
 
 
 class DetailsToProductsTab(QWidget):
-    def __init__(self, item: Item, main_table=None, fields=[]):
+    def __init__(self, item: Item, main_table=None, fields=[], list_btns=True):
         super().__init__()
         self.main_table = main_table
+        self.item = item
+        self.fields = fields
+
         self.box = QVBoxLayout()
         self.box.setContentsMargins(0,0,0,0)
         self.setLayout(self.box)
-        self.controls = QHBoxLayout()
-        self.controls.setContentsMargins(0,0,0,0)
-        top = QWidget()
-        top.setLayout(self.controls)
-        self.box.addWidget(top, 1)
+        if list_btns:
+            self.controls = QHBoxLayout()
+            self.controls.setContentsMargins(0,0,0,0)
+            top = QWidget()
+            top.setLayout(self.controls)
+            self.controls.addStretch()
+            self.box.addWidget(top, 1)
+            add_list_btn = QPushButton('Додати список')
+            self.controls.addWidget(add_list_btn)
+            add_list_btn.clicked.connect(self.add_list)
+            add_multi_btn = QPushButton('Додати мультивибір')
+            self.controls.addWidget(add_multi_btn)
+            add_multi_btn.clicked.connect(self.add_multi_list)
+
         self.tabs = QTabWidget()
-        self.box.addWidget(self.tabs, 10)
-        self.controls.addStretch()
-        add_list_btn = QPushButton('Додати список')
-        self.controls.addWidget(add_list_btn)
-        add_list_btn.clicked.connect(self.add_list)
-        add_multi_btn = QPushButton('Додати мультивибір')
-        self.controls.addWidget(add_multi_btn)
-        add_multi_btn.clicked.connect(self.add_multi_list)
-        self.item = item
-        self.fields = fields
+        self.box.addWidget(self.tabs, 30)
         
     def add_list(self):
         res = askdlg("Назва списку:")
@@ -628,6 +631,7 @@ class ItemsToProduct(QSplitter):
             Item('numbers_to_product'),
             main_table=self.products,
             fields=fields,
+            list_btns=False,
             )
         self.tabs.addTab(self.n2ps, "Кількість")
         
