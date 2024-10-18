@@ -571,6 +571,7 @@
         "name": {"def": "Замовлення", "hum": "Назва", "form": 2},
         "created_at": {"def": "date", "hum": "Створений", "form": 0},
         "deadline_at": {"def": "date", "hum": "Зробити до", "form": 1},
+        "finished_at": {"def": "date", "hum": "Дата закриття", "form": 0},
         "user_id": {"def": 0, "hum": "Менеджер", "form": 2},
         "contragent_id": {"def": 0, "hum": "Контрагент", "form": 2},
         "contact_id": {"def": 0, "hum": "Контакт", "form": 2},

@@ -5710,6 +5710,7 @@ type Ordering struct {
 	Name             string  `json:"name"`
 	CreatedAt        string  `json:"created_at"`
 	DeadlineAt       string  `json:"deadline_at"`
+	FinishedAt       string  `json:"finished_at"`
 	UserId           int     `json:"user_id"`
 	ContragentId     int     `json:"contragent_id"`
 	ContactId        int     `json:"contact_id"`
@@ -5737,6 +5738,7 @@ func OrderingGet(id int, tx *sql.Tx) (Ordering, error) {
 		&o.Name,
 		&o.CreatedAt,
 		&o.DeadlineAt,
+		&o.FinishedAt,
 		&o.UserId,
 		&o.ContragentId,
 		&o.ContactId,
@@ -5779,6 +5781,7 @@ func OrderingGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Ordering,
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
+			&o.FinishedAt,
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
@@ -5821,14 +5824,15 @@ func OrderingCreate(o Ordering, tx *sql.Tx) (Ordering, error) {
 	o.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO ordering
-            (document_uid, name, created_at, deadline_at, user_id, contragent_id, contact_id, price, persent, profit, cost, info, ordering_status_id, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, name, created_at, deadline_at, finished_at, user_id, contragent_id, contact_id, price, persent, profit, cost, info, ordering_status_id, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		o.DocumentUid,
 		o.Name,
 		o.CreatedAt,
 		o.DeadlineAt,
+		o.FinishedAt,
 		o.UserId,
 		o.ContragentId,
 		o.ContactId,
@@ -5871,7 +5875,7 @@ func OrderingUpdate(o Ordering, tx *sql.Tx) (Ordering, error) {
 	}
 
 	sql := `UPDATE ordering SET
-                    document_uid=?, name=?, created_at=?, deadline_at=?, user_id=?, contragent_id=?, contact_id=?, price=?, persent=?, profit=?, cost=?, info=?, ordering_status_id=?, is_active=?
+                    document_uid=?, name=?, created_at=?, deadline_at=?, finished_at=?, user_id=?, contragent_id=?, contact_id=?, price=?, persent=?, profit=?, cost=?, info=?, ordering_status_id=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -5880,6 +5884,7 @@ func OrderingUpdate(o Ordering, tx *sql.Tx) (Ordering, error) {
 		o.Name,
 		o.CreatedAt,
 		o.DeadlineAt,
+		o.FinishedAt,
 		o.UserId,
 		o.ContragentId,
 		o.ContactId,
@@ -6057,6 +6062,7 @@ func OrderingGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
+			&o.FinishedAt,
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
@@ -6108,6 +6114,7 @@ func OrderingGetByFilterStr(field string, param string, withDeleted bool, delete
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
+			&o.FinishedAt,
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
@@ -6128,7 +6135,7 @@ func OrderingGetByFilterStr(field string, param string, withDeleted bool, delete
 }
 
 func OrderingTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "created_at", "deadline_at", "user_id", "contragent_id", "contact_id", "price", "persent", "profit", "cost", "info", "ordering_status_id", "is_active"}
+	fields := []string{"id", "document_uid", "name", "created_at", "deadline_at", "finished_at", "user_id", "contragent_id", "contact_id", "price", "persent", "profit", "cost", "info", "ordering_status_id", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -6159,6 +6166,7 @@ func OrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
+			&o.FinishedAt,
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
@@ -6199,6 +6207,7 @@ func OrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDeleted
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
+			&o.FinishedAt,
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
@@ -19939,6 +19948,7 @@ type WOrdering struct {
 	Name             string  `json:"name"`
 	CreatedAt        string  `json:"created_at"`
 	DeadlineAt       string  `json:"deadline_at"`
+	FinishedAt       string  `json:"finished_at"`
 	UserId           int     `json:"user_id"`
 	ContragentId     int     `json:"contragent_id"`
 	ContactId        int     `json:"contact_id"`
@@ -19968,6 +19978,7 @@ func WOrderingGet(id int) (WOrdering, error) {
 		&o.Name,
 		&o.CreatedAt,
 		&o.DeadlineAt,
+		&o.FinishedAt,
 		&o.UserId,
 		&o.ContragentId,
 		&o.ContactId,
@@ -20012,6 +20023,7 @@ func WOrderingGetAll(withDeleted bool, deletedOnly bool) ([]WOrdering, error) {
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
+			&o.FinishedAt,
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
@@ -20063,6 +20075,7 @@ func WOrderingGetByFilterInt(field string, param int, withDeleted bool, deletedO
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
+			&o.FinishedAt,
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
@@ -20115,6 +20128,7 @@ func WOrderingGetByFilterStr(field string, param string, withDeleted bool, delet
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
+			&o.FinishedAt,
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
@@ -20164,6 +20178,7 @@ func WOrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted b
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
+			&o.FinishedAt,
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
@@ -20212,6 +20227,7 @@ func WOrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDelete
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
+			&o.FinishedAt,
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
