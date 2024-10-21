@@ -313,7 +313,7 @@ class ConfigEditor(QWidget):
         with open ('prew_config.json', "w") as f:
             f.write(json.dumps(self.cfg))
         with open ('config.json', "w") as f:
-            f.write(json.dumps(new_cfg))
+            f.write(json.dumps(new_cfg, ensure_ascii=False, indent=4))
         self.cfg = new_cfg
 
 

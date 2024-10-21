@@ -9,87 +9,87 @@
 
     "models":{
         "document": {
-            "hum": "Документ",
+            "hum": "Р”РѕРєСѓРјРµРЅС‚",
             "rights": "DOC",
             "message": 0
         },
         "measure": {
-            "hum": "Од. виміру",
+            "hum": "РћРґ. РІРёРјС–СЂСѓ",
             "rights": "CATALOG",
             "message": 0
         },
         "count_type": {
-            "hum": "Тип обліку",
+            "hum": "РўРёРї РѕР±Р»С–РєСѓ",
             "rights": "CATALOG",
             "message": 0
         },
         "color_group": {
-            "hum":"Група кольору",
+            "hum":"Р“СЂСѓРїР° РєРѕР»СЊРѕСЂСѓ",
             "rights": "CATALOG",
             "message": 0
         },
         "color": {
-            "hum": "Колір",
+            "hum": "РљРѕР»С–СЂ",
             "rights": "CATALOG",
             "message": 1
         },
         "matherial_group": {
-            "hum": "Група матеріалів",
+            "hum": "Р“СЂСѓРїР° РјР°С‚РµСЂС–Р°Р»С–РІ",
             "rights": "CATALOG",
             "message": 0
         },
         "matherial": {
-            "hum": "Матеріал",
+            "hum": "РњР°С‚РµСЂС–Р°Р»",
             "rights": "CATALOG",
             "message": 1
         },
         "cash": {
-            "hum":"Каса",
+            "hum":"РљР°СЃР°",
             "rights": "CATALOG",
             "message": 1
         },
         "user_group": {
-            "hum":"Група користувачів",
+            "hum":"Р“СЂСѓРїР° РєРѕСЂРёСЃС‚СѓРІР°С‡С–РІ",
             "rights": "USER",
             "message": 0
         },
         "user": {
-            "hum":"Оператор",
+            "hum":"РћРїРµСЂР°С‚РѕСЂ",
             "rights": "USER",
             "message": 1
         },
         "equipment_group": {
-            "hum": "Група обладнання",
+            "hum": "Р“СЂСѓРїР° РѕР±Р»Р°РґРЅР°РЅРЅСЏ",
             "rights": "CATALOG",
             "message": 0
         },
         "equipment": {
-            "hum":"Обладнання",
+            "hum":"РћР±Р»Р°РґРЅР°РЅРЅСЏ",
             "rights": "CATALOG",
             "message": 1
         },
         "operation_group": {
-            "hum": "Група операцій",
+            "hum": "Р“СЂСѓРїР° РѕРїРµСЂР°С†С–Р№",
             "rights": "CATALOG",
             "message": 0
         },
         "operation": {
-            "hum":"Операція",
+            "hum":"РћРїРµСЂР°С†С–СЏ",
             "rights": "CATALOG",
             "message": 1
         },
         "product_group": {
-            "hum":"Група виробів",
+            "hum":"Р“СЂСѓРїР° РІРёСЂРѕР±С–РІ",
             "rights": "CATALOG",
             "message": 0
         },
         "product": {
-            "hum":"Виріб",
+            "hum":"Р’РёСЂС–Р±",
             "rights": "CATALOG",
             "message": 1
         },
         "contragent_group": {
-            "hum":"Група контрагента",
+            "hum":"Р“СЂСѓРїР° РєРѕРЅС‚СЂР°РіРµРЅС‚Р°",
             "rights": "CONTRAGENT",
             "message": 0
         },
@@ -97,17 +97,17 @@
             "find": [
                 {"contragent":["search"], "contact":["search"]}
             ],
-            "hum": "Контрагент",
+            "hum": "РљРѕРЅС‚СЂР°РіРµРЅС‚",
             "rights": "CONTRAGENT",
             "message": 1
         },
         "contact": {
-            "hum":"Контактна особа",
+            "hum":"РљРѕРЅС‚Р°РєС‚РЅР° РѕСЃРѕР±Р°",
             "rights": "CONTRAGENT",
             "message": 1
         },
         "ordering_status": {
-            "hum":"Стан",
+            "hum":"РЎС‚Р°РЅ",
             "rights": "DOC",
             "message": 1
         },
@@ -124,12 +124,12 @@
             ],
             "between": ["created_at", "deadline_at"],
             "sum": ["cash_sum"],
-            "hum":"Замовлення",
+            "hum":"Р—Р°РјРѕРІР»РµРЅРЅСЏ",
             "rights": "DOC",
             "message": 1
         },
         "owner": {
-            "hum":"Власні записи",
+            "hum":"Р’Р»Р°СЃРЅС– Р·Р°РїРёСЃРё",
             "rights": "OWNER",
             "message": 0
         },
@@ -141,7 +141,7 @@
             "related": [{"table": "item_to_invoice", "filter": "invoice_id", "filter_value": "id"}],
             "between": ["created_at"],
             "sum": ["cash_sum"],
-            "hum":"Рахунок",
+            "hum":"Р Р°С…СѓРЅРѕРє",
             "rights": "DOC",
             "message": 1
         },
@@ -150,12 +150,12 @@
             "register": [
                 {"reg_field": "invoice.cash_sum", "val_field": ["cost"], "func": "+"}
             ],
-            "hum":"Позиція рахунку",
+            "hum":"РџРѕР·РёС†С–СЏ СЂР°С…СѓРЅРєСѓ",
             "rights": "DOC",
             "message": 0
         },
         "product_to_ordering_status": {
-            "hum":"Стан",
+            "hum":"РЎС‚Р°РЅ",
             "rights": "DOC",
             "message": 0
         },
@@ -167,20 +167,20 @@
                 {"table": "operation_to_ordering", "filter": "product_to_ordering_id", "filter_value": "id"}
             ],
             "between_up": ["ordering.created_at"],
-            "hum":"Виріб до замовлення",
+            "hum":"Р’РёСЂС–Р± РґРѕ Р·Р°РјРѕРІР»РµРЅРЅСЏ",
             "rights": "DOC",
             "message": 1
         },
         "matherial_to_ordering": {
             "sum": ["cost"],
             "between_up": ["ordering.created_at"],
-            "hum":"Матеріал до замовлення",
+            "hum":"РњР°С‚РµСЂС–Р°Р» РґРѕ Р·Р°РјРѕРІР»РµРЅРЅСЏ",
             "rights": "DOC",
             "message": 0
         },
         "matherial_to_product": {
             "sum": ["cost"],
-            "hum":"Матеріал до виробу",
+            "hum":"РњР°С‚РµСЂС–Р°Р» РґРѕ РІРёСЂРѕР±Сѓ",
             "rights": "DOC",
             "message": 0
         },
@@ -190,32 +190,32 @@
                 {"reg_field": "equipment.total", "val_field": ["equipment_cost"], "func": "+"}
             ],
             "between_up": ["ordering.created_at"],
-            "hum":"Операція до замовлення",
+            "hum":"РћРїРµСЂР°С†С–СЏ РґРѕ Р·Р°РјРѕРІР»РµРЅРЅСЏ",
             "rights": "DOC",
             "message": 0
         },
         "operation_to_product": {
             "sum": ["cost"],
-            "hum":"Операція до замовлення",
+            "hum":"РћРїРµСЂР°С†С–СЏ РґРѕ Р·Р°РјРѕРІР»РµРЅРЅСЏ",
             "rights": "DOC",
             "message": 0
         },
         "product_to_product": {
             "sum": ["cost"],
-            "hum":"Операція до замовлення",
+            "hum":"РћРїРµСЂР°С†С–СЏ РґРѕ Р·Р°РјРѕРІР»РµРЅРЅСЏ",
             "rights": "DOC",
             "message": 0
         },
         "cbox_check": {
             "between": ["created_at"],
-            "hum": "Чек",
+            "hum": "Р§РµРє",
             "related": [{"table": "item_to_cbox_check", "filter": "cbox_check_id", "filter_value": "id"}],
             "rights": "DOC",
             "message": 1
         },
         "item_to_cbox_check": {
             "sum": ["cost"],
-            "hum":"Позиція чеку",
+            "hum":"РџРѕР·РёС†С–СЏ С‡РµРєСѓ",
             "rights": "DOC",
             "message": 0
         },
@@ -227,7 +227,7 @@
                 ],
             "between": ["created_at"],
             "sum": ["cash_sum"],
-            "hum":"ПКО",
+            "hum":"РџРљРћ",
             "rights": "DOC",
             "message": 1
         },
@@ -239,12 +239,12 @@
                 ],
             "between": ["created_at"],
             "sum": ["cash_sum"],
-            "hum":"ВКО",
+            "hum":"Р’РљРћ",
             "rights": "DOC",
             "message": 1
         },
         "whs": {
-            "hum":"Склад",
+            "hum":"РЎРєР»Р°Рґ",
             "rights": "CATALOG",
             "message": 1
         },
@@ -261,7 +261,7 @@
                 ],
             "between": ["created_at", "contragent_created_at"],
             "sum": ["whs_sum"],
-            "hum":"Прихідна накладна",
+            "hum":"РџСЂРёС…С–РґРЅР° РЅР°РєР»Р°РґРЅР°",
             "rights": "DOC",
             "message": 1
         },
@@ -273,12 +273,12 @@
             "related": [{"table": "matherial_to_whs_out", "filter": "whs_out_id", "filter_value": "id"}],
             "between": ["created_at"],
             "sum": ["whs_sum"],
-            "hum":"Вихідна накладна",
+            "hum":"Р’РёС…С–РґРЅР° РЅР°РєР»Р°РґРЅР°",
             "rights": "DOC",
             "message": 1
         },
         "matherial_to_whs_in": {
-            "hum": "Матеріали до приходу на склад",
+            "hum": "РњР°С‚РµСЂС–Р°Р»Рё РґРѕ РїСЂРёС…РѕРґСѓ РЅР° СЃРєР»Р°Рґ",
             "register":[
                 {"reg_field": "matherial.total", "val_field": ["number"], "func": "+"},
                 {"reg_field": "color.total", "val_field": ["number"], "func": "+"},
@@ -298,7 +298,7 @@
             "message": 0
         },
         "matherial_to_whs_out": {
-            "hum": "Матеріали до видачі зі складу",
+            "hum": "РњР°С‚РµСЂС–Р°Р»Рё РґРѕ РІРёРґР°С‡С– Р·С– СЃРєР»Р°РґСѓ",
             "register":[
                 {"reg_field": "matherial.total", "val_field": ["number"], "func": "-"},
                 {"reg_field": "color.total", "val_field": ["number"], "func": "-"},
@@ -319,42 +319,42 @@
         },
         "matherial_part": {
             "between": ["created_at"],
-            "hum": "Матеріали за партією",
+            "hum": "РњР°С‚РµСЂС–Р°Р»Рё Р·Р° РїР°СЂС‚С–С”СЋ",
             "rights": "DOC",
             "message": 0
         },
         "matherial_part_slice": {
             "between": ["created_at"],
-            "hum": "Зміни мат. за партією",
+            "hum": "Р—РјС–РЅРё РјР°С‚. Р·Р° РїР°СЂС‚С–С”СЋ",
             "rights": "DOC",
             "message": 0
         },
         "project_group": {
             "filter": [],
-            "hum":"Група проекту",
+            "hum":"Р“СЂСѓРїР° РїСЂРѕРµРєС‚Сѓ",
             "rights": "DOC",
             "message": 0
         },
         "project_status": {
-            "hum":"Етап",
+            "hum":"Р•С‚Р°Рї",
             "rights": "DOC",
             "message": 0
         },
         "project_type": {
-            "hum":"Виріб",
+            "hum":"Р’РёСЂС–Р±",
             "rights": "DOC",
             "message": 0
         },
         "project": {
             "find": [{"project": ["info"], "contragent":["-search"], "contact":["-search"]}],
             "between": ["created_at"],
-            "hum":"Проект",
+            "hum":"РџСЂРѕРµРєС‚",
             "rights": "DOC",
             "message": 1
         },
 
         "counter": {
-            "hum":"Лічильник",
+            "hum":"Р›С–С‡РёР»СЊРЅРёРє",
             "rights": "CATALOG",
             "message": 0
         },
@@ -364,17 +364,17 @@
                 ],
             "between": ["created_at"],
             "sum": ["number"],
-            "hum":"Запис лічильника",
+            "hum":"Р—Р°РїРёСЃ Р»С–С‡РёР»СЊРЅРёРєР°",
             "rights": "DOC",
             "message": 0
         },
         "wmc_number": {
-            "hum":"Склад наявність",
+            "hum":"РЎРєР»Р°Рґ РЅР°СЏРІРЅС–СЃС‚СЊ",
             "rights": "DOC",
             "message": 0
         },
         "numbers_to_product": {
-            "hum":"Від кількості",
+            "hum":"Р’С–Рґ РєС–Р»СЊРєРѕСЃС‚С–",
             "rights": "DOC",
             "message": 0
         }
@@ -382,620 +382,620 @@
     },
 
     "measure": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "full_name": {"def": "", "hum": "Повна назва", "form": 2},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "full_name": {"def": "", "hum": "РџРѕРІРЅР° РЅР°Р·РІР°", "form": 2},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "count_type": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "matherial_group": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "matherial_group_id": {"def": 0, "hum": "Група матеріалів", "form": 1},
-        "position": {"def": 0, "hum": "Позиція", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "matherial_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РјР°С‚РµСЂС–Р°Р»С–РІ", "form": 1},
+        "position": {"def": 0, "hum": "РџРѕР·РёС†С–СЏ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "matherial": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "full_name": {"def": "", "hum": "Повна назва", "form": 2},
-        "matherial_group_id": {"def": 0, "hum": "Група матеріалів", "form": 1},
-        "measure_id": {"def": 0, "hum": "Од. виміру", "form": 2},
-        "color_group_id": {"def": 0, "hum": "Група кольору", "form": 1},
-        "price": {"def": 0.0, "hum": "Ціна", "form": 1},
-        "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "total": {"def": 0.0, "hum": "В наявності", "form": 0},
-        "barcode": {"def": "", "hum": "Штрихкод", "form": 0},
-        "count_type_id": {"def": 0, "hum": "Тип обліку", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "full_name": {"def": "", "hum": "РџРѕРІРЅР° РЅР°Р·РІР°", "form": 2},
+        "matherial_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РјР°С‚РµСЂС–Р°Р»С–РІ", "form": 1},
+        "measure_id": {"def": 0, "hum": "РћРґ. РІРёРјС–СЂСѓ", "form": 2},
+        "color_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РєРѕР»СЊРѕСЂСѓ", "form": 1},
+        "price": {"def": 0.0, "hum": "Р¦С–РЅР°", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "total": {"def": 0.0, "hum": "Р’ РЅР°СЏРІРЅРѕСЃС‚С–", "form": 0},
+        "barcode": {"def": "", "hum": "РЁС‚СЂРёС…РєРѕРґ", "form": 0},
+        "count_type_id": {"def": 0, "hum": "РўРёРї РѕР±Р»С–РєСѓ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "operation_group": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "operation_group_id": {"def": 0, "hum": "Група операцій", "form": 1},
-        "position": {"def": 0, "hum": "Позиція", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "operation_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РѕРїРµСЂР°С†С–Р№", "form": 1},
+        "position": {"def": 0, "hum": "РџРѕР·РёС†С–СЏ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "operation": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "full_name": {"def": "", "hum": "Повна назва", "form": 2},
-        "operation_group_id": {"def": 0, "hum": "Група операцій", "form": 1},
-        "measure_id": {"def": 0, "hum": "Од. виміру", "form": 2},
-        "user_id": {"def": 0, "hum": "Виконавець", "form": 2},
-        "price": {"def": 0.0, "hum": "Тариф", "form": 1},
-        "cost": {"def": 0.0, "hum": "Ціна", "form": 2},
-        "equipment_id": {"def": 0, "hum": "Обладнання", "form": 1},
-        "equipment_price": {"def": 0.0, "hum": "Амортизація", "form": 1},
-        "barcode": {"def": "", "hum": "Штрихкод", "form": 0},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "full_name": {"def": "", "hum": "РџРѕРІРЅР° РЅР°Р·РІР°", "form": 2},
+        "operation_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РѕРїРµСЂР°С†С–Р№", "form": 1},
+        "measure_id": {"def": 0, "hum": "РћРґ. РІРёРјС–СЂСѓ", "form": 2},
+        "user_id": {"def": 0, "hum": "Р’РёРєРѕРЅР°РІРµС†СЊ", "form": 2},
+        "price": {"def": 0.0, "hum": "РўР°СЂРёС„", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р¦С–РЅР°", "form": 2},
+        "equipment_id": {"def": 0, "hum": "РћР±Р»Р°РґРЅР°РЅРЅСЏ", "form": 1},
+        "equipment_price": {"def": 0.0, "hum": "РђРјРѕСЂС‚РёР·Р°С†С–СЏ", "form": 1},
+        "barcode": {"def": "", "hum": "РЁС‚СЂРёС…РєРѕРґ", "form": 0},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "operation_to_ordering": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "ordering_id": {"def": 0, "hum": "Замовлення", "form": 1},
-        "operation_id": {"def": 0, "hum": "Операція", "form": 2},
-        "user_id": {"def": 0, "hum": "Виконавець", "form": 2},
-        "number": {"def": 1.0, "hum": "Кількість", "form": 1},
-        "price": {"def": 0.0, "hum": "Ціна", "form": 1},
-        "user_sum": {"def": 0.0, "hum": "Оплата", "form": 1},
-        "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "equipment_id": {"def": 0, "hum": "Обладнання", "form": 1},
-        "equipment_cost": {"def": 0.0, "hum": "Амортизація", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "product_to_ordering_id": {"def": 0, "hum": "Виріб до замовлення", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "ordering_id": {"def": 0, "hum": "Р—Р°РјРѕРІР»РµРЅРЅСЏ", "form": 1},
+        "operation_id": {"def": 0, "hum": "РћРїРµСЂР°С†С–СЏ", "form": 2},
+        "user_id": {"def": 0, "hum": "Р’РёРєРѕРЅР°РІРµС†СЊ", "form": 2},
+        "number": {"def": 1.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "price": {"def": 0.0, "hum": "Р¦С–РЅР°", "form": 1},
+        "user_sum": {"def": 0.0, "hum": "РћРїР»Р°С‚Р°", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "equipment_id": {"def": 0, "hum": "РћР±Р»Р°РґРЅР°РЅРЅСЏ", "form": 1},
+        "equipment_cost": {"def": 0.0, "hum": "РђРјРѕСЂС‚РёР·Р°С†С–СЏ", "form": 1},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "product_to_ordering_id": {"def": 0, "hum": "Р’РёСЂС–Р± РґРѕ Р·Р°РјРѕРІР»РµРЅРЅСЏ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "operation_to_product": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "product_id": {"def": 0, "hum": "Замовлення", "form": 1},
-        "operation_id": {"def": 0, "hum": "Операція", "form": 1},
-        "user_id": {"def": 0, "hum": "Виконавець", "form": 2},
-        "number": {"def": 1.0, "hum": "Кількість", "form": 1},
-        "coeff": {"def": 1.0, "hum": "Коефіцієнт", "form": 1},
-        "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "list_name": {"def": "default", "hum": "Назва списку", "form": 1},
-        "is_multiselect": {"def": false, "hum": "Мультивибір", "form": 1},
-        "equipment_id": {"def": 0, "hum": "Обладнання", "form": 1},
-        "equipment_cost": {"def": 0.0, "hum": "Амортизація", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "is_used": {"def": false, "hum": "Використовувати", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "product_id": {"def": 0, "hum": "Р—Р°РјРѕРІР»РµРЅРЅСЏ", "form": 1},
+        "operation_id": {"def": 0, "hum": "РћРїРµСЂР°С†С–СЏ", "form": 1},
+        "user_id": {"def": 0, "hum": "Р’РёРєРѕРЅР°РІРµС†СЊ", "form": 2},
+        "number": {"def": 1.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "coeff": {"def": 1.0, "hum": "РљРѕРµС„С–С†С–С”РЅС‚", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "list_name": {"def": "default", "hum": "РќР°Р·РІР° СЃРїРёСЃРєСѓ", "form": 1},
+        "is_multiselect": {"def": false, "hum": "РњСѓР»СЊС‚РёРІРёР±С–СЂ", "form": 1},
+        "equipment_id": {"def": 0, "hum": "РћР±Р»Р°РґРЅР°РЅРЅСЏ", "form": 1},
+        "equipment_cost": {"def": 0.0, "hum": "РђРјРѕСЂС‚РёР·Р°С†С–СЏ", "form": 1},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "is_used": {"def": false, "hum": "Р’РёРєРѕСЂРёСЃС‚РѕРІСѓРІР°С‚Рё", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "equipment_group": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "equipment_group_id": {"def": 0, "hum": "Група обладнання", "form": 1},
-        "position": {"def": 0, "hum": "Позиція", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "equipment_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РѕР±Р»Р°РґРЅР°РЅРЅСЏ", "form": 1},
+        "position": {"def": 0, "hum": "РџРѕР·РёС†С–СЏ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "equipment": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "full_name": {"def": "", "hum": "Повна назва", "form": 2},
-        "equipment_group_id": {"def": 0, "hum": "Група обладнання", "form": 1},
-        "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "total": {"def": 0.0, "hum": "Сплачено", "form": 0},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "full_name": {"def": "", "hum": "РџРѕРІРЅР° РЅР°Р·РІР°", "form": 2},
+        "equipment_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РѕР±Р»Р°РґРЅР°РЅРЅСЏ", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "total": {"def": 0.0, "hum": "РЎРїР»Р°С‡РµРЅРѕ", "form": 0},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "product_group": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "product_group_id": {"def": 0, "hum": "Група виробів", "form": 1},
-        "position": {"def": 0, "hum": "Позиція", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "product_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РІРёСЂРѕР±С–РІ", "form": 1},
+        "position": {"def": 0, "hum": "РџРѕР·РёС†С–СЏ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "product": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "short_name": {"def": "", "hum": "Коротка назва", "form": 2},
-        "product_group_id": {"def": 0, "hum": "Група виробів", "form": 1},
-        "measure_id": {"def": 0, "hum": "Од. виміру", "form": 2},
-        "width": {"def": 0.0, "hum": "Ширина, мм", "form": 1},
-        "length": {"def": 0.0, "hum": "Довжина, мм", "form": 1},
-        "min_cost": {"def": 0.0, "hum": "Мінімальна ціна", "form": 1},
-        "cost": {"def": 0.0, "hum": "Ціна", "form": 1},
-        "user_id": {"def": 0, "hum": "Виконавець", "form": 2},
-        "barcode": {"def": "", "hum": "Штрихкод", "form": 0},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "short_name": {"def": "", "hum": "РљРѕСЂРѕС‚РєР° РЅР°Р·РІР°", "form": 2},
+        "product_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РІРёСЂРѕР±С–РІ", "form": 1},
+        "measure_id": {"def": 0, "hum": "РћРґ. РІРёРјС–СЂСѓ", "form": 2},
+        "width": {"def": 0.0, "hum": "РЁРёСЂРёРЅР°, РјРј", "form": 1},
+        "length": {"def": 0.0, "hum": "Р”РѕРІР¶РёРЅР°, РјРј", "form": 1},
+        "min_cost": {"def": 0.0, "hum": "РњС–РЅС–РјР°Р»СЊРЅР° С†С–РЅР°", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р¦С–РЅР°", "form": 1},
+        "user_id": {"def": 0, "hum": "Р’РёРєРѕРЅР°РІРµС†СЊ", "form": 2},
+        "barcode": {"def": "", "hum": "РЁС‚СЂРёС…РєРѕРґ", "form": 0},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "product_to_product": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "product_id": {"def": 0, "hum": "До вирообу", "form": 1},
-        "product2_id": {"def": 0, "hum": "Виріб", "form": 1},
-        "width": {"def": 0.0, "hum": "Ширина, мм", "form": 1},
-        "length": {"def": 0.0, "hum": "Довжина, мм", "form": 1},
-        "number": {"def": 1.0, "hum": "Кількість", "form": 1},
-        "coeff": {"def": 1.0, "hum": "Коефіцієнт", "form": 1},
-        "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "list_name": {"def": "default", "hum": "Назва списку", "form": 1},
-        "is_multiselect": {"def": false, "hum": "Мультивибір", "form": 1},
-        "is_used": {"def": false, "hum": "Використовувати", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "product_id": {"def": 0, "hum": "Р”Рѕ РІРёСЂРѕРѕР±Сѓ", "form": 1},
+        "product2_id": {"def": 0, "hum": "Р’РёСЂС–Р±", "form": 1},
+        "width": {"def": 0.0, "hum": "РЁРёСЂРёРЅР°, РјРј", "form": 1},
+        "length": {"def": 0.0, "hum": "Р”РѕРІР¶РёРЅР°, РјРј", "form": 1},
+        "number": {"def": 1.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "coeff": {"def": 1.0, "hum": "РљРѕРµС„С–С†С–С”РЅС‚", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "list_name": {"def": "default", "hum": "РќР°Р·РІР° СЃРїРёСЃРєСѓ", "form": 1},
+        "is_multiselect": {"def": false, "hum": "РњСѓР»СЊС‚РёРІРёР±С–СЂ", "form": 1},
+        "is_used": {"def": false, "hum": "Р’РёРєРѕСЂРёСЃС‚РѕРІСѓРІР°С‚Рё", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "user_group": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "user_group_id": {"def": 0, "hum": "Група користувачів", "form": 1},
-        "position": {"def": 0, "hum": "Позиція", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "user_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РєРѕСЂРёСЃС‚СѓРІР°С‡С–РІ", "form": 1},
+        "position": {"def": 0, "hum": "РџРѕР·РёС†С–СЏ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "user": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "full_name": {"def": "", "hum": "Повна назва", "form": 2},
-        "user_group_id": {"def": 0, "hum": "Група", "form": 1},
-        "cash_id": {"def": 0, "hum": "Каса", "form": 1},
-        "phone": {"def": "", "hum": "Телефон", "form": 1},
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "full_name": {"def": "", "hum": "РџРѕРІРЅР° РЅР°Р·РІР°", "form": 2},
+        "user_group_id": {"def": 0, "hum": "Р“СЂСѓРїР°", "form": 1},
+        "cash_id": {"def": 0, "hum": "РљР°СЃР°", "form": 1},
+        "phone": {"def": "", "hum": "РўРµР»РµС„РѕРЅ", "form": 1},
         "email": {"def": "", "hum": "Email", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "login": {"def": "", "hum": "Логін", "form": 1},
-        "password": {"def": "*", "hum": "Пароль", "form": 1},
-        "base_access": {"def": 1171, "hum": "Доступ", "form": 1},
-        "add_access": {"def": 1171, "hum": "Доступ+", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "login": {"def": "", "hum": "Р›РѕРіС–РЅ", "form": 1},
+        "password": {"def": "*", "hum": "РџР°СЂРѕР»СЊ", "form": 1},
+        "base_access": {"def": 1171, "hum": "Р”РѕСЃС‚СѓРї", "form": 1},
+        "add_access": {"def": 1171, "hum": "Р”РѕСЃС‚СѓРї+", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "document": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "doc_type": {"def": "", "hum": "Тип", "form": 0},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "doc_type": {"def": "", "hum": "РўРёРї", "form": 0},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "ordering_status": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "ordering": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "document_uid": {"def": 0, "hum": "Код документа", "form": 0},
-        "name": {"def": "Замовлення", "hum": "Назва", "form": 2},
-        "created_at": {"def": "date", "hum": "Створений", "form": 0},
-        "deadline_at": {"def": "date", "hum": "Зробити до", "form": 1},
-        "finished_at": {"def": "date", "hum": "Дата закриття", "form": 0},
-        "user_id": {"def": 0, "hum": "Менеджер", "form": 2},
-        "contragent_id": {"def": 0, "hum": "Контрагент", "form": 2},
-        "contact_id": {"def": 0, "hum": "Контакт", "form": 2},
-        "price": {"def": 0.0, "hum": "Ціна", "form": 1},
-        "persent": {"def": 0.0, "hum": "Націнка %", "form": 1},
-        "profit": {"def": 0.0, "hum": "Націнка грн.", "form": 1},
-        "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "info": {"def": "\n", "hum": "Опис", "form": 1},
-        "ordering_status_id": {"def": 1, "hum": "Стан", "form": 1},
-        "is_active": {"def": true, "hum": "Діюче", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "document_uid": {"def": 0, "hum": "РљРѕРґ РґРѕРєСѓРјРµРЅС‚Р°", "form": 0},
+        "name": {"def": "Р—Р°РјРѕРІР»РµРЅРЅСЏ", "hum": "РќР°Р·РІР°", "form": 2},
+        "created_at": {"def": "date", "hum": "РЎС‚РІРѕСЂРµРЅРёР№", "form": 0},
+        "deadline_at": {"def": "date", "hum": "Р—СЂРѕР±РёС‚Рё РґРѕ", "form": 1},
+        "finished_at": {"def": "date", "hum": "Р”Р°С‚Р° Р·Р°РєСЂРёС‚С‚СЏ", "form": 0},
+        "user_id": {"def": 0, "hum": "РњРµРЅРµРґР¶РµСЂ", "form": 2},
+        "contragent_id": {"def": 0, "hum": "РљРѕРЅС‚СЂР°РіРµРЅС‚", "form": 2},
+        "contact_id": {"def": 0, "hum": "РљРѕРЅС‚Р°РєС‚", "form": 2},
+        "price": {"def": 0.0, "hum": "Р¦С–РЅР°", "form": 1},
+        "persent": {"def": 0.0, "hum": "РќР°С†С–РЅРєР° %", "form": 1},
+        "profit": {"def": 0.0, "hum": "РќР°С†С–РЅРєР° РіСЂРЅ.", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "info": {"def": "\n", "hum": "РћРїРёСЃ", "form": 1},
+        "ordering_status_id": {"def": 1, "hum": "РЎС‚Р°РЅ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡Рµ", "form": 0}
     },
 
     "product_to_ordering_status": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "product_to_ordering": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "ordering_id": {"def": 0, "hum": "Замовлення", "form": 0},
-        "product_id": {"def": 0, "hum": "Виріб", "form": 1},
-        "user_id": {"def": 0, "hum": "Виконавець", "form": 2},
-        "deadline_at": {"def": "date", "hum": "Зробити до", "form": 1},
-        "product_to_ordering_status_id": {"def": 1, "hum": "Стан", "form": 1},
-        "width": {"def": 0.0, "hum": "Ширина, мм", "form": 1},
-        "length": {"def": 0.0, "hum": "Довжина, мм", "form": 1},
-        "pieces": {"def": 1, "hum": "Штук", "form": 1},
-        "number": {"def": 1.0, "hum": "Кількість", "form": 1},
-        "price": {"def": 0.0, "hum": "Ціна", "form": 1},
-        "persent": {"def": 0.0, "hum": "Націнка %", "form": 1},
-        "profit": {"def": 0.0, "hum": "Націнка грн.", "form": 1},
-        "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "info": {"def": "\n", "hum": "Опис", "form": 1},
-        "product_to_ordering_id": {"def": 0, "hum": "Виріб до замовлення", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "ordering_id": {"def": 0, "hum": "Р—Р°РјРѕРІР»РµРЅРЅСЏ", "form": 0},
+        "product_id": {"def": 0, "hum": "Р’РёСЂС–Р±", "form": 1},
+        "user_id": {"def": 0, "hum": "Р’РёРєРѕРЅР°РІРµС†СЊ", "form": 2},
+        "deadline_at": {"def": "date", "hum": "Р—СЂРѕР±РёС‚Рё РґРѕ", "form": 1},
+        "product_to_ordering_status_id": {"def": 1, "hum": "РЎС‚Р°РЅ", "form": 1},
+        "width": {"def": 0.0, "hum": "РЁРёСЂРёРЅР°, РјРј", "form": 1},
+        "length": {"def": 0.0, "hum": "Р”РѕРІР¶РёРЅР°, РјРј", "form": 1},
+        "pieces": {"def": 1, "hum": "РЁС‚СѓРє", "form": 1},
+        "number": {"def": 1.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "price": {"def": 0.0, "hum": "Р¦С–РЅР°", "form": 1},
+        "persent": {"def": 0.0, "hum": "РќР°С†С–РЅРєР° %", "form": 1},
+        "profit": {"def": 0.0, "hum": "РќР°С†С–РЅРєР° РіСЂРЅ.", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "info": {"def": "\n", "hum": "РћРїРёСЃ", "form": 1},
+        "product_to_ordering_id": {"def": 0, "hum": "Р’РёСЂС–Р± РґРѕ Р·Р°РјРѕРІР»РµРЅРЅСЏ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "invoice": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "document_uid": {"def": 0, "hum": "Код документа", "form": 0},
-        "ordering_id": {"def": 0, "hum": "Замовлення", "form": 0},
-        "based_on": {"def": 0, "hum": "За документом", "form": 0},
-        "owner_id": {"def": 0, "hum": "Від кого", "form": 2},
-        "name": {"def": "Рахунок", "hum": "Назва", "form": 2},
-        "created_at": {"def": "date", "hum": "Створений", "form": 0},
-        "user_id": {"def": 0, "hum": "Менеджер", "form": 2},
-        "contragent_id": {"def": 0, "hum": "Контрагент", "form": 2},
-        "contact_id": {"def": 0, "hum": "Контакт", "form": 2},
-        "cash_sum": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "is_active": {"def": true, "hum": "Діюче", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "document_uid": {"def": 0, "hum": "РљРѕРґ РґРѕРєСѓРјРµРЅС‚Р°", "form": 0},
+        "ordering_id": {"def": 0, "hum": "Р—Р°РјРѕРІР»РµРЅРЅСЏ", "form": 0},
+        "based_on": {"def": 0, "hum": "Р—Р° РґРѕРєСѓРјРµРЅС‚РѕРј", "form": 0},
+        "owner_id": {"def": 0, "hum": "Р’С–Рґ РєРѕРіРѕ", "form": 2},
+        "name": {"def": "Р Р°С…СѓРЅРѕРє", "hum": "РќР°Р·РІР°", "form": 2},
+        "created_at": {"def": "date", "hum": "РЎС‚РІРѕСЂРµРЅРёР№", "form": 0},
+        "user_id": {"def": 0, "hum": "РњРµРЅРµРґР¶РµСЂ", "form": 2},
+        "contragent_id": {"def": 0, "hum": "РљРѕРЅС‚СЂР°РіРµРЅС‚", "form": 2},
+        "contact_id": {"def": 0, "hum": "РљРѕРЅС‚Р°РєС‚", "form": 2},
+        "cash_sum": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡Рµ", "form": 0}
     },
 
     "item_to_invoice": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "invoice_id": {"def": 0, "hum": "Рахунок", "form": 1},
-        "number": {"def": 1.0, "hum": "Кількість", "form": 1},
-        "measure_id": {"def": 0, "hum": "Од. виміру", "form": 2},
-        "price": {"def": 0.0, "hum": "Ціна", "form": 1},
-        "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "invoice_id": {"def": 0, "hum": "Р Р°С…СѓРЅРѕРє", "form": 1},
+        "number": {"def": 1.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "measure_id": {"def": 0, "hum": "РћРґ. РІРёРјС–СЂСѓ", "form": 2},
+        "price": {"def": 0.0, "hum": "Р¦С–РЅР°", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "cash": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "persent": {"def": 0.0, "hum": "Націнка", "form": 1},
-        "total": {"def": 0.0, "hum": "В наявності", "form": 0},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "is_fiscal": {"def": false, "hum": "Фіскальна", "form": 1},
-        "is_account": {"def": true, "hum": "Рахунок", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "persent": {"def": 0.0, "hum": "РќР°С†С–РЅРєР°", "form": 1},
+        "total": {"def": 0.0, "hum": "Р’ РЅР°СЏРІРЅРѕСЃС‚С–", "form": 0},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "is_fiscal": {"def": false, "hum": "Р¤С–СЃРєР°Р»СЊРЅР°", "form": 1},
+        "is_account": {"def": true, "hum": "Р Р°С…СѓРЅРѕРє", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "cash_in": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "document_uid": {"def": 0, "hum": "Код документа", "form": 0},
-        "name": {"def": "ПКО", "hum": "Назва", "form": 2},
-        "cash_id": {"def": 0, "hum": "Каса", "form": 2},
-        "user_id": {"def": 0, "hum": "Оператор", "form": 2},
-        "based_on": {"def": 0, "hum": "За документом", "form": 0},
-        "cbox_check_id": {"def": 0, "hum": "Чек", "form": 0},
-        "contragent_id": {"def": 0, "hum": "Контрагент", "form": 2},
-        "contact_id": {"def": 0, "hum": "Контакт", "form": 2},
-        "created_at": {"def": "date", "hum": "Дата", "form": 0},
-        "cash_sum": {"def": 0.0, "hum": "Сплачено", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "document_uid": {"def": 0, "hum": "РљРѕРґ РґРѕРєСѓРјРµРЅС‚Р°", "form": 0},
+        "name": {"def": "РџРљРћ", "hum": "РќР°Р·РІР°", "form": 2},
+        "cash_id": {"def": 0, "hum": "РљР°СЃР°", "form": 2},
+        "user_id": {"def": 0, "hum": "РћРїРµСЂР°С‚РѕСЂ", "form": 2},
+        "based_on": {"def": 0, "hum": "Р—Р° РґРѕРєСѓРјРµРЅС‚РѕРј", "form": 0},
+        "cbox_check_id": {"def": 0, "hum": "Р§РµРє", "form": 0},
+        "contragent_id": {"def": 0, "hum": "РљРѕРЅС‚СЂР°РіРµРЅС‚", "form": 2},
+        "contact_id": {"def": 0, "hum": "РљРѕРЅС‚Р°РєС‚", "form": 2},
+        "created_at": {"def": "date", "hum": "Р”Р°С‚Р°", "form": 0},
+        "cash_sum": {"def": 0.0, "hum": "РЎРїР»Р°С‡РµРЅРѕ", "form": 1},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "cash_out": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "document_uid": {"def": 0, "hum": "Код документа", "form": 0},
-        "name": {"def": "ВКО", "hum": "Назва", "form": 2},
-        "cash_id": {"def": 0, "hum": "Каса", "form": 2},
-        "user_id": {"def": 0, "hum": "Оператор", "form": 2},
-        "based_on": {"def": 0, "hum": "За документом", "form": 0},
-        "cbox_check_id": {"def": 0, "hum": "Чек", "form": 0},
-        "contragent_id": {"def": 0, "hum": "Контрагент", "form": 2},
-        "contact_id": {"def": 0, "hum": "Контакт", "form": 2},
-        "created_at": {"def": "date", "hum": "Дата", "form": 0},
-        "cash_sum": {"def": 0.0, "hum": "Сплачено", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "document_uid": {"def": 0, "hum": "РљРѕРґ РґРѕРєСѓРјРµРЅС‚Р°", "form": 0},
+        "name": {"def": "Р’РљРћ", "hum": "РќР°Р·РІР°", "form": 2},
+        "cash_id": {"def": 0, "hum": "РљР°СЃР°", "form": 2},
+        "user_id": {"def": 0, "hum": "РћРїРµСЂР°С‚РѕСЂ", "form": 2},
+        "based_on": {"def": 0, "hum": "Р—Р° РґРѕРєСѓРјРµРЅС‚РѕРј", "form": 0},
+        "cbox_check_id": {"def": 0, "hum": "Р§РµРє", "form": 0},
+        "contragent_id": {"def": 0, "hum": "РљРѕРЅС‚СЂР°РіРµРЅС‚", "form": 2},
+        "contact_id": {"def": 0, "hum": "РљРѕРЅС‚Р°РєС‚", "form": 2},
+        "created_at": {"def": "date", "hum": "Р”Р°С‚Р°", "form": 0},
+        "cash_sum": {"def": 0.0, "hum": "РЎРїР»Р°С‡РµРЅРѕ", "form": 1},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "whs": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "whs_in": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "document_uid": {"def": 0, "hum": "Код документа", "form": 0},
-        "name": {"def": "ПН", "hum": "Назва", "form": 2},
-        "based_on": {"def": 0, "hum": "За документом", "form": 1},
-        "whs_id": {"def": 0, "hum": "Склад", "form": 2},
-        "user_id": {"def": 0, "hum": "Оператор", "form": 2},
-        "contragent_id": {"def": 0, "hum": "Контрагент", "form": 2},
-        "contact_id": {"def": 0, "hum": "Контакт", "form": 2},
-        "contragent_doc_uid": {"def": "", "hum": "Док-т контрагента", "form": 1},
-        "contragent_created_at": {"def": "date", "hum": "Дата контрагента", "form": 1},
-        "created_at": {"def": "date", "hum": "Дата", "form": 0},
-        "whs_sum": {"def": 0.0, "hum": "Сума", "form": 1},
-        "delivery": {"def": 0.0, "hum": "Доставка", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "document_uid": {"def": 0, "hum": "РљРѕРґ РґРѕРєСѓРјРµРЅС‚Р°", "form": 0},
+        "name": {"def": "РџРќ", "hum": "РќР°Р·РІР°", "form": 2},
+        "based_on": {"def": 0, "hum": "Р—Р° РґРѕРєСѓРјРµРЅС‚РѕРј", "form": 1},
+        "whs_id": {"def": 0, "hum": "РЎРєР»Р°Рґ", "form": 2},
+        "user_id": {"def": 0, "hum": "РћРїРµСЂР°С‚РѕСЂ", "form": 2},
+        "contragent_id": {"def": 0, "hum": "РљРѕРЅС‚СЂР°РіРµРЅС‚", "form": 2},
+        "contact_id": {"def": 0, "hum": "РљРѕРЅС‚Р°РєС‚", "form": 2},
+        "contragent_doc_uid": {"def": "", "hum": "Р”РѕРє-С‚ РєРѕРЅС‚СЂР°РіРµРЅС‚Р°", "form": 1},
+        "contragent_created_at": {"def": "date", "hum": "Р”Р°С‚Р° РєРѕРЅС‚СЂР°РіРµРЅС‚Р°", "form": 1},
+        "created_at": {"def": "date", "hum": "Р”Р°С‚Р°", "form": 0},
+        "whs_sum": {"def": 0.0, "hum": "РЎСѓРјР°", "form": 1},
+        "delivery": {"def": 0.0, "hum": "Р”РѕСЃС‚Р°РІРєР°", "form": 1},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "whs_out": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "document_uid": {"def": 0, "hum": "Код документа", "form": 0},
-        "name": {"def": "ВН", "hum": "Назва", "form": 2},
-        "based_on": {"def": 0, "hum": "За документом", "form": 0},
-        "whs_id": {"def": 0, "hum": "Склад", "form": 2},
-        "user_id": {"def": 0, "hum": "Оператор", "form": 2},
-        "contragent_id": {"def": 0, "hum": "Контрагент", "form": 2},
-        "contact_id": {"def": 0, "hum": "Контакт", "form": 2},
-        "created_at": {"def": "date", "hum": "Дата", "form": 0},
-        "whs_sum": {"def": 0.0, "hum": "Сума", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "document_uid": {"def": 0, "hum": "РљРѕРґ РґРѕРєСѓРјРµРЅС‚Р°", "form": 0},
+        "name": {"def": "Р’Рќ", "hum": "РќР°Р·РІР°", "form": 2},
+        "based_on": {"def": 0, "hum": "Р—Р° РґРѕРєСѓРјРµРЅС‚РѕРј", "form": 0},
+        "whs_id": {"def": 0, "hum": "РЎРєР»Р°Рґ", "form": 2},
+        "user_id": {"def": 0, "hum": "РћРїРµСЂР°С‚РѕСЂ", "form": 2},
+        "contragent_id": {"def": 0, "hum": "РљРѕРЅС‚СЂР°РіРµРЅС‚", "form": 2},
+        "contact_id": {"def": 0, "hum": "РљРѕРЅС‚Р°РєС‚", "form": 2},
+        "created_at": {"def": "date", "hum": "Р”Р°С‚Р°", "form": 0},
+        "whs_sum": {"def": 0.0, "hum": "РЎСѓРјР°", "form": 1},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "matherial_to_whs_in": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "matherial_id": {"def": 0, "hum": "Матеріал", "form": 2},
-        "contragent_mat_uid": {"def": "", "hum": "Номер мат. контр-та", "form": 1},
-        "whs_in_id": {"def": 0, "hum": "Пр. накладна", "form": 2},
-        "number": {"def": 1.0, "hum": "Кількість", "form": 1},
-        "price": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "cost": {"def": 0.0, "hum": "Сума", "form": 0},
-        "width": {"def": 0.0, "hum": "Ширина, мм", "form": 1},
-        "length": {"def": 0.0, "hum": "Довжина, мм", "form": 1},
-        "color_id": {"def": 0, "hum": "Колір", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "matherial_id": {"def": 0, "hum": "РњР°С‚РµСЂС–Р°Р»", "form": 2},
+        "contragent_mat_uid": {"def": "", "hum": "РќРѕРјРµСЂ РјР°С‚. РєРѕРЅС‚СЂ-С‚Р°", "form": 1},
+        "whs_in_id": {"def": 0, "hum": "РџСЂ. РЅР°РєР»Р°РґРЅР°", "form": 2},
+        "number": {"def": 1.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "price": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "cost": {"def": 0.0, "hum": "РЎСѓРјР°", "form": 0},
+        "width": {"def": 0.0, "hum": "РЁРёСЂРёРЅР°, РјРј", "form": 1},
+        "length": {"def": 0.0, "hum": "Р”РѕРІР¶РёРЅР°, РјРј", "form": 1},
+        "color_id": {"def": 0, "hum": "РљРѕР»С–СЂ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "matherial_to_whs_out": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "matherial_id": {"def": 0, "hum": "Матеріал", "form": 2},
-        "whs_out_id": {"def": 0, "hum": "Вид. накладна", "form": 2},
-        "number": {"def": 1.0, "hum": "Кількість", "form": 1},
-        "price": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "cost": {"def": 0.0, "hum": "Сума", "form": 0},
-        "width": {"def": 0.0, "hum": "Ширина, мм", "form": 1},
-        "length": {"def": 0.0, "hum": "Довжина, мм", "form": 1},
-        "color_id": {"def": 0, "hum": "Колір", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "matherial_id": {"def": 0, "hum": "РњР°С‚РµСЂС–Р°Р»", "form": 2},
+        "whs_out_id": {"def": 0, "hum": "Р’РёРґ. РЅР°РєР»Р°РґРЅР°", "form": 2},
+        "number": {"def": 1.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "price": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "cost": {"def": 0.0, "hum": "РЎСѓРјР°", "form": 0},
+        "width": {"def": 0.0, "hum": "РЁРёСЂРёРЅР°, РјРј", "form": 1},
+        "length": {"def": 0.0, "hum": "Р”РѕРІР¶РёРЅР°, РјРј", "form": 1},
+        "color_id": {"def": 0, "hum": "РљРѕР»С–СЂ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "matherial_part": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "matherial_id": {"def": 0, "hum": "Матеріал", "form": 1},
-        "part_uid": {"def": 0, "hum": "Код", "form": 1},
-        "number": {"def": 1.0, "hum": "Кількість", "form": 1},
-        "width": {"def": 0.0, "hum": "Ширина, мм", "form": 1},
-        "length": {"def": 0.0, "hum": "Довжина, мм", "form": 1},
-        "color_id": {"def": 0, "hum": "Колір", "form": 1},
-        "user_id": {"def": 0, "hum": "Оператор", "form": 1},
-        "created_at": {"def": "date", "hum": "Дата", "form": 0},
-        "is_recycle": {"def": true, "hum": "Вторинний", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "matherial_id": {"def": 0, "hum": "РњР°С‚РµСЂС–Р°Р»", "form": 1},
+        "part_uid": {"def": 0, "hum": "РљРѕРґ", "form": 1},
+        "number": {"def": 1.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "width": {"def": 0.0, "hum": "РЁРёСЂРёРЅР°, РјРј", "form": 1},
+        "length": {"def": 0.0, "hum": "Р”РѕРІР¶РёРЅР°, РјРј", "form": 1},
+        "color_id": {"def": 0, "hum": "РљРѕР»С–СЂ", "form": 1},
+        "user_id": {"def": 0, "hum": "РћРїРµСЂР°С‚РѕСЂ", "form": 1},
+        "created_at": {"def": "date", "hum": "Р”Р°С‚Р°", "form": 0},
+        "is_recycle": {"def": true, "hum": "Р’С‚РѕСЂРёРЅРЅРёР№", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "matherial_part_slice": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "matherial_part_id": {"def": 0, "hum": "Номер партії", "form": 1},
-        "user_id": {"def": 0, "hum": "Оператор", "form": 1},
-        "created_at": {"def": "date", "hum": "Дата", "form": 0},
-        "number": {"def": 1.0, "hum": "Кількість", "form": 1},
-        "width": {"def": 0.0, "hum": "Ширина, мм", "form": 1},
-        "length": {"def": 0.0, "hum": "Довжина, мм", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "matherial_part_id": {"def": 0, "hum": "РќРѕРјРµСЂ РїР°СЂС‚С–С—", "form": 1},
+        "user_id": {"def": 0, "hum": "РћРїРµСЂР°С‚РѕСЂ", "form": 1},
+        "created_at": {"def": "date", "hum": "Р”Р°С‚Р°", "form": 0},
+        "number": {"def": 1.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "width": {"def": 0.0, "hum": "РЁРёСЂРёРЅР°, РјРј", "form": 1},
+        "length": {"def": 0.0, "hum": "Р”РѕРІР¶РёРЅР°, РјРј", "form": 1},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "matherial_to_ordering": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "ordering_id": {"def": 0, "hum": "Замовлення", "form": 2},
-        "matherial_id": {"def": 0, "hum": "Матеріал", "form": 2},
-        "width": {"def": 0.0, "hum": "Ширина, мм", "form": 1},
-        "length": {"def": 0.0, "hum": "Довжина, мм", "form": 1},
-        "pieces": {"def": 1, "hum": "Штук", "form": 1},
-        "color_id": {"def": 0, "hum": "Колір", "form": 1},
-        "user_id": {"def": 0, "hum": "Оператор", "form": 2},
-        "number": {"def": 1.0, "hum": "Кількість", "form": 1},
-        "price": {"def": 0.0, "hum": "Ціна", "form": 1},
-        "persent": {"def": 0.0, "hum": "Націнка %", "form": 1},
-        "profit": {"def": 0.0, "hum": "Націнка грн.", "form": 1},
-        "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "product_to_ordering_id": {"def": 0, "hum": "Виріб до замовлення", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "ordering_id": {"def": 0, "hum": "Р—Р°РјРѕРІР»РµРЅРЅСЏ", "form": 2},
+        "matherial_id": {"def": 0, "hum": "РњР°С‚РµСЂС–Р°Р»", "form": 2},
+        "width": {"def": 0.0, "hum": "РЁРёСЂРёРЅР°, РјРј", "form": 1},
+        "length": {"def": 0.0, "hum": "Р”РѕРІР¶РёРЅР°, РјРј", "form": 1},
+        "pieces": {"def": 1, "hum": "РЁС‚СѓРє", "form": 1},
+        "color_id": {"def": 0, "hum": "РљРѕР»С–СЂ", "form": 1},
+        "user_id": {"def": 0, "hum": "РћРїРµСЂР°С‚РѕСЂ", "form": 2},
+        "number": {"def": 1.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "price": {"def": 0.0, "hum": "Р¦С–РЅР°", "form": 1},
+        "persent": {"def": 0.0, "hum": "РќР°С†С–РЅРєР° %", "form": 1},
+        "profit": {"def": 0.0, "hum": "РќР°С†С–РЅРєР° РіСЂРЅ.", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "product_to_ordering_id": {"def": 0, "hum": "Р’РёСЂС–Р± РґРѕ Р·Р°РјРѕРІР»РµРЅРЅСЏ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "matherial_to_product": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "product_id": {"def": 0, "hum": "Виріб", "form": 0},
-        "matherial_id": {"def": 0, "hum": "Матеріал", "form": 2},
-        "number": {"def": 1.0, "hum": "Кількість", "form": 1},
-        "coeff": {"def": 1.0, "hum": "Коефіцієнт", "form": 1},
-        "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "list_name": {"def": "default", "hum": "Назва списку", "form": 1},
-        "is_multiselect": {"def": false, "hum": "Мультивибір", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "is_used": {"def": false, "hum": "Використовувати", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "product_id": {"def": 0, "hum": "Р’РёСЂС–Р±", "form": 0},
+        "matherial_id": {"def": 0, "hum": "РњР°С‚РµСЂС–Р°Р»", "form": 2},
+        "number": {"def": 1.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "coeff": {"def": 1.0, "hum": "РљРѕРµС„С–С†С–С”РЅС‚", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "list_name": {"def": "default", "hum": "РќР°Р·РІР° СЃРїРёСЃРєСѓ", "form": 1},
+        "is_multiselect": {"def": false, "hum": "РњСѓР»СЊС‚РёРІРёР±С–СЂ", "form": 1},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "is_used": {"def": false, "hum": "Р’РёРєРѕСЂРёСЃС‚РѕРІСѓРІР°С‚Рё", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "color_group": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "color_group_id": {"def": 0, "hum": "Група кольорів", "form": 1},
-        "position": {"def": 0, "hum": "Позиція", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "color_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РєРѕР»СЊРѕСЂС–РІ", "form": 1},
+        "position": {"def": 0, "hum": "РџРѕР·РёС†С–СЏ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "color": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "color_group_id": {"def": 0, "hum": "Група", "form": 2},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "total": {"def": 0.0, "hum": "В наявності", "form": 0},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "color_group_id": {"def": 0, "hum": "Р“СЂСѓРїР°", "form": 2},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "total": {"def": 0.0, "hum": "Р’ РЅР°СЏРІРЅРѕСЃС‚С–", "form": 0},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "contragent_group": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "contragent_group_id": {"def": 0, "hum": "Група контрагентів", "form": 1},
-        "position": {"def": 0, "hum": "Позиція", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "contragent_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РєРѕРЅС‚СЂР°РіРµРЅС‚С–РІ", "form": 1},
+        "position": {"def": 0, "hum": "РџРѕР·РёС†С–СЏ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "contragent": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "contragent_group_id": {"def": 2, "hum": "Група контрагента", "form": 1},
-        "phone": {"def": "", "hum": "Тел.", "form": 1},
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "contragent_group_id": {"def": 2, "hum": "Р“СЂСѓРїР° РєРѕРЅС‚СЂР°РіРµРЅС‚Р°", "form": 1},
+        "phone": {"def": "", "hum": "РўРµР».", "form": 1},
         "email": {"def": "", "hum": "Email", "form": 1},
         "web": {"def": "", "hum": "Web", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "dir_name": {"def": "", "hum": "Назва теки", "form": 2},
-        "search": {"def": "", "hum": "Пошук", "form": 0},
-        "total": {"def": 0.0, "hum": "Баланс", "form": 1},
-        "full_name": {"def": "", "hum": "Повна назва", "form": 2},
-        "edrpou": {"def": "", "hum": "ЕДРПОУ", "form": 1},
-        "ipn": {"def": "", "hum": "ІПН", "form": 1},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "dir_name": {"def": "", "hum": "РќР°Р·РІР° С‚РµРєРё", "form": 2},
+        "search": {"def": "", "hum": "РџРѕС€СѓРє", "form": 0},
+        "total": {"def": 0.0, "hum": "Р‘Р°Р»Р°РЅСЃ", "form": 1},
+        "full_name": {"def": "", "hum": "РџРѕРІРЅР° РЅР°Р·РІР°", "form": 2},
+        "edrpou": {"def": "", "hum": "Р•Р”Р РџРћРЈ", "form": 1},
+        "ipn": {"def": "", "hum": "Р†РџРќ", "form": 1},
         "iban": {"def": "", "hum": "IBAN", "form": 1},
-        "bank": {"def": "", "hum": "Банк", "form": 1},
-        "mfo": {"def": "", "hum": "МФО", "form": 1},
-        "fop": {"def": "", "hum": "ФОП", "form": 1},
-        "address": {"def": "", "hum": "Адреса", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "bank": {"def": "", "hum": "Р‘Р°РЅРє", "form": 1},
+        "mfo": {"def": "", "hum": "РњР¤Рћ", "form": 1},
+        "fop": {"def": "", "hum": "Р¤РћРџ", "form": 1},
+        "address": {"def": "", "hum": "РђРґСЂРµСЃР°", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "contact": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "contragent_id": {"def": 0, "hum": "Контрагент", "form": 2},
-        "name": {"def": "", "hum": "Ім'я", "form": 2},
-        "phone": {"def": "", "hum": "Тел.", "form": 1},
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "contragent_id": {"def": 0, "hum": "РљРѕРЅС‚СЂР°РіРµРЅС‚", "form": 2},
+        "name": {"def": "", "hum": "Р†Рј'СЏ", "form": 2},
+        "phone": {"def": "", "hum": "РўРµР».", "form": 1},
         "email": {"def": "", "hum": "Email", "form": 1},
         "viber": {"def": "", "hum": "Viber", "form": 1},
         "telegram": {"def": "", "hum": "Telegram", "form": 1},
         "telegram_uid": {"def": 0, "hum": "Telegram", "form": 1},
-        "search": {"def": "", "hum": "Пошук", "form": 1},
-        "total": {"def": 0.0, "hum": "Баланс", "form": 0},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "search": {"def": "", "hum": "РџРѕС€СѓРє", "form": 1},
+        "total": {"def": 0.0, "hum": "Р‘Р°Р»Р°РЅСЃ", "form": 0},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "owner": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 1},
-        "phone": {"def": "", "hum": "Тел.", "form": 1},
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 1},
+        "phone": {"def": "", "hum": "РўРµР».", "form": 1},
         "email": {"def": "", "hum": "Email", "form": 1},
         "web": {"def": "", "hum": "Web", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "total": {"def": 0.0, "hum": "Баланс", "form": 1},
-        "full_name": {"def": "", "hum": "Повна назва", "form": 1},
-        "edrpou": {"def": "", "hum": "ЕДРПОУ", "form": 1},
-        "ipn": {"def": "", "hum": "ІПН", "form": 1},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "total": {"def": 0.0, "hum": "Р‘Р°Р»Р°РЅСЃ", "form": 1},
+        "full_name": {"def": "", "hum": "РџРѕРІРЅР° РЅР°Р·РІР°", "form": 1},
+        "edrpou": {"def": "", "hum": "Р•Р”Р РџРћРЈ", "form": 1},
+        "ipn": {"def": "", "hum": "Р†РџРќ", "form": 1},
         "iban": {"def": "", "hum": "IBAN", "form": 1},
-        "bank": {"def": "", "hum": "Банк", "form": 1},
-        "mfo": {"def": "", "hum": "МФО", "form": 1},
-        "fop": {"def": "", "hum": "ФОП", "form": 1},
-        "address": {"def": "", "hum": "Адреса", "form": 1},
-        "sign": {"def": "", "hum": "Підпис(назва файлу)", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "bank": {"def": "", "hum": "Р‘Р°РЅРє", "form": 1},
+        "mfo": {"def": "", "hum": "РњР¤Рћ", "form": 1},
+        "fop": {"def": "", "hum": "Р¤РћРџ", "form": 1},
+        "address": {"def": "", "hum": "РђРґСЂРµСЃР°", "form": 1},
+        "sign": {"def": "", "hum": "РџС–РґРїРёСЃ(РЅР°Р·РІР° С„Р°Р№Р»Сѓ)", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "cbox_check": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "fs_uid": {"def": "0", "hum": "Фіскальний код", "form": 1},
-        "checkbox_uid": {"def": "0", "hum": "Код checkbox", "form": 1},
-        "user_id": {"def": 0, "hum": "Оператор", "form": 2},
-        "contragent_id": {"def": 0, "hum": "Замовник", "form": 2},
-        "document_uid": {"def": 0, "hum": "Код документа", "form": 0},
-        "ordering_id": {"def": 0, "hum": "Замовлення", "form": 0},
-        "based_on": {"def": 0, "hum": "За документом", "form": 0},
-        "created_at": {"def": "date", "hum": "Дата", "form": 0},
-        "cash_sum": {"def": 0.0, "hum": "Сума", "form": 2},
-        "discount": {"def": 0.0, "hum": "Сума дисконту", "form": 1},
-        "comm": {"def": "", "hum": "Коментар", "form": 1},
-        "is_cash": {"def": true, "hum": "Готівка", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "fs_uid": {"def": "0", "hum": "Р¤С–СЃРєР°Р»СЊРЅРёР№ РєРѕРґ", "form": 1},
+        "checkbox_uid": {"def": "0", "hum": "РљРѕРґ checkbox", "form": 1},
+        "user_id": {"def": 0, "hum": "РћРїРµСЂР°С‚РѕСЂ", "form": 2},
+        "contragent_id": {"def": 0, "hum": "Р—Р°РјРѕРІРЅРёРє", "form": 2},
+        "document_uid": {"def": 0, "hum": "РљРѕРґ РґРѕРєСѓРјРµРЅС‚Р°", "form": 0},
+        "ordering_id": {"def": 0, "hum": "Р—Р°РјРѕРІР»РµРЅРЅСЏ", "form": 0},
+        "based_on": {"def": 0, "hum": "Р—Р° РґРѕРєСѓРјРµРЅС‚РѕРј", "form": 0},
+        "created_at": {"def": "date", "hum": "Р”Р°С‚Р°", "form": 0},
+        "cash_sum": {"def": 0.0, "hum": "РЎСѓРјР°", "form": 2},
+        "discount": {"def": 0.0, "hum": "РЎСѓРјР° РґРёСЃРєРѕРЅС‚Сѓ", "form": 1},
+        "comm": {"def": "", "hum": "РљРѕРјРµРЅС‚Р°СЂ", "form": 1},
+        "is_cash": {"def": true, "hum": "Р“РѕС‚С–РІРєР°", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "item_to_cbox_check": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 2},
-        "cbox_check_id": {"def": 0, "hum": "Номер чеку", "form": 1},
-        "number": {"def": 1.0, "hum": "Кількість", "form": 1},
-        "measure_id": {"def": 0, "hum": "Од. виміру", "form": 2},
-        "price": {"def": 0.0, "hum": "Ціна", "form": 1},
-        "discount": {"def": 0.0, "hum": "Сума дисконту", "form": 1},
-        "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "item_code": {"def": "", "hum": "Код товара", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 2},
+        "cbox_check_id": {"def": 0, "hum": "РќРѕРјРµСЂ С‡РµРєСѓ", "form": 1},
+        "number": {"def": 1.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "measure_id": {"def": 0, "hum": "РћРґ. РІРёРјС–СЂСѓ", "form": 2},
+        "price": {"def": 0.0, "hum": "Р¦С–РЅР°", "form": 1},
+        "discount": {"def": 0.0, "hum": "РЎСѓРјР° РґРёСЃРєРѕРЅС‚Сѓ", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "item_code": {"def": "", "hum": "РљРѕРґ С‚РѕРІР°СЂР°", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "project_group": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 1},
-        "project_group_id": {"def": 0, "hum": "Група проектів", "form": 1},
-        "position": {"def": 0, "hum": "Позиція", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 1}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 1},
+        "project_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РїСЂРѕРµРєС‚С–РІ", "form": 1},
+        "position": {"def": 0, "hum": "РџРѕР·РёС†С–СЏ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 1}
     },
 
     "project": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "document_uid": {"def": 0, "hum": "Код документа", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 1},
-        "project_group_id": {"def": 0, "hum": "Група проекту", "form": 1},
-        "user_id": {"def": 0, "hum": "Менеджер", "form": 1},
-        "contragent_id": {"def": 0, "hum": "Контрагент", "form": 1},
-        "contact_id": {"def": 0, "hum": "Контакт", "form": 1},
-        "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
-        "cash_sum": {"def": 0.0, "hum": "Сплачено", "form": 1},
-        "whs_sum": {"def": 0.0, "hum": "По складу", "form": 1},
-        "project_type_id": {"def": 0, "hum": "Виріб", "form": 1},
-        "type_dir": {"def": "", "hum": "Тека виробу", "form": 0},
-        "project_status_id": {"def": 0, "hum": "Етап", "form": 1},
-        "number_dir": {"def": "", "hum": "Тека номеру", "form": 0},
-        "info": {"def": "\n", "hum": "Опис", "form": 1},
-        "created_at": {"def": "date", "hum": "Створений", "form": 0},
-        "is_in_work": {"def": true, "hum": "В роботі", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 1}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "document_uid": {"def": 0, "hum": "РљРѕРґ РґРѕРєСѓРјРµРЅС‚Р°", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 1},
+        "project_group_id": {"def": 0, "hum": "Р“СЂСѓРїР° РїСЂРѕРµРєС‚Сѓ", "form": 1},
+        "user_id": {"def": 0, "hum": "РњРµРЅРµРґР¶РµСЂ", "form": 1},
+        "contragent_id": {"def": 0, "hum": "РљРѕРЅС‚СЂР°РіРµРЅС‚", "form": 1},
+        "contact_id": {"def": 0, "hum": "РљРѕРЅС‚Р°РєС‚", "form": 1},
+        "cost": {"def": 0.0, "hum": "Р’Р°СЂС‚С–СЃС‚СЊ", "form": 1},
+        "cash_sum": {"def": 0.0, "hum": "РЎРїР»Р°С‡РµРЅРѕ", "form": 1},
+        "whs_sum": {"def": 0.0, "hum": "РџРѕ СЃРєР»Р°РґСѓ", "form": 1},
+        "project_type_id": {"def": 0, "hum": "Р’РёСЂС–Р±", "form": 1},
+        "type_dir": {"def": "", "hum": "РўРµРєР° РІРёСЂРѕР±Сѓ", "form": 0},
+        "project_status_id": {"def": 0, "hum": "Р•С‚Р°Рї", "form": 1},
+        "number_dir": {"def": "", "hum": "РўРµРєР° РЅРѕРјРµСЂСѓ", "form": 0},
+        "info": {"def": "\n", "hum": "РћРїРёСЃ", "form": 1},
+        "created_at": {"def": "date", "hum": "РЎС‚РІРѕСЂРµРЅРёР№", "form": 0},
+        "is_in_work": {"def": true, "hum": "Р’ СЂРѕР±РѕС‚С–", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 1}
     },
 
     "project_status": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 1},
-        "code_name": {"def": "", "hum": "Кодове ім'я", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 1}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 1},
+        "code_name": {"def": "", "hum": "РљРѕРґРѕРІРµ С–Рј'СЏ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 1}
     },
 
     "project_type": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 1},
-        "dir_name": {"def": "", "hum": "Назва теки", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 1}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 1},
+        "dir_name": {"def": "", "hum": "РќР°Р·РІР° С‚РµРєРё", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 1}
     },
 
     "counter": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "name": {"def": "", "hum": "Назва", "form": 1},
-        "equipment_id": {"def": 0, "hum": "Обладнання", "form": 1},
-        "total": {"def": 0, "hum": "Загалом", "form": 1},
-        "updated_at": {"def": "date", "hum": "Змінений", "form": 0},
-        "is_active": {"def": true, "hum": "Діючий", "form": 1}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "name": {"def": "", "hum": "РќР°Р·РІР°", "form": 1},
+        "equipment_id": {"def": 0, "hum": "РћР±Р»Р°РґРЅР°РЅРЅСЏ", "form": 1},
+        "total": {"def": 0, "hum": "Р—Р°РіР°Р»РѕРј", "form": 1},
+        "updated_at": {"def": "date", "hum": "Р—РјС–РЅРµРЅРёР№", "form": 0},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 1}
     },
 
     "record_to_counter": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "counter_id": {"def": 0, "hum": "Лічильник", "form": 1},
-        "created_at": {"def": "date", "hum": "Дата", "form": 0},
-        "number": {"def": 0, "hum": "Значення", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 1}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "counter_id": {"def": 0, "hum": "Р›С–С‡РёР»СЊРЅРёРє", "form": 1},
+        "created_at": {"def": "date", "hum": "Р”Р°С‚Р°", "form": 0},
+        "number": {"def": 0, "hum": "Р—РЅР°С‡РµРЅРЅСЏ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 1}
     },
 
     "wmc_number": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "whs_id": {"def": 0, "hum": "Склад", "form": 1},
-        "matherial_id": {"def": 0, "hum": "Матеріал", "form": 1},
-        "color_id": {"def": 0, "hum": "Колір", "form": 1},
-        "total": {"def": 1.0, "hum": "Кількість", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "whs_id": {"def": 0, "hum": "РЎРєР»Р°Рґ", "form": 1},
+        "matherial_id": {"def": 0, "hum": "РњР°С‚РµСЂС–Р°Р»", "form": 1},
+        "color_id": {"def": 0, "hum": "РљРѕР»С–СЂ", "form": 1},
+        "total": {"def": 1.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     },
 
     "numbers_to_product": {
-        "id": {"def": 0, "hum": "Номер", "form": 0},
-        "product_id": {"def": 0, "hum": "Виріб", "form": 0},
-        "number": {"def": 0.0, "hum": "Кількість", "form": 1},
-        "pieces": {"def": 0, "hum": "Штук", "form": 1},
-        "size": {"def": 0.0, "hum": "Розмір", "form": 1},
-        "persent": {"def": 0.0, "hum": "Націнка %", "form": 1},
-        "is_active": {"def": true, "hum": "Діючий", "form": 0}
+        "id": {"def": 0, "hum": "РќРѕРјРµСЂ", "form": 0},
+        "product_id": {"def": 0, "hum": "Р’РёСЂС–Р±", "form": 0},
+        "number": {"def": 0.0, "hum": "РљС–Р»СЊРєС–СЃС‚СЊ", "form": 1},
+        "pieces": {"def": 0, "hum": "РЁС‚СѓРє", "form": 1},
+        "size": {"def": 0.0, "hum": "Р РѕР·РјС–СЂ", "form": 1},
+        "persent": {"def": 0.0, "hum": "РќР°С†С–РЅРєР° %", "form": 1},
+        "is_active": {"def": true, "hum": "Р”С–СЋС‡РёР№", "form": 0}
     }
 
 }
