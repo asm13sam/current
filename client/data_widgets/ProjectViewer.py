@@ -161,13 +161,14 @@ class ProjectViewer(QSplitter):
             error('Оберіть проект')
             return
         app = App()
+        path = self.make_project_path(project)
+        subprocess.run([app.config['program'], path])
+    
+    def make_project_path(self, project):    
+        app = App()
         base_dir = app.config['bs_makets_path']
         if project['project_group_id'] == 4 or project['project_group_id'] == 5:
             base_dir = app.config['makets_path']
-        path = self.make_project_path(project, base_dir)
-        subprocess.run([app.config['program'], path])
-    
-    def make_project_path(self, project, base_dir):    
         contragent = Item('contragent')
         err = contragent.get(project['contragent_id'])
         if err:
