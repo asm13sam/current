@@ -12,3 +12,4 @@ client/dist
 *.exe
 state.json
 prew_config.json
+menv
