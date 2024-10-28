@@ -476,7 +476,7 @@ func UploadFile(req Req) {
 
 func CopyBase(r Req) {
 	t := time.Now()
-	createdAt := t.Format("2006-01-02T15:04:05")
+	createdAt := t.Format("2006-01-02T15-04-05")
 	base_name := r.StrParam + "_" + createdAt
 	newPath := filepath.Join(Cfg.BckpPath, base_name)
 	err := copyFile(Cfg.DBFile, newPath)
