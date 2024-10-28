@@ -667,29 +667,33 @@ class ItemsToProduct(QSplitter):
         self.setStretchFactor(0, 2)
         self.setStretchFactor(1, 3)
         self.products.table.table.valueSelected.connect(self.on_product_selected)
-        recalc_btn = QPushButton('Перерахувати')
+        
         row = self.products.info.grid.rowCount()
         col = self.products.info.grid.columnCount()
+        recalc_btn = QPushButton('Перерахувати')
         self.products.info.grid.addWidget(recalc_btn, row-1, col-4)
-        recalc_btn.clicked.connect(self.recalc_product)
+        recalc_btn.clicked.connect(self.recalc_products)
         reverse_price_btn = QPushButton('Реверс ціни')
         self.products.info.grid.addWidget(reverse_price_btn, row-1, col-3)
-        reverse_price_btn.clicked.connect(self.revers_product_price)
-
+        reverse_price_btn.clicked.connect(self.revers_product_prices)
+        discard_coeff_btn = QPushButton('Скинути коефіцієнти')
+        self.products.info.grid.addWidget(discard_coeff_btn, row-1, col-2)
+        discard_coeff_btn.clicked.connect(self.discard_coefficients)
         update_prices_persent_btn = QPushButton('Оновити ціни на відсоток')
-        self.products.info.grid.addWidget(update_prices_persent_btn, row-1, col-2)
+        self.products.info.grid.addWidget(update_prices_persent_btn, row-1, col-1)
         update_prices_persent_btn.clicked.connect(self.update_pricing_percent)
-        update_list_prices_btn = QPushButton('Оновити ціни в списках')
-        self.products.info.grid.addWidget(update_list_prices_btn, row-1, col-1)
-        update_list_prices_btn.clicked.connect(self.update_prices_in_lists)
         update_prices_btn = QPushButton('Оновити ціни')
         self.products.info.grid.addWidget(update_prices_btn, row, col-1)
-        update_prices_btn.clicked.connect(self.update_product_prices)
+        update_prices_btn.clicked.connect(self.reload_prices)
                 
     def reload(self):
         self.products.reload()
 
     def update_pricing_percent(self, field):
+        values = self.products.table.table.get_selected_values()
+        if not values:
+            error("Оберіть позиції")
+            return
         res = askdlg("Вкажіть відсоток")
         try:
             persent = int(res)
@@ -702,12 +706,7 @@ class ItemsToProduct(QSplitter):
             approx = int(res)
         except:
             return
-        
         item = Item('product')
-        values = self.products.table.table.get_selected_values()
-        if not values:
-            error("Оберіть позиції")
-            return
         for v in values:
             v['cost'] = round(v['cost'] + v['cost'] * persent / 100, approx)
             item.value = v
@@ -715,76 +714,9 @@ class ItemsToProduct(QSplitter):
             if err:
                 error(f'Не можу оновити {v["name"]}[{v["id"]}]:\n {err}')
                 continue
-            self.revers_product_price(v)
+        self.revers_product_prices(values)
+        self.reload()
         
-    def update_prices(self, name, with_defaults=False) -> int:
-        item = Item(name)
-        err = item.get_all()
-        if err:
-            error(err)
-            return 0
-        prices = {v['id']: v['cost'] for v in item.values}
-        
-        i2p = Item(f'{name}_to_product')
-        err = i2p.get_all()
-        if err:
-            error(err)
-            return 0
-        
-        update_counter = 0
-        for v in i2p.values:
-            if not with_defaults and v['list_name'] == 'default':
-                continue
-            id_name = f'product2_id' if name == 'product' else f'{name}_id'
-            cost = round(v['coeff'] * prices[v[id_name]] * v['number'], 1)
-            if cost == v['cost']:
-                continue
-            v['cost'] = cost
-            i2p.value = v
-            err = i2p.save()
-            if err:
-                error(err)
-                continue
-            update_counter += 1
-        messbox(f"{item.hum.title()} - ціни оновлено у {update_counter} позиціях")
-        return update_counter
-    
-    def update_prices_in_lists(self):
-        self.update_prices('matherial')
-        self.update_prices('operation')
-        self.update_prices('product')
-
-    def update_product_prices(self):
-        self.update_prices('matherial', with_defaults=True)
-        self.update_prices('operation', with_defaults=True)
-        self.update_prices('product', with_defaults=True)
-        product = Item('product')
-        err = product.get_all()
-        if err:
-            error(err)
-            return 0
-        prod_updated = 0
-        for v in product.values:
-            new_price = self.update_product_price(v)
-            if not new_price or v['cost'] == new_price:
-                continue
-            v['cost'] = new_price
-            product.value = v
-            err = product.save()
-            if err:
-                error(err)
-                return
-            prod_updated += 1
-        if not prod_updated:
-            return 
-        p2p_updated = self.update_prices('product', with_defaults=True)
-        if not p2p_updated:
-            return
-        res = ok_cansel_dlg("Перервати?")
-        if res:
-            return
-        self.update_product_prices()
-
     def on_product_selected(self, value):
         self.m2ps.reload(value['id'])
         self.o2ps.reload(value['id'])
@@ -828,31 +760,38 @@ class ItemsToProduct(QSplitter):
                 prod_sum += v['cost']
         return prod_sum
     
-    def recalc_product(self):
-        prod_value = self.products.current_value
-        if not prod_value:
-            return
-        prod_sum = self.update_product_price(prod_value)
-        if not prod_sum:
+    def recalc_products(self):
+        values = self.products.table.table.get_selected_values()
+        if not values:
+            error("Оберіть позиції")
             return
         prod = Item('product')
-        prod.value = prod_value
-        prod.value['cost'] = prod_sum
+        for v in values:
+            prod.value = v
+            self.recalc_product(prod)
+        self.update_sum()    
+
+    def recalc_product(self, prod: Item):
+        prod_sum = self.update_product_price(prod.value)
+        if not prod_sum:
+            return
+        prod.value['cost'] = round(prod_sum)
         err = prod.save()
         if err:
             error(err)
+            
+    def revers_product_prices(self, _, values:dict=None):
+        print(values)
+        if values is None:
+            values = self.products.table.table.get_selected_values()
+        if not values:
+            error("Оберіть позиції")
             return
-        self.update_sum()
-
-    def revers_product_price(self, value=None):
-        if not value:
-            prod_value = self.products.current_value
-        else:
-            prod_value = value
+        for v in values:
+            self.revers_product_price(v)
+        self.reload_details()
         
-        if not prod_value:
-            error('Оберіть позицію')
-            return
+    def revers_product_price(self, prod_value):
         price = prod_value['cost']
         calc_price = self.update_product_price(prod_value)
         if not calc_price or price == calc_price:
@@ -872,4 +811,92 @@ class ItemsToProduct(QSplitter):
                     err = i2p.save()
                     if err:
                         error(err)
-                        continue
+
+    def reload_details(self):
+        self.m2ps.reload()
+        self.o2ps.reload()
+        self.p2ps.reload()
+        self.n2ps.reload()
+
+    def discard_coefficients(self):
+        values = self.products.table.table.get_selected_values()
+        if not values:
+            error("Оберіть позиції")
+            return
+        for v in values:
+            self.discard_coefficient(v)
+        self.reload_details()
+        
+    def discard_coefficient(self, prod_value):
+        for name in ('matherial_to_product', 'operation_to_product', 'product_to_product'):
+            i2p = Item(name)
+            err = i2p.get_filter_w('product_id', prod_value['id'])
+            if err:
+                error(err)
+                return 0
+            for v in i2p.values:
+                v['cost'] = round(v['cost'] / v['coeff'], 1)
+                v['coeff'] = 1
+                i2p.value = v
+                err = i2p.save()
+                if err:
+                    error(err)
+
+    def reload_prices(self, _, values=None):
+        if values is None:
+            values = self.products.table.table.get_selected_values()
+        if not values:
+            error("Оберіть позиції")
+            return
+        
+        for v in values:
+            self.reload_price(v)
+            
+        self.reload()
+
+    def reload_price(self, value):
+        p2p = Item('product_to_product')
+        err = p2p.get_filter_w('product_id', value['id'])
+        if err:
+            error(err)
+            return
+        prod = Item('product')
+        for v in p2p.values:
+            err = prod.get(v['product2_id'])
+            if err:
+                error(err)
+                continue
+            self.reload_price(prod.value)
+        prod_sum = 0
+        prod_sum += self.reload_price_for('matherial', value['id'])
+        prod_sum += self.reload_price_for('operation', value['id'])
+        prod_sum += self.reload_price_for('product', value['id'])
+        value['cost'] = round(prod_sum)
+        prod.value = value
+        err = prod.save()
+        if err:
+            error(err)
+                
+    def reload_price_for(self, name, product_id):    
+        item2p = Item(name + '_to_product')
+        item = Item(name)
+        res_sum = 0
+        id_name = f'product2_id' if name == 'product' else f'{name}_id'
+        err = item2p.get_filter_w('product_id', product_id)
+        if err:
+            error(err)
+            return 0
+        for v in item2p.values:
+            err = item.get(v[id_name])
+            if err:
+                error(err)
+                return 0
+            v['cost'] = round(v['coeff'] * item.value['cost'] * v['number'], 2)
+            item2p.value = v
+            err = item2p.save()
+            if err:
+                error(err)
+                return 0
+            if v['list_name'] == 'default':
+                res_sum += v['cost']
+        return res_sum
