@@ -694,6 +694,10 @@ class ItemsToProduct(QSplitter):
         self.products.reload()
 
     def update_pricing_percent(self, field):
+        values = self.products.table.table.get_selected_values()
+        if not values:
+            error("Оберіть позиції")
+            return
         res = askdlg("Вкажіть відсоток")
         try:
             persent = int(res)
@@ -706,12 +710,7 @@ class ItemsToProduct(QSplitter):
             approx = int(res)
         except:
             return
-        
         item = Item('product')
-        values = self.products.table.table.get_selected_values()
-        if not values:
-            error("Оберіть позиції")
-            return
         for v in values:
             v['cost'] = round(v['cost'] + v['cost'] * persent / 100, approx)
             item.value = v
@@ -719,7 +718,8 @@ class ItemsToProduct(QSplitter):
             if err:
                 error(f'Не можу оновити {v["name"]}[{v["id"]}]:\n {err}')
                 continue
-            self.revers_product_price(v)
+        self.revers_product_prices(values)
+        self.reload()
         
     def update_prices(self, name, with_defaults=False) -> int:
         item = Item(name)
@@ -835,6 +835,7 @@ class ItemsToProduct(QSplitter):
     def recalc_products(self):
         values = self.products.table.table.get_selected_values()
         if not values:
+            error("Оберіть позиції")
             return
         prod = Item('product')
         for v in values:
@@ -851,9 +852,11 @@ class ItemsToProduct(QSplitter):
         if err:
             error(err)
             
-    def revers_product_prices(self):
-        values = self.products.table.table.get_selected_values()
+    def revers_product_prices(self, values=None):
+        if values is None:
+            values = self.products.table.table.get_selected_values()
         if not values:
+            error("Оберіть позиції")
             return
         for v in values:
             self.revers_product_price(v)
@@ -889,6 +892,7 @@ class ItemsToProduct(QSplitter):
     def discard_coefficients(self):
         values = self.products.table.table.get_selected_values()
         if not values:
+            error("Оберіть позиції")
             return
         for v in values:
             self.discard_coefficient(v)
