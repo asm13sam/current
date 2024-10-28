@@ -667,20 +667,24 @@ class ItemsToProduct(QSplitter):
         self.setStretchFactor(0, 2)
         self.setStretchFactor(1, 3)
         self.products.table.table.valueSelected.connect(self.on_product_selected)
-        recalc_btn = QPushButton('Перерахувати')
+        
         row = self.products.info.grid.rowCount()
         col = self.products.info.grid.columnCount()
-        self.products.info.grid.addWidget(recalc_btn, row-1, col-4)
+        recalc_btn = QPushButton('Перерахувати')
+        self.products.info.grid.addWidget(recalc_btn, row-1, col-3)
         recalc_btn.clicked.connect(self.recalc_products)
         reverse_price_btn = QPushButton('Реверс ціни')
-        self.products.info.grid.addWidget(reverse_price_btn, row-1, col-3)
+        self.products.info.grid.addWidget(reverse_price_btn, row-1, col-2)
         reverse_price_btn.clicked.connect(self.revers_product_prices)
+        discard_coeff_btn = QPushButton('Скинути коефіцієнти')
+        self.products.info.grid.addWidget(discard_coeff_btn, row-1, col-1)
+        discard_coeff_btn.clicked.connect(self.discard_coefficients)
 
         update_prices_persent_btn = QPushButton('Оновити ціни на відсоток')
-        self.products.info.grid.addWidget(update_prices_persent_btn, row-1, col-2)
+        self.products.info.grid.addWidget(update_prices_persent_btn, row, col-3)
         update_prices_persent_btn.clicked.connect(self.update_pricing_percent)
         update_list_prices_btn = QPushButton('Оновити ціни в списках')
-        self.products.info.grid.addWidget(update_list_prices_btn, row-1, col-1)
+        self.products.info.grid.addWidget(update_list_prices_btn, row, col-2)
         update_list_prices_btn.clicked.connect(self.update_prices_in_lists)
         update_prices_btn = QPushButton('Оновити ціни')
         self.products.info.grid.addWidget(update_prices_btn, row, col-1)
@@ -853,10 +857,7 @@ class ItemsToProduct(QSplitter):
             return
         for v in values:
             self.revers_product_price(v)
-        self.m2ps.reload()
-        self.o2ps.reload()
-        self.p2ps.reload()
-        self.n2ps.reload()
+        self.reload_details()
         
     def revers_product_price(self, prod_value):
         price = prod_value['cost']
@@ -878,4 +879,32 @@ class ItemsToProduct(QSplitter):
                     err = i2p.save()
                     if err:
                         error(err)
-                        continue
+
+    def reload_details(self):
+        self.m2ps.reload()
+        self.o2ps.reload()
+        self.p2ps.reload()
+        self.n2ps.reload()
+
+    def discard_coefficients(self):
+        values = self.products.table.table.get_selected_values()
+        if not values:
+            return
+        for v in values:
+            self.discard_coefficient(v)
+        self.reload_details()
+        
+    def discard_coefficient(self, prod_value):
+        for name in ('matherial_to_product', 'operation_to_product', 'product_to_product'):
+            i2p = Item(name)
+            err = i2p.get_filter_w('product_id', prod_value['id'])
+            if err:
+                error(err)
+                return 0
+            for v in i2p.values:
+                v['cost'] = round(v['cost'] / v['coeff'], 1)
+                v['coeff'] = 1
+                i2p.value = v
+                err = i2p.save()
+                if err:
+                    error(err)
