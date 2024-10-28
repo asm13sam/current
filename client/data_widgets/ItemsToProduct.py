@@ -828,21 +828,25 @@ class ItemsToProduct(QSplitter):
                 prod_sum += v['cost']
         return prod_sum
     
-    def recalc_product(self):
-        prod_value = self.products.current_value
-        if not prod_value:
-            return
-        prod_sum = self.update_product_price(prod_value)
-        if not prod_sum:
+    def recalc_products(self):
+        values = self.products.table.table.get_selected_values()
+        if not values:
             return
         prod = Item('product')
-        prod.value = prod_value
+        for v in values:
+            prod.value = v
+            self.recalc_product(prod)
+        self.update_sum()    
+
+    def recalc_product(self, prod: Item):
+        prod_sum = self.update_product_price(prod.value)
+        if not prod_sum:
+            return
         prod.value['cost'] = prod_sum
         err = prod.save()
         if err:
             error(err)
-            return
-        self.update_sum()
+            
 
     def revers_product_price(self, value=None):
         if not value:
