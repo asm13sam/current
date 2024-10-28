@@ -671,10 +671,10 @@ class ItemsToProduct(QSplitter):
         row = self.products.info.grid.rowCount()
         col = self.products.info.grid.columnCount()
         self.products.info.grid.addWidget(recalc_btn, row-1, col-4)
-        recalc_btn.clicked.connect(self.recalc_product)
+        recalc_btn.clicked.connect(self.recalc_products)
         reverse_price_btn = QPushButton('Реверс ціни')
         self.products.info.grid.addWidget(reverse_price_btn, row-1, col-3)
-        reverse_price_btn.clicked.connect(self.revers_product_price)
+        reverse_price_btn.clicked.connect(self.revers_product_prices)
 
         update_prices_persent_btn = QPushButton('Оновити ціни на відсоток')
         self.products.info.grid.addWidget(update_prices_persent_btn, row-1, col-2)
@@ -847,16 +847,18 @@ class ItemsToProduct(QSplitter):
         if err:
             error(err)
             
-
-    def revers_product_price(self, value=None):
-        if not value:
-            prod_value = self.products.current_value
-        else:
-            prod_value = value
-        
-        if not prod_value:
-            error('Оберіть позицію')
+    def revers_product_prices(self):
+        values = self.products.table.table.get_selected_values()
+        if not values:
             return
+        for v in values:
+            self.revers_product_price(v)
+        self.m2ps.reload()
+        self.o2ps.reload()
+        self.p2ps.reload()
+        self.n2ps.reload()
+        
+    def revers_product_price(self, prod_value):
         price = prod_value['cost']
         calc_price = self.update_product_price(prod_value)
         if not calc_price or price == calc_price:
