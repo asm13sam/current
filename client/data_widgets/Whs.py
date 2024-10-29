@@ -71,8 +71,9 @@ class DetailsMatherialToWhsInTable(DetailsItemTable):
             if err:
                 error(err)
                 continue
-            add_mess = f"{matherial.value['name']} з {matherial.value['price']} грн. на {v['price']} грн.\n"
-            matherial.value['price'] = v['price']
+            new_price = round(v['price'], 2)
+            add_mess = f"{matherial.value['name']} з {matherial.value['price']} грн. на {new_price} грн.\n"
+            matherial.value['price'] = new_price
             err = matherial.save()
             if err:
                 error(err)
@@ -201,7 +202,6 @@ class WhsInTab(WhsTab):
         whs_out_btn.clicked.connect(self.create_whs_out)
         cash_out_delivery_btn.clicked.connect(self.create_cash_out_delivery)
         delivery_btn.clicked.connect(self.distrib_delivery)
-
 
     def calc_sum(self):
         cur_value = self.main_table.table.table.get_selected_value()
@@ -355,6 +355,13 @@ class WhsInTab(WhsTab):
             err = m2wi.save()
             if err:
                 error(err)
+        whs_in = Item('whs_in')
+        cur_value['whs_sum'] += cur_value['delivery']
+        cur_value['delivery'] = 0
+        whs_in.value = cur_value
+        err = whs_in.save()
+        if err:
+            error(err)
         self.reload()
                     
 
