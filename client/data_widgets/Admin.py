@@ -29,6 +29,7 @@ from widgets.Form import (
     )
 from widgets.Table import TableWControls
 from data_widgets.Helpers import OrdTree
+from common.params import CONF_TABS
 
 
 class PathSelector(QPushButton):
@@ -230,14 +231,22 @@ class ConfigEditor(QWidget):
         self.cfg = {}
         self.hum = {}
         self.widgets = {}
+        self.box = QVBoxLayout()
+        self.box.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(self.box)
         self.grid = QGridLayout()
-        self.setLayout(self.grid)
+        controls = QWidget()
+        self.box.addWidget(controls, 0)
+        controls.setLayout(self.grid)
         self.grid.setContentsMargins(0, 0, 0, 0)
         self.grid.setVerticalSpacing(1)
-
+        self.tabs = QTabWidget()
+        self.box.addWidget(self.tabs, 30)
+        
     def make_gui(self):
+        self.make_controls()
         self.make_widgets()
-        self.make_form()
+        self.make_forms()
 
     def read_config(self):
         with open ('config.json', "r") as f:
@@ -287,19 +296,32 @@ class ConfigEditor(QWidget):
 
         self.widgets["product_groups"] = ProductPlacesConfig()
 
-    def make_form(self):
+    def make_forms(self):
+        for k, v in CONF_TABS.items():
+            form = self.make_form(v)
+            self.tabs.addTab(form, k)
+    
+    def make_form(self, widget_keys):
+        w = QWidget()
+        grid = QGridLayout()
+        w.setLayout(grid)
+        grid.setContentsMargins(0, 0, 0, 0)
+        grid.setVerticalSpacing(3)
         row = 0
-        for k, v in self.cfg.items():
-            self.grid.addWidget(QLabel(self.hum[k]), row, 0)
-            self.grid.addWidget(self.widgets[k], row, 1)
-            self.widgets[k].set_value(v)
+        for k in widget_keys:
+            grid.addWidget(QLabel(self.hum[k]), row, 0)
+            grid.addWidget(self.widgets[k], row, 1)
+            self.widgets[k].set_value(self.cfg[k])
             row += 1
-        
+        grid.setRowStretch(row, 10)
+        return w
+    
+    def make_controls(self):
         cancel_btn = QPushButton('Скинути')
-        self.grid.addWidget(cancel_btn, row, 0)
+        self.grid.addWidget(cancel_btn, 0, 0)
         cancel_btn.clicked.connect(self.restore_config)
         save_btn = QPushButton('Зберегти')
-        self.grid.addWidget(save_btn, row, 1)
+        self.grid.addWidget(save_btn, 0, 1)
         save_btn.clicked.connect(self.save_config)
 
     def restore_config(self):
