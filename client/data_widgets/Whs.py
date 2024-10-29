@@ -187,14 +187,21 @@ class WhsInTab(WhsTab):
         cash_out_btn = QPushButton('Створити ВКО')
         cash_in_btn = QPushButton('Створити ПКО')
         whs_out_btn = QPushButton('Створити ВН')
+        cash_out_delivery_btn = QPushButton('ВКО на доставку')
+        delivery_btn = QPushButton('Поділити доставку')
         row = self.main_table.info.grid.rowCount()
         col = self.main_table.info.grid.columnCount()
         self.main_table.info.grid.addWidget(cash_out_btn, row-4, col-1)
         self.main_table.info.grid.addWidget(cash_in_btn, row-3, col-1)
         self.main_table.info.grid.addWidget(whs_out_btn, row-3, col-2)
+        self.main_table.info.grid.addWidget(cash_out_delivery_btn, row-2, col-1)
+        self.main_table.info.grid.addWidget(delivery_btn, row-2, col-2)
         cash_out_btn.clicked.connect(self.create_cash_out)
         cash_in_btn.clicked.connect(self.create_cash_in)
         whs_out_btn.clicked.connect(self.create_whs_out)
+        cash_out_delivery_btn.clicked.connect(self.create_cash_out_delivery)
+        delivery_btn.clicked.connect(self.distrib_delivery)
+
 
     def calc_sum(self):
         cur_value = self.main_table.table.table.get_selected_value()
@@ -215,6 +222,9 @@ class WhsInTab(WhsTab):
         cash_out.value["contact_id"] = cur_value["contact_id"]
         cash_out.value["cash_sum"] = cur_value["whs_sum"] + cur_value["delivery"] - payed
         cash_out.value["comm"] = f'авт. до {cur_value["name"]}'
+        app = App()
+        cash_out.value["cash_id"] = app.config["whs_in cash id"]
+        cash_out.value["user_id"] = app.user['id']
 
         dlg = FormDialog('Створити ВКО', cash_out.model, cash_out.value)
         res = dlg.exec()
@@ -235,6 +245,9 @@ class WhsInTab(WhsTab):
         cash_in.value["contragent_id"] = cur_value["contragent_id"]
         cash_in.value["contact_id"] = cur_value["contact_id"]
         cash_in.value["comm"] = f'авт. до {cur_value["name"]}'
+        app = App()
+        cash_in.value["cash_id"] = app.config["whs_in cash id"]
+        cash_in.value["user_id"] = app.user['id']
 
         m2wi_values = self.details_table.table.table.get_selected_values()
         for v in m2wi_values:
@@ -259,6 +272,8 @@ class WhsInTab(WhsTab):
         whs_out.value["contragent_id"] = cur_value["contragent_id"]
         whs_out.value["contact_id"] = cur_value["contact_id"]
         whs_out.value["comm"] = f'авт. до {cur_value["name"]}'
+        app = App()
+        whs_out.value["user_id"] = app.user['id']
 
         m2wi_values = self.details_table.table.table.get_selected_values()
         for v in m2wi_values:
@@ -288,6 +303,29 @@ class WhsInTab(WhsTab):
                 error(err)
             
         self.doc_table.reload(cur_value)
+
+    def create_cash_out_delivery(self):
+        cur_value = self.main_table.table.table.get_selected_value()
+        if not cur_value:
+            return
+        app = App()
+        cash_out = Item('cash_out')
+        cash_out.create_default()
+        cash_out.value["based_on"] = cur_value['document_uid']
+        cash_out.value["contragent_id"] = app.config["contragent for delivery"]
+        cash_out.value["contact_id"] = app.config["contact for delivery"]
+        cash_out.value["cash_sum"] = cur_value["delivery"]
+        cash_out.value["comm"] = f'авт. до {cur_value["name"]}'
+        cash_out.value["cash_id"] = app.config["whs_in cash id"]
+        cash_out.value["user_id"] = app.user['id']
+        err = cash_out.save()
+        if err:
+            error(err)
+            return
+        self.doc_table.reload(cur_value)
+    
+    def distrib_delivery(self):
+        pass
 
 
 class WhsOutTab(WhsTab):

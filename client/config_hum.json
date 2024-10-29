@@ -25,6 +25,7 @@
 
     "warehouse persent": "Націнка складу, %",
     "copycenter warehouse id": "Склад копіцентра",
+    "whs_in cash id": "Каса оплати приходу товарів",
     "measure pieces": "Одиниця виміру шт.",
     "measure linear": "Одиниця виміру м.п.",
     "measure square": "Одиниця виміру м2",
@@ -32,6 +33,8 @@
     "contact to production": "Контакт Виробництво",
     "contragent copycenter default": "Контрагент Копіцентру",
     "contact copycenter default": "Контакт Копіцентру",
+    "contragent for delivery": "Контрагент Доставка",
+    "contact for delivery": "Контакт Доставка",
     "ordering state in work": "Стан замовлення 'в роботі'",
     "ordering state ready": "Стан замовлення 'готове'",
     "ordering state taken": "Стан замовлення 'забране'",
