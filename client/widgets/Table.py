@@ -40,8 +40,8 @@ class TableModel(QStandardItemModel):
 
     def make_item(self, value, name):
         v = value[name]
-        if type(v) == float:
-            v = round(v, 2)
+        # if type(v) == float:
+        #     v = round(v, 2)
         item = QStandardItem(str(v))
         item.setData(v, SORT_ROLE)
         item.setEditable(False)

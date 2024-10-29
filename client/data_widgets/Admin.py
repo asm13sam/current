@@ -279,6 +279,7 @@ class ConfigEditor(QWidget):
 
         self.widgets["warehouse persent"] = PersentWidget()
         self.widgets["copycenter warehouse id"] = Selector('whs')
+        self.widgets["whs_in cash id"] = Selector('cash')
         self.widgets["measure pieces"] = Selector('measure')
         self.widgets["measure linear"] = Selector('measure')
         self.widgets["measure square"] = Selector('measure')
@@ -288,6 +289,9 @@ class ConfigEditor(QWidget):
         self.widgets["contragent copycenter default"] = Selector('contragent')
         self.widgets["contact copycenter default"] = ContactSelector(self.widgets["contragent copycenter default"])
         self.widgets["contact copycenter default"].remove_phone()
+        self.widgets["contragent for delivery"] = Selector('contragent')
+        self.widgets["contact for delivery"] = ContactSelector(self.widgets["contragent for delivery"])
+        self.widgets["contact for delivery"].remove_phone()
         self.widgets["ordering state in work"] = Selector('ordering_status')
         self.widgets["ordering state ready"] = Selector('ordering_status')
         self.widgets["ordering state taken"] = Selector('ordering_status')

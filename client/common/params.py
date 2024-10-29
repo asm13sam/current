@@ -60,10 +60,13 @@ CONF_TABS = {
                 ),
     "Призначення": (
                 "copycenter warehouse id",
+                "whs_in cash id",
                 "contragent to production",
                 "contact to production",
                 "contragent copycenter default",
                 "contact copycenter default",
+                "contragent for delivery",
+                "contact for delivery",
                 ),
     "Константи": (
                 "warehouse persent",
