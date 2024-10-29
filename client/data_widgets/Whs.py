@@ -220,7 +220,7 @@ class WhsInTab(WhsTab):
         cash_out.value["based_on"] = cur_value['document_uid']
         cash_out.value["contragent_id"] = cur_value["contragent_id"]
         cash_out.value["contact_id"] = cur_value["contact_id"]
-        cash_out.value["cash_sum"] = cur_value["whs_sum"] + cur_value["delivery"] - payed
+        cash_out.value["cash_sum"] = cur_value["whs_sum"] - payed
         cash_out.value["comm"] = f'авт. до {cur_value["name"]}'
         app = App()
         cash_out.value["cash_id"] = app.config["whs_in cash id"]
@@ -325,8 +325,38 @@ class WhsInTab(WhsTab):
         self.doc_table.reload(cur_value)
     
     def distrib_delivery(self):
-        pass
-
+        cur_value = self.main_table.table.table.get_selected_value()
+        if not cur_value:
+            return
+        k = cur_value['delivery']/cur_value['whs_sum']
+        delivery_sum = cur_value['delivery']
+        m2wi_values = self.details_table.table.table.get_selected_values()
+        if not m2wi_values:
+            m2wi_values = self.details_table.values()
+        else:
+            ksum = 0
+            for v in m2wi_values:
+                ksum += v['cost']
+            k = cur_value['delivery']/ksum
+        m2wi = Item('matherial_to_whs_in')
+        for v in m2wi_values:
+            add_sum = round(v['cost'] * k) + 1 
+            add_price = round(add_sum/v['number'], 5)
+            add_sum = round(add_price * v['number'], 2)
+            # if lost of delivery sum less than add sum use lost of delivery sum
+            if delivery_sum - add_sum < 0:
+                add_sum = delivery_sum
+                add_price = round(add_sum / v['number'], 5)
+            else:
+                delivery_sum -= add_sum
+            v['price'] = round(v['price'] + add_price, 5)
+            v['cost'] = round(add_sum + v['cost'], 2)
+            m2wi.value = v
+            err = m2wi.save()
+            if err:
+                error(err)
+        self.reload()
+                    
 
 class WhsOutTab(WhsTab):
     def __init__(self):
