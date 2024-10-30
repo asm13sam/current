@@ -4,7 +4,8 @@
         "cash_in",
         "cash_out",
         "whs_in",
-        "whs_out"
+        "whs_out",
+        "invoice"
     ],
 
     "models":{
@@ -581,6 +582,7 @@
         "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
         "info": {"def": "\n", "hum": "Опис", "form": 1},
         "ordering_status_id": {"def": 1, "hum": "Стан", "form": 1},
+        "is_realized": {"def": false, "hum": "Проведений", "form": 1},
         "is_active": {"def": true, "hum": "Діюче", "form": 0}
     },
 
@@ -624,6 +626,7 @@
         "contact_id": {"def": 0, "hum": "Контакт", "form": 2},
         "cash_sum": {"def": 0.0, "hum": "Вартість", "form": 1},
         "comm": {"def": "", "hum": "Коментар", "form": 1},
+        "is_realized": {"def": false, "hum": "Проведений", "form": 1},
         "is_active": {"def": true, "hum": "Діюче", "form": 0}
     },
 
@@ -662,6 +665,7 @@
         "created_at": {"def": "date", "hum": "Дата", "form": 0},
         "cash_sum": {"def": 0.0, "hum": "Сплачено", "form": 1},
         "comm": {"def": "", "hum": "Коментар", "form": 1},
+        "is_realized": {"def": false, "hum": "Проведений", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -678,6 +682,7 @@
         "created_at": {"def": "date", "hum": "Дата", "form": 0},
         "cash_sum": {"def": 0.0, "hum": "Сплачено", "form": 1},
         "comm": {"def": "", "hum": "Коментар", "form": 1},
+        "is_realized": {"def": false, "hum": "Проведений", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -703,6 +708,7 @@
         "whs_sum": {"def": 0.0, "hum": "Сума", "form": 1},
         "delivery": {"def": 0.0, "hum": "Доставка", "form": 1},
         "comm": {"def": "", "hum": "Коментар", "form": 1},
+        "is_realized": {"def": false, "hum": "Проведений", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -718,6 +724,7 @@
         "created_at": {"def": "date", "hum": "Дата", "form": 0},
         "whs_sum": {"def": 0.0, "hum": "Сума", "form": 1},
         "comm": {"def": "", "hum": "Коментар", "form": 1},
+        "is_realized": {"def": false, "hum": "Проведений", "form": 1},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 

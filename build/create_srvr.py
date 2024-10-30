@@ -536,7 +536,16 @@ def create_go_create(table, keys, model):
     create_doc = ''
     doc_update_name = ''
     doc_update_name_tx = ''
+    start_is_realized = ''
+    end_is_realized = ''
     if table in model['documents']:
+        if complex_reg or reg_get:
+            start_is_realized = '''
+                if c.IsRealized {
+            '''
+            end_is_realized = '''
+                }
+            '''
         create_doc = f'''
             doc := Document{{Id:0, DocType: "{table}", IsActive:true}}
             doc, err = DocumentCreate(doc, tx)
@@ -575,7 +584,7 @@ def create_go_create(table, keys, model):
             needCommit = true
             defer tx.Rollback()
         }}
-        {complex_reg}{reg_get}{create_doc}{created_at}
+        {start_is_realized}{complex_reg}{reg_get}{end_is_realized}{create_doc}{created_at}
         sql := `INSERT INTO {table}
             ({', '.join(list(keys)[1:])})
             VALUES({('?, '*(len(keys)-1))[:-2]});`

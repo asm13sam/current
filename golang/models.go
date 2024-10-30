@@ -10752,33 +10752,35 @@ func CashInCreate(c CashIn, tx *sql.Tx) (CashIn, error) {
 		defer tx.Rollback()
 	}
 
-	cash, err := CashGet(c.CashId, tx)
-	if err == nil {
-		cash.Total += c.CashSum
+	if c.IsActive {
+		cash, err := CashGet(c.CashId, tx)
+		if err == nil {
+			cash.Total += c.CashSum
 
-		_, err = CashUpdate(cash, tx)
-		if err != nil {
-			return c, err
+			_, err = CashUpdate(cash, tx)
+			if err != nil {
+				return c, err
+			}
 		}
-	}
 
-	contragent, err := ContragentGet(c.ContragentId, tx)
-	if err == nil {
-		contragent.Total += c.CashSum
+		contragent, err := ContragentGet(c.ContragentId, tx)
+		if err == nil {
+			contragent.Total += c.CashSum
 
-		_, err = ContragentUpdate(contragent, tx)
-		if err != nil {
-			return c, err
+			_, err = ContragentUpdate(contragent, tx)
+			if err != nil {
+				return c, err
+			}
 		}
-	}
 
-	contact, err := ContactGet(c.ContactId, tx)
-	if err == nil {
-		contact.Total += c.CashSum
+		contact, err := ContactGet(c.ContactId, tx)
+		if err == nil {
+			contact.Total += c.CashSum
 
-		_, err = ContactUpdate(contact, tx)
-		if err != nil {
-			return c, err
+			_, err = ContactUpdate(contact, tx)
+			if err != nil {
+				return c, err
+			}
 		}
 	}
 
