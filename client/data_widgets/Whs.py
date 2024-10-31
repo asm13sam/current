@@ -1,3 +1,4 @@
+import math
 from PyQt6.QtWidgets import (
     QPushButton,
     QWidget,
@@ -324,6 +325,13 @@ class WhsInTab(WhsTab):
             return
         self.doc_table.reload(cur_value)
     
+    def correct_add_sum(self, value, add_sum):
+        sum = value['cost'] + add_sum
+        price = math.ceil(sum/value['number'] * 100) / 100
+        sum = round(price * value['number'], 2)
+        add_sum = sum - value['cost']
+        return add_sum, sum, price
+
     def distrib_delivery(self):
         cur_value = self.main_table.table.table.get_selected_value()
         if not cur_value:
@@ -340,17 +348,17 @@ class WhsInTab(WhsTab):
             k = cur_value['delivery']/ksum
         m2wi = Item('matherial_to_whs_in')
         for v in m2wi_values:
-            add_sum = round(v['cost'] * k) + 1 
-            add_price = round(add_sum/v['number'], 5)
-            add_sum = round(add_price * v['number'], 2)
-            # if lost of delivery sum less than add sum use lost of delivery sum
+            add_sum = round(v['cost'] * k)
+            add_sum, sum, price = self.correct_add_sum(v, add_sum)
+            
             if delivery_sum - add_sum < 0:
                 add_sum = delivery_sum
-                add_price = round(add_sum / v['number'], 5)
-            else:
-                delivery_sum -= add_sum
-            v['price'] = round(v['price'] + add_price, 5)
-            v['cost'] = round(add_sum + v['cost'], 2)
+                add_sum, sum, price = self.correct_add_sum(v, add_sum)
+            
+            delivery_sum -= add_sum
+            
+            v['price'] = price
+            v['cost'] = sum
             m2wi.value = v
             err = m2wi.save()
             if err:
