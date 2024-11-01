@@ -543,6 +543,9 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/item_to_invoice_filter_str/{fs}/{fs2}",
 		WrapAuth(GetItemToInvoiceByFilterStr, DOC_READ)).Methods("GET")
 
+	r.HandleFunc("/realized/item_to_invoice/{id:[0-9]+}",
+		WrapAuth(RealizedItemToInvoice, DOC_CREATE)).Methods("GET")
+
 	r.HandleFunc("/item_to_invoice_of_cost_sum_before/{fs}/{id:[0-9]+}/{fs2}",
 		WrapAuth(GetItemToInvoiceCostSumBefore, DOC_READ)).Methods("GET")
 
@@ -948,6 +951,9 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/matherial_to_whs_in_filter_str/{fs}/{fs2}",
 		WrapAuth(GetMatherialToWhsInByFilterStr, DOC_READ)).Methods("GET")
 
+	r.HandleFunc("/realized/matherial_to_whs_in/{id:[0-9]+}",
+		WrapAuth(RealizedMatherialToWhsIn, DOC_CREATE)).Methods("GET")
+
 	r.HandleFunc("/matherial_to_whs_out/{id:[0-9]+}",
 		WrapAuth(GetMatherialToWhsOut, DOC_READ)).Methods("GET")
 
@@ -968,6 +974,9 @@ func makeRouter() *mux.Router {
 
 	r.HandleFunc("/matherial_to_whs_out_filter_str/{fs}/{fs2}",
 		WrapAuth(GetMatherialToWhsOutByFilterStr, DOC_READ)).Methods("GET")
+
+	r.HandleFunc("/realized/matherial_to_whs_out/{id:[0-9]+}",
+		WrapAuth(RealizedMatherialToWhsOut, DOC_CREATE)).Methods("GET")
 
 	r.HandleFunc("/matherial_part/{id:[0-9]+}",
 		WrapAuth(GetMatherialPart, DOC_READ)).Methods("GET")

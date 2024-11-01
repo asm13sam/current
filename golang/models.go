@@ -150,7 +150,7 @@ func DocumentUpdate(d Document, tx *sql.Tx) (Document, error) {
 	return d, nil
 }
 
-func DocumentDelete(id int, tx *sql.Tx) (Document, error) {
+func DocumentDelete(id int, tx *sql.Tx, isUnRealize bool) (Document, error) {
 	needCommit := false
 	var err error
 	var d Document
@@ -168,7 +168,9 @@ func DocumentDelete(id int, tx *sql.Tx) (Document, error) {
 	}
 
 	sql := `UPDATE document SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE document SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, d.Id)
 	if err != nil {
 		return d, err
@@ -406,7 +408,7 @@ func MeasureUpdate(m Measure, tx *sql.Tx) (Measure, error) {
 	return m, nil
 }
 
-func MeasureDelete(id int, tx *sql.Tx) (Measure, error) {
+func MeasureDelete(id int, tx *sql.Tx, isUnRealize bool) (Measure, error) {
 	needCommit := false
 	var err error
 	var m Measure
@@ -424,7 +426,9 @@ func MeasureDelete(id int, tx *sql.Tx) (Measure, error) {
 	}
 
 	sql := `UPDATE measure SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE measure SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
@@ -659,7 +663,7 @@ func CountTypeUpdate(c CountType, tx *sql.Tx) (CountType, error) {
 	return c, nil
 }
 
-func CountTypeDelete(id int, tx *sql.Tx) (CountType, error) {
+func CountTypeDelete(id int, tx *sql.Tx, isUnRealize bool) (CountType, error) {
 	needCommit := false
 	var err error
 	var c CountType
@@ -677,7 +681,9 @@ func CountTypeDelete(id int, tx *sql.Tx) (CountType, error) {
 	}
 
 	sql := `UPDATE count_type SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE count_type SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
@@ -920,7 +926,7 @@ func ColorGroupUpdate(c ColorGroup, tx *sql.Tx) (ColorGroup, error) {
 	return c, nil
 }
 
-func ColorGroupDelete(id int, tx *sql.Tx) (ColorGroup, error) {
+func ColorGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (ColorGroup, error) {
 	needCommit := false
 	var err error
 	var c ColorGroup
@@ -938,7 +944,9 @@ func ColorGroupDelete(id int, tx *sql.Tx) (ColorGroup, error) {
 	}
 
 	sql := `UPDATE color_group SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE color_group SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
@@ -1185,7 +1193,7 @@ func ColorUpdate(c Color, tx *sql.Tx) (Color, error) {
 	return c, nil
 }
 
-func ColorDelete(id int, tx *sql.Tx) (Color, error) {
+func ColorDelete(id int, tx *sql.Tx, isUnRealize bool) (Color, error) {
 	needCommit := false
 	var err error
 	var c Color
@@ -1203,7 +1211,9 @@ func ColorDelete(id int, tx *sql.Tx) (Color, error) {
 	}
 
 	sql := `UPDATE color SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE color SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
@@ -1450,7 +1460,7 @@ func MatherialGroupUpdate(m MatherialGroup, tx *sql.Tx) (MatherialGroup, error) 
 	return m, nil
 }
 
-func MatherialGroupDelete(id int, tx *sql.Tx) (MatherialGroup, error) {
+func MatherialGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialGroup, error) {
 	needCommit := false
 	var err error
 	var m MatherialGroup
@@ -1468,7 +1478,9 @@ func MatherialGroupDelete(id int, tx *sql.Tx) (MatherialGroup, error) {
 	}
 
 	sql := `UPDATE matherial_group SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE matherial_group SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
@@ -1750,7 +1762,7 @@ func MatherialUpdate(m Matherial, tx *sql.Tx) (Matherial, error) {
 	return m, nil
 }
 
-func MatherialDelete(id int, tx *sql.Tx) (Matherial, error) {
+func MatherialDelete(id int, tx *sql.Tx, isUnRealize bool) (Matherial, error) {
 	needCommit := false
 	var err error
 	var m Matherial
@@ -1768,7 +1780,9 @@ func MatherialDelete(id int, tx *sql.Tx) (Matherial, error) {
 	}
 
 	sql := `UPDATE matherial SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE matherial SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
@@ -2044,7 +2058,7 @@ func CashUpdate(c Cash, tx *sql.Tx) (Cash, error) {
 	return c, nil
 }
 
-func CashDelete(id int, tx *sql.Tx) (Cash, error) {
+func CashDelete(id int, tx *sql.Tx, isUnRealize bool) (Cash, error) {
 	needCommit := false
 	var err error
 	var c Cash
@@ -2062,7 +2076,9 @@ func CashDelete(id int, tx *sql.Tx) (Cash, error) {
 	}
 
 	sql := `UPDATE cash SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE cash SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
@@ -2315,7 +2331,7 @@ func UserGroupUpdate(u UserGroup, tx *sql.Tx) (UserGroup, error) {
 	return u, nil
 }
 
-func UserGroupDelete(id int, tx *sql.Tx) (UserGroup, error) {
+func UserGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (UserGroup, error) {
 	needCommit := false
 	var err error
 	var u UserGroup
@@ -2333,7 +2349,9 @@ func UserGroupDelete(id int, tx *sql.Tx) (UserGroup, error) {
 	}
 
 	sql := `UPDATE user_group SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE user_group SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, u.Id)
 	if err != nil {
 		return u, err
@@ -2620,7 +2638,7 @@ func UserUpdate(u User, tx *sql.Tx) (User, error) {
 	return u, nil
 }
 
-func UserDelete(id int, tx *sql.Tx) (User, error) {
+func UserDelete(id int, tx *sql.Tx, isUnRealize bool) (User, error) {
 	needCommit := false
 	var err error
 	var u User
@@ -2638,7 +2656,9 @@ func UserDelete(id int, tx *sql.Tx) (User, error) {
 	}
 
 	sql := `UPDATE user SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE user SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, u.Id)
 	if err != nil {
 		return u, err
@@ -2901,7 +2921,7 @@ func EquipmentGroupUpdate(e EquipmentGroup, tx *sql.Tx) (EquipmentGroup, error) 
 	return e, nil
 }
 
-func EquipmentGroupDelete(id int, tx *sql.Tx) (EquipmentGroup, error) {
+func EquipmentGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (EquipmentGroup, error) {
 	needCommit := false
 	var err error
 	var e EquipmentGroup
@@ -2919,7 +2939,9 @@ func EquipmentGroupDelete(id int, tx *sql.Tx) (EquipmentGroup, error) {
 	}
 
 	sql := `UPDATE equipment_group SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE equipment_group SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, e.Id)
 	if err != nil {
 		return e, err
@@ -3176,7 +3198,7 @@ func EquipmentUpdate(e Equipment, tx *sql.Tx) (Equipment, error) {
 	return e, nil
 }
 
-func EquipmentDelete(id int, tx *sql.Tx) (Equipment, error) {
+func EquipmentDelete(id int, tx *sql.Tx, isUnRealize bool) (Equipment, error) {
 	needCommit := false
 	var err error
 	var e Equipment
@@ -3194,7 +3216,9 @@ func EquipmentDelete(id int, tx *sql.Tx) (Equipment, error) {
 	}
 
 	sql := `UPDATE equipment SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE equipment SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, e.Id)
 	if err != nil {
 		return e, err
@@ -3445,7 +3469,7 @@ func OperationGroupUpdate(o OperationGroup, tx *sql.Tx) (OperationGroup, error) 
 	return o, nil
 }
 
-func OperationGroupDelete(id int, tx *sql.Tx) (OperationGroup, error) {
+func OperationGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (OperationGroup, error) {
 	needCommit := false
 	var err error
 	var o OperationGroup
@@ -3463,7 +3487,9 @@ func OperationGroupDelete(id int, tx *sql.Tx) (OperationGroup, error) {
 	}
 
 	sql := `UPDATE operation_group SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE operation_group SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, o.Id)
 	if err != nil {
 		return o, err
@@ -3745,7 +3771,7 @@ func OperationUpdate(o Operation, tx *sql.Tx) (Operation, error) {
 	return o, nil
 }
 
-func OperationDelete(id int, tx *sql.Tx) (Operation, error) {
+func OperationDelete(id int, tx *sql.Tx, isUnRealize bool) (Operation, error) {
 	needCommit := false
 	var err error
 	var o Operation
@@ -3763,7 +3789,9 @@ func OperationDelete(id int, tx *sql.Tx) (Operation, error) {
 	}
 
 	sql := `UPDATE operation SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE operation SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, o.Id)
 	if err != nil {
 		return o, err
@@ -4024,7 +4052,7 @@ func ProductGroupUpdate(p ProductGroup, tx *sql.Tx) (ProductGroup, error) {
 	return p, nil
 }
 
-func ProductGroupDelete(id int, tx *sql.Tx) (ProductGroup, error) {
+func ProductGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (ProductGroup, error) {
 	needCommit := false
 	var err error
 	var p ProductGroup
@@ -4042,7 +4070,9 @@ func ProductGroupDelete(id int, tx *sql.Tx) (ProductGroup, error) {
 	}
 
 	sql := `UPDATE product_group SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE product_group SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
@@ -4324,7 +4354,7 @@ func ProductUpdate(p Product, tx *sql.Tx) (Product, error) {
 	return p, nil
 }
 
-func ProductDelete(id int, tx *sql.Tx) (Product, error) {
+func ProductDelete(id int, tx *sql.Tx, isUnRealize bool) (Product, error) {
 	needCommit := false
 	var err error
 	var p Product
@@ -4342,7 +4372,9 @@ func ProductDelete(id int, tx *sql.Tx) (Product, error) {
 	}
 
 	sql := `UPDATE product SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE product SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
@@ -4603,7 +4635,7 @@ func ContragentGroupUpdate(c ContragentGroup, tx *sql.Tx) (ContragentGroup, erro
 	return c, nil
 }
 
-func ContragentGroupDelete(id int, tx *sql.Tx) (ContragentGroup, error) {
+func ContragentGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (ContragentGroup, error) {
 	needCommit := false
 	var err error
 	var c ContragentGroup
@@ -4621,7 +4653,9 @@ func ContragentGroupDelete(id int, tx *sql.Tx) (ContragentGroup, error) {
 	}
 
 	sql := `UPDATE contragent_group SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE contragent_group SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
@@ -4938,7 +4972,7 @@ func ContragentUpdate(c Contragent, tx *sql.Tx) (Contragent, error) {
 	return c, nil
 }
 
-func ContragentDelete(id int, tx *sql.Tx) (Contragent, error) {
+func ContragentDelete(id int, tx *sql.Tx, isUnRealize bool) (Contragent, error) {
 	needCommit := false
 	var err error
 	var c Contragent
@@ -4956,7 +4990,9 @@ func ContragentDelete(id int, tx *sql.Tx) (Contragent, error) {
 	}
 
 	sql := `UPDATE contragent SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE contragent SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
@@ -5314,7 +5350,7 @@ func ContactUpdate(c Contact, tx *sql.Tx) (Contact, error) {
 	return c, nil
 }
 
-func ContactDelete(id int, tx *sql.Tx) (Contact, error) {
+func ContactDelete(id int, tx *sql.Tx, isUnRealize bool) (Contact, error) {
 	needCommit := false
 	var err error
 	var c Contact
@@ -5332,7 +5368,9 @@ func ContactDelete(id int, tx *sql.Tx) (Contact, error) {
 	}
 
 	sql := `UPDATE contact SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE contact SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
@@ -5583,7 +5621,7 @@ func OrderingStatusUpdate(o OrderingStatus, tx *sql.Tx) (OrderingStatus, error) 
 	return o, nil
 }
 
-func OrderingStatusDelete(id int, tx *sql.Tx) (OrderingStatus, error) {
+func OrderingStatusDelete(id int, tx *sql.Tx, isUnRealize bool) (OrderingStatus, error) {
 	needCommit := false
 	var err error
 	var o OrderingStatus
@@ -5601,7 +5639,9 @@ func OrderingStatusDelete(id int, tx *sql.Tx) (OrderingStatus, error) {
 	}
 
 	sql := `UPDATE ordering_status SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE ordering_status SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, o.Id)
 	if err != nil {
 		return o, err
@@ -5720,6 +5760,7 @@ type Ordering struct {
 	Cost             float64 `json:"cost"`
 	Info             string  `json:"info"`
 	OrderingStatusId int     `json:"ordering_status_id"`
+	IsRealized       bool    `json:"is_realized"`
 	IsActive         bool    `json:"is_active"`
 }
 
@@ -5748,6 +5789,7 @@ func OrderingGet(id int, tx *sql.Tx) (Ordering, error) {
 		&o.Cost,
 		&o.Info,
 		&o.OrderingStatusId,
+		&o.IsRealized,
 		&o.IsActive,
 	)
 	return o, err
@@ -5791,6 +5833,7 @@ func OrderingGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Ordering,
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.IsRealized,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -5824,8 +5867,8 @@ func OrderingCreate(o Ordering, tx *sql.Tx) (Ordering, error) {
 	o.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO ordering
-            (document_uid, name, created_at, deadline_at, finished_at, user_id, contragent_id, contact_id, price, persent, profit, cost, info, ordering_status_id, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, name, created_at, deadline_at, finished_at, user_id, contragent_id, contact_id, price, persent, profit, cost, info, ordering_status_id, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		o.DocumentUid,
@@ -5842,6 +5885,7 @@ func OrderingCreate(o Ordering, tx *sql.Tx) (Ordering, error) {
 		o.Cost,
 		o.Info,
 		o.OrderingStatusId,
+		o.IsRealized,
 		o.IsActive,
 	)
 	if err != nil {
@@ -5875,7 +5919,7 @@ func OrderingUpdate(o Ordering, tx *sql.Tx) (Ordering, error) {
 	}
 
 	sql := `UPDATE ordering SET
-                    document_uid=?, name=?, created_at=?, deadline_at=?, finished_at=?, user_id=?, contragent_id=?, contact_id=?, price=?, persent=?, profit=?, cost=?, info=?, ordering_status_id=?, is_active=?
+                    document_uid=?, name=?, created_at=?, deadline_at=?, finished_at=?, user_id=?, contragent_id=?, contact_id=?, price=?, persent=?, profit=?, cost=?, info=?, ordering_status_id=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -5894,6 +5938,7 @@ func OrderingUpdate(o Ordering, tx *sql.Tx) (Ordering, error) {
 		o.Cost,
 		o.Info,
 		o.OrderingStatusId,
+		o.IsRealized,
 		o.IsActive,
 		o.Id,
 	)
@@ -5909,7 +5954,7 @@ func OrderingUpdate(o Ordering, tx *sql.Tx) (Ordering, error) {
 	return o, nil
 }
 
-func OrderingDelete(id int, tx *sql.Tx) (Ordering, error) {
+func OrderingDelete(id int, tx *sql.Tx, isUnRealize bool) (Ordering, error) {
 	needCommit := false
 	var err error
 	var o Ordering
@@ -5931,7 +5976,7 @@ func OrderingDelete(id int, tx *sql.Tx) (Ordering, error) {
 		return o, err
 	}
 	for _, product_to_ordering := range product_to_orderings {
-		_, err = ProductToOrderingDelete(product_to_ordering.Id, tx)
+		_, err = ProductToOrderingDelete(product_to_ordering.Id, tx, isUnRealize)
 		if err != nil {
 			return o, err
 		}
@@ -5942,7 +5987,7 @@ func OrderingDelete(id int, tx *sql.Tx) (Ordering, error) {
 		return o, err
 	}
 	for _, operation_to_ordering := range operation_to_orderings {
-		_, err = OperationToOrderingDelete(operation_to_ordering.Id, tx)
+		_, err = OperationToOrderingDelete(operation_to_ordering.Id, tx, isUnRealize)
 		if err != nil {
 			return o, err
 		}
@@ -5953,7 +5998,7 @@ func OrderingDelete(id int, tx *sql.Tx) (Ordering, error) {
 		return o, err
 	}
 	for _, matherial_to_ordering := range matherial_to_orderings {
-		_, err = MatherialToOrderingDelete(matherial_to_ordering.Id, tx)
+		_, err = MatherialToOrderingDelete(matherial_to_ordering.Id, tx, isUnRealize)
 		if err != nil {
 			return o, err
 		}
@@ -5964,7 +6009,7 @@ func OrderingDelete(id int, tx *sql.Tx) (Ordering, error) {
 		return o, err
 	}
 	for _, invoice := range invoices {
-		_, err = InvoiceDelete(invoice.Id, tx)
+		_, err = InvoiceDelete(invoice.Id, tx, isUnRealize)
 		if err != nil {
 			return o, err
 		}
@@ -5975,7 +6020,7 @@ func OrderingDelete(id int, tx *sql.Tx) (Ordering, error) {
 		return o, err
 	}
 	for _, cash_out := range cash_outs {
-		_, err = CashOutDelete(cash_out.Id, tx)
+		_, err = CashOutDelete(cash_out.Id, tx, isUnRealize)
 		if err != nil {
 			return o, err
 		}
@@ -5986,7 +6031,7 @@ func OrderingDelete(id int, tx *sql.Tx) (Ordering, error) {
 		return o, err
 	}
 	for _, cash_in := range cash_ins {
-		_, err = CashInDelete(cash_in.Id, tx)
+		_, err = CashInDelete(cash_in.Id, tx, isUnRealize)
 		if err != nil {
 			return o, err
 		}
@@ -5997,7 +6042,7 @@ func OrderingDelete(id int, tx *sql.Tx) (Ordering, error) {
 		return o, err
 	}
 	for _, whs_out := range whs_outs {
-		_, err = WhsOutDelete(whs_out.Id, tx)
+		_, err = WhsOutDelete(whs_out.Id, tx, isUnRealize)
 		if err != nil {
 			return o, err
 		}
@@ -6008,14 +6053,16 @@ func OrderingDelete(id int, tx *sql.Tx) (Ordering, error) {
 		return o, err
 	}
 	for _, whs_in := range whs_ins {
-		_, err = WhsInDelete(whs_in.Id, tx)
+		_, err = WhsInDelete(whs_in.Id, tx, isUnRealize)
 		if err != nil {
 			return o, err
 		}
 	}
 
 	sql := `UPDATE ordering SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE ordering SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, o.Id)
 	if err != nil {
 		return o, err
@@ -6072,6 +6119,7 @@ func OrderingGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.IsRealized,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -6124,6 +6172,7 @@ func OrderingGetByFilterStr(field string, param string, withDeleted bool, delete
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.IsRealized,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -6135,7 +6184,7 @@ func OrderingGetByFilterStr(field string, param string, withDeleted bool, delete
 }
 
 func OrderingTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "created_at", "deadline_at", "finished_at", "user_id", "contragent_id", "contact_id", "price", "persent", "profit", "cost", "info", "ordering_status_id", "is_active"}
+	fields := []string{"id", "document_uid", "name", "created_at", "deadline_at", "finished_at", "user_id", "contragent_id", "contact_id", "price", "persent", "profit", "cost", "info", "ordering_status_id", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -6176,6 +6225,7 @@ func OrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.IsRealized,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -6217,6 +6267,7 @@ func OrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDeleted
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.IsRealized,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -6455,7 +6506,7 @@ func OwnerUpdate(o Owner, tx *sql.Tx) (Owner, error) {
 	return o, nil
 }
 
-func OwnerDelete(id int, tx *sql.Tx) (Owner, error) {
+func OwnerDelete(id int, tx *sql.Tx, isUnRealize bool) (Owner, error) {
 	needCommit := false
 	var err error
 	var o Owner
@@ -6473,7 +6524,9 @@ func OwnerDelete(id int, tx *sql.Tx) (Owner, error) {
 	}
 
 	sql := `UPDATE owner SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE owner SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, o.Id)
 	if err != nil {
 		return o, err
@@ -6617,6 +6670,7 @@ type Invoice struct {
 	ContactId    int     `json:"contact_id"`
 	CashSum      float64 `json:"cash_sum"`
 	Comm         string  `json:"comm"`
+	IsRealized   bool    `json:"is_realized"`
 	IsActive     bool    `json:"is_active"`
 }
 
@@ -6642,6 +6696,7 @@ func InvoiceGet(id int, tx *sql.Tx) (Invoice, error) {
 		&i.ContactId,
 		&i.CashSum,
 		&i.Comm,
+		&i.IsRealized,
 		&i.IsActive,
 	)
 	return i, err
@@ -6682,6 +6737,7 @@ func InvoiceGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Invoice, e
 			&i.ContactId,
 			&i.CashSum,
 			&i.Comm,
+			&i.IsRealized,
 			&i.IsActive,
 		); err != nil {
 			return nil, err
@@ -6704,32 +6760,19 @@ func InvoiceCreate(i Invoice, tx *sql.Tx) (Invoice, error) {
 		defer tx.Rollback()
 	}
 
-	contragent, err := ContragentGet(i.ContragentId, tx)
-	if err == nil {
-		contragent.Total -= i.CashSum
-
-		_, err = ContragentUpdate(contragent, tx)
-		if err != nil {
-			return i, err
-		}
+	doc := Document{Id: 0, DocType: "invoice", IsActive: true}
+	doc, err = DocumentCreate(doc, tx)
+	if err != nil {
+		return i, err
 	}
-
-	contact, err := ContactGet(i.ContactId, tx)
-	if err == nil {
-		contact.Total -= i.CashSum
-
-		_, err = ContactUpdate(contact, tx)
-		if err != nil {
-			return i, err
-		}
-	}
+	i.DocumentUid = doc.Id
 
 	t := time.Now()
 	i.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO invoice
-            (document_uid, ordering_id, based_on, owner_id, name, created_at, user_id, contragent_id, contact_id, cash_sum, comm, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, ordering_id, based_on, owner_id, name, created_at, user_id, contragent_id, contact_id, cash_sum, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		i.DocumentUid,
@@ -6743,6 +6786,7 @@ func InvoiceCreate(i Invoice, tx *sql.Tx) (Invoice, error) {
 		i.ContactId,
 		i.CashSum,
 		i.Comm,
+		i.IsRealized,
 		i.IsActive,
 	)
 	if err != nil {
@@ -6753,6 +6797,12 @@ func InvoiceCreate(i Invoice, tx *sql.Tx) (Invoice, error) {
 		return i, err
 	}
 	i.Id = int(last_id)
+	i.Name = fmt.Sprintf("%s-%d", i.Name, i.Id)
+
+	i, err = InvoiceUpdate(i, tx)
+	if err != nil {
+		return i, err
+	}
 
 	if needCommit {
 		err = tx.Commit()
@@ -6775,59 +6825,63 @@ func InvoiceUpdate(i Invoice, tx *sql.Tx) (Invoice, error) {
 		defer tx.Rollback()
 	}
 
-	invoice, err := InvoiceGet(i.Id, tx)
-	if err != nil {
-		return i, err
-	}
+	if i.IsRealized {
 
-	contragent, err := ContragentGet(invoice.ContragentId, tx)
-	if err == nil {
-		contragent.Total += invoice.CashSum
+		invoice, err := InvoiceGet(i.Id, tx)
+		if err != nil {
+			return i, err
+		}
 
-	}
+		contragent, err := ContragentGet(invoice.ContragentId, tx)
+		if err == nil {
+			contragent.Total += invoice.CashSum
 
-	if invoice.ContragentId != i.ContragentId {
+		}
+
+		if invoice.ContragentId != i.ContragentId {
+			_, err = ContragentUpdate(contragent, tx)
+			if err != nil {
+				return i, err
+			}
+			contragent, err = ContragentGet(i.ContragentId, tx)
+			if err != nil {
+				return i, err
+			}
+		}
+		contragent.Total -= i.CashSum
+
 		_, err = ContragentUpdate(contragent, tx)
 		if err != nil {
 			return i, err
 		}
-		contragent, err = ContragentGet(i.ContragentId, tx)
-		if err != nil {
-			return i, err
+
+		contact, err := ContactGet(invoice.ContactId, tx)
+		if err == nil {
+			contact.Total += invoice.CashSum
+
 		}
-	}
-	contragent.Total -= i.CashSum
 
-	_, err = ContragentUpdate(contragent, tx)
-	if err != nil {
-		return i, err
-	}
+		if invoice.ContactId != i.ContactId {
+			_, err = ContactUpdate(contact, tx)
+			if err != nil {
+				return i, err
+			}
+			contact, err = ContactGet(i.ContactId, tx)
+			if err != nil {
+				return i, err
+			}
+		}
+		contact.Total -= i.CashSum
 
-	contact, err := ContactGet(invoice.ContactId, tx)
-	if err == nil {
-		contact.Total += invoice.CashSum
-
-	}
-
-	if invoice.ContactId != i.ContactId {
 		_, err = ContactUpdate(contact, tx)
 		if err != nil {
 			return i, err
 		}
-		contact, err = ContactGet(i.ContactId, tx)
-		if err != nil {
-			return i, err
-		}
-	}
-	contact.Total -= i.CashSum
 
-	_, err = ContactUpdate(contact, tx)
-	if err != nil {
-		return i, err
 	}
 
 	sql := `UPDATE invoice SET
-                    document_uid=?, ordering_id=?, based_on=?, owner_id=?, name=?, created_at=?, user_id=?, contragent_id=?, contact_id=?, cash_sum=?, comm=?, is_active=?
+                    document_uid=?, ordering_id=?, based_on=?, owner_id=?, name=?, created_at=?, user_id=?, contragent_id=?, contact_id=?, cash_sum=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -6843,6 +6897,7 @@ func InvoiceUpdate(i Invoice, tx *sql.Tx) (Invoice, error) {
 		i.ContactId,
 		i.CashSum,
 		i.Comm,
+		i.IsRealized,
 		i.IsActive,
 		i.Id,
 	)
@@ -6858,7 +6913,7 @@ func InvoiceUpdate(i Invoice, tx *sql.Tx) (Invoice, error) {
 	return i, nil
 }
 
-func InvoiceDelete(id int, tx *sql.Tx) (Invoice, error) {
+func InvoiceDelete(id int, tx *sql.Tx, isUnRealize bool) (Invoice, error) {
 	needCommit := false
 	var err error
 	var i Invoice
@@ -6900,14 +6955,16 @@ func InvoiceDelete(id int, tx *sql.Tx) (Invoice, error) {
 		return i, err
 	}
 	for _, item_to_invoice := range item_to_invoices {
-		_, err = ItemToInvoiceDelete(item_to_invoice.Id, tx)
+		_, err = ItemToInvoiceDelete(item_to_invoice.Id, tx, isUnRealize)
 		if err != nil {
 			return i, err
 		}
 	}
 
 	sql := `UPDATE invoice SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE invoice SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, i.Id)
 	if err != nil {
 		return i, err
@@ -6961,6 +7018,7 @@ func InvoiceGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 			&i.ContactId,
 			&i.CashSum,
 			&i.Comm,
+			&i.IsRealized,
 			&i.IsActive,
 		); err != nil {
 			return nil, err
@@ -7010,6 +7068,7 @@ func InvoiceGetByFilterStr(field string, param string, withDeleted bool, deleted
 			&i.ContactId,
 			&i.CashSum,
 			&i.Comm,
+			&i.IsRealized,
 			&i.IsActive,
 		); err != nil {
 			return nil, err
@@ -7021,13 +7080,75 @@ func InvoiceGetByFilterStr(field string, param string, withDeleted bool, deleted
 }
 
 func InvoiceTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "ordering_id", "based_on", "owner_id", "name", "created_at", "user_id", "contragent_id", "contact_id", "cash_sum", "comm", "is_active"}
+	fields := []string{"id", "document_uid", "ordering_id", "based_on", "owner_id", "name", "created_at", "user_id", "contragent_id", "contact_id", "cash_sum", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
 		}
 	}
 	return false
+}
+
+func InvoiceRealized(id int, tx *sql.Tx) (Invoice, error) {
+	var err error
+	needCommit := false
+	var i Invoice
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return i, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+	i, err = InvoiceGet(id, tx)
+	if err != nil {
+		return i, err
+	}
+
+	contragent, err := ContragentGet(i.ContragentId, tx)
+	if err == nil {
+		contragent.Total -= i.CashSum
+
+		_, err = ContragentUpdate(contragent, tx)
+		if err != nil {
+			return i, err
+		}
+	}
+
+	contact, err := ContactGet(i.ContactId, tx)
+	if err == nil {
+		contact.Total -= i.CashSum
+
+		_, err = ContactUpdate(contact, tx)
+		if err != nil {
+			return i, err
+		}
+	}
+
+	item_to_invoices, err := ItemToInvoiceGetByFilterInt("invoice_id", i.Id, false, false, tx)
+	if err != nil {
+		return i, err
+	}
+	for _, item_to_invoice := range item_to_invoices {
+		_, err = ItemToInvoiceRealized(item_to_invoice.Id, tx)
+		if err != nil {
+			return i, err
+		}
+	}
+
+	sql := `UPDATE invoice SET is_realized=1 WHERE id=?;`
+	_, err = tx.Exec(sql, i.Id)
+	if err != nil {
+		return i, err
+	}
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return i, err
+		}
+	}
+	return i, nil
 }
 
 func InvoiceGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool, deletedOnly bool) ([]Invoice, error) {
@@ -7059,6 +7180,7 @@ func InvoiceGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 			&i.ContactId,
 			&i.CashSum,
 			&i.Comm,
+			&i.IsRealized,
 			&i.IsActive,
 		); err != nil {
 			return nil, err
@@ -7290,7 +7412,7 @@ func ItemToInvoiceUpdate(i ItemToInvoice, tx *sql.Tx) (ItemToInvoice, error) {
 	return i, nil
 }
 
-func ItemToInvoiceDelete(id int, tx *sql.Tx) (ItemToInvoice, error) {
+func ItemToInvoiceDelete(id int, tx *sql.Tx, isUnRealize bool) (ItemToInvoice, error) {
 	needCommit := false
 	var err error
 	var i ItemToInvoice
@@ -7318,7 +7440,9 @@ func ItemToInvoiceDelete(id int, tx *sql.Tx) (ItemToInvoice, error) {
 	}
 
 	sql := `UPDATE item_to_invoice SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE item_to_invoice SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, i.Id)
 	if err != nil {
 		return i, err
@@ -7429,6 +7553,37 @@ func ItemToInvoiceTestForExistingField(fieldName string) bool {
 		}
 	}
 	return false
+}
+
+func ItemToInvoiceRealized(id int, tx *sql.Tx) (ItemToInvoice, error) {
+	var err error
+	needCommit := false
+	var i ItemToInvoice
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return i, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+	i, err = ItemToInvoiceGet(id, tx)
+	if err != nil {
+		return i, err
+	}
+
+	sql := `UPDATE item_to_invoice SET is_realized=1 WHERE id=?;`
+	_, err = tx.Exec(sql, i.Id)
+	if err != nil {
+		return i, err
+	}
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return i, err
+		}
+	}
+	return i, nil
 }
 
 func ItemToInvoiceCostGetSumBefore(field string, id int, date string) (map[string]int, error) {
@@ -7590,7 +7745,7 @@ func ProductToOrderingStatusUpdate(p ProductToOrderingStatus, tx *sql.Tx) (Produ
 	return p, nil
 }
 
-func ProductToOrderingStatusDelete(id int, tx *sql.Tx) (ProductToOrderingStatus, error) {
+func ProductToOrderingStatusDelete(id int, tx *sql.Tx, isUnRealize bool) (ProductToOrderingStatus, error) {
 	needCommit := false
 	var err error
 	var p ProductToOrderingStatus
@@ -7608,7 +7763,9 @@ func ProductToOrderingStatusDelete(id int, tx *sql.Tx) (ProductToOrderingStatus,
 	}
 
 	sql := `UPDATE product_to_ordering_status SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE product_to_ordering_status SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
@@ -7916,7 +8073,7 @@ func ProductToOrderingUpdate(p ProductToOrdering, tx *sql.Tx) (ProductToOrdering
 	return p, nil
 }
 
-func ProductToOrderingDelete(id int, tx *sql.Tx) (ProductToOrdering, error) {
+func ProductToOrderingDelete(id int, tx *sql.Tx, isUnRealize bool) (ProductToOrdering, error) {
 	needCommit := false
 	var err error
 	var p ProductToOrdering
@@ -7938,7 +8095,7 @@ func ProductToOrderingDelete(id int, tx *sql.Tx) (ProductToOrdering, error) {
 		return p, err
 	}
 	for _, product_to_ordering := range product_to_orderings {
-		_, err = ProductToOrderingDelete(product_to_ordering.Id, tx)
+		_, err = ProductToOrderingDelete(product_to_ordering.Id, tx, isUnRealize)
 		if err != nil {
 			return p, err
 		}
@@ -7949,7 +8106,7 @@ func ProductToOrderingDelete(id int, tx *sql.Tx) (ProductToOrdering, error) {
 		return p, err
 	}
 	for _, matherial_to_ordering := range matherial_to_orderings {
-		_, err = MatherialToOrderingDelete(matherial_to_ordering.Id, tx)
+		_, err = MatherialToOrderingDelete(matherial_to_ordering.Id, tx, isUnRealize)
 		if err != nil {
 			return p, err
 		}
@@ -7960,14 +8117,16 @@ func ProductToOrderingDelete(id int, tx *sql.Tx) (ProductToOrdering, error) {
 		return p, err
 	}
 	for _, operation_to_ordering := range operation_to_orderings {
-		_, err = OperationToOrderingDelete(operation_to_ordering.Id, tx)
+		_, err = OperationToOrderingDelete(operation_to_ordering.Id, tx, isUnRealize)
 		if err != nil {
 			return p, err
 		}
 	}
 
 	sql := `UPDATE product_to_ordering SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE product_to_ordering SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
@@ -8324,7 +8483,7 @@ func MatherialToOrderingUpdate(m MatherialToOrdering, tx *sql.Tx) (MatherialToOr
 	return m, nil
 }
 
-func MatherialToOrderingDelete(id int, tx *sql.Tx) (MatherialToOrdering, error) {
+func MatherialToOrderingDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialToOrdering, error) {
 	needCommit := false
 	var err error
 	var m MatherialToOrdering
@@ -8342,7 +8501,9 @@ func MatherialToOrderingDelete(id int, tx *sql.Tx) (MatherialToOrdering, error) 
 	}
 
 	sql := `UPDATE matherial_to_ordering SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE matherial_to_ordering SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
@@ -8670,7 +8831,7 @@ func MatherialToProductUpdate(m MatherialToProduct, tx *sql.Tx) (MatherialToProd
 	return m, nil
 }
 
-func MatherialToProductDelete(id int, tx *sql.Tx) (MatherialToProduct, error) {
+func MatherialToProductDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialToProduct, error) {
 	needCommit := false
 	var err error
 	var m MatherialToProduct
@@ -8688,7 +8849,9 @@ func MatherialToProductDelete(id int, tx *sql.Tx) (MatherialToProduct, error) {
 	}
 
 	sql := `UPDATE matherial_to_product SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE matherial_to_product SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
@@ -9054,7 +9217,7 @@ func OperationToOrderingUpdate(o OperationToOrdering, tx *sql.Tx) (OperationToOr
 	return o, nil
 }
 
-func OperationToOrderingDelete(id int, tx *sql.Tx) (OperationToOrdering, error) {
+func OperationToOrderingDelete(id int, tx *sql.Tx, isUnRealize bool) (OperationToOrdering, error) {
 	needCommit := false
 	var err error
 	var o OperationToOrdering
@@ -9082,7 +9245,9 @@ func OperationToOrderingDelete(id int, tx *sql.Tx) (OperationToOrdering, error) 
 	}
 
 	sql := `UPDATE operation_to_ordering SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE operation_to_ordering SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, o.Id)
 	if err != nil {
 		return o, err
@@ -9419,7 +9584,7 @@ func OperationToProductUpdate(o OperationToProduct, tx *sql.Tx) (OperationToProd
 	return o, nil
 }
 
-func OperationToProductDelete(id int, tx *sql.Tx) (OperationToProduct, error) {
+func OperationToProductDelete(id int, tx *sql.Tx, isUnRealize bool) (OperationToProduct, error) {
 	needCommit := false
 	var err error
 	var o OperationToProduct
@@ -9437,7 +9602,9 @@ func OperationToProductDelete(id int, tx *sql.Tx) (OperationToProduct, error) {
 	}
 
 	sql := `UPDATE operation_to_product SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE operation_to_product SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, o.Id)
 	if err != nil {
 		return o, err
@@ -9766,7 +9933,7 @@ func ProductToProductUpdate(p ProductToProduct, tx *sql.Tx) (ProductToProduct, e
 	return p, nil
 }
 
-func ProductToProductDelete(id int, tx *sql.Tx) (ProductToProduct, error) {
+func ProductToProductDelete(id int, tx *sql.Tx, isUnRealize bool) (ProductToProduct, error) {
 	needCommit := false
 	var err error
 	var p ProductToProduct
@@ -9784,7 +9951,9 @@ func ProductToProductDelete(id int, tx *sql.Tx) (ProductToProduct, error) {
 	}
 
 	sql := `UPDATE product_to_product SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE product_to_product SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
@@ -10127,7 +10296,7 @@ func CboxCheckUpdate(c CboxCheck, tx *sql.Tx) (CboxCheck, error) {
 	return c, nil
 }
 
-func CboxCheckDelete(id int, tx *sql.Tx) (CboxCheck, error) {
+func CboxCheckDelete(id int, tx *sql.Tx, isUnRealize bool) (CboxCheck, error) {
 	needCommit := false
 	var err error
 	var c CboxCheck
@@ -10149,14 +10318,16 @@ func CboxCheckDelete(id int, tx *sql.Tx) (CboxCheck, error) {
 		return c, err
 	}
 	for _, item_to_cbox_check := range item_to_cbox_checks {
-		_, err = ItemToCboxCheckDelete(item_to_cbox_check.Id, tx)
+		_, err = ItemToCboxCheckDelete(item_to_cbox_check.Id, tx, isUnRealize)
 		if err != nil {
 			return c, err
 		}
 	}
 
 	sql := `UPDATE cbox_check SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE cbox_check SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
@@ -10488,7 +10659,7 @@ func ItemToCboxCheckUpdate(i ItemToCboxCheck, tx *sql.Tx) (ItemToCboxCheck, erro
 	return i, nil
 }
 
-func ItemToCboxCheckDelete(id int, tx *sql.Tx) (ItemToCboxCheck, error) {
+func ItemToCboxCheckDelete(id int, tx *sql.Tx, isUnRealize bool) (ItemToCboxCheck, error) {
 	needCommit := false
 	var err error
 	var i ItemToCboxCheck
@@ -10506,7 +10677,9 @@ func ItemToCboxCheckDelete(id int, tx *sql.Tx) (ItemToCboxCheck, error) {
 	}
 
 	sql := `UPDATE item_to_cbox_check SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE item_to_cbox_check SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, i.Id)
 	if err != nil {
 		return i, err
@@ -10665,6 +10838,7 @@ type CashIn struct {
 	CreatedAt    string  `json:"created_at"`
 	CashSum      float64 `json:"cash_sum"`
 	Comm         string  `json:"comm"`
+	IsRealized   bool    `json:"is_realized"`
 	IsActive     bool    `json:"is_active"`
 }
 
@@ -10690,6 +10864,7 @@ func CashInGet(id int, tx *sql.Tx) (CashIn, error) {
 		&c.CreatedAt,
 		&c.CashSum,
 		&c.Comm,
+		&c.IsRealized,
 		&c.IsActive,
 	)
 	return c, err
@@ -10730,6 +10905,7 @@ func CashInGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]CashIn, err
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -10752,38 +10928,6 @@ func CashInCreate(c CashIn, tx *sql.Tx) (CashIn, error) {
 		defer tx.Rollback()
 	}
 
-	if c.IsActive {
-		cash, err := CashGet(c.CashId, tx)
-		if err == nil {
-			cash.Total += c.CashSum
-
-			_, err = CashUpdate(cash, tx)
-			if err != nil {
-				return c, err
-			}
-		}
-
-		contragent, err := ContragentGet(c.ContragentId, tx)
-		if err == nil {
-			contragent.Total += c.CashSum
-
-			_, err = ContragentUpdate(contragent, tx)
-			if err != nil {
-				return c, err
-			}
-		}
-
-		contact, err := ContactGet(c.ContactId, tx)
-		if err == nil {
-			contact.Total += c.CashSum
-
-			_, err = ContactUpdate(contact, tx)
-			if err != nil {
-				return c, err
-			}
-		}
-	}
-
 	doc := Document{Id: 0, DocType: "cash_in", IsActive: true}
 	doc, err = DocumentCreate(doc, tx)
 	if err != nil {
@@ -10795,8 +10939,8 @@ func CashInCreate(c CashIn, tx *sql.Tx) (CashIn, error) {
 	c.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO cash_in
-            (document_uid, name, cash_id, user_id, based_on, cbox_check_id, contragent_id, contact_id, created_at, cash_sum, comm, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, name, cash_id, user_id, based_on, cbox_check_id, contragent_id, contact_id, created_at, cash_sum, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		c.DocumentUid,
@@ -10810,6 +10954,7 @@ func CashInCreate(c CashIn, tx *sql.Tx) (CashIn, error) {
 		c.CreatedAt,
 		c.CashSum,
 		c.Comm,
+		c.IsRealized,
 		c.IsActive,
 	)
 	if err != nil {
@@ -10848,82 +10993,86 @@ func CashInUpdate(c CashIn, tx *sql.Tx) (CashIn, error) {
 		defer tx.Rollback()
 	}
 
-	cash_in, err := CashInGet(c.Id, tx)
-	if err != nil {
-		return c, err
-	}
+	if c.IsRealized {
 
-	cash, err := CashGet(cash_in.CashId, tx)
-	if err == nil {
-		cash.Total -= cash_in.CashSum
+		cash_in, err := CashInGet(c.Id, tx)
+		if err != nil {
+			return c, err
+		}
 
-	}
+		cash, err := CashGet(cash_in.CashId, tx)
+		if err == nil {
+			cash.Total -= cash_in.CashSum
 
-	if cash_in.CashId != c.CashId {
+		}
+
+		if cash_in.CashId != c.CashId {
+			_, err = CashUpdate(cash, tx)
+			if err != nil {
+				return c, err
+			}
+			cash, err = CashGet(c.CashId, tx)
+			if err != nil {
+				return c, err
+			}
+		}
+		cash.Total += c.CashSum
+
 		_, err = CashUpdate(cash, tx)
 		if err != nil {
 			return c, err
 		}
-		cash, err = CashGet(c.CashId, tx)
-		if err != nil {
-			return c, err
+
+		contragent, err := ContragentGet(cash_in.ContragentId, tx)
+		if err == nil {
+			contragent.Total -= cash_in.CashSum
+
 		}
-	}
-	cash.Total += c.CashSum
 
-	_, err = CashUpdate(cash, tx)
-	if err != nil {
-		return c, err
-	}
+		if cash_in.ContragentId != c.ContragentId {
+			_, err = ContragentUpdate(contragent, tx)
+			if err != nil {
+				return c, err
+			}
+			contragent, err = ContragentGet(c.ContragentId, tx)
+			if err != nil {
+				return c, err
+			}
+		}
+		contragent.Total += c.CashSum
 
-	contragent, err := ContragentGet(cash_in.ContragentId, tx)
-	if err == nil {
-		contragent.Total -= cash_in.CashSum
-
-	}
-
-	if cash_in.ContragentId != c.ContragentId {
 		_, err = ContragentUpdate(contragent, tx)
 		if err != nil {
 			return c, err
 		}
-		contragent, err = ContragentGet(c.ContragentId, tx)
-		if err != nil {
-			return c, err
+
+		contact, err := ContactGet(cash_in.ContactId, tx)
+		if err == nil {
+			contact.Total -= cash_in.CashSum
+
 		}
-	}
-	contragent.Total += c.CashSum
 
-	_, err = ContragentUpdate(contragent, tx)
-	if err != nil {
-		return c, err
-	}
+		if cash_in.ContactId != c.ContactId {
+			_, err = ContactUpdate(contact, tx)
+			if err != nil {
+				return c, err
+			}
+			contact, err = ContactGet(c.ContactId, tx)
+			if err != nil {
+				return c, err
+			}
+		}
+		contact.Total += c.CashSum
 
-	contact, err := ContactGet(cash_in.ContactId, tx)
-	if err == nil {
-		contact.Total -= cash_in.CashSum
-
-	}
-
-	if cash_in.ContactId != c.ContactId {
 		_, err = ContactUpdate(contact, tx)
 		if err != nil {
 			return c, err
 		}
-		contact, err = ContactGet(c.ContactId, tx)
-		if err != nil {
-			return c, err
-		}
-	}
-	contact.Total += c.CashSum
 
-	_, err = ContactUpdate(contact, tx)
-	if err != nil {
-		return c, err
 	}
 
 	sql := `UPDATE cash_in SET
-                    document_uid=?, name=?, cash_id=?, user_id=?, based_on=?, cbox_check_id=?, contragent_id=?, contact_id=?, created_at=?, cash_sum=?, comm=?, is_active=?
+                    document_uid=?, name=?, cash_id=?, user_id=?, based_on=?, cbox_check_id=?, contragent_id=?, contact_id=?, created_at=?, cash_sum=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -10939,6 +11088,7 @@ func CashInUpdate(c CashIn, tx *sql.Tx) (CashIn, error) {
 		c.CreatedAt,
 		c.CashSum,
 		c.Comm,
+		c.IsRealized,
 		c.IsActive,
 		c.Id,
 	)
@@ -10954,7 +11104,7 @@ func CashInUpdate(c CashIn, tx *sql.Tx) (CashIn, error) {
 	return c, nil
 }
 
-func CashInDelete(id int, tx *sql.Tx) (CashIn, error) {
+func CashInDelete(id int, tx *sql.Tx, isUnRealize bool) (CashIn, error) {
 	needCommit := false
 	var err error
 	var c CashIn
@@ -11002,7 +11152,9 @@ func CashInDelete(id int, tx *sql.Tx) (CashIn, error) {
 	}
 
 	sql := `UPDATE cash_in SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE cash_in SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
@@ -11056,6 +11208,7 @@ func CashInGetByFilterInt(field string, param int, withDeleted bool, deletedOnly
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -11105,6 +11258,7 @@ func CashInGetByFilterStr(field string, param string, withDeleted bool, deletedO
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -11116,13 +11270,74 @@ func CashInGetByFilterStr(field string, param string, withDeleted bool, deletedO
 }
 
 func CashInTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "cash_id", "user_id", "based_on", "cbox_check_id", "contragent_id", "contact_id", "created_at", "cash_sum", "comm", "is_active"}
+	fields := []string{"id", "document_uid", "name", "cash_id", "user_id", "based_on", "cbox_check_id", "contragent_id", "contact_id", "created_at", "cash_sum", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
 		}
 	}
 	return false
+}
+
+func CashInRealized(id int, tx *sql.Tx) (CashIn, error) {
+	var err error
+	needCommit := false
+	var c CashIn
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return c, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+	c, err = CashInGet(id, tx)
+	if err != nil {
+		return c, err
+	}
+
+	cash, err := CashGet(c.CashId, tx)
+	if err == nil {
+		cash.Total += c.CashSum
+
+		_, err = CashUpdate(cash, tx)
+		if err != nil {
+			return c, err
+		}
+	}
+
+	contragent, err := ContragentGet(c.ContragentId, tx)
+	if err == nil {
+		contragent.Total += c.CashSum
+
+		_, err = ContragentUpdate(contragent, tx)
+		if err != nil {
+			return c, err
+		}
+	}
+
+	contact, err := ContactGet(c.ContactId, tx)
+	if err == nil {
+		contact.Total += c.CashSum
+
+		_, err = ContactUpdate(contact, tx)
+		if err != nil {
+			return c, err
+		}
+	}
+
+	sql := `UPDATE cash_in SET is_realized=1 WHERE id=?;`
+	_, err = tx.Exec(sql, c.Id)
+	if err != nil {
+		return c, err
+	}
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return c, err
+		}
+	}
+	return c, nil
 }
 
 func CashInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool, deletedOnly bool) ([]CashIn, error) {
@@ -11154,6 +11369,7 @@ func CashInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -11205,6 +11421,7 @@ type CashOut struct {
 	CreatedAt    string  `json:"created_at"`
 	CashSum      float64 `json:"cash_sum"`
 	Comm         string  `json:"comm"`
+	IsRealized   bool    `json:"is_realized"`
 	IsActive     bool    `json:"is_active"`
 }
 
@@ -11230,6 +11447,7 @@ func CashOutGet(id int, tx *sql.Tx) (CashOut, error) {
 		&c.CreatedAt,
 		&c.CashSum,
 		&c.Comm,
+		&c.IsRealized,
 		&c.IsActive,
 	)
 	return c, err
@@ -11270,6 +11488,7 @@ func CashOutGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]CashOut, e
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -11292,36 +11511,6 @@ func CashOutCreate(c CashOut, tx *sql.Tx) (CashOut, error) {
 		defer tx.Rollback()
 	}
 
-	cash, err := CashGet(c.CashId, tx)
-	if err == nil {
-		cash.Total -= c.CashSum
-
-		_, err = CashUpdate(cash, tx)
-		if err != nil {
-			return c, err
-		}
-	}
-
-	contragent, err := ContragentGet(c.ContragentId, tx)
-	if err == nil {
-		contragent.Total -= c.CashSum
-
-		_, err = ContragentUpdate(contragent, tx)
-		if err != nil {
-			return c, err
-		}
-	}
-
-	contact, err := ContactGet(c.ContactId, tx)
-	if err == nil {
-		contact.Total -= c.CashSum
-
-		_, err = ContactUpdate(contact, tx)
-		if err != nil {
-			return c, err
-		}
-	}
-
 	doc := Document{Id: 0, DocType: "cash_out", IsActive: true}
 	doc, err = DocumentCreate(doc, tx)
 	if err != nil {
@@ -11333,8 +11522,8 @@ func CashOutCreate(c CashOut, tx *sql.Tx) (CashOut, error) {
 	c.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO cash_out
-            (document_uid, name, cash_id, user_id, based_on, cbox_check_id, contragent_id, contact_id, created_at, cash_sum, comm, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, name, cash_id, user_id, based_on, cbox_check_id, contragent_id, contact_id, created_at, cash_sum, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		c.DocumentUid,
@@ -11348,6 +11537,7 @@ func CashOutCreate(c CashOut, tx *sql.Tx) (CashOut, error) {
 		c.CreatedAt,
 		c.CashSum,
 		c.Comm,
+		c.IsRealized,
 		c.IsActive,
 	)
 	if err != nil {
@@ -11386,82 +11576,86 @@ func CashOutUpdate(c CashOut, tx *sql.Tx) (CashOut, error) {
 		defer tx.Rollback()
 	}
 
-	cash_out, err := CashOutGet(c.Id, tx)
-	if err != nil {
-		return c, err
-	}
+	if c.IsRealized {
 
-	cash, err := CashGet(cash_out.CashId, tx)
-	if err == nil {
-		cash.Total += cash_out.CashSum
+		cash_out, err := CashOutGet(c.Id, tx)
+		if err != nil {
+			return c, err
+		}
 
-	}
+		cash, err := CashGet(cash_out.CashId, tx)
+		if err == nil {
+			cash.Total += cash_out.CashSum
 
-	if cash_out.CashId != c.CashId {
+		}
+
+		if cash_out.CashId != c.CashId {
+			_, err = CashUpdate(cash, tx)
+			if err != nil {
+				return c, err
+			}
+			cash, err = CashGet(c.CashId, tx)
+			if err != nil {
+				return c, err
+			}
+		}
+		cash.Total -= c.CashSum
+
 		_, err = CashUpdate(cash, tx)
 		if err != nil {
 			return c, err
 		}
-		cash, err = CashGet(c.CashId, tx)
-		if err != nil {
-			return c, err
+
+		contragent, err := ContragentGet(cash_out.ContragentId, tx)
+		if err == nil {
+			contragent.Total += cash_out.CashSum
+
 		}
-	}
-	cash.Total -= c.CashSum
 
-	_, err = CashUpdate(cash, tx)
-	if err != nil {
-		return c, err
-	}
+		if cash_out.ContragentId != c.ContragentId {
+			_, err = ContragentUpdate(contragent, tx)
+			if err != nil {
+				return c, err
+			}
+			contragent, err = ContragentGet(c.ContragentId, tx)
+			if err != nil {
+				return c, err
+			}
+		}
+		contragent.Total -= c.CashSum
 
-	contragent, err := ContragentGet(cash_out.ContragentId, tx)
-	if err == nil {
-		contragent.Total += cash_out.CashSum
-
-	}
-
-	if cash_out.ContragentId != c.ContragentId {
 		_, err = ContragentUpdate(contragent, tx)
 		if err != nil {
 			return c, err
 		}
-		contragent, err = ContragentGet(c.ContragentId, tx)
-		if err != nil {
-			return c, err
+
+		contact, err := ContactGet(cash_out.ContactId, tx)
+		if err == nil {
+			contact.Total += cash_out.CashSum
+
 		}
-	}
-	contragent.Total -= c.CashSum
 
-	_, err = ContragentUpdate(contragent, tx)
-	if err != nil {
-		return c, err
-	}
+		if cash_out.ContactId != c.ContactId {
+			_, err = ContactUpdate(contact, tx)
+			if err != nil {
+				return c, err
+			}
+			contact, err = ContactGet(c.ContactId, tx)
+			if err != nil {
+				return c, err
+			}
+		}
+		contact.Total -= c.CashSum
 
-	contact, err := ContactGet(cash_out.ContactId, tx)
-	if err == nil {
-		contact.Total += cash_out.CashSum
-
-	}
-
-	if cash_out.ContactId != c.ContactId {
 		_, err = ContactUpdate(contact, tx)
 		if err != nil {
 			return c, err
 		}
-		contact, err = ContactGet(c.ContactId, tx)
-		if err != nil {
-			return c, err
-		}
-	}
-	contact.Total -= c.CashSum
 
-	_, err = ContactUpdate(contact, tx)
-	if err != nil {
-		return c, err
 	}
 
 	sql := `UPDATE cash_out SET
-                    document_uid=?, name=?, cash_id=?, user_id=?, based_on=?, cbox_check_id=?, contragent_id=?, contact_id=?, created_at=?, cash_sum=?, comm=?, is_active=?
+                    document_uid=?, name=?, cash_id=?, user_id=?, based_on=?, cbox_check_id=?, contragent_id=?, contact_id=?, created_at=?, cash_sum=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -11477,6 +11671,7 @@ func CashOutUpdate(c CashOut, tx *sql.Tx) (CashOut, error) {
 		c.CreatedAt,
 		c.CashSum,
 		c.Comm,
+		c.IsRealized,
 		c.IsActive,
 		c.Id,
 	)
@@ -11492,7 +11687,7 @@ func CashOutUpdate(c CashOut, tx *sql.Tx) (CashOut, error) {
 	return c, nil
 }
 
-func CashOutDelete(id int, tx *sql.Tx) (CashOut, error) {
+func CashOutDelete(id int, tx *sql.Tx, isUnRealize bool) (CashOut, error) {
 	needCommit := false
 	var err error
 	var c CashOut
@@ -11540,7 +11735,9 @@ func CashOutDelete(id int, tx *sql.Tx) (CashOut, error) {
 	}
 
 	sql := `UPDATE cash_out SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE cash_out SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
@@ -11594,6 +11791,7 @@ func CashOutGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -11643,6 +11841,7 @@ func CashOutGetByFilterStr(field string, param string, withDeleted bool, deleted
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -11654,13 +11853,74 @@ func CashOutGetByFilterStr(field string, param string, withDeleted bool, deleted
 }
 
 func CashOutTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "cash_id", "user_id", "based_on", "cbox_check_id", "contragent_id", "contact_id", "created_at", "cash_sum", "comm", "is_active"}
+	fields := []string{"id", "document_uid", "name", "cash_id", "user_id", "based_on", "cbox_check_id", "contragent_id", "contact_id", "created_at", "cash_sum", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
 		}
 	}
 	return false
+}
+
+func CashOutRealized(id int, tx *sql.Tx) (CashOut, error) {
+	var err error
+	needCommit := false
+	var c CashOut
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return c, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+	c, err = CashOutGet(id, tx)
+	if err != nil {
+		return c, err
+	}
+
+	cash, err := CashGet(c.CashId, tx)
+	if err == nil {
+		cash.Total -= c.CashSum
+
+		_, err = CashUpdate(cash, tx)
+		if err != nil {
+			return c, err
+		}
+	}
+
+	contragent, err := ContragentGet(c.ContragentId, tx)
+	if err == nil {
+		contragent.Total -= c.CashSum
+
+		_, err = ContragentUpdate(contragent, tx)
+		if err != nil {
+			return c, err
+		}
+	}
+
+	contact, err := ContactGet(c.ContactId, tx)
+	if err == nil {
+		contact.Total -= c.CashSum
+
+		_, err = ContactUpdate(contact, tx)
+		if err != nil {
+			return c, err
+		}
+	}
+
+	sql := `UPDATE cash_out SET is_realized=1 WHERE id=?;`
+	_, err = tx.Exec(sql, c.Id)
+	if err != nil {
+		return c, err
+	}
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return c, err
+		}
+	}
+	return c, nil
 }
 
 func CashOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool, deletedOnly bool) ([]CashOut, error) {
@@ -11692,6 +11952,7 @@ func CashOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -11865,7 +12126,7 @@ func WhsUpdate(w Whs, tx *sql.Tx) (Whs, error) {
 	return w, nil
 }
 
-func WhsDelete(id int, tx *sql.Tx) (Whs, error) {
+func WhsDelete(id int, tx *sql.Tx, isUnRealize bool) (Whs, error) {
 	needCommit := false
 	var err error
 	var w Whs
@@ -11883,7 +12144,9 @@ func WhsDelete(id int, tx *sql.Tx) (Whs, error) {
 	}
 
 	sql := `UPDATE whs SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE whs SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, w.Id)
 	if err != nil {
 		return w, err
@@ -12003,6 +12266,7 @@ type WhsIn struct {
 	WhsSum              float64 `json:"whs_sum"`
 	Delivery            float64 `json:"delivery"`
 	Comm                string  `json:"comm"`
+	IsRealized          bool    `json:"is_realized"`
 	IsActive            bool    `json:"is_active"`
 }
 
@@ -12030,6 +12294,7 @@ func WhsInGet(id int, tx *sql.Tx) (WhsIn, error) {
 		&w.WhsSum,
 		&w.Delivery,
 		&w.Comm,
+		&w.IsRealized,
 		&w.IsActive,
 	)
 	return w, err
@@ -12072,6 +12337,7 @@ func WhsInGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]WhsIn, error
 			&w.WhsSum,
 			&w.Delivery,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 		); err != nil {
 			return nil, err
@@ -12094,28 +12360,6 @@ func WhsInCreate(w WhsIn, tx *sql.Tx) (WhsIn, error) {
 		defer tx.Rollback()
 	}
 
-	contragent, err := ContragentGet(w.ContragentId, tx)
-	if err == nil {
-		contragent.Total += w.WhsSum
-		contragent.Total += w.Delivery
-
-		_, err = ContragentUpdate(contragent, tx)
-		if err != nil {
-			return w, err
-		}
-	}
-
-	contact, err := ContactGet(w.ContactId, tx)
-	if err == nil {
-		contact.Total += w.WhsSum
-		contact.Total += w.Delivery
-
-		_, err = ContactUpdate(contact, tx)
-		if err != nil {
-			return w, err
-		}
-	}
-
 	doc := Document{Id: 0, DocType: "whs_in", IsActive: true}
 	doc, err = DocumentCreate(doc, tx)
 	if err != nil {
@@ -12127,8 +12371,8 @@ func WhsInCreate(w WhsIn, tx *sql.Tx) (WhsIn, error) {
 	w.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO whs_in
-            (document_uid, name, based_on, whs_id, user_id, contragent_id, contact_id, contragent_doc_uid, contragent_created_at, created_at, whs_sum, delivery, comm, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, name, based_on, whs_id, user_id, contragent_id, contact_id, contragent_doc_uid, contragent_created_at, created_at, whs_sum, delivery, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		w.DocumentUid,
@@ -12144,6 +12388,7 @@ func WhsInCreate(w WhsIn, tx *sql.Tx) (WhsIn, error) {
 		w.WhsSum,
 		w.Delivery,
 		w.Comm,
+		w.IsRealized,
 		w.IsActive,
 	)
 	if err != nil {
@@ -12182,63 +12427,67 @@ func WhsInUpdate(w WhsIn, tx *sql.Tx) (WhsIn, error) {
 		defer tx.Rollback()
 	}
 
-	whs_in, err := WhsInGet(w.Id, tx)
-	if err != nil {
-		return w, err
-	}
+	if w.IsRealized {
 
-	contragent, err := ContragentGet(whs_in.ContragentId, tx)
-	if err == nil {
-		contragent.Total -= whs_in.WhsSum
-		contragent.Total -= whs_in.Delivery
+		whs_in, err := WhsInGet(w.Id, tx)
+		if err != nil {
+			return w, err
+		}
 
-	}
+		contragent, err := ContragentGet(whs_in.ContragentId, tx)
+		if err == nil {
+			contragent.Total -= whs_in.WhsSum
+			contragent.Total -= whs_in.Delivery
 
-	if whs_in.ContragentId != w.ContragentId {
+		}
+
+		if whs_in.ContragentId != w.ContragentId {
+			_, err = ContragentUpdate(contragent, tx)
+			if err != nil {
+				return w, err
+			}
+			contragent, err = ContragentGet(w.ContragentId, tx)
+			if err != nil {
+				return w, err
+			}
+		}
+		contragent.Total += w.WhsSum
+		contragent.Total += w.Delivery
+
 		_, err = ContragentUpdate(contragent, tx)
 		if err != nil {
 			return w, err
 		}
-		contragent, err = ContragentGet(w.ContragentId, tx)
-		if err != nil {
-			return w, err
+
+		contact, err := ContactGet(whs_in.ContactId, tx)
+		if err == nil {
+			contact.Total -= whs_in.WhsSum
+			contact.Total -= whs_in.Delivery
+
 		}
-	}
-	contragent.Total += w.WhsSum
-	contragent.Total += w.Delivery
 
-	_, err = ContragentUpdate(contragent, tx)
-	if err != nil {
-		return w, err
-	}
+		if whs_in.ContactId != w.ContactId {
+			_, err = ContactUpdate(contact, tx)
+			if err != nil {
+				return w, err
+			}
+			contact, err = ContactGet(w.ContactId, tx)
+			if err != nil {
+				return w, err
+			}
+		}
+		contact.Total += w.WhsSum
+		contact.Total += w.Delivery
 
-	contact, err := ContactGet(whs_in.ContactId, tx)
-	if err == nil {
-		contact.Total -= whs_in.WhsSum
-		contact.Total -= whs_in.Delivery
-
-	}
-
-	if whs_in.ContactId != w.ContactId {
 		_, err = ContactUpdate(contact, tx)
 		if err != nil {
 			return w, err
 		}
-		contact, err = ContactGet(w.ContactId, tx)
-		if err != nil {
-			return w, err
-		}
-	}
-	contact.Total += w.WhsSum
-	contact.Total += w.Delivery
 
-	_, err = ContactUpdate(contact, tx)
-	if err != nil {
-		return w, err
 	}
 
 	sql := `UPDATE whs_in SET
-                    document_uid=?, name=?, based_on=?, whs_id=?, user_id=?, contragent_id=?, contact_id=?, contragent_doc_uid=?, contragent_created_at=?, created_at=?, whs_sum=?, delivery=?, comm=?, is_active=?
+                    document_uid=?, name=?, based_on=?, whs_id=?, user_id=?, contragent_id=?, contact_id=?, contragent_doc_uid=?, contragent_created_at=?, created_at=?, whs_sum=?, delivery=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -12256,6 +12505,7 @@ func WhsInUpdate(w WhsIn, tx *sql.Tx) (WhsIn, error) {
 		w.WhsSum,
 		w.Delivery,
 		w.Comm,
+		w.IsRealized,
 		w.IsActive,
 		w.Id,
 	)
@@ -12271,7 +12521,7 @@ func WhsInUpdate(w WhsIn, tx *sql.Tx) (WhsIn, error) {
 	return w, nil
 }
 
-func WhsInDelete(id int, tx *sql.Tx) (WhsIn, error) {
+func WhsInDelete(id int, tx *sql.Tx, isUnRealize bool) (WhsIn, error) {
 	needCommit := false
 	var err error
 	var w WhsIn
@@ -12315,7 +12565,7 @@ func WhsInDelete(id int, tx *sql.Tx) (WhsIn, error) {
 		return w, err
 	}
 	for _, matherial_to_whs_in := range matherial_to_whs_ins {
-		_, err = MatherialToWhsInDelete(matherial_to_whs_in.Id, tx)
+		_, err = MatherialToWhsInDelete(matherial_to_whs_in.Id, tx, isUnRealize)
 		if err != nil {
 			return w, err
 		}
@@ -12326,7 +12576,7 @@ func WhsInDelete(id int, tx *sql.Tx) (WhsIn, error) {
 		return w, err
 	}
 	for _, cash_out := range cash_outs {
-		_, err = CashOutDelete(cash_out.Id, tx)
+		_, err = CashOutDelete(cash_out.Id, tx, isUnRealize)
 		if err != nil {
 			return w, err
 		}
@@ -12337,7 +12587,7 @@ func WhsInDelete(id int, tx *sql.Tx) (WhsIn, error) {
 		return w, err
 	}
 	for _, cash_in := range cash_ins {
-		_, err = CashInDelete(cash_in.Id, tx)
+		_, err = CashInDelete(cash_in.Id, tx, isUnRealize)
 		if err != nil {
 			return w, err
 		}
@@ -12348,14 +12598,16 @@ func WhsInDelete(id int, tx *sql.Tx) (WhsIn, error) {
 		return w, err
 	}
 	for _, whs_out := range whs_outs {
-		_, err = WhsOutDelete(whs_out.Id, tx)
+		_, err = WhsOutDelete(whs_out.Id, tx, isUnRealize)
 		if err != nil {
 			return w, err
 		}
 	}
 
 	sql := `UPDATE whs_in SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE whs_in SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, w.Id)
 	if err != nil {
 		return w, err
@@ -12411,6 +12663,7 @@ func WhsInGetByFilterInt(field string, param int, withDeleted bool, deletedOnly 
 			&w.WhsSum,
 			&w.Delivery,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 		); err != nil {
 			return nil, err
@@ -12462,6 +12715,7 @@ func WhsInGetByFilterStr(field string, param string, withDeleted bool, deletedOn
 			&w.WhsSum,
 			&w.Delivery,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 		); err != nil {
 			return nil, err
@@ -12473,13 +12727,110 @@ func WhsInGetByFilterStr(field string, param string, withDeleted bool, deletedOn
 }
 
 func WhsInTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "based_on", "whs_id", "user_id", "contragent_id", "contact_id", "contragent_doc_uid", "contragent_created_at", "created_at", "whs_sum", "delivery", "comm", "is_active"}
+	fields := []string{"id", "document_uid", "name", "based_on", "whs_id", "user_id", "contragent_id", "contact_id", "contragent_doc_uid", "contragent_created_at", "created_at", "whs_sum", "delivery", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
 		}
 	}
 	return false
+}
+
+func WhsInRealized(id int, tx *sql.Tx) (WhsIn, error) {
+	var err error
+	needCommit := false
+	var w WhsIn
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return w, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+	w, err = WhsInGet(id, tx)
+	if err != nil {
+		return w, err
+	}
+
+	contragent, err := ContragentGet(w.ContragentId, tx)
+	if err == nil {
+		contragent.Total += w.WhsSum
+		contragent.Total += w.Delivery
+
+		_, err = ContragentUpdate(contragent, tx)
+		if err != nil {
+			return w, err
+		}
+	}
+
+	contact, err := ContactGet(w.ContactId, tx)
+	if err == nil {
+		contact.Total += w.WhsSum
+		contact.Total += w.Delivery
+
+		_, err = ContactUpdate(contact, tx)
+		if err != nil {
+			return w, err
+		}
+	}
+
+	matherial_to_whs_ins, err := MatherialToWhsInGetByFilterInt("whs_in_id", w.Id, false, false, tx)
+	if err != nil {
+		return w, err
+	}
+	for _, matherial_to_whs_in := range matherial_to_whs_ins {
+		_, err = MatherialToWhsInRealized(matherial_to_whs_in.Id, tx)
+		if err != nil {
+			return w, err
+		}
+	}
+
+	cash_outs, err := CashOutGetByFilterInt("based_on", w.DocumentUid, false, false, tx)
+	if err != nil {
+		return w, err
+	}
+	for _, cash_out := range cash_outs {
+		_, err = CashOutRealized(cash_out.Id, tx)
+		if err != nil {
+			return w, err
+		}
+	}
+
+	cash_ins, err := CashInGetByFilterInt("based_on", w.DocumentUid, false, false, tx)
+	if err != nil {
+		return w, err
+	}
+	for _, cash_in := range cash_ins {
+		_, err = CashInRealized(cash_in.Id, tx)
+		if err != nil {
+			return w, err
+		}
+	}
+
+	whs_outs, err := WhsOutGetByFilterInt("based_on", w.DocumentUid, false, false, tx)
+	if err != nil {
+		return w, err
+	}
+	for _, whs_out := range whs_outs {
+		_, err = WhsOutRealized(whs_out.Id, tx)
+		if err != nil {
+			return w, err
+		}
+	}
+
+	sql := `UPDATE whs_in SET is_realized=1 WHERE id=?;`
+	_, err = tx.Exec(sql, w.Id)
+	if err != nil {
+		return w, err
+	}
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return w, err
+		}
+	}
+	return w, nil
 }
 
 func WhsInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool, deletedOnly bool) ([]WhsIn, error) {
@@ -12513,6 +12864,7 @@ func WhsInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool,
 			&w.WhsSum,
 			&w.Delivery,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 		); err != nil {
 			return nil, err
@@ -12553,6 +12905,7 @@ func WhsInGetBetweenContragentCreatedAt(contragent_created_at1, contragent_creat
 			&w.WhsSum,
 			&w.Delivery,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 		); err != nil {
 			return nil, err
@@ -12603,6 +12956,7 @@ type WhsOut struct {
 	CreatedAt    string  `json:"created_at"`
 	WhsSum       float64 `json:"whs_sum"`
 	Comm         string  `json:"comm"`
+	IsRealized   bool    `json:"is_realized"`
 	IsActive     bool    `json:"is_active"`
 }
 
@@ -12627,6 +12981,7 @@ func WhsOutGet(id int, tx *sql.Tx) (WhsOut, error) {
 		&w.CreatedAt,
 		&w.WhsSum,
 		&w.Comm,
+		&w.IsRealized,
 		&w.IsActive,
 	)
 	return w, err
@@ -12666,6 +13021,7 @@ func WhsOutGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]WhsOut, err
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 		); err != nil {
 			return nil, err
@@ -12688,26 +13044,6 @@ func WhsOutCreate(w WhsOut, tx *sql.Tx) (WhsOut, error) {
 		defer tx.Rollback()
 	}
 
-	contragent, err := ContragentGet(w.ContragentId, tx)
-	if err == nil {
-		contragent.Total -= w.WhsSum
-
-		_, err = ContragentUpdate(contragent, tx)
-		if err != nil {
-			return w, err
-		}
-	}
-
-	contact, err := ContactGet(w.ContactId, tx)
-	if err == nil {
-		contact.Total -= w.WhsSum
-
-		_, err = ContactUpdate(contact, tx)
-		if err != nil {
-			return w, err
-		}
-	}
-
 	doc := Document{Id: 0, DocType: "whs_out", IsActive: true}
 	doc, err = DocumentCreate(doc, tx)
 	if err != nil {
@@ -12719,8 +13055,8 @@ func WhsOutCreate(w WhsOut, tx *sql.Tx) (WhsOut, error) {
 	w.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO whs_out
-            (document_uid, name, based_on, whs_id, user_id, contragent_id, contact_id, created_at, whs_sum, comm, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, name, based_on, whs_id, user_id, contragent_id, contact_id, created_at, whs_sum, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		w.DocumentUid,
@@ -12733,6 +13069,7 @@ func WhsOutCreate(w WhsOut, tx *sql.Tx) (WhsOut, error) {
 		w.CreatedAt,
 		w.WhsSum,
 		w.Comm,
+		w.IsRealized,
 		w.IsActive,
 	)
 	if err != nil {
@@ -12771,59 +13108,63 @@ func WhsOutUpdate(w WhsOut, tx *sql.Tx) (WhsOut, error) {
 		defer tx.Rollback()
 	}
 
-	whs_out, err := WhsOutGet(w.Id, tx)
-	if err != nil {
-		return w, err
-	}
+	if w.IsRealized {
 
-	contragent, err := ContragentGet(whs_out.ContragentId, tx)
-	if err == nil {
-		contragent.Total += whs_out.WhsSum
+		whs_out, err := WhsOutGet(w.Id, tx)
+		if err != nil {
+			return w, err
+		}
 
-	}
+		contragent, err := ContragentGet(whs_out.ContragentId, tx)
+		if err == nil {
+			contragent.Total += whs_out.WhsSum
 
-	if whs_out.ContragentId != w.ContragentId {
+		}
+
+		if whs_out.ContragentId != w.ContragentId {
+			_, err = ContragentUpdate(contragent, tx)
+			if err != nil {
+				return w, err
+			}
+			contragent, err = ContragentGet(w.ContragentId, tx)
+			if err != nil {
+				return w, err
+			}
+		}
+		contragent.Total -= w.WhsSum
+
 		_, err = ContragentUpdate(contragent, tx)
 		if err != nil {
 			return w, err
 		}
-		contragent, err = ContragentGet(w.ContragentId, tx)
-		if err != nil {
-			return w, err
+
+		contact, err := ContactGet(whs_out.ContactId, tx)
+		if err == nil {
+			contact.Total += whs_out.WhsSum
+
 		}
-	}
-	contragent.Total -= w.WhsSum
 
-	_, err = ContragentUpdate(contragent, tx)
-	if err != nil {
-		return w, err
-	}
+		if whs_out.ContactId != w.ContactId {
+			_, err = ContactUpdate(contact, tx)
+			if err != nil {
+				return w, err
+			}
+			contact, err = ContactGet(w.ContactId, tx)
+			if err != nil {
+				return w, err
+			}
+		}
+		contact.Total -= w.WhsSum
 
-	contact, err := ContactGet(whs_out.ContactId, tx)
-	if err == nil {
-		contact.Total += whs_out.WhsSum
-
-	}
-
-	if whs_out.ContactId != w.ContactId {
 		_, err = ContactUpdate(contact, tx)
 		if err != nil {
 			return w, err
 		}
-		contact, err = ContactGet(w.ContactId, tx)
-		if err != nil {
-			return w, err
-		}
-	}
-	contact.Total -= w.WhsSum
 
-	_, err = ContactUpdate(contact, tx)
-	if err != nil {
-		return w, err
 	}
 
 	sql := `UPDATE whs_out SET
-                    document_uid=?, name=?, based_on=?, whs_id=?, user_id=?, contragent_id=?, contact_id=?, created_at=?, whs_sum=?, comm=?, is_active=?
+                    document_uid=?, name=?, based_on=?, whs_id=?, user_id=?, contragent_id=?, contact_id=?, created_at=?, whs_sum=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -12838,6 +13179,7 @@ func WhsOutUpdate(w WhsOut, tx *sql.Tx) (WhsOut, error) {
 		w.CreatedAt,
 		w.WhsSum,
 		w.Comm,
+		w.IsRealized,
 		w.IsActive,
 		w.Id,
 	)
@@ -12853,7 +13195,7 @@ func WhsOutUpdate(w WhsOut, tx *sql.Tx) (WhsOut, error) {
 	return w, nil
 }
 
-func WhsOutDelete(id int, tx *sql.Tx) (WhsOut, error) {
+func WhsOutDelete(id int, tx *sql.Tx, isUnRealize bool) (WhsOut, error) {
 	needCommit := false
 	var err error
 	var w WhsOut
@@ -12895,14 +13237,16 @@ func WhsOutDelete(id int, tx *sql.Tx) (WhsOut, error) {
 		return w, err
 	}
 	for _, matherial_to_whs_out := range matherial_to_whs_outs {
-		_, err = MatherialToWhsOutDelete(matherial_to_whs_out.Id, tx)
+		_, err = MatherialToWhsOutDelete(matherial_to_whs_out.Id, tx, isUnRealize)
 		if err != nil {
 			return w, err
 		}
 	}
 
 	sql := `UPDATE whs_out SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE whs_out SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, w.Id)
 	if err != nil {
 		return w, err
@@ -12955,6 +13299,7 @@ func WhsOutGetByFilterInt(field string, param int, withDeleted bool, deletedOnly
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 		); err != nil {
 			return nil, err
@@ -13003,6 +13348,7 @@ func WhsOutGetByFilterStr(field string, param string, withDeleted bool, deletedO
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 		); err != nil {
 			return nil, err
@@ -13014,13 +13360,75 @@ func WhsOutGetByFilterStr(field string, param string, withDeleted bool, deletedO
 }
 
 func WhsOutTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "based_on", "whs_id", "user_id", "contragent_id", "contact_id", "created_at", "whs_sum", "comm", "is_active"}
+	fields := []string{"id", "document_uid", "name", "based_on", "whs_id", "user_id", "contragent_id", "contact_id", "created_at", "whs_sum", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
 		}
 	}
 	return false
+}
+
+func WhsOutRealized(id int, tx *sql.Tx) (WhsOut, error) {
+	var err error
+	needCommit := false
+	var w WhsOut
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return w, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+	w, err = WhsOutGet(id, tx)
+	if err != nil {
+		return w, err
+	}
+
+	contragent, err := ContragentGet(w.ContragentId, tx)
+	if err == nil {
+		contragent.Total -= w.WhsSum
+
+		_, err = ContragentUpdate(contragent, tx)
+		if err != nil {
+			return w, err
+		}
+	}
+
+	contact, err := ContactGet(w.ContactId, tx)
+	if err == nil {
+		contact.Total -= w.WhsSum
+
+		_, err = ContactUpdate(contact, tx)
+		if err != nil {
+			return w, err
+		}
+	}
+
+	matherial_to_whs_outs, err := MatherialToWhsOutGetByFilterInt("whs_out_id", w.Id, false, false, tx)
+	if err != nil {
+		return w, err
+	}
+	for _, matherial_to_whs_out := range matherial_to_whs_outs {
+		_, err = MatherialToWhsOutRealized(matherial_to_whs_out.Id, tx)
+		if err != nil {
+			return w, err
+		}
+	}
+
+	sql := `UPDATE whs_out SET is_realized=1 WHERE id=?;`
+	_, err = tx.Exec(sql, w.Id)
+	if err != nil {
+		return w, err
+	}
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return w, err
+		}
+	}
+	return w, nil
 }
 
 func WhsOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool, deletedOnly bool) ([]WhsOut, error) {
@@ -13051,6 +13459,7 @@ func WhsOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 		); err != nil {
 			return nil, err
@@ -13183,31 +13592,6 @@ func MatherialToWhsInCreate(m MatherialToWhsIn, tx *sql.Tx) (MatherialToWhsIn, e
 		defer tx.Rollback()
 	}
 
-	err = CreateMatherialToWhsInToNumber(&m, tx)
-	if err != nil {
-		return m, err
-	}
-
-	matherial, err := MatherialGet(m.MatherialId, tx)
-	if err == nil {
-		matherial.Total += m.Number
-
-		_, err = MatherialUpdate(matherial, tx)
-		if err != nil {
-			return m, err
-		}
-	}
-
-	color, err := ColorGet(m.ColorId, tx)
-	if err == nil {
-		color.Total += m.Number
-
-		_, err = ColorUpdate(color, tx)
-		if err != nil {
-			return m, err
-		}
-	}
-
 	whs_in, err := WhsInGet(m.WhsInId, tx)
 	if err == nil {
 		whs_in.WhsSum += m.Cost
@@ -13269,52 +13653,6 @@ func MatherialToWhsInUpdate(m MatherialToWhsIn, tx *sql.Tx) (MatherialToWhsIn, e
 		return m, err
 	}
 
-	matherial, err := MatherialGet(matherial_to_whs_in.MatherialId, tx)
-	if err == nil {
-		matherial.Total -= matherial_to_whs_in.Number
-
-	}
-
-	if matherial_to_whs_in.MatherialId != m.MatherialId {
-		_, err = MatherialUpdate(matherial, tx)
-		if err != nil {
-			return m, err
-		}
-		matherial, err = MatherialGet(m.MatherialId, tx)
-		if err != nil {
-			return m, err
-		}
-	}
-	matherial.Total += m.Number
-
-	_, err = MatherialUpdate(matherial, tx)
-	if err != nil {
-		return m, err
-	}
-
-	color, err := ColorGet(matherial_to_whs_in.ColorId, tx)
-	if err == nil {
-		color.Total -= matherial_to_whs_in.Number
-
-	}
-
-	if matherial_to_whs_in.ColorId != m.ColorId {
-		_, err = ColorUpdate(color, tx)
-		if err != nil {
-			return m, err
-		}
-		color, err = ColorGet(m.ColorId, tx)
-		if err != nil {
-			return m, err
-		}
-	}
-	color.Total += m.Number
-
-	_, err = ColorUpdate(color, tx)
-	if err != nil {
-		return m, err
-	}
-
 	whs_in, err := WhsInGet(matherial_to_whs_in.WhsInId, tx)
 	if err == nil {
 		whs_in.WhsSum -= matherial_to_whs_in.Cost
@@ -13338,9 +13676,59 @@ func MatherialToWhsInUpdate(m MatherialToWhsIn, tx *sql.Tx) (MatherialToWhsIn, e
 		return m, err
 	}
 
-	err = UpdateMatherialToWhsInToNumber(&m, matherial_to_whs_in.Number, tx)
-	if err != nil {
-		return m, err
+	if whs_in.IsRealized {
+
+		matherial, err := MatherialGet(matherial_to_whs_in.MatherialId, tx)
+		if err == nil {
+			matherial.Total -= matherial_to_whs_in.Number
+
+		}
+
+		if matherial_to_whs_in.MatherialId != m.MatherialId {
+			_, err = MatherialUpdate(matherial, tx)
+			if err != nil {
+				return m, err
+			}
+			matherial, err = MatherialGet(m.MatherialId, tx)
+			if err != nil {
+				return m, err
+			}
+		}
+		matherial.Total += m.Number
+
+		_, err = MatherialUpdate(matherial, tx)
+		if err != nil {
+			return m, err
+		}
+
+		color, err := ColorGet(matherial_to_whs_in.ColorId, tx)
+		if err == nil {
+			color.Total -= matherial_to_whs_in.Number
+
+		}
+
+		if matherial_to_whs_in.ColorId != m.ColorId {
+			_, err = ColorUpdate(color, tx)
+			if err != nil {
+				return m, err
+			}
+			color, err = ColorGet(m.ColorId, tx)
+			if err != nil {
+				return m, err
+			}
+		}
+		color.Total += m.Number
+
+		_, err = ColorUpdate(color, tx)
+		if err != nil {
+			return m, err
+		}
+
+		err = UpdateMatherialToWhsInToNumber(&m, matherial_to_whs_in.Number, tx)
+		if err != nil {
+			return m, err
+		}
+
 	}
 
 	sql := `UPDATE matherial_to_whs_in SET
@@ -13373,7 +13761,7 @@ func MatherialToWhsInUpdate(m MatherialToWhsIn, tx *sql.Tx) (MatherialToWhsIn, e
 	return m, nil
 }
 
-func MatherialToWhsInDelete(id int, tx *sql.Tx) (MatherialToWhsIn, error) {
+func MatherialToWhsInDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialToWhsIn, error) {
 	needCommit := false
 	var err error
 	var m MatherialToWhsIn
@@ -13393,6 +13781,16 @@ func MatherialToWhsInDelete(id int, tx *sql.Tx) (MatherialToWhsIn, error) {
 	err = DeleteMatherialToWhsInToNumber(&m, tx)
 	if err != nil {
 		return m, err
+	}
+
+	whs_in, err := WhsInGet(m.WhsInId, tx)
+	if err == nil {
+		whs_in.WhsSum -= m.Cost
+
+		_, err = WhsInUpdate(whs_in, tx)
+		if err != nil {
+			return m, err
+		}
 	}
 
 	matherial, err := MatherialGet(m.MatherialId, tx)
@@ -13415,18 +13813,10 @@ func MatherialToWhsInDelete(id int, tx *sql.Tx) (MatherialToWhsIn, error) {
 		}
 	}
 
-	whs_in, err := WhsInGet(m.WhsInId, tx)
-	if err == nil {
-		whs_in.WhsSum -= m.Cost
-
-		_, err = WhsInUpdate(whs_in, tx)
-		if err != nil {
-			return m, err
-		}
-	}
-
 	sql := `UPDATE matherial_to_whs_in SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE matherial_to_whs_in SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
@@ -13545,6 +13935,62 @@ func MatherialToWhsInTestForExistingField(fieldName string) bool {
 	return false
 }
 
+func MatherialToWhsInRealized(id int, tx *sql.Tx) (MatherialToWhsIn, error) {
+	var err error
+	needCommit := false
+	var m MatherialToWhsIn
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return m, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+	m, err = MatherialToWhsInGet(id, tx)
+	if err != nil {
+		return m, err
+	}
+
+	err = CreateMatherialToWhsInToNumber(&m, tx)
+	if err != nil {
+		return m, err
+	}
+
+	matherial, err := MatherialGet(m.MatherialId, tx)
+	if err == nil {
+		matherial.Total += m.Number
+
+		_, err = MatherialUpdate(matherial, tx)
+		if err != nil {
+			return m, err
+		}
+	}
+
+	color, err := ColorGet(m.ColorId, tx)
+	if err == nil {
+		color.Total += m.Number
+
+		_, err = ColorUpdate(color, tx)
+		if err != nil {
+			return m, err
+		}
+	}
+
+	sql := `UPDATE matherial_to_whs_in SET is_realized=1 WHERE id=?;`
+	_, err = tx.Exec(sql, m.Id)
+	if err != nil {
+		return m, err
+	}
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return m, err
+		}
+	}
+	return m, nil
+}
+
 type MatherialToWhsOut struct {
 	Id          int     `json:"id"`
 	MatherialId int     `json:"matherial_id"`
@@ -13636,31 +14082,6 @@ func MatherialToWhsOutCreate(m MatherialToWhsOut, tx *sql.Tx) (MatherialToWhsOut
 		defer tx.Rollback()
 	}
 
-	err = CreateMatherialToWhsOutToNumber(&m, tx)
-	if err != nil {
-		return m, err
-	}
-
-	matherial, err := MatherialGet(m.MatherialId, tx)
-	if err == nil {
-		matherial.Total -= m.Number
-
-		_, err = MatherialUpdate(matherial, tx)
-		if err != nil {
-			return m, err
-		}
-	}
-
-	color, err := ColorGet(m.ColorId, tx)
-	if err == nil {
-		color.Total -= m.Number
-
-		_, err = ColorUpdate(color, tx)
-		if err != nil {
-			return m, err
-		}
-	}
-
 	whs_out, err := WhsOutGet(m.WhsOutId, tx)
 	if err == nil {
 		whs_out.WhsSum += m.Cost
@@ -13721,52 +14142,6 @@ func MatherialToWhsOutUpdate(m MatherialToWhsOut, tx *sql.Tx) (MatherialToWhsOut
 		return m, err
 	}
 
-	matherial, err := MatherialGet(matherial_to_whs_out.MatherialId, tx)
-	if err == nil {
-		matherial.Total += matherial_to_whs_out.Number
-
-	}
-
-	if matherial_to_whs_out.MatherialId != m.MatherialId {
-		_, err = MatherialUpdate(matherial, tx)
-		if err != nil {
-			return m, err
-		}
-		matherial, err = MatherialGet(m.MatherialId, tx)
-		if err != nil {
-			return m, err
-		}
-	}
-	matherial.Total -= m.Number
-
-	_, err = MatherialUpdate(matherial, tx)
-	if err != nil {
-		return m, err
-	}
-
-	color, err := ColorGet(matherial_to_whs_out.ColorId, tx)
-	if err == nil {
-		color.Total += matherial_to_whs_out.Number
-
-	}
-
-	if matherial_to_whs_out.ColorId != m.ColorId {
-		_, err = ColorUpdate(color, tx)
-		if err != nil {
-			return m, err
-		}
-		color, err = ColorGet(m.ColorId, tx)
-		if err != nil {
-			return m, err
-		}
-	}
-	color.Total -= m.Number
-
-	_, err = ColorUpdate(color, tx)
-	if err != nil {
-		return m, err
-	}
-
 	whs_out, err := WhsOutGet(matherial_to_whs_out.WhsOutId, tx)
 	if err == nil {
 		whs_out.WhsSum -= matherial_to_whs_out.Cost
@@ -13790,9 +14165,59 @@ func MatherialToWhsOutUpdate(m MatherialToWhsOut, tx *sql.Tx) (MatherialToWhsOut
 		return m, err
 	}
 
-	err = UpdateMatherialToWhsOutToNumber(&m, matherial_to_whs_out.Number, tx)
-	if err != nil {
-		return m, err
+	if whs_out.IsRealized {
+
+		matherial, err := MatherialGet(matherial_to_whs_out.MatherialId, tx)
+		if err == nil {
+			matherial.Total += matherial_to_whs_out.Number
+
+		}
+
+		if matherial_to_whs_out.MatherialId != m.MatherialId {
+			_, err = MatherialUpdate(matherial, tx)
+			if err != nil {
+				return m, err
+			}
+			matherial, err = MatherialGet(m.MatherialId, tx)
+			if err != nil {
+				return m, err
+			}
+		}
+		matherial.Total -= m.Number
+
+		_, err = MatherialUpdate(matherial, tx)
+		if err != nil {
+			return m, err
+		}
+
+		color, err := ColorGet(matherial_to_whs_out.ColorId, tx)
+		if err == nil {
+			color.Total += matherial_to_whs_out.Number
+
+		}
+
+		if matherial_to_whs_out.ColorId != m.ColorId {
+			_, err = ColorUpdate(color, tx)
+			if err != nil {
+				return m, err
+			}
+			color, err = ColorGet(m.ColorId, tx)
+			if err != nil {
+				return m, err
+			}
+		}
+		color.Total -= m.Number
+
+		_, err = ColorUpdate(color, tx)
+		if err != nil {
+			return m, err
+		}
+
+		err = UpdateMatherialToWhsOutToNumber(&m, matherial_to_whs_out.Number, tx)
+		if err != nil {
+			return m, err
+		}
+
 	}
 
 	sql := `UPDATE matherial_to_whs_out SET
@@ -13824,7 +14249,7 @@ func MatherialToWhsOutUpdate(m MatherialToWhsOut, tx *sql.Tx) (MatherialToWhsOut
 	return m, nil
 }
 
-func MatherialToWhsOutDelete(id int, tx *sql.Tx) (MatherialToWhsOut, error) {
+func MatherialToWhsOutDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialToWhsOut, error) {
 	needCommit := false
 	var err error
 	var m MatherialToWhsOut
@@ -13844,6 +14269,16 @@ func MatherialToWhsOutDelete(id int, tx *sql.Tx) (MatherialToWhsOut, error) {
 	err = DeleteMatherialToWhsOutToNumber(&m, tx)
 	if err != nil {
 		return m, err
+	}
+
+	whs_out, err := WhsOutGet(m.WhsOutId, tx)
+	if err == nil {
+		whs_out.WhsSum -= m.Cost
+
+		_, err = WhsOutUpdate(whs_out, tx)
+		if err != nil {
+			return m, err
+		}
 	}
 
 	matherial, err := MatherialGet(m.MatherialId, tx)
@@ -13866,18 +14301,10 @@ func MatherialToWhsOutDelete(id int, tx *sql.Tx) (MatherialToWhsOut, error) {
 		}
 	}
 
-	whs_out, err := WhsOutGet(m.WhsOutId, tx)
-	if err == nil {
-		whs_out.WhsSum -= m.Cost
-
-		_, err = WhsOutUpdate(whs_out, tx)
-		if err != nil {
-			return m, err
-		}
-	}
-
 	sql := `UPDATE matherial_to_whs_out SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE matherial_to_whs_out SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
@@ -13992,6 +14419,62 @@ func MatherialToWhsOutTestForExistingField(fieldName string) bool {
 		}
 	}
 	return false
+}
+
+func MatherialToWhsOutRealized(id int, tx *sql.Tx) (MatherialToWhsOut, error) {
+	var err error
+	needCommit := false
+	var m MatherialToWhsOut
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return m, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+	m, err = MatherialToWhsOutGet(id, tx)
+	if err != nil {
+		return m, err
+	}
+
+	err = CreateMatherialToWhsOutToNumber(&m, tx)
+	if err != nil {
+		return m, err
+	}
+
+	matherial, err := MatherialGet(m.MatherialId, tx)
+	if err == nil {
+		matherial.Total -= m.Number
+
+		_, err = MatherialUpdate(matherial, tx)
+		if err != nil {
+			return m, err
+		}
+	}
+
+	color, err := ColorGet(m.ColorId, tx)
+	if err == nil {
+		color.Total -= m.Number
+
+		_, err = ColorUpdate(color, tx)
+		if err != nil {
+			return m, err
+		}
+	}
+
+	sql := `UPDATE matherial_to_whs_out SET is_realized=1 WHERE id=?;`
+	_, err = tx.Exec(sql, m.Id)
+	if err != nil {
+		return m, err
+	}
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return m, err
+		}
+	}
+	return m, nil
 }
 
 type MatherialPart struct {
@@ -14167,7 +14650,7 @@ func MatherialPartUpdate(m MatherialPart, tx *sql.Tx) (MatherialPart, error) {
 	return m, nil
 }
 
-func MatherialPartDelete(id int, tx *sql.Tx) (MatherialPart, error) {
+func MatherialPartDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialPart, error) {
 	needCommit := false
 	var err error
 	var m MatherialPart
@@ -14185,7 +14668,9 @@ func MatherialPartDelete(id int, tx *sql.Tx) (MatherialPart, error) {
 	}
 
 	sql := `UPDATE matherial_part SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE matherial_part SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
@@ -14503,7 +14988,7 @@ func MatherialPartSliceUpdate(m MatherialPartSlice, tx *sql.Tx) (MatherialPartSl
 	return m, nil
 }
 
-func MatherialPartSliceDelete(id int, tx *sql.Tx) (MatherialPartSlice, error) {
+func MatherialPartSliceDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialPartSlice, error) {
 	needCommit := false
 	var err error
 	var m MatherialPartSlice
@@ -14521,7 +15006,9 @@ func MatherialPartSliceDelete(id int, tx *sql.Tx) (MatherialPartSlice, error) {
 	}
 
 	sql := `UPDATE matherial_part_slice SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE matherial_part_slice SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
@@ -14810,7 +15297,7 @@ func ProjectGroupUpdate(p ProjectGroup, tx *sql.Tx) (ProjectGroup, error) {
 	return p, nil
 }
 
-func ProjectGroupDelete(id int, tx *sql.Tx) (ProjectGroup, error) {
+func ProjectGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (ProjectGroup, error) {
 	needCommit := false
 	var err error
 	var p ProjectGroup
@@ -14828,7 +15315,9 @@ func ProjectGroupDelete(id int, tx *sql.Tx) (ProjectGroup, error) {
 	}
 
 	sql := `UPDATE project_group SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE project_group SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
@@ -15070,7 +15559,7 @@ func ProjectStatusUpdate(p ProjectStatus, tx *sql.Tx) (ProjectStatus, error) {
 	return p, nil
 }
 
-func ProjectStatusDelete(id int, tx *sql.Tx) (ProjectStatus, error) {
+func ProjectStatusDelete(id int, tx *sql.Tx, isUnRealize bool) (ProjectStatus, error) {
 	needCommit := false
 	var err error
 	var p ProjectStatus
@@ -15088,7 +15577,9 @@ func ProjectStatusDelete(id int, tx *sql.Tx) (ProjectStatus, error) {
 	}
 
 	sql := `UPDATE project_status SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE project_status SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
@@ -15328,7 +15819,7 @@ func ProjectTypeUpdate(p ProjectType, tx *sql.Tx) (ProjectType, error) {
 	return p, nil
 }
 
-func ProjectTypeDelete(id int, tx *sql.Tx) (ProjectType, error) {
+func ProjectTypeDelete(id int, tx *sql.Tx, isUnRealize bool) (ProjectType, error) {
 	needCommit := false
 	var err error
 	var p ProjectType
@@ -15346,7 +15837,9 @@ func ProjectTypeDelete(id int, tx *sql.Tx) (ProjectType, error) {
 	}
 
 	sql := `UPDATE project_type SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE project_type SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
@@ -15659,7 +16152,7 @@ func ProjectUpdate(p Project, tx *sql.Tx) (Project, error) {
 	return p, nil
 }
 
-func ProjectDelete(id int, tx *sql.Tx) (Project, error) {
+func ProjectDelete(id int, tx *sql.Tx, isUnRealize bool) (Project, error) {
 	needCommit := false
 	var err error
 	var p Project
@@ -15677,7 +16170,9 @@ func ProjectDelete(id int, tx *sql.Tx) (Project, error) {
 	}
 
 	sql := `UPDATE project SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE project SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
@@ -16048,7 +16543,7 @@ func CounterUpdate(c Counter, tx *sql.Tx) (Counter, error) {
 	return c, nil
 }
 
-func CounterDelete(id int, tx *sql.Tx) (Counter, error) {
+func CounterDelete(id int, tx *sql.Tx, isUnRealize bool) (Counter, error) {
 	needCommit := false
 	var err error
 	var c Counter
@@ -16066,7 +16561,9 @@ func CounterDelete(id int, tx *sql.Tx) (Counter, error) {
 	}
 
 	sql := `UPDATE counter SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE counter SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
@@ -16652,7 +17149,7 @@ func WmcNumberUpdate(w WmcNumber, tx *sql.Tx) (WmcNumber, error) {
 	return w, nil
 }
 
-func WmcNumberDelete(id int, tx *sql.Tx) (WmcNumber, error) {
+func WmcNumberDelete(id int, tx *sql.Tx, isUnRealize bool) (WmcNumber, error) {
 	needCommit := false
 	var err error
 	var w WmcNumber
@@ -16670,7 +17167,9 @@ func WmcNumberDelete(id int, tx *sql.Tx) (WmcNumber, error) {
 	}
 
 	sql := `UPDATE wmc_number SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE wmc_number SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, w.Id)
 	if err != nil {
 		return w, err
@@ -16929,7 +17428,7 @@ func NumbersToProductUpdate(n NumbersToProduct, tx *sql.Tx) (NumbersToProduct, e
 	return n, nil
 }
 
-func NumbersToProductDelete(id int, tx *sql.Tx) (NumbersToProduct, error) {
+func NumbersToProductDelete(id int, tx *sql.Tx, isUnRealize bool) (NumbersToProduct, error) {
 	needCommit := false
 	var err error
 	var n NumbersToProduct
@@ -16947,7 +17446,9 @@ func NumbersToProductDelete(id int, tx *sql.Tx) (NumbersToProduct, error) {
 	}
 
 	sql := `UPDATE numbers_to_product SET is_active=0 WHERE id=?;`
-
+	if isUnRealize {
+		sql = `UPDATE numbers_to_product SET is_realized=0 WHERE id=?;`
+	}
 	_, err = tx.Exec(sql, n.Id)
 	if err != nil {
 		return n, err
@@ -19960,6 +20461,7 @@ type WOrdering struct {
 	Cost             float64 `json:"cost"`
 	Info             string  `json:"info"`
 	OrderingStatusId int     `json:"ordering_status_id"`
+	IsRealized       bool    `json:"is_realized"`
 	IsActive         bool    `json:"is_active"`
 	User             string  `json:"user"`
 	Contragent       string  `json:"contragent"`
@@ -19990,6 +20492,7 @@ func WOrderingGet(id int) (WOrdering, error) {
 		&o.Cost,
 		&o.Info,
 		&o.OrderingStatusId,
+		&o.IsRealized,
 		&o.IsActive,
 		&o.User,
 		&o.Contragent,
@@ -20035,6 +20538,7 @@ func WOrderingGetAll(withDeleted bool, deletedOnly bool) ([]WOrdering, error) {
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.IsRealized,
 			&o.IsActive,
 			&o.User,
 			&o.Contragent,
@@ -20087,6 +20591,7 @@ func WOrderingGetByFilterInt(field string, param int, withDeleted bool, deletedO
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.IsRealized,
 			&o.IsActive,
 			&o.User,
 			&o.Contragent,
@@ -20140,6 +20645,7 @@ func WOrderingGetByFilterStr(field string, param string, withDeleted bool, delet
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.IsRealized,
 			&o.IsActive,
 			&o.User,
 			&o.Contragent,
@@ -20190,6 +20696,7 @@ func WOrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted b
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.IsRealized,
 			&o.IsActive,
 			&o.User,
 			&o.Contragent,
@@ -20239,6 +20746,7 @@ func WOrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDelete
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.IsRealized,
 			&o.IsActive,
 			&o.User,
 			&o.Contragent,
@@ -20444,6 +20952,7 @@ type WInvoice struct {
 	ContactId    int     `json:"contact_id"`
 	CashSum      float64 `json:"cash_sum"`
 	Comm         string  `json:"comm"`
+	IsRealized   bool    `json:"is_realized"`
 	IsActive     bool    `json:"is_active"`
 	Ordering     string  `json:"ordering"`
 	Owner        string  `json:"owner"`
@@ -20473,6 +20982,7 @@ func WInvoiceGet(id int) (WInvoice, error) {
 		&i.ContactId,
 		&i.CashSum,
 		&i.Comm,
+		&i.IsRealized,
 		&i.IsActive,
 		&i.Ordering,
 		&i.Owner,
@@ -20517,6 +21027,7 @@ func WInvoiceGetAll(withDeleted bool, deletedOnly bool) ([]WInvoice, error) {
 			&i.ContactId,
 			&i.CashSum,
 			&i.Comm,
+			&i.IsRealized,
 			&i.IsActive,
 			&i.Ordering,
 			&i.Owner,
@@ -20568,6 +21079,7 @@ func WInvoiceGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 			&i.ContactId,
 			&i.CashSum,
 			&i.Comm,
+			&i.IsRealized,
 			&i.IsActive,
 			&i.Ordering,
 			&i.Owner,
@@ -20620,6 +21132,7 @@ func WInvoiceGetByFilterStr(field string, param string, withDeleted bool, delete
 			&i.ContactId,
 			&i.CashSum,
 			&i.Comm,
+			&i.IsRealized,
 			&i.IsActive,
 			&i.Ordering,
 			&i.Owner,
@@ -20669,6 +21182,7 @@ func WInvoiceGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 			&i.ContactId,
 			&i.CashSum,
 			&i.Comm,
+			&i.IsRealized,
 			&i.IsActive,
 			&i.Ordering,
 			&i.Owner,
@@ -22707,6 +23221,7 @@ type WCashIn struct {
 	CreatedAt    string  `json:"created_at"`
 	CashSum      float64 `json:"cash_sum"`
 	Comm         string  `json:"comm"`
+	IsRealized   bool    `json:"is_realized"`
 	IsActive     bool    `json:"is_active"`
 	Cash         string  `json:"cash"`
 	User         string  `json:"user"`
@@ -22736,6 +23251,7 @@ func WCashInGet(id int) (WCashIn, error) {
 		&c.CreatedAt,
 		&c.CashSum,
 		&c.Comm,
+		&c.IsRealized,
 		&c.IsActive,
 		&c.Cash,
 		&c.User,
@@ -22780,6 +23296,7 @@ func WCashInGetAll(withDeleted bool, deletedOnly bool) ([]WCashIn, error) {
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 			&c.Cash,
 			&c.User,
@@ -22831,6 +23348,7 @@ func WCashInGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 			&c.Cash,
 			&c.User,
@@ -22883,6 +23401,7 @@ func WCashInGetByFilterStr(field string, param string, withDeleted bool, deleted
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 			&c.Cash,
 			&c.User,
@@ -22932,6 +23451,7 @@ func WCashInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 			&c.Cash,
 			&c.User,
@@ -22959,6 +23479,7 @@ type WCashOut struct {
 	CreatedAt    string  `json:"created_at"`
 	CashSum      float64 `json:"cash_sum"`
 	Comm         string  `json:"comm"`
+	IsRealized   bool    `json:"is_realized"`
 	IsActive     bool    `json:"is_active"`
 	Cash         string  `json:"cash"`
 	User         string  `json:"user"`
@@ -22988,6 +23509,7 @@ func WCashOutGet(id int) (WCashOut, error) {
 		&c.CreatedAt,
 		&c.CashSum,
 		&c.Comm,
+		&c.IsRealized,
 		&c.IsActive,
 		&c.Cash,
 		&c.User,
@@ -23032,6 +23554,7 @@ func WCashOutGetAll(withDeleted bool, deletedOnly bool) ([]WCashOut, error) {
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 			&c.Cash,
 			&c.User,
@@ -23083,6 +23606,7 @@ func WCashOutGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 			&c.Cash,
 			&c.User,
@@ -23135,6 +23659,7 @@ func WCashOutGetByFilterStr(field string, param string, withDeleted bool, delete
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 			&c.Cash,
 			&c.User,
@@ -23184,6 +23709,7 @@ func WCashOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
+			&c.IsRealized,
 			&c.IsActive,
 			&c.Cash,
 			&c.User,
@@ -23327,6 +23853,7 @@ type WWhsIn struct {
 	WhsSum              float64 `json:"whs_sum"`
 	Delivery            float64 `json:"delivery"`
 	Comm                string  `json:"comm"`
+	IsRealized          bool    `json:"is_realized"`
 	IsActive            bool    `json:"is_active"`
 	Whs                 string  `json:"whs"`
 	User                string  `json:"user"`
@@ -23356,6 +23883,7 @@ func WWhsInGet(id int) (WWhsIn, error) {
 		&w.WhsSum,
 		&w.Delivery,
 		&w.Comm,
+		&w.IsRealized,
 		&w.IsActive,
 		&w.Whs,
 		&w.User,
@@ -23400,6 +23928,7 @@ func WWhsInGetAll(withDeleted bool, deletedOnly bool) ([]WWhsIn, error) {
 			&w.WhsSum,
 			&w.Delivery,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 			&w.Whs,
 			&w.User,
@@ -23451,6 +23980,7 @@ func WWhsInGetByFilterInt(field string, param int, withDeleted bool, deletedOnly
 			&w.WhsSum,
 			&w.Delivery,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 			&w.Whs,
 			&w.User,
@@ -23503,6 +24033,7 @@ func WWhsInGetByFilterStr(field string, param string, withDeleted bool, deletedO
 			&w.WhsSum,
 			&w.Delivery,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 			&w.Whs,
 			&w.User,
@@ -23552,6 +24083,7 @@ func WWhsInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool
 			&w.WhsSum,
 			&w.Delivery,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 			&w.Whs,
 			&w.User,
@@ -23600,6 +24132,7 @@ func WWhsInGetBetweenContragentCreatedAt(contragent_created_at1, contragent_crea
 			&w.WhsSum,
 			&w.Delivery,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 			&w.Whs,
 			&w.User,
@@ -23625,6 +24158,7 @@ type WWhsOut struct {
 	CreatedAt    string  `json:"created_at"`
 	WhsSum       float64 `json:"whs_sum"`
 	Comm         string  `json:"comm"`
+	IsRealized   bool    `json:"is_realized"`
 	IsActive     bool    `json:"is_active"`
 	Whs          string  `json:"whs"`
 	User         string  `json:"user"`
@@ -23651,6 +24185,7 @@ func WWhsOutGet(id int) (WWhsOut, error) {
 		&w.CreatedAt,
 		&w.WhsSum,
 		&w.Comm,
+		&w.IsRealized,
 		&w.IsActive,
 		&w.Whs,
 		&w.User,
@@ -23692,6 +24227,7 @@ func WWhsOutGetAll(withDeleted bool, deletedOnly bool) ([]WWhsOut, error) {
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 			&w.Whs,
 			&w.User,
@@ -23740,6 +24276,7 @@ func WWhsOutGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 			&w.Whs,
 			&w.User,
@@ -23789,6 +24326,7 @@ func WWhsOutGetByFilterStr(field string, param string, withDeleted bool, deleted
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 			&w.Whs,
 			&w.User,
@@ -23835,6 +24373,7 @@ func WWhsOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
+			&w.IsRealized,
 			&w.IsActive,
 			&w.Whs,
 			&w.User,

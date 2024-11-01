@@ -49,7 +49,7 @@ func UpdateDocument(req Req) {
 }
 
 func DeleteDocument(req Req) {
-	req.Respond(DocumentDelete(req.IntParam, nil))
+	req.Respond(DocumentDelete(req.IntParam, nil, false))
 }
 
 func GetDocumentByFilterInt(req Req) {
@@ -95,7 +95,7 @@ func UpdateMeasure(req Req) {
 }
 
 func DeleteMeasure(req Req) {
-	req.Respond(MeasureDelete(req.IntParam, nil))
+	req.Respond(MeasureDelete(req.IntParam, nil, false))
 }
 
 func GetMeasureByFilterInt(req Req) {
@@ -141,7 +141,7 @@ func UpdateCountType(req Req) {
 }
 
 func DeleteCountType(req Req) {
-	req.Respond(CountTypeDelete(req.IntParam, nil))
+	req.Respond(CountTypeDelete(req.IntParam, nil, false))
 }
 
 func GetCountTypeByFilterInt(req Req) {
@@ -187,7 +187,7 @@ func UpdateColorGroup(req Req) {
 }
 
 func DeleteColorGroup(req Req) {
-	req.Respond(ColorGroupDelete(req.IntParam, nil))
+	req.Respond(ColorGroupDelete(req.IntParam, nil, false))
 }
 
 func GetColorGroupByFilterInt(req Req) {
@@ -233,7 +233,7 @@ func UpdateColor(req Req) {
 }
 
 func DeleteColor(req Req) {
-	req.Respond(ColorDelete(req.IntParam, nil))
+	req.Respond(ColorDelete(req.IntParam, nil, false))
 }
 
 func GetColorByFilterInt(req Req) {
@@ -279,7 +279,7 @@ func UpdateMatherialGroup(req Req) {
 }
 
 func DeleteMatherialGroup(req Req) {
-	req.Respond(MatherialGroupDelete(req.IntParam, nil))
+	req.Respond(MatherialGroupDelete(req.IntParam, nil, false))
 }
 
 func GetMatherialGroupByFilterInt(req Req) {
@@ -325,7 +325,7 @@ func UpdateMatherial(req Req) {
 }
 
 func DeleteMatherial(req Req) {
-	req.Respond(MatherialDelete(req.IntParam, nil))
+	req.Respond(MatherialDelete(req.IntParam, nil, false))
 }
 
 func GetMatherialByFilterInt(req Req) {
@@ -371,7 +371,7 @@ func UpdateCash(req Req) {
 }
 
 func DeleteCash(req Req) {
-	req.Respond(CashDelete(req.IntParam, nil))
+	req.Respond(CashDelete(req.IntParam, nil, false))
 }
 
 func GetCashByFilterInt(req Req) {
@@ -417,7 +417,7 @@ func UpdateUserGroup(req Req) {
 }
 
 func DeleteUserGroup(req Req) {
-	req.Respond(UserGroupDelete(req.IntParam, nil))
+	req.Respond(UserGroupDelete(req.IntParam, nil, false))
 }
 
 func GetUserGroupByFilterInt(req Req) {
@@ -463,7 +463,7 @@ func UpdateUser(req Req) {
 }
 
 func DeleteUser(req Req) {
-	req.Respond(UserDelete(req.IntParam, nil))
+	req.Respond(UserDelete(req.IntParam, nil, false))
 }
 
 func GetUserByFilterInt(req Req) {
@@ -509,7 +509,7 @@ func UpdateEquipmentGroup(req Req) {
 }
 
 func DeleteEquipmentGroup(req Req) {
-	req.Respond(EquipmentGroupDelete(req.IntParam, nil))
+	req.Respond(EquipmentGroupDelete(req.IntParam, nil, false))
 }
 
 func GetEquipmentGroupByFilterInt(req Req) {
@@ -555,7 +555,7 @@ func UpdateEquipment(req Req) {
 }
 
 func DeleteEquipment(req Req) {
-	req.Respond(EquipmentDelete(req.IntParam, nil))
+	req.Respond(EquipmentDelete(req.IntParam, nil, false))
 }
 
 func GetEquipmentByFilterInt(req Req) {
@@ -601,7 +601,7 @@ func UpdateOperationGroup(req Req) {
 }
 
 func DeleteOperationGroup(req Req) {
-	req.Respond(OperationGroupDelete(req.IntParam, nil))
+	req.Respond(OperationGroupDelete(req.IntParam, nil, false))
 }
 
 func GetOperationGroupByFilterInt(req Req) {
@@ -647,7 +647,7 @@ func UpdateOperation(req Req) {
 }
 
 func DeleteOperation(req Req) {
-	req.Respond(OperationDelete(req.IntParam, nil))
+	req.Respond(OperationDelete(req.IntParam, nil, false))
 }
 
 func GetOperationByFilterInt(req Req) {
@@ -693,7 +693,7 @@ func UpdateProductGroup(req Req) {
 }
 
 func DeleteProductGroup(req Req) {
-	req.Respond(ProductGroupDelete(req.IntParam, nil))
+	req.Respond(ProductGroupDelete(req.IntParam, nil, false))
 }
 
 func GetProductGroupByFilterInt(req Req) {
@@ -739,7 +739,7 @@ func UpdateProduct(req Req) {
 }
 
 func DeleteProduct(req Req) {
-	req.Respond(ProductDelete(req.IntParam, nil))
+	req.Respond(ProductDelete(req.IntParam, nil, false))
 }
 
 func GetProductByFilterInt(req Req) {
@@ -785,7 +785,7 @@ func UpdateContragentGroup(req Req) {
 }
 
 func DeleteContragentGroup(req Req) {
-	req.Respond(ContragentGroupDelete(req.IntParam, nil))
+	req.Respond(ContragentGroupDelete(req.IntParam, nil, false))
 }
 
 func GetContragentGroupByFilterInt(req Req) {
@@ -831,7 +831,7 @@ func UpdateContragent(req Req) {
 }
 
 func DeleteContragent(req Req) {
-	req.Respond(ContragentDelete(req.IntParam, nil))
+	req.Respond(ContragentDelete(req.IntParam, nil, false))
 }
 
 func GetContragentByFilterInt(req Req) {
@@ -881,7 +881,7 @@ func UpdateContact(req Req) {
 }
 
 func DeleteContact(req Req) {
-	req.Respond(ContactDelete(req.IntParam, nil))
+	req.Respond(ContactDelete(req.IntParam, nil, false))
 }
 
 func GetContactByFilterInt(req Req) {
@@ -927,7 +927,7 @@ func UpdateOrderingStatus(req Req) {
 }
 
 func DeleteOrderingStatus(req Req) {
-	req.Respond(OrderingStatusDelete(req.IntParam, nil))
+	req.Respond(OrderingStatusDelete(req.IntParam, nil, false))
 }
 
 func GetOrderingStatusByFilterInt(req Req) {
@@ -973,7 +973,7 @@ func UpdateOrdering(req Req) {
 }
 
 func DeleteOrdering(req Req) {
-	req.Respond(OrderingDelete(req.IntParam, nil))
+	req.Respond(OrderingDelete(req.IntParam, nil, false))
 }
 
 func GetOrderingByFilterInt(req Req) {
@@ -1035,7 +1035,7 @@ func UpdateOwner(req Req) {
 }
 
 func DeleteOwner(req Req) {
-	req.Respond(OwnerDelete(req.IntParam, nil))
+	req.Respond(OwnerDelete(req.IntParam, nil, false))
 }
 
 func GetOwnerByFilterInt(req Req) {
@@ -1081,7 +1081,7 @@ func UpdateInvoice(req Req) {
 }
 
 func DeleteInvoice(req Req) {
-	req.Respond(InvoiceDelete(req.IntParam, nil))
+	req.Respond(InvoiceDelete(req.IntParam, nil, false))
 }
 
 func GetInvoiceByFilterInt(req Req) {
@@ -1139,7 +1139,7 @@ func UpdateItemToInvoice(req Req) {
 }
 
 func DeleteItemToInvoice(req Req) {
-	req.Respond(ItemToInvoiceDelete(req.IntParam, nil))
+	req.Respond(ItemToInvoiceDelete(req.IntParam, nil, false))
 }
 
 func GetItemToInvoiceByFilterInt(req Req) {
@@ -1156,6 +1156,10 @@ func DecodeItemToInvoice(req Req) (ItemToInvoice, error) {
 	var i ItemToInvoice
 	err := decoder.Decode(&i)
 	return i, err
+}
+
+func RealizedItemToInvoice(req Req) {
+	req.Respond(ItemToInvoiceRealized(req.IntParam, nil))
 }
 
 func GetItemToInvoiceCostSumBefore(req Req) {
@@ -1193,7 +1197,7 @@ func UpdateProductToOrderingStatus(req Req) {
 }
 
 func DeleteProductToOrderingStatus(req Req) {
-	req.Respond(ProductToOrderingStatusDelete(req.IntParam, nil))
+	req.Respond(ProductToOrderingStatusDelete(req.IntParam, nil, false))
 }
 
 func GetProductToOrderingStatusByFilterInt(req Req) {
@@ -1239,7 +1243,7 @@ func UpdateProductToOrdering(req Req) {
 }
 
 func DeleteProductToOrdering(req Req) {
-	req.Respond(ProductToOrderingDelete(req.IntParam, nil))
+	req.Respond(ProductToOrderingDelete(req.IntParam, nil, false))
 }
 
 func GetProductToOrderingByFilterInt(req Req) {
@@ -1293,7 +1297,7 @@ func UpdateMatherialToOrdering(req Req) {
 }
 
 func DeleteMatherialToOrdering(req Req) {
-	req.Respond(MatherialToOrderingDelete(req.IntParam, nil))
+	req.Respond(MatherialToOrderingDelete(req.IntParam, nil, false))
 }
 
 func GetMatherialToOrderingByFilterInt(req Req) {
@@ -1347,7 +1351,7 @@ func UpdateMatherialToProduct(req Req) {
 }
 
 func DeleteMatherialToProduct(req Req) {
-	req.Respond(MatherialToProductDelete(req.IntParam, nil))
+	req.Respond(MatherialToProductDelete(req.IntParam, nil, false))
 }
 
 func GetMatherialToProductByFilterInt(req Req) {
@@ -1401,7 +1405,7 @@ func UpdateOperationToOrdering(req Req) {
 }
 
 func DeleteOperationToOrdering(req Req) {
-	req.Respond(OperationToOrderingDelete(req.IntParam, nil))
+	req.Respond(OperationToOrderingDelete(req.IntParam, nil, false))
 }
 
 func GetOperationToOrderingByFilterInt(req Req) {
@@ -1455,7 +1459,7 @@ func UpdateOperationToProduct(req Req) {
 }
 
 func DeleteOperationToProduct(req Req) {
-	req.Respond(OperationToProductDelete(req.IntParam, nil))
+	req.Respond(OperationToProductDelete(req.IntParam, nil, false))
 }
 
 func GetOperationToProductByFilterInt(req Req) {
@@ -1509,7 +1513,7 @@ func UpdateProductToProduct(req Req) {
 }
 
 func DeleteProductToProduct(req Req) {
-	req.Respond(ProductToProductDelete(req.IntParam, nil))
+	req.Respond(ProductToProductDelete(req.IntParam, nil, false))
 }
 
 func GetProductToProductByFilterInt(req Req) {
@@ -1563,7 +1567,7 @@ func UpdateCboxCheck(req Req) {
 }
 
 func DeleteCboxCheck(req Req) {
-	req.Respond(CboxCheckDelete(req.IntParam, nil))
+	req.Respond(CboxCheckDelete(req.IntParam, nil, false))
 }
 
 func GetCboxCheckByFilterInt(req Req) {
@@ -1613,7 +1617,7 @@ func UpdateItemToCboxCheck(req Req) {
 }
 
 func DeleteItemToCboxCheck(req Req) {
-	req.Respond(ItemToCboxCheckDelete(req.IntParam, nil))
+	req.Respond(ItemToCboxCheckDelete(req.IntParam, nil, false))
 }
 
 func GetItemToCboxCheckByFilterInt(req Req) {
@@ -1667,7 +1671,7 @@ func UpdateCashIn(req Req) {
 }
 
 func DeleteCashIn(req Req) {
-	req.Respond(CashInDelete(req.IntParam, nil))
+	req.Respond(CashInDelete(req.IntParam, nil, false))
 }
 
 func GetCashInByFilterInt(req Req) {
@@ -1725,7 +1729,7 @@ func UpdateCashOut(req Req) {
 }
 
 func DeleteCashOut(req Req) {
-	req.Respond(CashOutDelete(req.IntParam, nil))
+	req.Respond(CashOutDelete(req.IntParam, nil, false))
 }
 
 func GetCashOutByFilterInt(req Req) {
@@ -1783,7 +1787,7 @@ func UpdateWhs(req Req) {
 }
 
 func DeleteWhs(req Req) {
-	req.Respond(WhsDelete(req.IntParam, nil))
+	req.Respond(WhsDelete(req.IntParam, nil, false))
 }
 
 func GetWhsByFilterInt(req Req) {
@@ -1829,7 +1833,7 @@ func UpdateWhsIn(req Req) {
 }
 
 func DeleteWhsIn(req Req) {
-	req.Respond(WhsInDelete(req.IntParam, nil))
+	req.Respond(WhsInDelete(req.IntParam, nil, false))
 }
 
 func GetWhsInByFilterInt(req Req) {
@@ -1891,7 +1895,7 @@ func UpdateWhsOut(req Req) {
 }
 
 func DeleteWhsOut(req Req) {
-	req.Respond(WhsOutDelete(req.IntParam, nil))
+	req.Respond(WhsOutDelete(req.IntParam, nil, false))
 }
 
 func GetWhsOutByFilterInt(req Req) {
@@ -1949,7 +1953,7 @@ func UpdateMatherialToWhsIn(req Req) {
 }
 
 func DeleteMatherialToWhsIn(req Req) {
-	req.Respond(MatherialToWhsInDelete(req.IntParam, nil))
+	req.Respond(MatherialToWhsInDelete(req.IntParam, nil, false))
 }
 
 func GetMatherialToWhsInByFilterInt(req Req) {
@@ -1966,6 +1970,10 @@ func DecodeMatherialToWhsIn(req Req) (MatherialToWhsIn, error) {
 	var m MatherialToWhsIn
 	err := decoder.Decode(&m)
 	return m, err
+}
+
+func RealizedMatherialToWhsIn(req Req) {
+	req.Respond(MatherialToWhsInRealized(req.IntParam, nil))
 }
 
 func GetMatherialToWhsOut(req Req) {
@@ -1995,7 +2003,7 @@ func UpdateMatherialToWhsOut(req Req) {
 }
 
 func DeleteMatherialToWhsOut(req Req) {
-	req.Respond(MatherialToWhsOutDelete(req.IntParam, nil))
+	req.Respond(MatherialToWhsOutDelete(req.IntParam, nil, false))
 }
 
 func GetMatherialToWhsOutByFilterInt(req Req) {
@@ -2012,6 +2020,10 @@ func DecodeMatherialToWhsOut(req Req) (MatherialToWhsOut, error) {
 	var m MatherialToWhsOut
 	err := decoder.Decode(&m)
 	return m, err
+}
+
+func RealizedMatherialToWhsOut(req Req) {
+	req.Respond(MatherialToWhsOutRealized(req.IntParam, nil))
 }
 
 func GetMatherialPart(req Req) {
@@ -2041,7 +2053,7 @@ func UpdateMatherialPart(req Req) {
 }
 
 func DeleteMatherialPart(req Req) {
-	req.Respond(MatherialPartDelete(req.IntParam, nil))
+	req.Respond(MatherialPartDelete(req.IntParam, nil, false))
 }
 
 func GetMatherialPartByFilterInt(req Req) {
@@ -2091,7 +2103,7 @@ func UpdateMatherialPartSlice(req Req) {
 }
 
 func DeleteMatherialPartSlice(req Req) {
-	req.Respond(MatherialPartSliceDelete(req.IntParam, nil))
+	req.Respond(MatherialPartSliceDelete(req.IntParam, nil, false))
 }
 
 func GetMatherialPartSliceByFilterInt(req Req) {
@@ -2141,7 +2153,7 @@ func UpdateProjectGroup(req Req) {
 }
 
 func DeleteProjectGroup(req Req) {
-	req.Respond(ProjectGroupDelete(req.IntParam, nil))
+	req.Respond(ProjectGroupDelete(req.IntParam, nil, false))
 }
 
 func GetProjectGroupByFilterInt(req Req) {
@@ -2187,7 +2199,7 @@ func UpdateProjectStatus(req Req) {
 }
 
 func DeleteProjectStatus(req Req) {
-	req.Respond(ProjectStatusDelete(req.IntParam, nil))
+	req.Respond(ProjectStatusDelete(req.IntParam, nil, false))
 }
 
 func GetProjectStatusByFilterInt(req Req) {
@@ -2233,7 +2245,7 @@ func UpdateProjectType(req Req) {
 }
 
 func DeleteProjectType(req Req) {
-	req.Respond(ProjectTypeDelete(req.IntParam, nil))
+	req.Respond(ProjectTypeDelete(req.IntParam, nil, false))
 }
 
 func GetProjectTypeByFilterInt(req Req) {
@@ -2279,7 +2291,7 @@ func UpdateProject(req Req) {
 }
 
 func DeleteProject(req Req) {
-	req.Respond(ProjectDelete(req.IntParam, nil))
+	req.Respond(ProjectDelete(req.IntParam, nil, false))
 }
 
 func GetProjectByFilterInt(req Req) {
@@ -2333,7 +2345,7 @@ func UpdateCounter(req Req) {
 }
 
 func DeleteCounter(req Req) {
-	req.Respond(CounterDelete(req.IntParam, nil))
+	req.Respond(CounterDelete(req.IntParam, nil, false))
 }
 
 func GetCounterByFilterInt(req Req) {
@@ -2433,7 +2445,7 @@ func UpdateWmcNumber(req Req) {
 }
 
 func DeleteWmcNumber(req Req) {
-	req.Respond(WmcNumberDelete(req.IntParam, nil))
+	req.Respond(WmcNumberDelete(req.IntParam, nil, false))
 }
 
 func GetWmcNumberByFilterInt(req Req) {
@@ -2479,7 +2491,7 @@ func UpdateNumbersToProduct(req Req) {
 }
 
 func DeleteNumbersToProduct(req Req) {
-	req.Respond(NumbersToProductDelete(req.IntParam, nil))
+	req.Respond(NumbersToProductDelete(req.IntParam, nil, false))
 }
 
 func GetNumbersToProductByFilterInt(req Req) {
