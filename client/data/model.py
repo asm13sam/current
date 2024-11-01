@@ -153,6 +153,24 @@ class Item:
                 mess += f'\nПричина: {cause}'
             self.repo.send_ws_message(json.dumps({'user_id': self.user_id, 'username': self.username, 'message': mess}))
         return self.process_result(res)
+    
+    def unrealize(self, id, cause=''):
+        res = self.repo.unrealize(self.name, id)
+        if not res['error']:
+            mess = f"відмінив проведення {self.hum} {self.value['name'] if 'name' in self.value else ''} [#{id}]"
+            if cause:
+                mess += f'\nПричина: {cause}'
+            self.repo.send_ws_message(json.dumps({'user_id': self.user_id, 'username': self.username, 'message': mess}))
+        return self.process_result(res)
+    
+    def realize(self, id, cause=''):
+        res = self.repo.realized(self.name, id)
+        if not res['error']:
+            mess = f"провів {self.hum} {self.value['name'] if 'name' in self.value else ''} [#{id}]"
+            if cause:
+                mess += f'\nПричина: {cause}'
+            self.repo.send_ws_message(json.dumps({'user_id': self.user_id, 'username': self.username, 'message': mess}))
+        return self.process_result(res)
 
     def process_result(self, result):
         if result['error']:

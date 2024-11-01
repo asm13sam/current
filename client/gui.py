@@ -102,10 +102,10 @@ class Window(QWidget):
             "comm",
         ]
 
-        cash_in = ItemTable('cash_in', 'name', fields=fields)
+        cash_in = ItemTable('cash_in', 'name', fields=fields, releazed_buttons=True)
         self.doc_tabs.addTab(cash_in, 'ПКО')
         self.docs['cash_in'] = cash_in
-        cash_out = ItemTable('cash_out', 'name', fields=fields)
+        cash_out = ItemTable('cash_out', 'name', fields=fields, releazed_buttons=True)
         self.doc_tabs.addTab(cash_out, 'ВКО')
         self.docs['cash_out'] = cash_out
 

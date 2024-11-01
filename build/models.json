@@ -4,7 +4,13 @@
         "cash_in",
         "cash_out",
         "whs_in",
-        "whs_out"
+        "whs_out",
+        "invoice"
+    ],
+
+    "doc_table_items": [
+        "matherial_to_whs_in",
+        "matherial_to_whs_out"
     ],
 
     "models":{
@@ -134,7 +140,7 @@
             "message": 0
         },
         "invoice": {
-            "register":[
+            "rz_register":[
                 {"reg_field": "contragent.total", "val_field": ["cash_sum"], "func": "-"},
                 {"reg_field": "contact.total", "val_field": ["cash_sum"], "func": "-"}
                 ],
@@ -220,7 +226,7 @@
             "message": 0
         },
         "cash_in": {
-            "register":[
+            "rz_register":[
                 {"reg_field": "cash.total", "val_field": ["cash_sum"], "func": "+"},
                 {"reg_field": "contragent.total", "val_field": ["cash_sum"], "func": "+"},
                 {"reg_field": "contact.total", "val_field": ["cash_sum"], "func": "+"}
@@ -232,7 +238,7 @@
             "message": 1
         },
         "cash_out": {
-            "register":[
+            "rz_register":[
                 {"reg_field": "cash.total", "val_field": ["cash_sum"], "func": "-"},
                 {"reg_field": "contragent.total", "val_field": ["cash_sum"], "func": "-"},
                 {"reg_field": "contact.total", "val_field": ["cash_sum"], "func": "-"}
@@ -249,7 +255,7 @@
             "message": 1
         },
         "whs_in": {
-            "register":[
+            "rz_register":[
                 {"reg_field": "contragent.total", "val_field": ["whs_sum", "delivery"], "func": "+"},
                 {"reg_field": "contact.total", "val_field": ["whs_sum", "delivery"], "func": "+"}
                 ],
@@ -266,7 +272,7 @@
             "message": 1
         },
         "whs_out": {
-            "register":[
+            "rz_register":[
                 {"reg_field": "contragent.total", "val_field": ["whs_sum"], "func": "-"},
                 {"reg_field": "contact.total", "val_field": ["whs_sum"], "func": "-"}
                 ],
@@ -280,9 +286,11 @@
         "matherial_to_whs_in": {
             "hum": "Матеріали до приходу на склад",
             "register":[
-                {"reg_field": "matherial.total", "val_field": ["number"], "func": "+"},
-                {"reg_field": "color.total", "val_field": ["number"], "func": "+"},
                 {"reg_field": "whs_in.whs_sum", "val_field": ["cost"], "func": "+"}
+                ],
+            "rz_register":[
+                {"reg_field": "matherial.total", "val_field": ["number"], "func": "+"},
+                {"reg_field": "color.total", "val_field": ["number"], "func": "+"}
                 ],
             "complex_register":[
                 {
@@ -300,9 +308,11 @@
         "matherial_to_whs_out": {
             "hum": "Матеріали до видачі зі складу",
             "register":[
-                {"reg_field": "matherial.total", "val_field": ["number"], "func": "-"},
-                {"reg_field": "color.total", "val_field": ["number"], "func": "-"},
                 {"reg_field": "whs_out.whs_sum", "val_field": ["cost"], "func": "+"}
+                ],
+            "rz_register":[
+                {"reg_field": "matherial.total", "val_field": ["number"], "func": "-"},
+                {"reg_field": "color.total", "val_field": ["number"], "func": "-"}
                 ],
             "complex_register":[
                 {
@@ -581,6 +591,7 @@
         "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
         "info": {"def": "\n", "hum": "Опис", "form": 1},
         "ordering_status_id": {"def": 1, "hum": "Стан", "form": 1},
+        "is_realized": {"def": false, "hum": "Проведений", "form": 1},
         "is_active": {"def": true, "hum": "Діюче", "form": 0}
     },
 
@@ -624,6 +635,7 @@
         "contact_id": {"def": 0, "hum": "Контакт", "form": 2},
         "cash_sum": {"def": 0.0, "hum": "Вартість", "form": 1},
         "comm": {"def": "", "hum": "Коментар", "form": 1},
+        "is_realized": {"def": false, "hum": "Проведений", "form": 0},
         "is_active": {"def": true, "hum": "Діюче", "form": 0}
     },
 
@@ -662,6 +674,7 @@
         "created_at": {"def": "date", "hum": "Дата", "form": 0},
         "cash_sum": {"def": 0.0, "hum": "Сплачено", "form": 1},
         "comm": {"def": "", "hum": "Коментар", "form": 1},
+        "is_realized": {"def": false, "hum": "Проведений", "form": 0},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -678,6 +691,7 @@
         "created_at": {"def": "date", "hum": "Дата", "form": 0},
         "cash_sum": {"def": 0.0, "hum": "Сплачено", "form": 1},
         "comm": {"def": "", "hum": "Коментар", "form": 1},
+        "is_realized": {"def": false, "hum": "Проведений", "form": 0},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -703,6 +717,7 @@
         "whs_sum": {"def": 0.0, "hum": "Сума", "form": 1},
         "delivery": {"def": 0.0, "hum": "Доставка", "form": 1},
         "comm": {"def": "", "hum": "Коментар", "form": 1},
+        "is_realized": {"def": false, "hum": "Проведений", "form": 0},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 
@@ -718,6 +733,7 @@
         "created_at": {"def": "date", "hum": "Дата", "form": 0},
         "whs_sum": {"def": 0.0, "hum": "Сума", "form": 1},
         "comm": {"def": "", "hum": "Коментар", "form": 1},
+        "is_realized": {"def": false, "hum": "Проведений", "form": 0},
         "is_active": {"def": true, "hum": "Діючий", "form": 0}
     },
 

@@ -232,6 +232,17 @@ def create_go_models(model, tables):
 
         h += create_go_decode(table)
         g += make_field_validation(table, keys)
+        
+        if table in model['documents'] and table != 'ordering': 
+            g1, h1, m1 = create_go_realized(table, keys, model)
+            g += g1
+            h += h1
+            m += m1
+
+        if table in model['doc_table_items'] or table == 'item_to_invoice': 
+            g1 = create_go_realized_item(table, keys, model)
+            g += g1
+            
 
         if 'find' in model['models'][table]:
             finds = model['models'][table]['find']
@@ -521,12 +532,6 @@ def create_go_create(table, keys, model):
             req.Respond({gtype}Create({gv}, nil))
         }}
     '''
-    complex_reg = ''
-    if 'complex_register' in model['models'][table]:
-        complex_registers = model['models'][table]['complex_register']
-        for register in complex_registers:
-            complex_reg += create_go_create_complex_registers(register, gv, table)
-
     reg_get = ''
     if 'register' in model['models'][table]:
         registers = model['models'][table]['register']
@@ -575,7 +580,7 @@ def create_go_create(table, keys, model):
             needCommit = true
             defer tx.Rollback()
         }}
-        {complex_reg}{reg_get}{create_doc}{created_at}
+        {reg_get}{create_doc}{created_at}
         sql := `INSERT INTO {table}
             ({', '.join(list(keys)[1:])})
             VALUES({('?, '*(len(keys)-1))[:-2]});`
@@ -602,6 +607,145 @@ def create_go_create(table, keys, model):
     }}
     '''
     return g, h, m
+
+def create_go_realized_relateds(related, gv):
+    table = related['table']
+    gtable = to_go(table)
+    val = related['filter_value']
+    gval = to_go(val)
+    r = f'''
+    {table}s, err := {gtable}GetByFilterInt("{related['filter']}", {gv}.{gval}, false, false, tx)
+    if err != nil {{
+        return {gv}, err
+    }}
+    for _, {table} := range {table}s {{
+        _, err = {gtable}Realized({table}.Id, tx)
+        if err != nil {{
+            return {gv}, err
+        }}
+    }}
+    '''
+    return r
+
+def create_go_realized(table, keys, model):
+    right = model['models'][table]['rights'] + '_CREATE'
+    gtype = to_go(table)
+    gv = table[0]
+
+    m = f'''
+        r.HandleFunc("/realized/{table}/{{id:[0-9]+}}",
+        WrapAuth(Realized{gtype}, {right})).Methods("GET")
+    '''
+
+    h = f'''
+        func Realized{gtype}(req Req){{
+            req.Respond({gtype}Realized(req.IntParam, nil))
+        }}
+    '''
+    complex_reg = ''
+    if 'complex_register' in model['models'][table]:
+        complex_registers = model['models'][table]['complex_register']
+        for register in complex_registers:
+            complex_reg += create_go_create_complex_registers(register, gv, table)
+
+    reg_get = ''
+    if 'rz_register' in model['models'][table]:
+        registers = model['models'][table]['rz_register']
+        for register in registers:
+            reg_get += create_go_create_registers(register, gv)
+    rel_realized = ''
+    if 'related' in model['models'][table]:
+        relateds = model['models'][table]['related']
+        for related in relateds:
+            r = create_go_realized_relateds(related, gv)
+            rel_realized += r
+    
+    g = f'''
+    func {gtype}Realized(id int, tx *sql.Tx) ({gtype}, error) {{
+        var err error
+        needCommit := false
+        var {gv} {gtype}
+        if tx == nil {{
+            tx, err = db.Begin()
+            if err != nil {{
+                return {gv}, err
+            }}
+            needCommit = true
+            defer tx.Rollback()
+        }}
+        {gv}, err = {gtype}Get(id, tx)
+            if err != nil {{
+                return {gv}, err
+            }}
+        {complex_reg}{reg_get}{rel_realized}
+        sql := `UPDATE {table} SET is_realized=1 WHERE id=?;`
+        _, err = tx.Exec(sql, {gv}.Id)
+        if err != nil {{
+            return {gv}, err
+        }}
+        if needCommit {{
+            err = tx.Commit()
+            if err != nil {{
+                return {gv}, err
+            }}
+        }}
+        return {gv}, nil
+    }}
+    '''
+    return g, h, m
+
+def create_go_realized_item(table, keys, model):
+    right = model['models'][table]['rights'] + '_CREATE'
+    gtype = to_go(table)
+    gv = table[0]
+    
+    complex_reg = ''
+    if 'complex_register' in model['models'][table]:
+        complex_registers = model['models'][table]['complex_register']
+        for register in complex_registers:
+            complex_reg += create_go_create_complex_registers(register, gv, table)
+
+    reg_get = ''
+    if 'rz_register' in model['models'][table]:
+        registers = model['models'][table]['rz_register']
+        for register in registers:
+            reg_get += create_go_create_registers(register, gv)
+    rel_realized = ''
+    if 'related' in model['models'][table]:
+        relateds = model['models'][table]['related']
+        for related in relateds:
+            r = create_go_realized_relateds(related, gv)
+            rel_realized += r
+    
+    g = f'''
+    func {gtype}Realized(id int, tx *sql.Tx) ({gtype}, error) {{
+        var err error
+        needCommit := false
+        var {gv} {gtype}
+        if tx == nil {{
+            tx, err = db.Begin()
+            if err != nil {{
+                return {gv}, err
+            }}
+            needCommit = true
+            defer tx.Rollback()
+        }}
+        {gv}, err = {gtype}Get(id, tx)
+            if err != nil {{
+                return {gv}, err
+            }}
+        {complex_reg}{reg_get}{rel_realized}
+        
+        if needCommit {{
+            err = tx.Commit()
+            if err != nil {{
+                return {gv}, err
+            }}
+        }}
+        return {gv}, nil
+    }}
+    '''
+    return g
 
 
 def create_go_update_complex_registers(register, gv, table):
@@ -692,11 +836,22 @@ def create_go_update(table, keys, model):
             complex_reg += create_go_update_complex_registers(register, gv, table)
 
     reg_get = ''
+    prew = ''
     if 'register' in model['models'][table]:
-        reg_get += create_go_update_registers_get_previous(gv, table)
+        prew = create_go_update_registers_get_previous(gv, table)
+        reg_get += prew
         registers = model['models'][table]['register']
         for register in registers:
             reg_get += create_go_update_registers(register, gv, table)
+
+    rz_reg_get = ''
+    if 'rz_register' in model['models'][table]:
+        if not prew:
+            prew = create_go_update_registers_get_previous(gv, table)
+            rz_reg_get += prew
+        registers = model['models'][table]['rz_register']
+        for register in registers:
+            rz_reg_get += create_go_update_registers(register, gv, table)
 
     hooks_before = ''
     hooks_after = ''
@@ -714,7 +869,21 @@ def create_go_update(table, keys, model):
         t := time.Now()
         {gv}.UpdatedAt = t.Format("2006-01-02T15:04:05")
         '''
-
+    realized = ''
+    if table in model['documents'] and table != 'ordering':
+        realized = f'''
+            if {gv}.IsRealized{{
+                {rz_reg_get}{complex_reg}
+                }}
+            '''
+    elif table in model['doc_table_items']:
+        to_table = table.split('_to_')[1]
+        realized = f'''
+            if {to_table}.IsRealized{{
+                {rz_reg_get}{complex_reg}
+                }}
+                
+            '''
 
     g = f'''
         func {gtype}Update({gv} {gtype}, tx *sql.Tx) ({gtype}, error) {{
@@ -728,7 +897,8 @@ def create_go_update(table, keys, model):
                 needCommit = true
                 defer tx.Rollback()
             }}
-            {reg_get}{complex_reg}{update}
+            {reg_get}{update}
+            {realized}
             sql := `UPDATE {table} SET
                     {'=?, '.join(list(keys)[1:])}=?
                     WHERE id=?;`
@@ -774,7 +944,7 @@ def create_go_delete_relateds(related, gv):
         return {gv}, err
     }}
     for _, {table} := range {table}s {{
-        _, err = {gtable}Delete({table}.Id, tx)
+        _, err = {gtable}Delete({table}.Id, tx, isUnRealize)
         if err != nil {{
             return {gv}, err
         }}
@@ -810,15 +980,29 @@ def create_go_delete(table, keys, model):
     right = model['models'][table]['rights'] + '_DELETE'
     gtype = to_go(table)
     gv = table[0]
+    m = ''
+    h = ''
 
-    m = f'''
+    if table in model['documents'] and model != 'ordering':
+        m += f'''
+            r.HandleFunc("/unrealize/{table}/{{id:[0-9]+}}",
+                WrapAuth(UnRealize{gtype}, {right})).Methods("GET")
+        '''
+
+        h += f'''
+            func UnRealize{gtype}(req Req) {{
+                req.Respond({gtype}Delete(req.IntParam, nil, true))
+            }}
+            '''    
+
+    m += f'''
         r.HandleFunc("/{table}/{{id:[0-9]+}}",
             WrapAuth(Delete{gtype}, {right})).Methods("DELETE")
     '''
 
-    h = f'''
+    h += f'''
         func Delete{gtype}(req Req) {{
-            req.Respond({gtype}Delete(req.IntParam, nil))
+            req.Respond({gtype}Delete(req.IntParam, nil, false))
         }}
         '''
     complex_reg = ''
@@ -834,6 +1018,12 @@ def create_go_delete(table, keys, model):
             if not register['func']: #register = last value, no need to delete
                 return '', '', ''
             reg_get += create_go_delete_registers(register, gv)
+    if 'rz_register' in model['models'][table]:
+        registers = model['models'][table]['rz_register']
+        for register in registers:
+            if not register['func']: #register = last value, no need to delete
+                return '', '', ''
+            reg_get += create_go_delete_registers(register, gv)
     rel_delete = ''
     if 'related' in model['models'][table]:
         relateds = model['models'][table]['related']
@@ -842,7 +1032,7 @@ def create_go_delete(table, keys, model):
             rel_delete += r
 
     g = f'''
-        func {gtype}Delete(id int, tx *sql.Tx) ({gtype}, error) {{
+        func {gtype}Delete(id int, tx *sql.Tx, isUnRealize bool) ({gtype}, error) {{
             needCommit := false
             var err error
             var {gv} {gtype}
@@ -860,7 +1050,9 @@ def create_go_delete(table, keys, model):
             }}
             {complex_reg}{reg_get}{rel_delete}
             sql := `UPDATE {table} SET is_active=0 WHERE id=?;`
-
+            if isUnRealize {{
+                sql = `UPDATE {table} SET is_realized=0 WHERE id=?;`
+            }} 
             _, err = tx.Exec(sql, {gv}.Id)
             if err != nil {{
                 return {gv}, err

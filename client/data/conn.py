@@ -107,6 +107,18 @@ class Data:
         # print('DELETE', url)
         response = requests.delete(url, cookies=self.cookie_jar)
         return self.format_response(response)
+    
+    def realized(self, model_name, id):
+        url = f'{self.base_url}realized/{model_name}/{id}'
+        print('REALIZED', url)
+        response = requests.get(url, cookies=self.cookie_jar)
+        return self.format_response(response)
+    
+    def unrealize(self, model_name, id):
+        url = f'{self.base_url}unrealize/{model_name}/{id}'
+        print('UNREALIZED', url)
+        response = requests.get(url, cookies=self.cookie_jar)
+        return self.format_response(response)
 
     def create(self, model_name, data):
         url = f'{self.base_url}{model_name}'
