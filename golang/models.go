@@ -168,13 +168,11 @@ func DocumentDelete(id int, tx *sql.Tx, isUnRealize bool) (Document, error) {
 	}
 
 	sql := `UPDATE document SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE document SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, d.Id)
 	if err != nil {
 		return d, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -426,13 +424,11 @@ func MeasureDelete(id int, tx *sql.Tx, isUnRealize bool) (Measure, error) {
 	}
 
 	sql := `UPDATE measure SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE measure SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -681,13 +677,11 @@ func CountTypeDelete(id int, tx *sql.Tx, isUnRealize bool) (CountType, error) {
 	}
 
 	sql := `UPDATE count_type SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE count_type SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -944,13 +938,11 @@ func ColorGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (ColorGroup, error) 
 	}
 
 	sql := `UPDATE color_group SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE color_group SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -1211,13 +1203,11 @@ func ColorDelete(id int, tx *sql.Tx, isUnRealize bool) (Color, error) {
 	}
 
 	sql := `UPDATE color SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE color SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -1478,13 +1468,11 @@ func MatherialGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialGroup,
 	}
 
 	sql := `UPDATE matherial_group SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE matherial_group SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -1780,13 +1768,11 @@ func MatherialDelete(id int, tx *sql.Tx, isUnRealize bool) (Matherial, error) {
 	}
 
 	sql := `UPDATE matherial SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE matherial SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -2076,13 +2062,11 @@ func CashDelete(id int, tx *sql.Tx, isUnRealize bool) (Cash, error) {
 	}
 
 	sql := `UPDATE cash SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE cash SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -2349,13 +2333,11 @@ func UserGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (UserGroup, error) {
 	}
 
 	sql := `UPDATE user_group SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE user_group SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, u.Id)
 	if err != nil {
 		return u, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -2656,13 +2638,11 @@ func UserDelete(id int, tx *sql.Tx, isUnRealize bool) (User, error) {
 	}
 
 	sql := `UPDATE user SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE user SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, u.Id)
 	if err != nil {
 		return u, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -2939,13 +2919,11 @@ func EquipmentGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (EquipmentGroup,
 	}
 
 	sql := `UPDATE equipment_group SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE equipment_group SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, e.Id)
 	if err != nil {
 		return e, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -3216,13 +3194,11 @@ func EquipmentDelete(id int, tx *sql.Tx, isUnRealize bool) (Equipment, error) {
 	}
 
 	sql := `UPDATE equipment SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE equipment SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, e.Id)
 	if err != nil {
 		return e, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -3487,13 +3463,11 @@ func OperationGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (OperationGroup,
 	}
 
 	sql := `UPDATE operation_group SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE operation_group SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, o.Id)
 	if err != nil {
 		return o, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -3789,13 +3763,11 @@ func OperationDelete(id int, tx *sql.Tx, isUnRealize bool) (Operation, error) {
 	}
 
 	sql := `UPDATE operation SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE operation SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, o.Id)
 	if err != nil {
 		return o, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -4070,13 +4042,11 @@ func ProductGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (ProductGroup, err
 	}
 
 	sql := `UPDATE product_group SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE product_group SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -4372,13 +4342,11 @@ func ProductDelete(id int, tx *sql.Tx, isUnRealize bool) (Product, error) {
 	}
 
 	sql := `UPDATE product SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE product SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -4653,13 +4621,11 @@ func ContragentGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (ContragentGrou
 	}
 
 	sql := `UPDATE contragent_group SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE contragent_group SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -4990,13 +4956,11 @@ func ContragentDelete(id int, tx *sql.Tx, isUnRealize bool) (Contragent, error) 
 	}
 
 	sql := `UPDATE contragent SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE contragent SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -5368,13 +5332,11 @@ func ContactDelete(id int, tx *sql.Tx, isUnRealize bool) (Contact, error) {
 	}
 
 	sql := `UPDATE contact SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE contact SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -5639,13 +5601,11 @@ func OrderingStatusDelete(id int, tx *sql.Tx, isUnRealize bool) (OrderingStatus,
 	}
 
 	sql := `UPDATE ordering_status SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE ordering_status SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, o.Id)
 	if err != nil {
 		return o, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -6067,6 +6027,7 @@ func OrderingDelete(id int, tx *sql.Tx, isUnRealize bool) (Ordering, error) {
 	if err != nil {
 		return o, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -6524,13 +6485,11 @@ func OwnerDelete(id int, tx *sql.Tx, isUnRealize bool) (Owner, error) {
 	}
 
 	sql := `UPDATE owner SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE owner SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, o.Id)
 	if err != nil {
 		return o, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -6969,6 +6928,7 @@ func InvoiceDelete(id int, tx *sql.Tx, isUnRealize bool) (Invoice, error) {
 	if err != nil {
 		return i, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -7440,13 +7400,11 @@ func ItemToInvoiceDelete(id int, tx *sql.Tx, isUnRealize bool) (ItemToInvoice, e
 	}
 
 	sql := `UPDATE item_to_invoice SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE item_to_invoice SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, i.Id)
 	if err != nil {
 		return i, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -7758,13 +7716,11 @@ func ProductToOrderingStatusDelete(id int, tx *sql.Tx, isUnRealize bool) (Produc
 	}
 
 	sql := `UPDATE product_to_ordering_status SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE product_to_ordering_status SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -8119,13 +8075,11 @@ func ProductToOrderingDelete(id int, tx *sql.Tx, isUnRealize bool) (ProductToOrd
 	}
 
 	sql := `UPDATE product_to_ordering SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE product_to_ordering SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -8496,13 +8450,11 @@ func MatherialToOrderingDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialT
 	}
 
 	sql := `UPDATE matherial_to_ordering SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE matherial_to_ordering SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -8844,13 +8796,11 @@ func MatherialToProductDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialTo
 	}
 
 	sql := `UPDATE matherial_to_product SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE matherial_to_product SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -9240,13 +9190,11 @@ func OperationToOrderingDelete(id int, tx *sql.Tx, isUnRealize bool) (OperationT
 	}
 
 	sql := `UPDATE operation_to_ordering SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE operation_to_ordering SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, o.Id)
 	if err != nil {
 		return o, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -9597,13 +9545,11 @@ func OperationToProductDelete(id int, tx *sql.Tx, isUnRealize bool) (OperationTo
 	}
 
 	sql := `UPDATE operation_to_product SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE operation_to_product SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, o.Id)
 	if err != nil {
 		return o, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -9946,13 +9892,11 @@ func ProductToProductDelete(id int, tx *sql.Tx, isUnRealize bool) (ProductToProd
 	}
 
 	sql := `UPDATE product_to_product SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE product_to_product SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -10320,13 +10264,11 @@ func CboxCheckDelete(id int, tx *sql.Tx, isUnRealize bool) (CboxCheck, error) {
 	}
 
 	sql := `UPDATE cbox_check SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE cbox_check SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -10672,13 +10614,11 @@ func ItemToCboxCheckDelete(id int, tx *sql.Tx, isUnRealize bool) (ItemToCboxChec
 	}
 
 	sql := `UPDATE item_to_cbox_check SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE item_to_cbox_check SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, i.Id)
 	if err != nil {
 		return i, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -11154,6 +11094,7 @@ func CashInDelete(id int, tx *sql.Tx, isUnRealize bool) (CashIn, error) {
 	if err != nil {
 		return c, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -11737,6 +11678,7 @@ func CashOutDelete(id int, tx *sql.Tx, isUnRealize bool) (CashOut, error) {
 	if err != nil {
 		return c, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -12139,13 +12081,11 @@ func WhsDelete(id int, tx *sql.Tx, isUnRealize bool) (Whs, error) {
 	}
 
 	sql := `UPDATE whs SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE whs SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, w.Id)
 	if err != nil {
 		return w, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -12607,6 +12547,7 @@ func WhsInDelete(id int, tx *sql.Tx, isUnRealize bool) (WhsIn, error) {
 	if err != nil {
 		return w, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -13246,6 +13187,7 @@ func WhsOutDelete(id int, tx *sql.Tx, isUnRealize bool) (WhsOut, error) {
 	if err != nil {
 		return w, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -13808,14 +13750,14 @@ func MatherialToWhsInDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialToWh
 		}
 	}
 
-	sql := `UPDATE matherial_to_whs_in SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE matherial_to_whs_in SET is_realized=0 WHERE id=?;`
+	if !isUnRealize {
+		sql := `UPDATE matherial_to_whs_in SET is_active=0 WHERE id=?;`
+		_, err = tx.Exec(sql, m.Id)
+		if err != nil {
+			return m, err
+		}
 	}
-	_, err = tx.Exec(sql, m.Id)
-	if err != nil {
-		return m, err
-	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -14291,14 +14233,14 @@ func MatherialToWhsOutDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialToW
 		}
 	}
 
-	sql := `UPDATE matherial_to_whs_out SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE matherial_to_whs_out SET is_realized=0 WHERE id=?;`
+	if !isUnRealize {
+		sql := `UPDATE matherial_to_whs_out SET is_active=0 WHERE id=?;`
+		_, err = tx.Exec(sql, m.Id)
+		if err != nil {
+			return m, err
+		}
 	}
-	_, err = tx.Exec(sql, m.Id)
-	if err != nil {
-		return m, err
-	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -14653,13 +14595,11 @@ func MatherialPartDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialPart, e
 	}
 
 	sql := `UPDATE matherial_part SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE matherial_part SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -14991,13 +14931,11 @@ func MatherialPartSliceDelete(id int, tx *sql.Tx, isUnRealize bool) (MatherialPa
 	}
 
 	sql := `UPDATE matherial_part_slice SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE matherial_part_slice SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, m.Id)
 	if err != nil {
 		return m, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -15300,13 +15238,11 @@ func ProjectGroupDelete(id int, tx *sql.Tx, isUnRealize bool) (ProjectGroup, err
 	}
 
 	sql := `UPDATE project_group SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE project_group SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -15562,13 +15498,11 @@ func ProjectStatusDelete(id int, tx *sql.Tx, isUnRealize bool) (ProjectStatus, e
 	}
 
 	sql := `UPDATE project_status SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE project_status SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -15822,13 +15756,11 @@ func ProjectTypeDelete(id int, tx *sql.Tx, isUnRealize bool) (ProjectType, error
 	}
 
 	sql := `UPDATE project_type SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE project_type SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -16155,13 +16087,11 @@ func ProjectDelete(id int, tx *sql.Tx, isUnRealize bool) (Project, error) {
 	}
 
 	sql := `UPDATE project SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE project SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, p.Id)
 	if err != nil {
 		return p, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -16546,13 +16476,11 @@ func CounterDelete(id int, tx *sql.Tx, isUnRealize bool) (Counter, error) {
 	}
 
 	sql := `UPDATE counter SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE counter SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
 		return c, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -17152,13 +17080,11 @@ func WmcNumberDelete(id int, tx *sql.Tx, isUnRealize bool) (WmcNumber, error) {
 	}
 
 	sql := `UPDATE wmc_number SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE wmc_number SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, w.Id)
 	if err != nil {
 		return w, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -17431,13 +17357,11 @@ func NumbersToProductDelete(id int, tx *sql.Tx, isUnRealize bool) (NumbersToProd
 	}
 
 	sql := `UPDATE numbers_to_product SET is_active=0 WHERE id=?;`
-	if isUnRealize {
-		sql = `UPDATE numbers_to_product SET is_realized=0 WHERE id=?;`
-	}
 	_, err = tx.Exec(sql, n.Id)
 	if err != nil {
 		return n, err
 	}
+
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {

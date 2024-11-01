@@ -982,7 +982,13 @@ def create_go_delete(table, keys, model):
     gv = table[0]
     m = ''
     h = ''
-
+    check_unrealize = f'''
+            sql := `UPDATE {table} SET is_active=0 WHERE id=?;`
+            _, err = tx.Exec(sql, {gv}.Id)
+            if err != nil {{
+                return {gv}, err
+            }}
+            '''
     if table in model['documents'] and model != 'ordering':
         m += f'''
             r.HandleFunc("/unrealize/{table}/{{id:[0-9]+}}",
@@ -994,6 +1000,26 @@ def create_go_delete(table, keys, model):
                 req.Respond({gtype}Delete(req.IntParam, nil, true))
             }}
             '''    
+        check_unrealize = f'''
+            sql := `UPDATE {table} SET is_active=0 WHERE id=?;`
+            if isUnRealize {{
+                sql = `UPDATE {table} SET is_realized=0 WHERE id=?;`
+            }} 
+            _, err = tx.Exec(sql, {gv}.Id)
+            if err != nil {{
+                return {gv}, err
+            }}
+            '''
+    if table in model['doc_table_items'] or model == 'item_to_invoice':
+        check_unrealize = f'''
+            if !isUnRealize {{
+                sql := `UPDATE {table} SET is_active=0 WHERE id=?;`
+                _, err = tx.Exec(sql, {gv}.Id)
+                if err != nil {{
+                    return {gv}, err
+                }}
+            }} 
+            '''
 
     m += f'''
         r.HandleFunc("/{table}/{{id:[0-9]+}}",
@@ -1049,14 +1075,7 @@ def create_go_delete(table, keys, model):
                 return {gv}, err
             }}
             {complex_reg}{reg_get}{rel_delete}
-            sql := `UPDATE {table} SET is_active=0 WHERE id=?;`
-            if isUnRealize {{
-                sql = `UPDATE {table} SET is_realized=0 WHERE id=?;`
-            }} 
-            _, err = tx.Exec(sql, {gv}.Id)
-            if err != nil {{
-                return {gv}, err
-            }}
+            {check_unrealize}
             if needCommit {{
                 err = tx.Commit()
                 if err != nil {{
