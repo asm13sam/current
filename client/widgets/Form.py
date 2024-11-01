@@ -24,6 +24,7 @@ from PyQt6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QSizePolicy,
+    QStyle,
     )
 
 from datetime import datetime, date
@@ -889,6 +890,7 @@ class ItemTable(QSplitter):
             is_info_bottom=False,
             show_period=True,
             deleted_buttons=True,
+            releazed_buttons=False,
             ):
         if is_vertical_inner:
             super().__init__()
@@ -947,15 +949,51 @@ class ItemTable(QSplitter):
         self.table.table.valueSelected.connect(self.on_value_selected)
 
         if buttons and deleted_buttons:
-            all_btn = QPushButton('Усі')
+            all_btn = QPushButton()
+            pixmapi = QStyle.StandardPixmap.SP_BrowserReload
+            icon = self.style().standardIcon(pixmapi)
+            all_btn.setIcon(icon)
+            all_btn.setToolTip('Показати з видаленими')
             self.table.hbox.addWidget(all_btn)
             all_btn.clicked.connect(self.show_all)
-            del_btn = QPushButton('Видалені')
+            del_btn = QPushButton()
+            pixmapi = QStyle.StandardPixmap.SP_TrashIcon
+            icon = self.style().standardIcon(pixmapi)
+            del_btn.setIcon(icon)
+            del_btn.setToolTip('Показати лише видалені')
             self.table.hbox.addWidget(del_btn)
             del_btn.clicked.connect(self.show_deleted)
 
+        if buttons and releazed_buttons:
+            rel_btn = QPushButton()
+            pixmapi = QStyle.StandardPixmap.SP_DialogApplyButton
+            icon = self.style().standardIcon(pixmapi)
+            rel_btn.setIcon(icon)
+            rel_btn.setToolTip('Провести')
+            self.table.hbox.addWidget(rel_btn)
+            rel_btn.clicked.connect(self.realized)
+            urel_btn = QPushButton()
+            pixmapi = QStyle.StandardPixmap.SP_DialogCancelButton
+            icon = self.style().standardIcon(pixmapi)
+            urel_btn.setIcon(icon)
+            urel_btn.setToolTip('Відмінити проведення')
+            self.table.hbox.addWidget(urel_btn)
+            urel_btn.clicked.connect(self.unrealized)
+
         if values:
             self.reload(values)
+
+    def realized(self):
+        v = self.value()
+        err = self.item.realize(v['id'])
+        if err:
+            error(err)
+
+    def unrealized(self):    
+        v = self.value()
+        err = self.item.unrealize(v['id'])
+        if err:
+            error(err)
 
     def show_all(self):
         values = self.get_values('all')
@@ -1177,6 +1215,7 @@ class MainItemTable(ItemTable):
                 is_vertical_inner=True,
                 is_info_bottom=False,
                 show_period=True,
+                releazed_buttons=False,
                 ):
         super().__init__(
             item_name, 
@@ -1188,6 +1227,7 @@ class MainItemTable(ItemTable):
             is_vertical_inner, 
             is_info_bottom,
             show_period,
+            releazed_buttons=releazed_buttons,
             )
         self.details_table = None
         self.doc_table = None

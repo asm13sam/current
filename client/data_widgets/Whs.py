@@ -176,7 +176,12 @@ class WhsTab(ItemTableWithDetails):
 
 class WhsInTab(WhsTab):
     def __init__(self):
-        main_table = MainItemTable('whs_in', fields=['id', 'name', 'whs_sum', 'contragent', 'whs'], is_vertical_inner=False)
+        main_table = MainItemTable(
+            'whs_in', 
+            fields=['id', 'name', 'whs_sum', 'contragent', 'whs'], 
+            is_vertical_inner=False, 
+            releazed_buttons=True,
+            )
         details_table = DetailsMatherialToWhsInTable(
             fields=['id', 'matherial', 'number', 'price', 'cost', 'color'],
             )
@@ -367,7 +372,11 @@ class WhsInTab(WhsTab):
 
 class WhsOutTab(WhsTab):
     def __init__(self):
-        main_table = MainItemTable('whs_out', fields=['id', 'name', 'whs_sum', 'contragent', 'whs'])
+        main_table = MainItemTable(
+            'whs_out', 
+            fields=['id', 'name', 'whs_sum', 'contragent', 'whs'], 
+            releazed_buttons=True,
+            )
         details_table = DetailsMatherialToWhsOutTable(fields=['id', 'matherial', 'number', 'price', 'cost', 'color'])
         super().__init__('whs_out', main_table, details_table)
         

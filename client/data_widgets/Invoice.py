@@ -12,7 +12,7 @@ from widgets.Form import ItemTableWithDetails, MainItemTable, DetailsItemTable
 
 class InvoiceTab(ItemTableWithDetails):
     def __init__(self):
-        super().__init__(MainItemTable('invoice'), DetailsItemTable('item_to_invoice'))
+        super().__init__(MainItemTable('invoice', releazed_buttons=True), DetailsItemTable('item_to_invoice'))
         app = App()
         self.base_dir = app.config['new_makets_path']
         self.file_mngr = app.config['program'] 
