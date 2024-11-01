@@ -450,6 +450,9 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/ordering/{id:[0-9]+}",
 		WrapAuth(UpdateOrdering, DOC_UPDATE)).Methods("PUT")
 
+	r.HandleFunc("/unrealize/ordering/{id:[0-9]+}",
+		WrapAuth(UnRealizeOrdering, DOC_DELETE)).Methods("GET")
+
 	r.HandleFunc("/ordering/{id:[0-9]+}",
 		WrapAuth(DeleteOrdering, DOC_DELETE)).Methods("DELETE")
 
@@ -504,6 +507,9 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/invoice/{id:[0-9]+}",
 		WrapAuth(UpdateInvoice, DOC_UPDATE)).Methods("PUT")
 
+	r.HandleFunc("/unrealize/invoice/{id:[0-9]+}",
+		WrapAuth(UnRealizeInvoice, DOC_DELETE)).Methods("GET")
+
 	r.HandleFunc("/invoice/{id:[0-9]+}",
 		WrapAuth(DeleteInvoice, DOC_DELETE)).Methods("DELETE")
 
@@ -512,6 +518,9 @@ func makeRouter() *mux.Router {
 
 	r.HandleFunc("/invoice_filter_str/{fs}/{fs2}",
 		WrapAuth(GetInvoiceByFilterStr, DOC_READ)).Methods("GET")
+
+	r.HandleFunc("/realized/invoice/{id:[0-9]+}",
+		WrapAuth(RealizedInvoice, DOC_CREATE)).Methods("GET")
 
 	r.HandleFunc("/invoice_between_created_at/{fs}/{fs2}",
 		WrapAuth(GetInvoiceBetweenCreatedAt, DOC_READ)).Methods("GET")
@@ -542,9 +551,6 @@ func makeRouter() *mux.Router {
 
 	r.HandleFunc("/item_to_invoice_filter_str/{fs}/{fs2}",
 		WrapAuth(GetItemToInvoiceByFilterStr, DOC_READ)).Methods("GET")
-
-	r.HandleFunc("/realized/item_to_invoice/{id:[0-9]+}",
-		WrapAuth(RealizedItemToInvoice, DOC_CREATE)).Methods("GET")
 
 	r.HandleFunc("/item_to_invoice_of_cost_sum_before/{fs}/{id:[0-9]+}/{fs2}",
 		WrapAuth(GetItemToInvoiceCostSumBefore, DOC_READ)).Methods("GET")
@@ -798,6 +804,9 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/cash_in/{id:[0-9]+}",
 		WrapAuth(UpdateCashIn, DOC_UPDATE)).Methods("PUT")
 
+	r.HandleFunc("/unrealize/cash_in/{id:[0-9]+}",
+		WrapAuth(UnRealizeCashIn, DOC_DELETE)).Methods("GET")
+
 	r.HandleFunc("/cash_in/{id:[0-9]+}",
 		WrapAuth(DeleteCashIn, DOC_DELETE)).Methods("DELETE")
 
@@ -806,6 +815,9 @@ func makeRouter() *mux.Router {
 
 	r.HandleFunc("/cash_in_filter_str/{fs}/{fs2}",
 		WrapAuth(GetCashInByFilterStr, DOC_READ)).Methods("GET")
+
+	r.HandleFunc("/realized/cash_in/{id:[0-9]+}",
+		WrapAuth(RealizedCashIn, DOC_CREATE)).Methods("GET")
 
 	r.HandleFunc("/cash_in_between_created_at/{fs}/{fs2}",
 		WrapAuth(GetCashInBetweenCreatedAt, DOC_READ)).Methods("GET")
@@ -828,6 +840,9 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/cash_out/{id:[0-9]+}",
 		WrapAuth(UpdateCashOut, DOC_UPDATE)).Methods("PUT")
 
+	r.HandleFunc("/unrealize/cash_out/{id:[0-9]+}",
+		WrapAuth(UnRealizeCashOut, DOC_DELETE)).Methods("GET")
+
 	r.HandleFunc("/cash_out/{id:[0-9]+}",
 		WrapAuth(DeleteCashOut, DOC_DELETE)).Methods("DELETE")
 
@@ -836,6 +851,9 @@ func makeRouter() *mux.Router {
 
 	r.HandleFunc("/cash_out_filter_str/{fs}/{fs2}",
 		WrapAuth(GetCashOutByFilterStr, DOC_READ)).Methods("GET")
+
+	r.HandleFunc("/realized/cash_out/{id:[0-9]+}",
+		WrapAuth(RealizedCashOut, DOC_CREATE)).Methods("GET")
 
 	r.HandleFunc("/cash_out_between_created_at/{fs}/{fs2}",
 		WrapAuth(GetCashOutBetweenCreatedAt, DOC_READ)).Methods("GET")
@@ -879,6 +897,9 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/whs_in/{id:[0-9]+}",
 		WrapAuth(UpdateWhsIn, DOC_UPDATE)).Methods("PUT")
 
+	r.HandleFunc("/unrealize/whs_in/{id:[0-9]+}",
+		WrapAuth(UnRealizeWhsIn, DOC_DELETE)).Methods("GET")
+
 	r.HandleFunc("/whs_in/{id:[0-9]+}",
 		WrapAuth(DeleteWhsIn, DOC_DELETE)).Methods("DELETE")
 
@@ -887,6 +908,9 @@ func makeRouter() *mux.Router {
 
 	r.HandleFunc("/whs_in_filter_str/{fs}/{fs2}",
 		WrapAuth(GetWhsInByFilterStr, DOC_READ)).Methods("GET")
+
+	r.HandleFunc("/realized/whs_in/{id:[0-9]+}",
+		WrapAuth(RealizedWhsIn, DOC_CREATE)).Methods("GET")
 
 	r.HandleFunc("/whs_in_between_created_at/{fs}/{fs2}",
 		WrapAuth(GetWhsInBetweenCreatedAt, DOC_READ)).Methods("GET")
@@ -912,6 +936,9 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/whs_out/{id:[0-9]+}",
 		WrapAuth(UpdateWhsOut, DOC_UPDATE)).Methods("PUT")
 
+	r.HandleFunc("/unrealize/whs_out/{id:[0-9]+}",
+		WrapAuth(UnRealizeWhsOut, DOC_DELETE)).Methods("GET")
+
 	r.HandleFunc("/whs_out/{id:[0-9]+}",
 		WrapAuth(DeleteWhsOut, DOC_DELETE)).Methods("DELETE")
 
@@ -920,6 +947,9 @@ func makeRouter() *mux.Router {
 
 	r.HandleFunc("/whs_out_filter_str/{fs}/{fs2}",
 		WrapAuth(GetWhsOutByFilterStr, DOC_READ)).Methods("GET")
+
+	r.HandleFunc("/realized/whs_out/{id:[0-9]+}",
+		WrapAuth(RealizedWhsOut, DOC_CREATE)).Methods("GET")
 
 	r.HandleFunc("/whs_out_between_created_at/{fs}/{fs2}",
 		WrapAuth(GetWhsOutBetweenCreatedAt, DOC_READ)).Methods("GET")
@@ -951,9 +981,6 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/matherial_to_whs_in_filter_str/{fs}/{fs2}",
 		WrapAuth(GetMatherialToWhsInByFilterStr, DOC_READ)).Methods("GET")
 
-	r.HandleFunc("/realized/matherial_to_whs_in/{id:[0-9]+}",
-		WrapAuth(RealizedMatherialToWhsIn, DOC_CREATE)).Methods("GET")
-
 	r.HandleFunc("/matherial_to_whs_out/{id:[0-9]+}",
 		WrapAuth(GetMatherialToWhsOut, DOC_READ)).Methods("GET")
 
@@ -974,9 +1001,6 @@ func makeRouter() *mux.Router {
 
 	r.HandleFunc("/matherial_to_whs_out_filter_str/{fs}/{fs2}",
 		WrapAuth(GetMatherialToWhsOutByFilterStr, DOC_READ)).Methods("GET")
-
-	r.HandleFunc("/realized/matherial_to_whs_out/{id:[0-9]+}",
-		WrapAuth(RealizedMatherialToWhsOut, DOC_CREATE)).Methods("GET")
 
 	r.HandleFunc("/matherial_part/{id:[0-9]+}",
 		WrapAuth(GetMatherialPart, DOC_READ)).Methods("GET")

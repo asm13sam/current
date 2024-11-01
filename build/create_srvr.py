@@ -234,14 +234,15 @@ def create_go_models(model, tables):
         g += make_field_validation(table, keys)
         
         if table in model['documents'] and table != 'ordering': 
-            g1 = create_go_realized_item(table, keys, model)
-            g += g1
-
-        if table in model['doc_table_items'] or table == 'item_to_invoice': 
             g1, h1, m1 = create_go_realized(table, keys, model)
             g += g1
             h += h1
             m += m1
+
+        if table in model['doc_table_items'] or table == 'item_to_invoice': 
+            g1 = create_go_realized_item(table, keys, model)
+            g += g1
+            
 
         if 'find' in model['models'][table]:
             finds = model['models'][table]['find']
@@ -734,11 +735,7 @@ def create_go_realized_item(table, keys, model):
                 return {gv}, err
             }}
         {complex_reg}{reg_get}{rel_realized}
-        sql := `UPDATE {table} SET is_realized=1 WHERE id=?;`
-        _, err = tx.Exec(sql, {gv}.Id)
-        if err != nil {{
-            return {gv}, err
-        }}
+        
         if needCommit {{
             err = tx.Commit()
             if err != nil {{
@@ -983,25 +980,27 @@ def create_go_delete(table, keys, model):
     right = model['models'][table]['rights'] + '_DELETE'
     gtype = to_go(table)
     gv = table[0]
+    m = ''
+    h = ''
 
     if table in model['documents'] and model != 'ordering':
-        m = f'''
+        m += f'''
             r.HandleFunc("/unrealize/{table}/{{id:[0-9]+}}",
                 WrapAuth(UnRealize{gtype}, {right})).Methods("GET")
         '''
 
-        h = f'''
+        h += f'''
             func UnRealize{gtype}(req Req) {{
                 req.Respond({gtype}Delete(req.IntParam, nil, true))
             }}
             '''    
 
-    m = f'''
+    m += f'''
         r.HandleFunc("/{table}/{{id:[0-9]+}}",
             WrapAuth(Delete{gtype}, {right})).Methods("DELETE")
     '''
 
-    h = f'''
+    h += f'''
         func Delete{gtype}(req Req) {{
             req.Respond({gtype}Delete(req.IntParam, nil, false))
         }}

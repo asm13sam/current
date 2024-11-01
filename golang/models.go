@@ -7572,11 +7572,6 @@ func ItemToInvoiceRealized(id int, tx *sql.Tx) (ItemToInvoice, error) {
 		return i, err
 	}
 
-	sql := `UPDATE item_to_invoice SET is_realized=1 WHERE id=?;`
-	_, err = tx.Exec(sql, i.Id)
-	if err != nil {
-		return i, err
-	}
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -13977,11 +13972,6 @@ func MatherialToWhsInRealized(id int, tx *sql.Tx) (MatherialToWhsIn, error) {
 		}
 	}
 
-	sql := `UPDATE matherial_to_whs_in SET is_realized=1 WHERE id=?;`
-	_, err = tx.Exec(sql, m.Id)
-	if err != nil {
-		return m, err
-	}
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {
@@ -14463,11 +14453,6 @@ func MatherialToWhsOutRealized(id int, tx *sql.Tx) (MatherialToWhsOut, error) {
 		}
 	}
 
-	sql := `UPDATE matherial_to_whs_out SET is_realized=1 WHERE id=?;`
-	_, err = tx.Exec(sql, m.Id)
-	if err != nil {
-		return m, err
-	}
 	if needCommit {
 		err = tx.Commit()
 		if err != nil {

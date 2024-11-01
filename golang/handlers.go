@@ -972,6 +972,10 @@ func UpdateOrdering(req Req) {
 	req.Respond(OrderingUpdate(o, nil))
 }
 
+func UnRealizeOrdering(req Req) {
+	req.Respond(OrderingDelete(req.IntParam, nil, true))
+}
+
 func DeleteOrdering(req Req) {
 	req.Respond(OrderingDelete(req.IntParam, nil, false))
 }
@@ -1080,6 +1084,10 @@ func UpdateInvoice(req Req) {
 	req.Respond(InvoiceUpdate(i, nil))
 }
 
+func UnRealizeInvoice(req Req) {
+	req.Respond(InvoiceDelete(req.IntParam, nil, true))
+}
+
 func DeleteInvoice(req Req) {
 	req.Respond(InvoiceDelete(req.IntParam, nil, false))
 }
@@ -1098,6 +1106,10 @@ func DecodeInvoice(req Req) (Invoice, error) {
 	var i Invoice
 	err := decoder.Decode(&i)
 	return i, err
+}
+
+func RealizedInvoice(req Req) {
+	req.Respond(InvoiceRealized(req.IntParam, nil))
 }
 
 func GetInvoiceBetweenCreatedAt(req Req) {
@@ -1156,10 +1168,6 @@ func DecodeItemToInvoice(req Req) (ItemToInvoice, error) {
 	var i ItemToInvoice
 	err := decoder.Decode(&i)
 	return i, err
-}
-
-func RealizedItemToInvoice(req Req) {
-	req.Respond(ItemToInvoiceRealized(req.IntParam, nil))
 }
 
 func GetItemToInvoiceCostSumBefore(req Req) {
@@ -1670,6 +1678,10 @@ func UpdateCashIn(req Req) {
 	req.Respond(CashInUpdate(c, nil))
 }
 
+func UnRealizeCashIn(req Req) {
+	req.Respond(CashInDelete(req.IntParam, nil, true))
+}
+
 func DeleteCashIn(req Req) {
 	req.Respond(CashInDelete(req.IntParam, nil, false))
 }
@@ -1688,6 +1700,10 @@ func DecodeCashIn(req Req) (CashIn, error) {
 	var c CashIn
 	err := decoder.Decode(&c)
 	return c, err
+}
+
+func RealizedCashIn(req Req) {
+	req.Respond(CashInRealized(req.IntParam, nil))
 }
 
 func GetCashInBetweenCreatedAt(req Req) {
@@ -1728,6 +1744,10 @@ func UpdateCashOut(req Req) {
 	req.Respond(CashOutUpdate(c, nil))
 }
 
+func UnRealizeCashOut(req Req) {
+	req.Respond(CashOutDelete(req.IntParam, nil, true))
+}
+
 func DeleteCashOut(req Req) {
 	req.Respond(CashOutDelete(req.IntParam, nil, false))
 }
@@ -1746,6 +1766,10 @@ func DecodeCashOut(req Req) (CashOut, error) {
 	var c CashOut
 	err := decoder.Decode(&c)
 	return c, err
+}
+
+func RealizedCashOut(req Req) {
+	req.Respond(CashOutRealized(req.IntParam, nil))
 }
 
 func GetCashOutBetweenCreatedAt(req Req) {
@@ -1832,6 +1856,10 @@ func UpdateWhsIn(req Req) {
 	req.Respond(WhsInUpdate(w, nil))
 }
 
+func UnRealizeWhsIn(req Req) {
+	req.Respond(WhsInDelete(req.IntParam, nil, true))
+}
+
 func DeleteWhsIn(req Req) {
 	req.Respond(WhsInDelete(req.IntParam, nil, false))
 }
@@ -1850,6 +1878,10 @@ func DecodeWhsIn(req Req) (WhsIn, error) {
 	var w WhsIn
 	err := decoder.Decode(&w)
 	return w, err
+}
+
+func RealizedWhsIn(req Req) {
+	req.Respond(WhsInRealized(req.IntParam, nil))
 }
 
 func GetWhsInBetweenCreatedAt(req Req) {
@@ -1894,6 +1926,10 @@ func UpdateWhsOut(req Req) {
 	req.Respond(WhsOutUpdate(w, nil))
 }
 
+func UnRealizeWhsOut(req Req) {
+	req.Respond(WhsOutDelete(req.IntParam, nil, true))
+}
+
 func DeleteWhsOut(req Req) {
 	req.Respond(WhsOutDelete(req.IntParam, nil, false))
 }
@@ -1912,6 +1948,10 @@ func DecodeWhsOut(req Req) (WhsOut, error) {
 	var w WhsOut
 	err := decoder.Decode(&w)
 	return w, err
+}
+
+func RealizedWhsOut(req Req) {
+	req.Respond(WhsOutRealized(req.IntParam, nil))
 }
 
 func GetWhsOutBetweenCreatedAt(req Req) {
@@ -1972,10 +2012,6 @@ func DecodeMatherialToWhsIn(req Req) (MatherialToWhsIn, error) {
 	return m, err
 }
 
-func RealizedMatherialToWhsIn(req Req) {
-	req.Respond(MatherialToWhsInRealized(req.IntParam, nil))
-}
-
 func GetMatherialToWhsOut(req Req) {
 	req.Respond(MatherialToWhsOutGet(req.IntParam, nil))
 }
@@ -2020,10 +2056,6 @@ func DecodeMatherialToWhsOut(req Req) (MatherialToWhsOut, error) {
 	var m MatherialToWhsOut
 	err := decoder.Decode(&m)
 	return m, err
-}
-
-func RealizedMatherialToWhsOut(req Req) {
-	req.Respond(MatherialToWhsOutRealized(req.IntParam, nil))
 }
 
 func GetMatherialPart(req Req) {
