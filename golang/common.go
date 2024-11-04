@@ -591,7 +591,7 @@ func CreateProjectDirs(r Req) {
 		return
 	}
 	numberDir := fmt.Sprintf("%d", o.Id)
-	newPath := filepath.Join(Cfg.MaketsPath, c.DirName, numberDir)
+	newPath := filepath.Join(Cfg.NewMaketsPath, c.DirName, numberDir)
 	err = os.MkdirAll(newPath, 0777)
 	if err != nil {
 		r.Respond(nil, err)
@@ -605,7 +605,7 @@ func CreateProjectDirs(r Req) {
 			return
 		}
 	}
-	maketFile := filepath.Join(Cfg.MaketsPath, "maket.cdr")
+	maketFile := filepath.Join(Cfg.NewMaketsPath, "maket.cdr")
 	newMaketFile := filepath.Join(newPath, fmt.Sprintf("maket_%d.cdr", o.Id))
 
 	if fileExists(newMaketFile) {

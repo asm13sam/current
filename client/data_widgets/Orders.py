@@ -786,6 +786,7 @@ class ProductsTab(QWidget):
         ordering.value['contragent_id'] = app.config["contragent copycenter default"]
         ordering.value['contact_id'] = app.config["contact copycenter default"]
         ordering.value['info'] = f"id: {shift_data['id']}'\n'serial: {shift_data['serial']}"
+        ordering.value['deadline_at'] = date.today().isoformat() + 'T23:59:59'
         err = ordering.save()
         if err:
             error(err)
