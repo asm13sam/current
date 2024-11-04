@@ -194,7 +194,7 @@ class ContragentsTab(QWidget):
         
         sum_in = 0
         for v in doc_in_values:
-            sum_in += v['cost']
+            sum_in += v['cost'] if v['is_realized'] else 0
         self.in_sum.setText(str(sum_in))
         self.docs_in_table.reload(doc_in_values)
         
@@ -244,7 +244,7 @@ class ContragentsTab(QWidget):
 
         sum_out = 0
         for v in doc_out_values:
-            sum_out += v['cost']
+            sum_out += v['cost'] if v['is_realized'] else 0
         self.out_sum.setText(str(sum_out))
         self.doc_out_table.reload(doc_out_values)
         total = sum_in - sum_out

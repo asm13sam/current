@@ -171,7 +171,7 @@ class CashesTab(QWidget):
                 cash_in_values = [v for v in cash_in_values if v['cash_id'] == self.current_cash['id']]
         sum_in = 0
         for v in cash_in_values:
-            sum_in += v['cash_sum']
+            sum_in += v['cash_sum'] if v['is_realized'] else 0
         self.in_sum.setText(str(sum_in))
         self.cash_in_table.reload(cash_in_values)
         
@@ -182,7 +182,7 @@ class CashesTab(QWidget):
                 cash_out_values = [v for v in cash_out_values if v['cash_id'] == self.current_cash['id']]
         sum_out = 0
         for v in cash_out_values:
-            sum_out += v['cash_sum']
+            sum_out += v['cash_sum'] if v['is_realized'] else 0
         self.out_sum.setText(str(sum_out))
         self.cash_out_table.reload(cash_out_values)
         self.total_sum.setText(str(sum_in - sum_out))
