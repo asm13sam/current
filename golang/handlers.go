@@ -996,6 +996,10 @@ func DecodeOrdering(req Req) (Ordering, error) {
 	return o, err
 }
 
+func RealizedOrdering(req Req) {
+	req.Respond(OrderingRealized(req.IntParam, nil))
+}
+
 func GetOrderingBetweenCreatedAt(req Req) {
 	req.Respond(OrderingGetBetweenCreatedAt(req.StrParam, req.Str2Param, req.WithDeleted, req.DeletedOnly))
 }

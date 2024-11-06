@@ -10,7 +10,8 @@
 
     "doc_table_items": [
         "matherial_to_whs_in",
-        "matherial_to_whs_out"
+        "matherial_to_whs_out",
+        "operation_to_ordering"
     ],
 
     "models":{
@@ -192,7 +193,7 @@
         },
         "operation_to_ordering": {
             "sum": ["cost"],
-            "register": [
+            "rz_register": [
                 {"reg_field": "equipment.total", "val_field": ["equipment_cost"], "func": "+"}
             ],
             "between_up": ["ordering.created_at"],
@@ -591,7 +592,7 @@
         "cost": {"def": 0.0, "hum": "Вартість", "form": 1},
         "info": {"def": "\n", "hum": "Опис", "form": 1},
         "ordering_status_id": {"def": 1, "hum": "Стан", "form": 1},
-        "is_realized": {"def": false, "hum": "Проведений", "form": 1},
+        "is_realized": {"def": false, "hum": "Проведений", "form": 0},
         "is_active": {"def": true, "hum": "Діюче", "form": 0}
     },
 

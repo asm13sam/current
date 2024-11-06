@@ -1,6 +1,6 @@
 import json
 from barcode import EAN13
-from datetime import datetime
+from datetime import datetime, date
 
 from data.app import App
 
@@ -253,6 +253,8 @@ class Item:
                 self.value[k] = app.user['id']
             if k == 'created_at':
                 self.value[k] = datetime.now().isoformat(timespec='seconds')
+            elif k == 'deadline_at':
+                self.value[k] = date.today().isoformat() + 'T23:59:59'
             else:
                 self.value[k] = v['def']
 

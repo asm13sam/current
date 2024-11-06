@@ -195,7 +195,7 @@ class ContragentsTab(QWidget):
         sum_in = 0
         for v in doc_in_values:
             sum_in += v['cost'] if v['is_realized'] else 0
-        self.in_sum.setText(str(sum_in))
+        self.in_sum.setText(str(round(sum_in, 2)))
         self.docs_in_table.reload(doc_in_values)
         
         doc_out_values = []
@@ -245,10 +245,10 @@ class ContragentsTab(QWidget):
         sum_out = 0
         for v in doc_out_values:
             sum_out += v['cost'] if v['is_realized'] else 0
-        self.out_sum.setText(str(sum_out))
+        self.out_sum.setText(str(round(sum_out, 2)))
         self.doc_out_table.reload(doc_out_values)
         total = sum_in - sum_out
-        self.total_sum.setText(str(total))
+        self.total_sum.setText(str(round(total, 2)))
         if not all_contragents:
             if self.current_contact:
                 sum_in_before, sum_out_before = self.calc_sums("contact_id", self.current_contact['id'], self.date_from)
@@ -257,8 +257,8 @@ class ContragentsTab(QWidget):
             else:
                 return    
             total_before = sum_in_before - sum_out_before
-            self.last_sum.setText(str(total_before))
-            self.total_sum.setText(str(total + total_before))
+            self.last_sum.setText(str(round(total_before, 2)))
+            self.total_sum.setText(str(round(total + total_before, 2)))
 
         self.ordering.get_between_w('created_at', self.date_from, self. date_to)
         ordering_values = self.ordering.values

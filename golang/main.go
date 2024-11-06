@@ -462,6 +462,9 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/ordering_filter_str/{fs}/{fs2}",
 		WrapAuth(GetOrderingByFilterStr, DOC_READ)).Methods("GET")
 
+	r.HandleFunc("/realized/ordering/{id:[0-9]+}",
+		WrapAuth(RealizedOrdering, DOC_CREATE)).Methods("GET")
+
 	r.HandleFunc("/ordering_between_created_at/{fs}/{fs2}",
 		WrapAuth(GetOrderingBetweenCreatedAt, DOC_READ)).Methods("GET")
 
