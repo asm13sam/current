@@ -72,7 +72,8 @@ class TableModel(QStandardItemModel):
         res = 0
         for i in range(self.rowCount()):
             row = self.get_row_value(i)
-            res += row[field]
+            if 'is_realized' in row and row['is_realized']:
+                res += row[field]
         return res
 
 
