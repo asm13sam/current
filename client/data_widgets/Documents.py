@@ -15,6 +15,7 @@ class DocsTable(Table):
             "id": {"def": 0, "hum": "Номер"},
             "name": {"def": "Замовлення", "hum": "Назва"},
             "created_at": {"def": "date", "hum": "Створений"},
+            "is_realized": {"def": "date", "hum": "Проведений"},
             "doc_sum": {"def": 0.0, "hum": "Сума"},
             "type": {"def": "", "hum": "Тип code"},
             "type_hum": {"def": "", "hum": "Тип"},
@@ -45,6 +46,7 @@ class DocsTable(Table):
                 doc_val['id'] = val['id']
                 doc_val['name'] = val['name']
                 doc_val['created_at'] = val['created_at']
+                doc_val['is_realized'] = val['is_realized']
                 doc_val['type'] = doc.name
                 doc_val['type_hum'] = doc.hum
                 doc_val['comm'] = val['comm'] if 'comm' in val else ''
@@ -57,5 +59,5 @@ class DocsTable(Table):
         res = 0
         for v in values:
             if v['type'] == type_name:
-                res += v['doc_sum']
+                res += v['doc_sum'] if v['is_realized'] else 0
         return res
