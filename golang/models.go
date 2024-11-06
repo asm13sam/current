@@ -6968,6 +6968,29 @@ func InvoiceUpdate(i Invoice, tx *sql.Tx) (Invoice, error) {
 			return i, err
 		}
 
+		owner, err := OwnerGet(invoice.OwnerId, tx)
+		if err == nil {
+			owner.Total -= invoice.CashSum
+
+		}
+
+		if invoice.OwnerId != i.OwnerId {
+			_, err = OwnerUpdate(owner, tx)
+			if err != nil {
+				return i, err
+			}
+			owner, err = OwnerGet(i.OwnerId, tx)
+			if err != nil {
+				return i, err
+			}
+		}
+		owner.Total += i.CashSum
+
+		_, err = OwnerUpdate(owner, tx)
+		if err != nil {
+			return i, err
+		}
+
 	}
 
 	sql := `UPDATE invoice SET
@@ -7035,6 +7058,16 @@ func InvoiceDelete(id int, tx *sql.Tx, isUnRealize bool) (Invoice, error) {
 		contact.Total += i.CashSum
 
 		_, err = ContactUpdate(contact, tx)
+		if err != nil {
+			return i, err
+		}
+	}
+
+	owner, err := OwnerGet(i.OwnerId, tx)
+	if err == nil {
+		owner.Total -= i.CashSum
+
+		_, err = OwnerUpdate(owner, tx)
 		if err != nil {
 			return i, err
 		}
@@ -7215,6 +7248,16 @@ func InvoiceRealized(id int, tx *sql.Tx) (Invoice, error) {
 		contact.Total -= i.CashSum
 
 		_, err = ContactUpdate(contact, tx)
+		if err != nil {
+			return i, err
+		}
+	}
+
+	owner, err := OwnerGet(i.OwnerId, tx)
+	if err == nil {
+		owner.Total += i.CashSum
+
+		_, err = OwnerUpdate(owner, tx)
 		if err != nil {
 			return i, err
 		}
