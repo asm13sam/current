@@ -51,6 +51,7 @@ CONF_TABS = {
                 "info_names_color",
                 "info_values_color",
                 "info_bg_color",
+                "unreleazed_color",
                 "product_groups",
                 ),
     "Checkbox": (
@@ -78,5 +79,6 @@ CONF_TABS = {
                 "ordering state taken",
                 "ordering state canceled",
                 "product_to_ordering state ready",
+                "clients_group",
                 ),
 }

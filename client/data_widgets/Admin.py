@@ -272,6 +272,7 @@ class ConfigEditor(QWidget):
         self.widgets["info_names_color"] = ColorSelector()
         self.widgets["info_values_color"] = ColorSelector()
         self.widgets["info_bg_color"] = ColorSelector()
+        self.widgets["unreleazed_color"] = ColorSelector()
 
         self.widgets["license_key"] = LineEditWidget()
         self.widgets["cashier_pin"] = LineEditWidget()
@@ -297,6 +298,7 @@ class ConfigEditor(QWidget):
         self.widgets["ordering state taken"] = Selector('ordering_status')
         self.widgets["ordering state canceled"] = Selector('ordering_status')
         self.widgets["product_to_ordering state ready"] = Selector('ordering_status')
+        self.widgets["clients_group"] = Selector('contragent_group')
 
         self.widgets["product_groups"] = ProductPlacesConfig()
 
