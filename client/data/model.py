@@ -249,9 +249,9 @@ class Item:
     def create_default(self):
         app = App()
         for k, v in self.model.items():
-            if k == 'user_id' and app.user:
+            if k == 'user_id':
                 self.value[k] = app.user['id']
-            if k == 'created_at':
+            elif k == 'created_at':
                 self.value[k] = datetime.now().isoformat(timespec='seconds')
             elif k == 'deadline_at':
                 self.value[k] = date.today().isoformat() + 'T23:59:59'
