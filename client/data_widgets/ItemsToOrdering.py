@@ -56,7 +56,7 @@ from data_widgets.Calculation import CalculatorTab
 
 class OrderingTable(MainItemTable):
     def __init__(self, fields: list = [], values: list = None, buttons=TABLE_BUTTONS, group_id=0):
-        super().__init__('ordering', '', fields, values, buttons, group_id)
+        super().__init__('ordering', '', fields, values, buttons, group_id, releazed_buttons=True)
         self.pos_btn = QPushButton('_') #'[|]'
         self.table.hbox.addWidget(self.pos_btn)
         self.is_info_position_vertical = True

@@ -233,7 +233,7 @@ def create_go_models(model, tables):
         h += create_go_decode(table)
         g += make_field_validation(table, keys)
         
-        if table in model['documents'] and table != 'ordering': 
+        if table in model['documents']: 
             g1, h1, m1 = create_go_realized(table, keys, model)
             g += g1
             h += h1
@@ -657,8 +657,9 @@ def create_go_realized(table, keys, model):
     if 'related' in model['models'][table]:
         relateds = model['models'][table]['related']
         for related in relateds:
-            r = create_go_realized_relateds(related, gv)
-            rel_realized += r
+            if related['table'] in model['documents'] or related['table'] in model['doc_table_items']: 
+                r = create_go_realized_relateds(related, gv)
+                rel_realized += r
     
     g = f'''
     func {gtype}Realized(id int, tx *sql.Tx) ({gtype}, error) {{
@@ -676,6 +677,9 @@ def create_go_realized(table, keys, model):
         {gv}, err = {gtype}Get(id, tx)
             if err != nil {{
                 return {gv}, err
+            }}
+            if {gv}.IsRealized {{
+                return {gv}, nil
             }}
         {complex_reg}{reg_get}{rel_realized}
         sql := `UPDATE {table} SET is_realized=1 WHERE id=?;`
@@ -839,7 +843,7 @@ def create_go_update(table, keys, model):
     prew = ''
     if 'register' in model['models'][table]:
         prew = create_go_update_registers_get_previous(gv, table)
-        reg_get += prew
+        
         registers = model['models'][table]['register']
         for register in registers:
             reg_get += create_go_update_registers(register, gv, table)
@@ -848,7 +852,7 @@ def create_go_update(table, keys, model):
     if 'rz_register' in model['models'][table]:
         if not prew:
             prew = create_go_update_registers_get_previous(gv, table)
-            rz_reg_get += prew
+            
         registers = model['models'][table]['rz_register']
         for register in registers:
             rz_reg_get += create_go_update_registers(register, gv, table)
@@ -870,20 +874,26 @@ def create_go_update(table, keys, model):
         {gv}.UpdatedAt = t.Format("2006-01-02T15:04:05")
         '''
     realized = ''
-    if table in model['documents'] and table != 'ordering':
+    if table in model['documents'] and (rz_reg_get or complex_reg):
         realized = f'''
             if {gv}.IsRealized{{
                 {rz_reg_get}{complex_reg}
                 }}
             '''
     elif table in model['doc_table_items']:
-        to_table = table.split('_to_')[1]
-        realized = f'''
-            if {to_table}.IsRealized{{
-                {rz_reg_get}{complex_reg}
+        if rz_reg_get or complex_reg:
+            to_table = table.split('_to_')[1]
+            gtable = to_go(to_table)
+            realized = f'''
+                {to_table[:3]}, err := {gtable}Get({gv}.{gtable}Id, tx)
+                if err != nil {{
+                    return {gv}, err
                 }}
-                
-            '''
+                if {to_table[:3]}.IsRealized{{
+                    {rz_reg_get}{complex_reg}
+                    }}
+                    
+                '''
 
     g = f'''
         func {gtype}Update({gv} {gtype}, tx *sql.Tx) ({gtype}, error) {{
@@ -897,6 +907,7 @@ def create_go_update(table, keys, model):
                 needCommit = true
                 defer tx.Rollback()
             }}
+            {prew}
             {reg_get}{update}
             {realized}
             sql := `UPDATE {table} SET
@@ -939,16 +950,16 @@ def create_go_delete_relateds(related, gv):
     val = related['filter_value']
     gval = to_go(val)
     r = f'''
-    {table}s, err := {gtable}GetByFilterInt("{related['filter']}", {gv}.{gval}, false, false, tx)
-    if err != nil {{
-        return {gv}, err
-    }}
-    for _, {table} := range {table}s {{
-        _, err = {gtable}Delete({table}.Id, tx, isUnRealize)
+        {table}s, err := {gtable}GetByFilterInt("{related['filter']}", {gv}.{gval}, false, false, tx)
         if err != nil {{
             return {gv}, err
         }}
-    }}
+        for _, {table} := range {table}s {{
+            _, err = {gtable}Delete({table}.Id, tx, isUnRealize)
+            if err != nil {{
+                return {gv}, err
+            }}
+        }}
     '''
     return r
 
@@ -983,13 +994,15 @@ def create_go_delete(table, keys, model):
     m = ''
     h = ''
     check_unrealize = f'''
-            sql := `UPDATE {table} SET is_active=0 WHERE id=?;`
-            _, err = tx.Exec(sql, {gv}.Id)
-            if err != nil {{
-                return {gv}, err
+            if !isUnRealize {{
+                sql := `UPDATE {table} SET is_active=0 WHERE id=?;`
+                _, err = tx.Exec(sql, {gv}.Id)
+                if err != nil {{
+                    return {gv}, err
+                }}
             }}
             '''
-    if table in model['documents'] and model != 'ordering':
+    if table in model['documents']:
         m += f'''
             r.HandleFunc("/unrealize/{table}/{{id:[0-9]+}}",
                 WrapAuth(UnRealize{gtype}, {right})).Methods("GET")
@@ -1010,16 +1023,7 @@ def create_go_delete(table, keys, model):
                 return {gv}, err
             }}
             '''
-    if table in model['doc_table_items'] or model == 'item_to_invoice':
-        check_unrealize = f'''
-            if !isUnRealize {{
-                sql := `UPDATE {table} SET is_active=0 WHERE id=?;`
-                _, err = tx.Exec(sql, {gv}.Id)
-                if err != nil {{
-                    return {gv}, err
-                }}
-            }} 
-            '''
+    
 
     m += f'''
         r.HandleFunc("/{table}/{{id:[0-9]+}}",
@@ -1044,18 +1048,40 @@ def create_go_delete(table, keys, model):
             if not register['func']: #register = last value, no need to delete
                 return '', '', ''
             reg_get += create_go_delete_registers(register, gv)
+    rz_reg_get = ''
     if 'rz_register' in model['models'][table]:
         registers = model['models'][table]['rz_register']
         for register in registers:
             if not register['func']: #register = last value, no need to delete
                 return '', '', ''
-            reg_get += create_go_delete_registers(register, gv)
+            rz_reg_get += create_go_delete_registers(register, gv)
     rel_delete = ''
     if 'related' in model['models'][table]:
         relateds = model['models'][table]['related']
         for related in relateds:
+            if table == 'ordering' and related['table'] == 'operation_to_ordering':
+                continue
+
             r = create_go_delete_relateds(related, gv)
             rel_delete += r
+
+    if table in model['doc_table_items'] or model == 'item_to_invoice':
+        check_unrealize = f'''
+            if !isUnRealize {{
+                sql := `UPDATE {table} SET is_active=0 WHERE id=?;`
+                _, err = tx.Exec(sql, {gv}.Id)
+                if err != nil {{
+                    return {gv}, err
+                }}
+            }} 
+            '''
+    if table in model['doc_table_items'] or table == 'item_to_invoice':
+        if reg_get:
+            reg_get = f'''
+                if !isUnRealize {{
+                {reg_get}
+                }}
+                '''
 
     g = f'''
         func {gtype}Delete(id int, tx *sql.Tx, isUnRealize bool) ({gtype}, error) {{
@@ -1074,7 +1100,7 @@ def create_go_delete(table, keys, model):
             if err != nil {{
                 return {gv}, err
             }}
-            {complex_reg}{reg_get}{rel_delete}
+            {complex_reg}{reg_get}{rz_reg_get}{rel_delete}
             {check_unrealize}
             if needCommit {{
                 err = tx.Commit()
@@ -1209,10 +1235,13 @@ func Get{gtype}{gsum_field}SumBefore(req Req) {{
     req.Respond({gtype}{gsum_field}GetSumBefore(req.StrParam, req.IntParam, req.Str2Param))
 }}
     '''
+    check_realiz = ''
+    if table in model['documents']:
+        check_realiz = ' AND is_realized = 1'
 
     g = f'''
 func {gtype}{gsum_field}GetSumBefore(field string, id int, date string) (map[string]int, error) {{
-    query := fmt.Sprintf("SELECT SUM({sum_field}) FROM {table} WHERE is_active = 1 AND %s = ? AND created_at <= ?", field)
+    query := fmt.Sprintf("SELECT SUM({sum_field}) FROM {table} WHERE is_active = 1{check_realiz} AND %s = ? AND created_at <= ?", field)
     var sum int
     row := db.QueryRow(query, id, date)
     err := row.Scan(&sum)
