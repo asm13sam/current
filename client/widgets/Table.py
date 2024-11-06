@@ -14,6 +14,7 @@ from PyQt6.QtWidgets import (
 
 from widgets.Dialogs import error
 from common.params import SORT_ROLE, FULL_VALUE_ROLE, TABLE_BUTTONS
+from data.app import App
 
 
 # field_names specified fields of table to be showed,
@@ -45,6 +46,10 @@ class TableModel(QStandardItemModel):
         item = QStandardItem(str(v))
         item.setData(v, SORT_ROLE)
         item.setEditable(False)
+        if 'is_realized' in value and not value['is_realized']:
+            brush = QtGui.QBrush()
+            brush.setColor(QtGui.QColor(App().config['unreleazed_color']))
+            item.setForeground(brush)
         return item
 
     def append(self, value):
@@ -72,7 +77,8 @@ class TableModel(QStandardItemModel):
         res = 0
         for i in range(self.rowCount()):
             row = self.get_row_value(i)
-            res += row[field]
+            if (not 'is_realized' in row) or row['is_realized']:
+                res += row[field]
         return res
 
 

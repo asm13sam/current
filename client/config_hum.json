@@ -16,7 +16,7 @@
     "info_names_color": "Колір заголовків інфо",
     "info_values_color": "Колір значень інфо",
     "info_bg_color": "Колір тла інфо",
-
+    "unreleazed_color": "Колір для непроведених",
 
     "license_key": "Ключ ліцензії чекбокс",
     "cashier_pin": "ПІН касира",
@@ -40,6 +40,7 @@
     "ordering state taken": "Стан замовлення 'забране'",
     "ordering state canceled": "Стан замовлення 'відмінене'",
     "product_to_ordering state ready": "Стан виробу 'готовий'",
+    "clients_group": "Група 'Клієнти'",
 
     "product_groups": "Групи виробів"
 }

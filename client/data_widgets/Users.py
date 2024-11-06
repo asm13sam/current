@@ -19,7 +19,7 @@ class UserOrderingDetailsTable(DetailsItemTable):
         super().__init__('operation_to_ordering', '', fields, values, buttons, show_period=True)
         user_sum_caption = QLabel("Загалом")
         self.table.hbox.insertWidget(1, user_sum_caption)
-        self.user_sum = QLabel("Загалом")
+        self.user_sum = QLabel("0.00")
         self.table.hbox.insertWidget(2, self.user_sum)
     
     def period_changed(self, date_from, date_to):

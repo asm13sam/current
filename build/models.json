@@ -143,7 +143,8 @@
         "invoice": {
             "rz_register":[
                 {"reg_field": "contragent.total", "val_field": ["cash_sum"], "func": "-"},
-                {"reg_field": "contact.total", "val_field": ["cash_sum"], "func": "-"}
+                {"reg_field": "contact.total", "val_field": ["cash_sum"], "func": "-"},
+                {"reg_field": "owner.total", "val_field": ["cash_sum"], "func": "+"}
                 ],
             "related": [{"table": "item_to_invoice", "filter": "invoice_id", "filter_value": "id"}],
             "between": ["created_at"],
