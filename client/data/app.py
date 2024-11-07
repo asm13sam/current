@@ -1,3 +1,5 @@
+from data.conn import Data
+
 class SingletonMeta(type):
     _instances = {}
 
@@ -14,12 +16,12 @@ class SingletonMeta(type):
 
 class App(metaclass=SingletonMeta):
     def set_params(self, config, models, repository):
-        self.user = {}
-        self.config = config
-        self.model = models
-        self.repository = repository
-        self.model_w = {}
-        self.groups = {}
+        self.user: dict = {}
+        self.config: dict = config
+        self.model: dict = models
+        self.repository: Data = repository
+        self.model_w: dict = {}
+        self.groups: dict = {}
         self.make_model_w()
         self.make_groups()
 
