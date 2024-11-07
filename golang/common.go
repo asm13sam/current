@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -626,6 +627,20 @@ func CreateProjectDirs(r Req) {
 		file: newMaketFile,
 	}
 
+	r.Respond(res, nil)
+}
+
+func GetModels(r Req) {
+	data, err := os.ReadFile("models.json")
+	if err != nil {
+		r.Respond(nil, err)
+	}
+	res := map[string]interface{}{}
+	decoder := json.NewDecoder(strings.NewReader(string(data)))
+	err = decoder.Decode(&res)
+	if err != nil {
+		r.Respond(nil, err)
+	}
 	r.Respond(res, nil)
 }
 

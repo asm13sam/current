@@ -281,7 +281,7 @@ class CustomForm(QWidget):
             # if it is simple integer value
             w = IntWidget()
             
-        w.setValue(cur_value)
+        w.setValue(int(cur_value))
         return w
 
     def create_float_widget(self, cur_value, field):

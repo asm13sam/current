@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import (
     QTabWidget,
     QLabel,
     QHBoxLayout,
+    QPushButton,
     )
 from PyQt6.QtGui import QKeySequence, QShortcut, QFont
 
@@ -72,6 +73,8 @@ class Window(QWidget):
     def make_add_gui(self):
         sc = QShortcut(QKeySequence('Ctrl+f'), self)
         sc.activated.connect(self.find_from_clipboard)
+
+        
         self.ordering = ItemsToOrdering(self.check)
         self.main_tabs.addTab(self.ordering, 'Замовити')
         self.ordering.doc_table.valueDoubleCklicked.connect(self.open_document)
@@ -177,7 +180,7 @@ class Window(QWidget):
         self.test_tabs.addTab(p2os_work, 'В роботі')
         admin = AdminTab()
         self.test_tabs.addTab(admin, "Адміністрування")
-
+        
     def reload_tab(self, index):
         w = self.main_tabs.widget(index)
         w.reload()
@@ -221,6 +224,10 @@ class Window(QWidget):
         print('login', res)
         if res['error']:
             return
+        res = app.repository.get_models()
+        if res['error']:
+            return
+        app.set_models(res['value'])
         user = Item('user')
         err = user.get(value['id'])
         if err:

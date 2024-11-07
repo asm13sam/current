@@ -15,13 +15,17 @@ class SingletonMeta(type):
 
 
 class App(metaclass=SingletonMeta):
-    def set_params(self, config, models, repository):
+    def set_params(self, config, repository):
         self.user: dict = {}
         self.config: dict = config
-        self.model: dict = models
+        
         self.repository: Data = repository
+        self.model: dict = {}
         self.model_w: dict = {}
         self.groups: dict = {}
+
+    def set_models(self, models):
+        self.model = models
         self.make_model_w()
         self.make_groups()
 

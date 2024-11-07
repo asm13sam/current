@@ -1905,6 +1905,8 @@ func makeRouter() *mux.Router {
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/",
 		http.FileServer(http.Dir("./static/"))))
 
+	r.HandleFunc("/models",
+		WrapAuth(GetModels, DOC_READ)).Methods("GET")
 	r.HandleFunc("/login", WrapAuth(Login, LOGIN)).Methods("POST")
 	r.HandleFunc("/logout", WrapAuth(Logout, LOGOUT)).Methods("GET")
 	r.HandleFunc("/copy_project/{id:[0-9]+}", WrapAuth(CopyProject, ADMIN)).Methods("GET")

@@ -28,6 +28,12 @@ class Data:
         self.cookie_jar.set('sess', cookie)
         return response.json()
 
+    def get_models(self) -> dict:
+        url = f'{self.base_url}models'
+        print('GET MODELS', url)
+        response = requests.get(url, cookies=self.cookie_jar)
+        return self.format_response(response)
+
         # -----------------------------------------------------
     def send_ws_message(self, msg):
         if not self.wsconn:
