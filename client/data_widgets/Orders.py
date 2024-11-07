@@ -36,6 +36,7 @@ from data_widgets.Helpers import (
     MatherialToOrderingForm, 
     OperationToOrderingForm, 
     ProductToOrderingForm,
+    OrderingForm,
     )
 from common.funcs import fake_id
 
@@ -605,9 +606,13 @@ class ProductsTab(QWidget):
         self.controls.addWidget(self.new_order_name)
         self.new_order_name.returnPressed.connect(self.add_tab)
         self.new_order_name.setMaximumWidth(100)
-        new_btn = QPushButton("Нове замовлення")
+        new_btn = QPushButton("Нова вкладка")
         new_btn.clicked.connect(self.add_tab)
         self.controls.addWidget(new_btn)
+        to_ord_btn = QPushButton("Виділити в замовлення")
+        to_ord_btn.clicked.connect(self.to_ordering)
+        self.controls.addWidget(to_ord_btn)
+        
         self.controls.addStretch()
         
         del_btn = QPushButton("Видалити")
@@ -1190,8 +1195,11 @@ class ProductsTab(QWidget):
                     v['product_extra']['product_to_ordering'] = p2o.value
                     self.create_used(v)
 
-    def create_product_to_order(self, product_value):
-        product_value['product_extra']['product_to_ordering']['ordering_id'] = self.current_ordering.value['id']
+    def create_product_to_order(self, product_value, order_id=0):
+        if order_id:
+            product_value['product_extra']['product_to_ordering']['ordering_id'] = order_id
+        else:
+            product_value['product_extra']['product_to_ordering']['ordering_id'] = self.current_ordering.value['id']
         product_to_order = Item('product_to_ordering')
         product_to_order.value = product_value['product_extra']['product_to_ordering']
         product_to_order.value['product_to_ordering_status_id'] = self.p2o_ready_status
@@ -1205,13 +1213,16 @@ class ProductsTab(QWidget):
         self.create_used(product_value)
         return product_value
     
-    def create_item_to_order(self, value):
+    def create_item_to_order(self, value, order_id=0):
         item_type = self.get_type_of_value(value)
         if not item_type:
             return
         if item_type == 'product':
-            return self.create_product_to_order(value)
-        value[f'{item_type}_to_ordering']['ordering_id'] = self.current_ordering.value['id']
+            return self.create_product_to_order(value, order_id)
+        if order_id:
+            value[f'{item_type}_to_ordering']['ordering_id'] = order_id
+        else:
+            value[f'{item_type}_to_ordering']['ordering_id'] = self.current_ordering.value['id']
         item_to_order = Item(f'{item_type}_to_ordering')
         item_to_order.value = value[f'{item_type}_to_ordering']
         err = item_to_order.save()
@@ -1221,11 +1232,11 @@ class ProductsTab(QWidget):
         value[f'{item_type}_to_ordering'] = item_to_order.value
         return value
 
-    def create_items_to_order(self):
+    def create_items_to_order(self, order_id=0):
         item_values = self.tabs.currentWidget()._model.values()
         i2os = []
         for value in item_values:
-            res = self.create_item_to_order(value)
+            res = self.create_item_to_order(value, order_id)
             if res is None:
                 item_name = self.get_name_of_value(value)
                 error(f"Не вдалося створити {item_name}")
@@ -1373,3 +1384,34 @@ class ProductsTab(QWidget):
             error(err)
             return
         return cin
+    
+    def to_ordering(self):
+        i = self.tabs.currentIndex()
+        caption = self.tabs.tabText(i)
+        ordering = Item('ordering')
+        ordering.create_default()
+        ordering.value['cost'] = self.summa
+        ordering.value['price'] = self.summa
+        ordering.value['name'] = caption
+        ordering.value['user_id'] = self.user['id']
+        order_id = self.current_ordering.value['id']
+        order_create = self.current_ordering.value['created_at']
+        ordering.value['info'] = f'Зі зміни № {order_id} за {order_create}'
+        ordering.value['deadline_at'] = date.today().isoformat() + 'T23:59:59'
+        form = OrderingForm(value=ordering.value)
+        dlg = CustomFormDialog('Нове замовлення', form)
+        res = dlg.exec()
+        if not (res and dlg.value):
+            return
+        err = ordering.save()
+        if err:
+            error(err)
+            return
+        print(ordering.value['id'])
+        self.create_items_to_order(ordering.value['id'])
+        err = ordering.create_dirs(ordering.value['id'])
+        if err:
+            error(err)
+            return
+        self.remove_current_order() 
+        

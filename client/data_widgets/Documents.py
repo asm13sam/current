@@ -46,7 +46,7 @@ class DocsTable(Table):
                 doc_val['id'] = val['id']
                 doc_val['name'] = val['name']
                 doc_val['created_at'] = val['created_at']
-                doc_val['is_realized'] = val['is_realized']
+                doc_val['is_realized'] = val['is_realized'] if 'is_realized' in val else True
                 doc_val['type'] = doc.name
                 doc_val['type_hum'] = doc.hum
                 doc_val['comm'] = val['comm'] if 'comm' in val else ''
