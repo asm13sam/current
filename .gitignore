@@ -13,3 +13,4 @@ client/dist
 state.json
 prew_config.json
 menv
+models_old.json

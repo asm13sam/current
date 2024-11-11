@@ -37,7 +37,7 @@ if len(sys.argv) == 1 or sys.argv[1] == 'tables':
 
     con_to.commit()
     shutil.copyfile('base.db', '../server/base.db')
-    shutil.copyfile('models.json', '../client/models.json')
+    shutil.copyfile('models.json', '../server/models.json')
 
 if len(sys.argv) == 1 or sys.argv[1] == 'srv':
     create_srvr.create_go_models(model, tables)
