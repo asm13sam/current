@@ -51,17 +51,17 @@ class PMOInfo(QWidget):
         
         columns = 2 if is_info_bottom else 1
         self.product = Item('product_to_ordering')
-        self.prod_info = InfoBlock(self.product.model_w, columns=columns)
+        self.prod_info = InfoBlock(self.product.model_w, self.product.columns, columns=columns)
         info_box.addWidget(self.prod_info)
         self.prod_info.setVisible(False)
 
         self.operation = Item('operation_to_ordering')
-        self.op_info = InfoBlock(self.operation.model_w, columns=columns)
+        self.op_info = InfoBlock(self.operation.model_w, self.operation.columns, columns=columns)
         info_box.addWidget(self.op_info)
         self.op_info.setVisible(False)
 
         self.matherial = Item('matherial_to_ordering')
-        self.mat_info = InfoBlock(self.matherial.model_w, columns=columns)
+        self.mat_info = InfoBlock(self.matherial.model_w, self.matherial.columns, columns=columns)
         info_box.addWidget(self.mat_info)
         self.mat_info.setVisible(False)
 
@@ -86,6 +86,7 @@ class PMOInfo(QWidget):
 class MatherialToOrderingForm(CustomForm):
     def __init__(self, fields: list = [], value: dict = {}):
         self.item = Item('matherial_to_ordering')
+        fields = fields if fields else self.item.columns
         super().__init__(self.item.model, fields, value)
         self.widgets['color_id'].setVisible(False)
         self.widgets['width'].setVisible(False)
@@ -170,6 +171,7 @@ class OperationToOrderingForm(CustomForm):
         self.price = 0
         self.cost = 0
         self.eq_price = 0
+        fields = fields if fields else self.item.columns
         super().__init__(self.item.model, fields, value)
         operation_value = self.widgets['operation_id'].full_value()
         if operation_value:
@@ -224,6 +226,7 @@ class ProductToOrderingForm(CustomForm):
     sizeChanged = pyqtSignal(float, float, int, float)
     def __init__(self, fields: list = [], value: dict = {}):
         self.item = Item('product_to_ordering')
+        fields = fields if fields else self.item.columns
         super().__init__(self.item.model, fields, value)
         self.numbers_to_product = Item('numbers_to_product')
         err = self.numbers_to_product.get_filter('product_id', value['product_id'])
@@ -382,6 +385,7 @@ class ComplexList(QListWidget):
 class OrderingForm(CustomForm):
     def __init__(self, fields: list = [], value: dict = {}):
         self.item = Item('ordering')
+        fields = fields if fields else self.item.columns
         super().__init__(self.item.model, fields, value, 2)
         self.widgets['price'].valChanged.connect(self.price_changed)
         self.widgets['persent'].valChanged.connect(self.price_changed)
@@ -395,6 +399,8 @@ class OrderingForm(CustomForm):
 
     def profit_changed(self):
         cost = self.widgets['price'].value()
+        if cost == 0:
+            return
         profit = self.widgets['profit'].value()
         persent = profit * 100 / cost
         self.widgets['persent'].set_value(persent)

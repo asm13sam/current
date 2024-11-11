@@ -209,12 +209,13 @@ class CustomForm(QWidget):
             if not self.model[field]['form']:
                 continue
             def_value = self.model[field]['def']
+            val_type = self.model[field]['type']
             value = self.value[field] if self.value else def_value
             if 'group_id' in self.model[field]:
                 group_id = self.model[field]['group_id']
             else:
                 group_id=0
-            w = self.create_widget(field, def_value, value, group_id)
+            w = self.create_widget(field, def_value, val_type, value, group_id)
             if w is None:
                 continue
             w.valChanged.connect(self.set_changed)
@@ -240,18 +241,17 @@ class CustomForm(QWidget):
         return row
             
 
-    def create_widget(self, field, def_value, cur_value, group_id=0):
-        t = type(def_value)
+    def create_widget(self, field, def_value, val_type, cur_value, group_id=0):
         # date, text or string
-        if t == str:
+        if val_type == "str":
             return self.create_str_widget(def_value, cur_value)
         # id or int
-        if t == int:
+        if val_type == "int":
             return self.create_int_widget(cur_value, field, group_id)
         # sum of money, number or float
-        if t == float:
+        if val_type == "float":
             return self.create_float_widget(cur_value, field)
-        if t == bool:
+        if val_type == "bool":
             return self.create_bool_widget(cur_value)
         
     def create_str_widget(self, def_value, cur_value):
@@ -281,7 +281,7 @@ class CustomForm(QWidget):
             # if it is simple integer value
             w = IntWidget()
             
-        w.setValue(cur_value)
+        w.setValue(int(cur_value))
         return w
 
     def create_float_widget(self, cur_value, field):
@@ -540,9 +540,9 @@ class ContactSelector(Selector):
        
 
 class FormDialog(CustomDialog):
-    def __init__(self, title, data_model, value):
+    def __init__(self, title, data_model, fields, value):
         self.value = {}
-        self.form = CustomForm(data_model=data_model, value=value)
+        self.form = CustomForm(data_model=data_model, fields=fields, value=value)
         super().__init__(self.make_widget(self.form), title)
         self.form.saveRequested.connect(self.get_value)
         self.form.setMinimumWidth(300)
@@ -906,7 +906,7 @@ class ItemTable(QSplitter):
         self.table = TableWControls(
             data_model=self.item.model_w, 
             with_search=bool(search_field),
-            table_fields=fields,
+            table_fields=fields if fields else self.item.columns,
             buttons=buttons,
         )
         self.search_field = search_field
@@ -928,7 +928,7 @@ class ItemTable(QSplitter):
         self.inner.setStretchFactor(0, 4)
 
         if is_info_bottom:
-            self.info = InfoBlock(self.item.model_w, columns=2)
+            self.info = InfoBlock(self.item.model_w, self.item.columns, columns=2)
             if is_vertical_inner:
                 self.inner.addWidget(self.info)
                 self.inner.setStretchFactor(0, 3)
@@ -938,7 +938,7 @@ class ItemTable(QSplitter):
                 self.setStretchFactor(0, 3)
                 self.setStretchFactor(1, 1)
         else:
-            self.info = InfoBlock(self.item.model_w)
+            self.info = InfoBlock(self.item.model_w, self.item.columns)
             if not is_vertical_inner:
                 self.inner.addWidget(self.info)
             else:
@@ -1146,7 +1146,7 @@ class ItemTable(QSplitter):
 
     def dialog(self, value, title):
         i = Item(self.item.name)
-        dlg = FormDialog(title, i.model, value)
+        dlg = FormDialog(title, i.model, i.columns, value)
         res = dlg.exec()
         if res and dlg.value:
             i.value = self.prepare_value_to_save(dlg.value)
@@ -1371,7 +1371,7 @@ class ItemTree(QSplitter):
         self.current_value = {}
         if not show_info:
             return
-        self.info = InfoBlock(self.item.model_w, columns=2 if is_info_bottom else 1)
+        self.info = InfoBlock(self.item.model_w, self.item.columns, columns=2 if is_info_bottom else 1)
         self.addWidget(self.info)
         self.tree.tree.itemSelected.connect(self.item_selected)
         self.setStretchFactor(0, 5)
@@ -1418,7 +1418,7 @@ class ItemTree(QSplitter):
 
     def dialog(self, value, title):
         i = Item(self.item.name)
-        dlg = FormDialog(title, i.model, value)
+        dlg = FormDialog(title, i.model, i.columns, value)
         res = dlg.exec()
         if res and dlg.value:
             i.value = self.prepare_value_to_save(dlg.value)
