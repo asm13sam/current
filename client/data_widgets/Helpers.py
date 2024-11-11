@@ -399,6 +399,8 @@ class OrderingForm(CustomForm):
 
     def profit_changed(self):
         cost = self.widgets['price'].value()
+        if cost == 0:
+            return
         profit = self.widgets['profit'].value()
         persent = profit * 100 / cost
         self.widgets['persent'].set_value(persent)

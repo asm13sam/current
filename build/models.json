@@ -1272,2465 +1272,2938 @@
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "full_name": {
             "def": "",
             "hum": "Повна назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "count_type": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "matherial_group": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "matherial_group_id": {
             "def": 0,
             "hum": "Група матеріалів",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "position": {
             "def": 0,
             "hum": "Позиція",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "matherial": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "full_name": {
             "def": "",
             "hum": "Повна назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "matherial_group_id": {
             "def": 0,
             "hum": "Група матеріалів",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "measure_id": {
             "def": 0,
             "hum": "Од. виміру",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "color_group_id": {
             "def": 0,
             "hum": "Група кольору",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "price": {
             "def": 0.0,
             "hum": "Ціна",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "total": {
             "def": 0.0,
             "hum": "В наявності",
-            "form": 0
+            "form": 0,
+            "type": "float"
         },
         "barcode": {
             "def": "",
             "hum": "Штрихкод",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "count_type_id": {
             "def": 0,
             "hum": "Тип обліку",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "operation_group": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "operation_group_id": {
             "def": 0,
             "hum": "Група операцій",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "position": {
             "def": 0,
             "hum": "Позиція",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "operation": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "full_name": {
             "def": "",
             "hum": "Повна назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "operation_group_id": {
             "def": 0,
             "hum": "Група операцій",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "measure_id": {
             "def": 0,
             "hum": "Од. виміру",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "user_id": {
             "def": 0,
             "hum": "Виконавець",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "price": {
             "def": 0.0,
             "hum": "Тариф",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Ціна",
-            "form": 2
+            "form": 2,
+            "type": "float"
         },
         "equipment_id": {
             "def": 0,
             "hum": "Обладнання",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "equipment_price": {
             "def": 0.0,
             "hum": "Амортизація",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "barcode": {
             "def": "",
             "hum": "Штрихкод",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "operation_to_ordering": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "ordering_id": {
             "def": 0,
             "hum": "Замовлення",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "operation_id": {
             "def": 0,
             "hum": "Операція",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "user_id": {
             "def": 0,
             "hum": "Виконавець",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "number": {
             "def": 1.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "price": {
             "def": 0.0,
             "hum": "Ціна",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "user_sum": {
             "def": 0.0,
             "hum": "Оплата",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "equipment_id": {
             "def": 0,
             "hum": "Обладнання",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "equipment_cost": {
             "def": 0.0,
             "hum": "Амортизація",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "product_to_ordering_id": {
             "def": 0,
             "hum": "Виріб до замовлення",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "operation_to_product": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "product_id": {
             "def": 0,
             "hum": "Замовлення",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "operation_id": {
             "def": 0,
             "hum": "Операція",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "user_id": {
             "def": 0,
             "hum": "Виконавець",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "number": {
             "def": 1.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "coeff": {
             "def": 1.0,
             "hum": "Коефіцієнт",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "list_name": {
             "def": "default",
             "hum": "Назва списку",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_multiselect": {
             "def": false,
             "hum": "Мультивибір",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         },
         "equipment_id": {
             "def": 0,
             "hum": "Обладнання",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "equipment_cost": {
             "def": 0.0,
             "hum": "Амортизація",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_used": {
             "def": false,
             "hum": "Використовувати",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "equipment_group": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "equipment_group_id": {
             "def": 0,
             "hum": "Група обладнання",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "position": {
             "def": 0,
             "hum": "Позиція",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "equipment": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "full_name": {
             "def": "",
             "hum": "Повна назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "equipment_group_id": {
             "def": 0,
             "hum": "Група обладнання",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "cost": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "total": {
             "def": 0.0,
             "hum": "Сплачено",
-            "form": 0
+            "form": 0,
+            "type": "float"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "product_group": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "product_group_id": {
             "def": 0,
             "hum": "Група виробів",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "position": {
             "def": 0,
             "hum": "Позиція",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "product": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "short_name": {
             "def": "",
             "hum": "Коротка назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "product_group_id": {
             "def": 0,
             "hum": "Група виробів",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "measure_id": {
             "def": 0,
             "hum": "Од. виміру",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "width": {
             "def": 0.0,
             "hum": "Ширина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "length": {
             "def": 0.0,
             "hum": "Довжина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "min_cost": {
             "def": 0.0,
             "hum": "Мінімальна ціна",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Ціна",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "user_id": {
             "def": 0,
             "hum": "Виконавець",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "barcode": {
             "def": "",
             "hum": "Штрихкод",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "product_to_product": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "product_id": {
             "def": 0,
             "hum": "До вирообу",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "product2_id": {
             "def": 0,
             "hum": "Виріб",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "width": {
             "def": 0.0,
             "hum": "Ширина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "length": {
             "def": 0.0,
             "hum": "Довжина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "number": {
             "def": 1.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "coeff": {
             "def": 1.0,
             "hum": "Коефіцієнт",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "list_name": {
             "def": "default",
             "hum": "Назва списку",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_multiselect": {
             "def": false,
             "hum": "Мультивибір",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         },
         "is_used": {
             "def": false,
             "hum": "Використовувати",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "user_group": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "user_group_id": {
             "def": 0,
             "hum": "Група користувачів",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "position": {
             "def": 0,
             "hum": "Позиція",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "user": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "full_name": {
             "def": "",
             "hum": "Повна назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "user_group_id": {
             "def": 0,
             "hum": "Група",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "cash_id": {
             "def": 0,
             "hum": "Каса",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "phone": {
             "def": "",
             "hum": "Телефон",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "email": {
             "def": "",
             "hum": "Email",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "login": {
             "def": "",
             "hum": "Логін",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "password": {
             "def": "*",
             "hum": "Пароль",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "base_access": {
             "def": 1171,
             "hum": "Доступ",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "add_access": {
             "def": 1171,
             "hum": "Доступ+",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "document": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "doc_type": {
             "def": "",
             "hum": "Тип",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "ordering_status": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "ordering": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "document_uid": {
             "def": 0,
             "hum": "Код документа",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "Замовлення",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "created_at": {
             "def": "date",
             "hum": "Створений",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "deadline_at": {
             "def": "date",
             "hum": "Зробити до",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "finished_at": {
             "def": "date",
             "hum": "Дата закриття",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "user_id": {
             "def": 0,
             "hum": "Менеджер",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "contragent_id": {
             "def": 0,
             "hum": "Контрагент",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "contact_id": {
             "def": 0,
             "hum": "Контакт",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "price": {
             "def": 0.0,
             "hum": "Ціна",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "persent": {
             "def": 0.0,
             "hum": "Націнка %",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "profit": {
             "def": 0.0,
             "hum": "Націнка грн.",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "info": {
             "def": "\n",
             "hum": "Опис",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "ordering_status_id": {
             "def": 1,
             "hum": "Стан",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_realized": {
             "def": false,
             "hum": "Проведений",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         },
         "is_active": {
             "def": true,
             "hum": "Діюче",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "product_to_ordering_status": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "product_to_ordering": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "ordering_id": {
             "def": 0,
             "hum": "Замовлення",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "product_id": {
             "def": 0,
             "hum": "Виріб",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "user_id": {
             "def": 0,
             "hum": "Виконавець",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "deadline_at": {
             "def": "date",
             "hum": "Зробити до",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "product_to_ordering_status_id": {
             "def": 1,
             "hum": "Стан",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "width": {
             "def": 0.0,
             "hum": "Ширина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "length": {
             "def": 0.0,
             "hum": "Довжина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "pieces": {
             "def": 1,
             "hum": "Штук",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "number": {
             "def": 1.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "price": {
             "def": 0.0,
             "hum": "Ціна",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "persent": {
             "def": 0.0,
             "hum": "Націнка %",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "profit": {
             "def": 0.0,
             "hum": "Націнка грн.",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "info": {
             "def": "\n",
             "hum": "Опис",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "product_to_ordering_id": {
             "def": 0,
             "hum": "Виріб до замовлення",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "invoice": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "document_uid": {
             "def": 0,
             "hum": "Код документа",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "ordering_id": {
             "def": 0,
             "hum": "Замовлення",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "based_on": {
             "def": 0,
             "hum": "За документом",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "owner_id": {
             "def": 0,
             "hum": "Від кого",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "name": {
             "def": "Рахунок",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "created_at": {
             "def": "date",
             "hum": "Створений",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "user_id": {
             "def": 0,
             "hum": "Менеджер",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "contragent_id": {
             "def": 0,
             "hum": "Контрагент",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "contact_id": {
             "def": 0,
             "hum": "Контакт",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "cash_sum": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_realized": {
             "def": false,
             "hum": "Проведений",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         },
         "is_active": {
             "def": true,
             "hum": "Діюче",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "item_to_invoice": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "invoice_id": {
             "def": 0,
             "hum": "Рахунок",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "number": {
             "def": 1.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "measure_id": {
             "def": 0,
             "hum": "Од. виміру",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "price": {
             "def": 0.0,
             "hum": "Ціна",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "cash": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "persent": {
             "def": 0.0,
             "hum": "Націнка",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "total": {
             "def": 0.0,
             "hum": "В наявності",
-            "form": 0
+            "form": 0,
+            "type": "float"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_fiscal": {
             "def": false,
             "hum": "Фіскальна",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         },
         "is_account": {
             "def": true,
             "hum": "Рахунок",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "cash_in": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "document_uid": {
             "def": 0,
             "hum": "Код документа",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "ПКО",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "cash_id": {
             "def": 0,
             "hum": "Каса",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "user_id": {
             "def": 0,
             "hum": "Оператор",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "based_on": {
             "def": 0,
             "hum": "За документом",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "cbox_check_id": {
             "def": 0,
             "hum": "Чек",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "contragent_id": {
             "def": 0,
             "hum": "Контрагент",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "contact_id": {
             "def": 0,
             "hum": "Контакт",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "created_at": {
             "def": "date",
             "hum": "Дата",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "cash_sum": {
             "def": 0.0,
             "hum": "Сплачено",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_realized": {
             "def": false,
             "hum": "Проведений",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "cash_out": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "document_uid": {
             "def": 0,
             "hum": "Код документа",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "ВКО",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "cash_id": {
             "def": 0,
             "hum": "Каса",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "user_id": {
             "def": 0,
             "hum": "Оператор",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "based_on": {
             "def": 0,
             "hum": "За документом",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "cbox_check_id": {
             "def": 0,
             "hum": "Чек",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "contragent_id": {
             "def": 0,
             "hum": "Контрагент",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "contact_id": {
             "def": 0,
             "hum": "Контакт",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "created_at": {
             "def": "date",
             "hum": "Дата",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "cash_sum": {
             "def": 0.0,
             "hum": "Сплачено",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_realized": {
             "def": false,
             "hum": "Проведений",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "whs": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "whs_in": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "document_uid": {
             "def": 0,
             "hum": "Код документа",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "ПН",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "based_on": {
             "def": 0,
             "hum": "За документом",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "whs_id": {
             "def": 0,
             "hum": "Склад",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "user_id": {
             "def": 0,
             "hum": "Оператор",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "contragent_id": {
             "def": 0,
             "hum": "Контрагент",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "contact_id": {
             "def": 0,
             "hum": "Контакт",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "contragent_doc_uid": {
             "def": "",
             "hum": "Док-т контрагента",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "contragent_created_at": {
             "def": "date",
             "hum": "Дата контрагента",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "created_at": {
             "def": "date",
             "hum": "Дата",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "whs_sum": {
             "def": 0.0,
             "hum": "Сума",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "delivery": {
             "def": 0.0,
             "hum": "Доставка",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_realized": {
             "def": false,
             "hum": "Проведений",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "whs_out": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "document_uid": {
             "def": 0,
             "hum": "Код документа",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "ВН",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "based_on": {
             "def": 0,
             "hum": "За документом",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "whs_id": {
             "def": 0,
             "hum": "Склад",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "user_id": {
             "def": 0,
             "hum": "Оператор",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "contragent_id": {
             "def": 0,
             "hum": "Контрагент",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "contact_id": {
             "def": 0,
             "hum": "Контакт",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "created_at": {
             "def": "date",
             "hum": "Дата",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "whs_sum": {
             "def": 0.0,
             "hum": "Сума",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_realized": {
             "def": false,
             "hum": "Проведений",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "matherial_to_whs_in": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "matherial_id": {
             "def": 0,
             "hum": "Матеріал",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "contragent_mat_uid": {
             "def": "",
             "hum": "Номер мат. контр-та",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "whs_in_id": {
             "def": 0,
             "hum": "Пр. накладна",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "number": {
             "def": 1.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "price": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Сума",
-            "form": 0
+            "form": 0,
+            "type": "float"
         },
         "width": {
             "def": 0.0,
             "hum": "Ширина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "length": {
             "def": 0.0,
             "hum": "Довжина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "color_id": {
             "def": 0,
             "hum": "Колір",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "matherial_to_whs_out": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "matherial_id": {
             "def": 0,
             "hum": "Матеріал",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "whs_out_id": {
             "def": 0,
             "hum": "Вид. накладна",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "number": {
             "def": 1.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "price": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Сума",
-            "form": 0
+            "form": 0,
+            "type": "float"
         },
         "width": {
             "def": 0.0,
             "hum": "Ширина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "length": {
             "def": 0.0,
             "hum": "Довжина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "color_id": {
             "def": 0,
             "hum": "Колір",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "matherial_part": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "matherial_id": {
             "def": 0,
             "hum": "Матеріал",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "part_uid": {
             "def": 0,
             "hum": "Код",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "number": {
             "def": 1.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "width": {
             "def": 0.0,
             "hum": "Ширина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "length": {
             "def": 0.0,
             "hum": "Довжина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "color_id": {
             "def": 0,
             "hum": "Колір",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "user_id": {
             "def": 0,
             "hum": "Оператор",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "created_at": {
             "def": "date",
             "hum": "Дата",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "is_recycle": {
             "def": true,
             "hum": "Вторинний",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "matherial_part_slice": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "matherial_part_id": {
             "def": 0,
             "hum": "Номер партії",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "user_id": {
             "def": 0,
             "hum": "Оператор",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "created_at": {
             "def": "date",
             "hum": "Дата",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "number": {
             "def": 1.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "width": {
             "def": 0.0,
             "hum": "Ширина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "length": {
             "def": 0.0,
             "hum": "Довжина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "matherial_to_ordering": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "ordering_id": {
             "def": 0,
             "hum": "Замовлення",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "matherial_id": {
             "def": 0,
             "hum": "Матеріал",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "width": {
             "def": 0.0,
             "hum": "Ширина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "length": {
             "def": 0.0,
             "hum": "Довжина, мм",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "pieces": {
             "def": 1,
             "hum": "Штук",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "color_id": {
             "def": 0,
             "hum": "Колір",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "user_id": {
             "def": 0,
             "hum": "Оператор",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "number": {
             "def": 1.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "price": {
             "def": 0.0,
             "hum": "Ціна",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "persent": {
             "def": 0.0,
             "hum": "Націнка %",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "profit": {
             "def": 0.0,
             "hum": "Націнка грн.",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "product_to_ordering_id": {
             "def": 0,
             "hum": "Виріб до замовлення",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "matherial_to_product": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "product_id": {
             "def": 0,
             "hum": "Виріб",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "matherial_id": {
             "def": 0,
             "hum": "Матеріал",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "number": {
             "def": 1.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "coeff": {
             "def": 1.0,
             "hum": "Коефіцієнт",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "list_name": {
             "def": "default",
             "hum": "Назва списку",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_multiselect": {
             "def": false,
             "hum": "Мультивибір",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_used": {
             "def": false,
             "hum": "Використовувати",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "color_group": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "color_group_id": {
             "def": 0,
             "hum": "Група кольорів",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "position": {
             "def": 0,
             "hum": "Позиція",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "color": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "color_group_id": {
             "def": 0,
             "hum": "Група",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "total": {
             "def": 0.0,
             "hum": "В наявності",
-            "form": 0
+            "form": 0,
+            "type": "float"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "contragent_group": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "contragent_group_id": {
             "def": 0,
             "hum": "Група контрагентів",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "position": {
             "def": 0,
             "hum": "Позиція",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "contragent": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "contragent_group_id": {
             "def": 2,
             "hum": "Група контрагента",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "phone": {
             "def": "",
             "hum": "Тел.",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "email": {
             "def": "",
             "hum": "Email",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "web": {
             "def": "",
             "hum": "Web",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "dir_name": {
             "def": "",
             "hum": "Назва теки",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "search": {
             "def": "",
             "hum": "Пошук",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "total": {
             "def": 0.0,
             "hum": "Баланс",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "full_name": {
             "def": "",
             "hum": "Повна назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "edrpou": {
             "def": "",
             "hum": "ЕДРПОУ",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "ipn": {
             "def": "",
             "hum": "ІПН",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "iban": {
             "def": "",
             "hum": "IBAN",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "bank": {
             "def": "",
             "hum": "Банк",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "mfo": {
             "def": "",
             "hum": "МФО",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "fop": {
             "def": "",
             "hum": "ФОП",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "address": {
             "def": "",
             "hum": "Адреса",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "contact": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "contragent_id": {
             "def": 0,
             "hum": "Контрагент",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Ім'я",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "phone": {
             "def": "",
             "hum": "Тел.",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "email": {
             "def": "",
             "hum": "Email",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "viber": {
             "def": "",
             "hum": "Viber",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "telegram": {
             "def": "",
             "hum": "Telegram",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "telegram_uid": {
             "def": 0,
             "hum": "Telegram",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "search": {
             "def": "",
             "hum": "Пошук",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "total": {
             "def": 0.0,
             "hum": "Баланс",
-            "form": 0
+            "form": 0,
+            "type": "float"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "owner": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "phone": {
             "def": "",
             "hum": "Тел.",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "email": {
             "def": "",
             "hum": "Email",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "web": {
             "def": "",
             "hum": "Web",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "total": {
             "def": 0.0,
             "hum": "Баланс",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "full_name": {
             "def": "",
             "hum": "Повна назва",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "edrpou": {
             "def": "",
             "hum": "ЕДРПОУ",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "ipn": {
             "def": "",
             "hum": "ІПН",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "iban": {
             "def": "",
             "hum": "IBAN",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "bank": {
             "def": "",
             "hum": "Банк",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "mfo": {
             "def": "",
             "hum": "МФО",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "fop": {
             "def": "",
             "hum": "ФОП",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "address": {
             "def": "",
             "hum": "Адреса",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "sign": {
             "def": "",
             "hum": "Підпис(назва файлу)",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "cbox_check": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "fs_uid": {
             "def": "0",
             "hum": "Фіскальний код",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "checkbox_uid": {
             "def": "0",
             "hum": "Код checkbox",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "user_id": {
             "def": 0,
             "hum": "Оператор",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "contragent_id": {
             "def": 0,
             "hum": "Замовник",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "document_uid": {
             "def": 0,
             "hum": "Код документа",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "ordering_id": {
             "def": 0,
             "hum": "Замовлення",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "based_on": {
             "def": 0,
             "hum": "За документом",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "created_at": {
             "def": "date",
             "hum": "Дата",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "cash_sum": {
             "def": 0.0,
             "hum": "Сума",
-            "form": 2
+            "form": 2,
+            "type": "float"
         },
         "discount": {
             "def": 0.0,
             "hum": "Сума дисконту",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "comm": {
             "def": "",
             "hum": "Коментар",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_cash": {
             "def": true,
             "hum": "Готівка",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "item_to_cbox_check": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 2
+            "form": 2,
+            "type": "str"
         },
         "cbox_check_id": {
             "def": 0,
             "hum": "Номер чеку",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "number": {
             "def": 1.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "measure_id": {
             "def": 0,
             "hum": "Од. виміру",
-            "form": 2
+            "form": 2,
+            "type": "int"
         },
         "price": {
             "def": 0.0,
             "hum": "Ціна",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "discount": {
             "def": 0.0,
             "hum": "Сума дисконту",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cost": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "item_code": {
             "def": "",
             "hum": "Код товара",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "project_group": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "project_group_id": {
             "def": 0,
             "hum": "Група проектів",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "position": {
             "def": 0,
             "hum": "Позиція",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         }
     },
     "project": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "document_uid": {
             "def": 0,
             "hum": "Код документа",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "project_group_id": {
             "def": 0,
             "hum": "Група проекту",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "user_id": {
             "def": 0,
             "hum": "Менеджер",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "contragent_id": {
             "def": 0,
             "hum": "Контрагент",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "contact_id": {
             "def": 0,
             "hum": "Контакт",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "cost": {
             "def": 0.0,
             "hum": "Вартість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "cash_sum": {
             "def": 0.0,
             "hum": "Сплачено",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "whs_sum": {
             "def": 0.0,
             "hum": "По складу",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "project_type_id": {
             "def": 0,
             "hum": "Виріб",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "type_dir": {
             "def": "",
             "hum": "Тека виробу",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "project_status_id": {
             "def": 0,
             "hum": "Етап",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "number_dir": {
             "def": "",
             "hum": "Тека номеру",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "info": {
             "def": "\n",
             "hum": "Опис",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "created_at": {
             "def": "date",
             "hum": "Створений",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "is_in_work": {
             "def": true,
             "hum": "В роботі",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         }
     },
     "project_status": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "code_name": {
             "def": "",
             "hum": "Кодове ім'я",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         }
     },
     "project_type": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "dir_name": {
             "def": "",
             "hum": "Назва теки",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         }
     },
     "counter": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "name": {
             "def": "",
             "hum": "Назва",
-            "form": 1
+            "form": 1,
+            "type": "str"
         },
         "equipment_id": {
             "def": 0,
             "hum": "Обладнання",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "total": {
             "def": 0,
             "hum": "Загалом",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "updated_at": {
             "def": "date",
             "hum": "Змінений",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         }
     },
     "record_to_counter": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "counter_id": {
             "def": 0,
             "hum": "Лічильник",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "created_at": {
             "def": "date",
             "hum": "Дата",
-            "form": 0
+            "form": 0,
+            "type": "str"
         },
         "number": {
             "def": 0,
             "hum": "Значення",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 1
+            "form": 1,
+            "type": "bool"
         }
     },
     "wmc_number": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "whs_id": {
             "def": 0,
             "hum": "Склад",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "matherial_id": {
             "def": 0,
             "hum": "Матеріал",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "color_id": {
             "def": 0,
             "hum": "Колір",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "total": {
             "def": 1.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     },
     "numbers_to_product": {
         "id": {
             "def": 0,
             "hum": "Номер",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "product_id": {
             "def": 0,
             "hum": "Виріб",
-            "form": 0
+            "form": 0,
+            "type": "int"
         },
         "number": {
             "def": 0.0,
             "hum": "Кількість",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "pieces": {
             "def": 0,
             "hum": "Штук",
-            "form": 1
+            "form": 1,
+            "type": "int"
         },
         "size": {
             "def": 0.0,
             "hum": "Розмір",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "persent": {
             "def": 0.0,
             "hum": "Націнка %",
-            "form": 1
+            "form": 1,
+            "type": "float"
         },
         "is_active": {
             "def": true,
             "hum": "Діючий",
-            "form": 0
+            "form": 0,
+            "type": "bool"
         }
     }
 }

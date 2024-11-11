@@ -209,12 +209,13 @@ class CustomForm(QWidget):
             if not self.model[field]['form']:
                 continue
             def_value = self.model[field]['def']
+            val_type = self.model[field]['type']
             value = self.value[field] if self.value else def_value
             if 'group_id' in self.model[field]:
                 group_id = self.model[field]['group_id']
             else:
                 group_id=0
-            w = self.create_widget(field, def_value, value, group_id)
+            w = self.create_widget(field, def_value, val_type, value, group_id)
             if w is None:
                 continue
             w.valChanged.connect(self.set_changed)
@@ -240,18 +241,17 @@ class CustomForm(QWidget):
         return row
             
 
-    def create_widget(self, field, def_value, cur_value, group_id=0):
-        t = type(def_value)
+    def create_widget(self, field, def_value, val_type, cur_value, group_id=0):
         # date, text or string
-        if t == str:
+        if val_type == "str":
             return self.create_str_widget(def_value, cur_value)
         # id or int
-        if t == int:
+        if val_type == "int":
             return self.create_int_widget(cur_value, field, group_id)
         # sum of money, number or float
-        if t == float:
+        if val_type == "float":
             return self.create_float_widget(cur_value, field)
-        if t == bool:
+        if val_type == "bool":
             return self.create_bool_widget(cur_value)
         
     def create_str_widget(self, def_value, cur_value):

@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QKeySequence, QShortcut, QFont
 
 import sys
+import json
 import qdarktheme
 
 from data.app import App
@@ -227,6 +228,8 @@ class Window(QWidget):
         res = app.repository.get_models()
         if res['error']:
             return
+        with open ('models.json', "w") as f:
+            f.write(json.dumps(res['value'], ensure_ascii=False, indent=4))
         app.set_models(res['value'])
         user = Item('user')
         err = user.get(value['id'])
