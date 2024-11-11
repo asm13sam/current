@@ -1231,7 +1231,7 @@ class CalculatorTab(QWidget):
         cost = float(self.total_sum.text())
         ordering.value['price'] = cost 
         ordering.value['cost'] = cost
-        form = OrderingForm(value = ordering.value)
+        form = OrderingForm(fields=ordering.columns, value = ordering.value)
         dlg = CustomFormDialog('Створити замовлення', form)
         res = dlg.exec()
         if not res:

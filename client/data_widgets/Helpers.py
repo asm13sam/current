@@ -382,6 +382,7 @@ class ComplexList(QListWidget):
 class OrderingForm(CustomForm):
     def __init__(self, fields: list = [], value: dict = {}):
         self.item = Item('ordering')
+        fields = fields if fields else self.item.columns
         super().__init__(self.item.model, fields, value, 2)
         self.widgets['price'].valChanged.connect(self.price_changed)
         self.widgets['persent'].valChanged.connect(self.price_changed)

@@ -17,6 +17,7 @@ class Item:
         self.value: dict = {}
         self.values: list = []
         self.model_w: dict = app.model_w[name]
+        self.columns: list = app.model['models'][name]['columns']
         if app.user:
             self.user_id = app.user['id']
             self.username = app.user['name']

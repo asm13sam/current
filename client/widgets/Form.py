@@ -540,9 +540,9 @@ class ContactSelector(Selector):
        
 
 class FormDialog(CustomDialog):
-    def __init__(self, title, data_model, value):
+    def __init__(self, title, data_model, fields, value):
         self.value = {}
-        self.form = CustomForm(data_model=data_model, value=value)
+        self.form = CustomForm(data_model=data_model, fields=fields, value=value)
         super().__init__(self.make_widget(self.form), title)
         self.form.saveRequested.connect(self.get_value)
         self.form.setMinimumWidth(300)
@@ -906,7 +906,7 @@ class ItemTable(QSplitter):
         self.table = TableWControls(
             data_model=self.item.model_w, 
             with_search=bool(search_field),
-            table_fields=fields,
+            table_fields=fields if fields else self.item.columns,
             buttons=buttons,
         )
         self.search_field = search_field
@@ -928,7 +928,7 @@ class ItemTable(QSplitter):
         self.inner.setStretchFactor(0, 4)
 
         if is_info_bottom:
-            self.info = InfoBlock(self.item.model_w, columns=2)
+            self.info = InfoBlock(self.item.model_w, self.item.columns, columns=2)
             if is_vertical_inner:
                 self.inner.addWidget(self.info)
                 self.inner.setStretchFactor(0, 3)
@@ -938,7 +938,7 @@ class ItemTable(QSplitter):
                 self.setStretchFactor(0, 3)
                 self.setStretchFactor(1, 1)
         else:
-            self.info = InfoBlock(self.item.model_w)
+            self.info = InfoBlock(self.item.model_w, self.item.columns)
             if not is_vertical_inner:
                 self.inner.addWidget(self.info)
             else:
@@ -1146,7 +1146,7 @@ class ItemTable(QSplitter):
 
     def dialog(self, value, title):
         i = Item(self.item.name)
-        dlg = FormDialog(title, i.model, value)
+        dlg = FormDialog(title, i.model, i.columns, value)
         res = dlg.exec()
         if res and dlg.value:
             i.value = self.prepare_value_to_save(dlg.value)
@@ -1371,7 +1371,7 @@ class ItemTree(QSplitter):
         self.current_value = {}
         if not show_info:
             return
-        self.info = InfoBlock(self.item.model_w, columns=2 if is_info_bottom else 1)
+        self.info = InfoBlock(self.item.model_w, self.item.columns, columns=2 if is_info_bottom else 1)
         self.addWidget(self.info)
         self.tree.tree.itemSelected.connect(self.item_selected)
         self.setStretchFactor(0, 5)
@@ -1418,7 +1418,7 @@ class ItemTree(QSplitter):
 
     def dialog(self, value, title):
         i = Item(self.item.name)
-        dlg = FormDialog(title, i.model, value)
+        dlg = FormDialog(title, i.model, i.columns, value)
         res = dlg.exec()
         if res and dlg.value:
             i.value = self.prepare_value_to_save(dlg.value)
