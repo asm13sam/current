@@ -400,7 +400,7 @@ class CheckFormDialog(CustomFormDialog):
         cbox_check.value['based_on'] = self.ordering_value['document_uid']
         cbox_check.value['name'] = f'Чек до зам. {self.ordering_value["id"]}'
         cbox_check.value['discount'] = discount
-        check_form = CustomForm(cbox_check.model, value=cbox_check.value)
+        check_form = CustomForm(cbox_check.model, value=cbox_check.value, fields=cbox_check.columns)
         is_prepay = CheckWidget()
         row = check_form.grid.rowCount() + 1
         check_form.grid.addWidget(QLabel("Передоплата"), row, 0)
@@ -1153,7 +1153,7 @@ class ItemsToOrdering(QSplitter):
         cash_out.value["cash_sum"] = cur_value["cost"]
         cash_out.value["comm"] = f'авт. до {cur_value["name"]}'
 
-        dlg = FormDialog('Створити ВКО', cash_out.model, cash_out.value)
+        dlg = FormDialog('Створити ВКО', cash_out.model, cash_out.columns, cash_out.value)
         res = dlg.exec()
         if res:
             err = cash_out.save()
@@ -1175,7 +1175,7 @@ class ItemsToOrdering(QSplitter):
         cash_in.value["comm"] = f'авт. до {cur_value["name"]}'
         cash_in.value["cash_sum"] = round(cur_value["cost"] - payed)
 
-        dlg = FormDialog('Створити ПКО', cash_in.model, cash_in.value)
+        dlg = FormDialog('Створити ПКО', cash_in.model, cash_in.columns, cash_in.value)
         res = dlg.exec()
         if res:
             err = cash_in.save()
@@ -1195,7 +1195,7 @@ class ItemsToOrdering(QSplitter):
         whs_out.value["contragent_id"] = app.config["contragent to production"]
         whs_out.value["contact_id"] = app.config["contact to production"]
         whs_out.value["comm"] = f'авт. до {cur_value["name"]}'
-        dlg = FormDialog('Створити ВН', whs_out.model, whs_out.value)
+        dlg = FormDialog('Створити ВН', whs_out.model, whs_out.columns, whs_out.value)
         res = dlg.exec()
         if not res:
             return
@@ -1255,7 +1255,7 @@ class ItemsToOrdering(QSplitter):
         whs_in.value["contact_id"] = cur_value["contact_id"]
         whs_in.value["comm"] = f'авт. до {cur_value["name"]}'
         
-        dlg = FormDialog('Створити ПН', whs_in.model, whs_in.value)
+        dlg = FormDialog('Створити ПН', whs_in.model, whs_in.columns, whs_in.value)
         res = dlg.exec()
         if not res:
             return
