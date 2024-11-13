@@ -572,7 +572,7 @@ class InvoiceFormDialog(CustomFormDialog):
         if not value:
             i.create_default_w()
             value = i.value
-        form = ItemToInvoiceForm(value=value)
+        form = ItemToInvoiceForm(value=value, fields=i.columns)
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
         if res and dlg.value:
@@ -590,7 +590,7 @@ class InvoiceFormDialog(CustomFormDialog):
         invoice.value['ordering_id'] = self.ordering_value['id']
         invoice.value['name'] = f'Рахунок до зам. {self.ordering_value["id"]}'
         invoice.value['discount'] = -self.ordering_value['profit']
-        form = CustomForm(invoice.model, value=invoice.value)
+        form = CustomForm(invoice.model, value=invoice.value, fields=invoice.columns)
         return form
         
     def create_table(self, m2os, o2os, p2os):

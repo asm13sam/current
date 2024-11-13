@@ -52,6 +52,6 @@ class InvoiceTab(ItemTableWithDetails):
     def open_doc(self):
         invoice = self.table.current_value
         doc_path = self.make_path() 
-        doc_path = os.path.join(doc_path, f"Рахунок до зам. {invoice['ordering_id']}.xlsx")
+        doc_path = os.path.join(doc_path, f"{invoice['name']}.xlsx")
         print(doc_path)
         subprocess.run(['c:\\Program Files\\LibreOffice 5\\program\\scalc.exe', doc_path])
