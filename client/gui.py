@@ -228,8 +228,8 @@ class Window(QWidget):
         res = app.repository.get_models()
         if res['error']:
             return
-        with open ('models.json', "w") as f:
-            f.write(json.dumps(res['value'], ensure_ascii=False, indent=4))
+        # with open ('models.json', "w") as f:
+        #     f.write(json.dumps(res['value'], ensure_ascii=False, indent=4))
         app.set_models(res['value'])
         user = Item('user')
         err = user.get(value['id'])

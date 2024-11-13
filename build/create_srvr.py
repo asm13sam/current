@@ -195,7 +195,7 @@ def create_go_models(model, tables):
     m = create_go_main_head()
     for table in tables:
         g += create_go_model(table, model)
-        keys = model[table].keys()
+        keys = model['models'][table]['columns']
 
         g1, h1, m1 = create_go_get(table, keys, model)
         g += g1
@@ -296,7 +296,7 @@ def create_go_models_w(model, tables):
     h = ''
     m = ''
     for table in tables:
-        keys = model[table].keys()
+        keys = model['models'][table]['columns']
         g += create_go_model_w(table, model)
 
         g1, h1, m1 = create_go_get_w(table, keys, model)
@@ -365,16 +365,26 @@ def list_of_vars_no_id(keys, gv):
             g += f'\n\t\t{gv}.{to_go(k)},'
     return g[2:]
 
+def get_def(table_name, column, model):
+    cdef = model['models'][table_name]['model'][column]['def']
+    ctype = model['models'][table_name]['model'][column]['type']
+    if ctype == 'int':
+        return int(cdef)
+    if ctype == 'bool':
+        return bool(cdef)
+    if ctype == 'float':
+        return float(cdef)
+    return str(cdef)
+
 def create_go_model(table, model):
     g = ''
     g += f'\n\ntype {to_go(table)} struct ' + '{'
-    for k, v in model[table].items():
-        d = v['def']
-        if type(d) == int:
+    for k, v in model['models'][table]['model'].items():
+        if v['type'] == 'int':
             g += f'\n\t{to_go(k)} int `json:"{k}"`'
-        elif type(d) == float:
+        elif v['type'] == 'float':
             g += f'\n\t{to_go(k)} float64 `json:"{k}"`'
-        elif type(d) == bool:
+        elif v['type'] == 'bool':
             g += f'\n\t{to_go(k)} bool `json:"{k}"`'
         else:
             g += f'\n\t{to_go(k)} string `json:"{k}"`'
@@ -1299,12 +1309,12 @@ def create_go_between(table, keys, between, model):
     gtype = to_go(table)
     gbetween = to_go(between)
     gv = table[0]
-    d = model[table][between]['def']
+    d = model['models'][table]['model'][between]['type']
     between_query1 = '{fs}'
     between_query2 = '{fs2}'
     between_param1 = 'req.StrParam'
     between_param2 = 'req.Str2Param'
-    if type(d) == int:
+    if d == 'int':
         between_type = 'int'
         between_query1 = '{id:[0-9]+}'
         between_query2 = '{id:[0-9]+}'
@@ -1452,14 +1462,18 @@ finds['WContragentFindByContragentSearchContactSearch'] = '''
 def create_go_find(table, keys, find, model):
     right = model['models'][table]['rights'] + '_READ'
     gtype = to_go(table)
-    gfind = ''
-    fnd = ''
-    for k, v in find.items():
-        gfind += to_go(k)
-        fnd += f"_{k}"
-        for i in v:
-            gfind += ('No' + to_go(i[1:]) if i.startswith('-') else to_go(i))
-            fnd += f"_{'no_' + i[1:] if i.startswith('-') else i}"
+    if table == 'contragent':
+        gfind = 'ContragentSearchContactSearch'
+        fnd = '_contragent_search_contact_search'
+    elif table == 'project':
+        gfind = 'ProjectInfoContragentNoSearchContactNoSearch'
+        fnd = '_project_info_contragent_no_search_contact_no_search'
+    # for k, v in find.items():
+    #     gfind += to_go(k)
+    #     fnd += f"_{k}"
+    #     for i in v:
+    #         gfind += ('No' + to_go(i[1:]) if i.startswith('-') else to_go(i))
+    #         fnd += f"_{'no_' + i[1:] if i.startswith('-') else i}"
 
     gv = table[0]
 
@@ -1512,22 +1526,18 @@ func {func_name}(fs string) ([]{gtype}, error) {{
 def create_go_model_w(table, model):
     g = ''
     g += f'\n\ntype W{to_go(table)} struct ' + '{'
-    for k, v in model[table].items():
-        d = v['def']
-        if type(d) == int:
+    for k, v in model['models'][table]['model'].items():
+        if v['type'] == 'int':
             g += f'\n\t{to_go(k)} int `json:"{k}"`'
-        elif type(d) == float:
+        elif v['type'] == 'float':
             g += f'\n\t{to_go(k)} float64 `json:"{k}"`'
-        elif type(d) == bool:
+        elif v['type'] == 'bool':
             g += f'\n\t{to_go(k)} bool `json:"{k}"`'
         else:
             g += f'\n\t{to_go(k)} string `json:"{k}"`'
 
-    for k in model[table].keys():
-        if k.endswith('_id'):
-            table_name = '_'.join(k.split('_')[:-1])
-            g += f'\n\t{to_go(table_name)} string `json:"{table_name}"`'
-
+    for k, v in model['models'][table]['w_model'].items():
+        g += f'\n\t{to_go(k)} string `json:"{k}"`'
     g += '\n}'
     return g
 
@@ -1650,12 +1660,12 @@ def create_go_between_w(table, keys, between, model):
     gtype = to_go(table)
     gbetween = to_go(between)
     gv = table[0]
-    d = model[table][between]['def']
+    d = model['models'][table]['model'][between]['type']
     between_query1 = '{fs}'
     between_query2 = '{fs2}'
     between_param1 = 'req.StrParam'
     between_param2 = 'req.Str2Param'
-    if type(d) == int:
+    if d == 'int':
         between_type = 'int'
         between_query1 = '{id:[0-9]+}'
         between_query2 = '{id:[0-9]+}'
@@ -1712,12 +1722,12 @@ def create_go_between_up_w(table, keys, between_up, model):
     gtype = to_go(table)
     gbetween = to_go(between)
     gv = table[0]
-    d = model[up_table][between]['def']
+    d = model['models'][up_table]['model'][between]['type']
     between_query1 = '{fs}'
     between_query2 = '{fs2}'
     between_param1 = 'req.StrParam'
     between_param2 = 'req.Str2Param'
-    if type(d) == int:
+    if d == 'int':
         between_type = 'int'
         between_query1 = '{id:[0-9]+}'
         between_query2 = '{id:[0-9]+}'
@@ -1865,14 +1875,21 @@ def create_add_joins_for_find(type, keys, find_keys):
 def create_go_find_w(table, keys, find, model):
     right = model['models'][table]['rights'] + '_READ'
     gtype = to_go(table)
-    gfind = ''
-    fnd = ''
-    for k, v in find.items():
-        gfind += to_go(k)
-        fnd += f"_{k}"
-        for i in v:
-            gfind += ('No' + to_go(i[1:]) if i.startswith('-') else to_go(i))
-            fnd += f"_{'no_' + i[1:] if i.startswith('-') else i}"
+    if table == 'contragent':
+        gfind = 'ContragentSearchContactSearch'
+        fnd = '_contragent_search_contact_search'
+    elif table == 'project':
+        gfind = 'ProjectInfoContragentNoSearchContactNoSearch'
+        fnd = '_project_info_contragent_no_search_contact_no_search'
+    
+    # gfind = ''
+    # fnd = ''
+    # for k, v in find.items():
+    #     gfind += to_go(k)
+    #     fnd += f"_{k}"
+    #     for i in v:
+    #         gfind += ('No' + to_go(i[1:]) if i.startswith('-') else to_go(i))
+    #         fnd += f"_{'no_' + i[1:] if i.startswith('-') else i}"
 
     gv = table[0]
 

@@ -98,12 +98,17 @@ class Data:
     # "find": [{"project": ["info"], "contragent":["-search"], "contact":["-search"]}]
     # "/find_project_project_info_contragent_no_search_contact_no_search/{fs}"
     def get_find(self, model_name: str, find: list, find_value: str|int) -> dict:
-        find_pref = ''
-        for k, v in find.items():
-            find_pref += f"_{k}"
-            for i in v:
-                find_pref += f"_{'no_' + i[1:] if i.startswith('-') else i}"
-        url = f'{self.base_url}find_{model_name}{find_pref}/{find_value}'
+        # find_pref = ''
+        # for k, v in find.items():
+        #     find_pref += f"_{k}"
+        #     for i in v:
+        #         find_pref += f"_{'no_' + i[1:] if i.startswith('-') else i}"
+        # url = f'{self.base_url}find_{model_name}{find_pref}/{find_value}'
+        if model_name == 'contragent':
+            url = 'find_contragent_contragent_search_contact_search'
+        elif model_name == 'project':
+            url = 'find_project_project_info_contragent_no_search_contact_no_search'
+        url = f'{self.base_url}{url}/{find_value}'
         print('GET_FIND', url)
         response = requests.get(url, cookies=self.cookie_jar)
         return self.format_response(response)
@@ -197,12 +202,17 @@ class Data:
     # "find": [{"project": ["info"], "contragent":["-search"], "contact":["-search"]}]
     # "/find_project_project_info_contragent_no_search_contact_no_search/{fs}"
     def get_find_w(self, model_name: str, find: list, find_value: str|int|bool) -> dict:
-        find_pref = ''
-        for k, v in find.items():
-            find_pref += f"_{k}"
-            for i in v:
-                find_pref += f"_{'no_' + i[1:] if i.startswith('-') else i}"
-        url = f'{self.base_url}w_find_{model_name}{find_pref}/{find_value}'
+        # find_pref = ''
+        # for k, v in find.items():
+        #     find_pref += f"_{k}"
+        #     for i in v:
+        #         find_pref += f"_{'no_' + i[1:] if i.startswith('-') else i}"
+        # url = f'{self.base_url}w_find_{model_name}{find_pref}/{find_value}'
+        if model_name == 'contragent':
+            url = 'w_find_contragent_contragent_search_contact_search'
+        elif model_name == 'project':
+            url = 'w_find_project_project_info_contragent_no_search_contact_no_search'
+        url = f'{self.base_url}{url}/{find_value}'
         print('WGET_FIND', url)
         response = requests.get(url, cookies=self.cookie_jar)
         return self.format_response(response)

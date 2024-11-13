@@ -26,27 +26,27 @@ class App(metaclass=SingletonMeta):
 
     def set_models(self, models):
         self.model = models
-        self.make_model_w()
+        # self.make_model_w()
         self.make_groups()
 
-    def make_model_w(self):
-        for m in self.model['models'].keys():
-            self.model_w[m] = {}
-            for k, v in self.model[m].items():
-                if k.endswith('_id'):
-                    table_name = '_'.join(k.split('_')[:-1])
-                    if table_name.endswith('2'):
-                        table_name = table_name[:-1]
-                    self.model_w[m][table_name] = {}
-                    if 'name' in self.model[table_name]:
-                        self.model_w[m][table_name]['def'] = self.model[table_name]['name']['def']
-                        self.model_w[m][table_name]['form'] = self.model[table_name]['name']['form']
-                        self.model_w[m][table_name]['hum'] = v['hum']
+    # def make_model_w(self):
+    #     for m in self.model['models'].keys():
+    #         self.model_w[m] = {}
+    #         for k, v in self.model[m].items():
+    #             if k.endswith('_id'):
+    #                 table_name = '_'.join(k.split('_')[:-1])
+    #                 if table_name.endswith('2'):
+    #                     table_name = table_name[:-1]
+    #                 self.model_w[m][table_name] = {}
+    #                 if 'name' in self.model[table_name]:
+    #                     self.model_w[m][table_name]['def'] = self.model[table_name]['name']['def']
+    #                     self.model_w[m][table_name]['form'] = self.model[table_name]['name']['form']
+    #                     self.model_w[m][table_name]['hum'] = v['hum']
                     
-                self.model_w[m][k] = {}
-                self.model_w[m][k]['def'] = v['def']
-                self.model_w[m][k]['form'] = v['form']
-                self.model_w[m][k]['hum'] = v['hum']
+    #             self.model_w[m][k] = {}
+    #             self.model_w[m][k]['def'] = v['def']
+    #             self.model_w[m][k]['form'] = v['form']
+    #             self.model_w[m][k]['hum'] = v['hum']
 
     def make_groups(self):
         for m in self.model['models']:
