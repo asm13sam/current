@@ -10,13 +10,17 @@ class Item:
         app = App()
         self.name = name
         self.hum: str = app.model['models'][name]['hum']
+        # print('hum', self.hum)
         self.find: list = app.model['models'][name]['find'] if 'find' in app.model['models'][name] else []
         self.op_model: dict = app.model['models'][name]
         self.repo = app.repository
-        self.model: dict = app.model[name]
+        self.model: dict = app.model['models'][name]['model']
+        # print('model', self.model)
         self.value: dict = {}
         self.values: list = []
-        self.model_w: dict = app.model_w[name]
+        self.model_w: dict = app.model['models'][name]['w_model']
+        self.model_w.update(self.model)
+        # print('model_w', self.model_w)
         self.columns: list = app.model['models'][name]['columns']
         if app.user:
             self.user_id = app.user['id']
