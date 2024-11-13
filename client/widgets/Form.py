@@ -58,7 +58,7 @@ class InfoBlock(QWidget):
         self.cfg = app.config
         fields = field_names if field_names else data_model.keys()
         if not is_full:
-            fields = [name for name in fields if not name.endswith('_id')]
+            fields = [name[:-3] if name.endswith('_id') else name for name in fields]
         headers = [data_model[name]['hum'] for name in fields]
         self.lables: dict[str, QLabel] = {}
 

@@ -108,6 +108,9 @@ class MatherialToWhsOutForm(CustomForm):
         self.widgets['color_id'].setVisible(False)
         self.widgets['width'].setVisible(False)
         self.widgets['length'].setVisible(False)
+        self.labels['color_id'].setVisible(False)
+        self.labels['width'].setVisible(False)
+        self.labels['length'].setVisible(False)
         self.widgets['matherial_id'].valChanged.connect(self.matherial_selected)
 
     def matherial_selected(self):
@@ -116,11 +119,15 @@ class MatherialToWhsOutForm(CustomForm):
         app = App()
         if matherial_value['measure'] == app.config['measure linear']:
             self.widgets['length'].setVisible(True)
+            self.labels['length'].setVisible(True)
         if matherial_value['measure'] == app.config['measure square']:
             self.widgets['width'].setVisible(True)
             self.widgets['length'].setVisible(True)
+            self.labels['width'].setVisible(True)
+            self.labels['length'].setVisible(True)
         if matherial_value['color_group_id']:
             self.widgets['color_id'].setVisible(True)
+            self.labels['color_id'].setVisible(True)
             self.widgets['color_id'].group_id = matherial_value['color_group_id']
 
 
@@ -130,7 +137,7 @@ class DetailsMatherialToWhsOutTable(DetailsItemTable):
 
     def dialog(self, value, title):
         i = Item(self.item.name)
-        form = MatherialToWhsOutForm(value=value)
+        form = MatherialToWhsOutForm(value=value, fields=i.columns)
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
         if res and dlg.value:
