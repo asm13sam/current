@@ -51,7 +51,7 @@ class ProductTable(MainItemTable):
 
     def dialog(self, value, title):
         i = Item(self.item.name)
-        form = ProductForm(value=value)
+        form = ProductForm(fields=i.columns, value=value)
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
         if res and dlg.value:
@@ -151,7 +151,7 @@ class DetailsProductToProductTable(DetailsItemTable):
     
     def dialog(self, value, title):
         i = Item(self.item.name)
-        form = ProductToProductForm(value=value)
+        form = ProductToProductForm(fields=i.columns, value=value)
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
         if res and dlg.value:
@@ -267,7 +267,7 @@ class DetailsMatherialToProductTable(DetailsItemTable):
     
     def dialog(self, value, title):
         i = Item(self.item.name)
-        form = MatherialToProductForm(value=value)
+        form = MatherialToProductForm(fields=i.columns, value=value)
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
         if res and dlg.value:
@@ -389,7 +389,7 @@ class DetailsOperationToProductTable(DetailsItemTable):
             
     def dialog(self, value, title):
         i = Item(self.item.name)
-        form = OperationToProductForm(value=value)
+        form = OperationToProductForm(fields=i.columns, value=value)
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
         if res and dlg.value:
@@ -452,7 +452,7 @@ class DetailsNumbersToProductTable(DetailsItemTable):
     
     def dialog(self, value, title):
         i = Item(self.item.name)
-        form = CustomForm(i.model, value=value)
+        form = CustomForm(i.model, fields=i.columns, value=value)
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
         if res and dlg.value:

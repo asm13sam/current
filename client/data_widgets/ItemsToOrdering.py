@@ -68,7 +68,7 @@ class OrderingTable(MainItemTable):
             self.tabs = QTabWidget()
             
             self.doc_table = self.inner.replaceWidget(1, self.tabs)
-            self.info = InfoBlock(self.item.model_w, columns=2)
+            self.info = InfoBlock(self.item.model_w, self.item.columns, columns=2)
             
             self.tabs.addTab(self.info, "Детально")
             self.tabs.addTab(self.doc_table, "Документи")
@@ -85,7 +85,7 @@ class OrderingTable(MainItemTable):
             self.inner.addWidget(self.doc_table)
             self.inner.setStretchFactor(0, 10)
             self.inner.setStretchFactor(1, 1)
-            self.info = InfoBlock(self.item.model_w)
+            self.info = InfoBlock(self.item.model_w, self.item.columns)
             self.addWidget(self.info)
 
             self.setStretchFactor(0, 3)
