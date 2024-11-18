@@ -31,10 +31,14 @@ class ContragentFilter(ByContragentFilter):
         self.contragent_selector.valueDoubleClicked.connect(self.edit_contragent)
 
     def edit_contragent(self, value):
-        dlg = FormDialog('Редагувати контрагента', self.contragent.model_w, value)
+        dlg = FormDialog('Редагувати контрагента', self.contragent.model_w, self.contragent.columns, value)
         res = dlg.exec()
         if not res:
             return
+        self.contragent.value = dlg.value
+        err = self.contragent.save()
+        if err:
+            error(err)
     
     def append_widget(self):
         self.contacts_list = QListWidget()
