@@ -52,7 +52,7 @@ class MatherialToWhsInForm(CustomForm):
 
 class DetailsMatherialToWhsInTable(DetailsItemTable):
     def __init__(self, fields: list = [], values: list = None, buttons=TABLE_BUTTONS, group_id=0):
-        super().__init__('matherial_to_whs_in', 'name', fields, values, buttons, group_id)
+        super().__init__('matherial_to_whs_in', '', fields, values, buttons, group_id)
         bottom_hbox = QWidget()
         self.bottom_controls = QHBoxLayout()
         self.bottom_controls.setContentsMargins(0, 0, 0, 0)
