@@ -16,9 +16,12 @@ from widgets.Form import (
     FormDialog, 
     CustomFormDialog,
     CustomForm,
+    QSplitter,
+    QTabWidget,
     )
 
 from data_widgets.Documents import DocsTable
+from data_widgets.Matherial import MatherialTab
 from data.app import App
 
 class MatherialToWhsInForm(CustomForm):
@@ -84,7 +87,7 @@ class DetailsMatherialToWhsInTable(DetailsItemTable):
     
     def dialog(self, value, title):
         i = Item(self.item.name)
-        form = MatherialToWhsInForm(value=value)
+        form = MatherialToWhsInForm(fields=i.columns, value=value)
         dlg = CustomFormDialog(title, form)
         res = dlg.exec()
         if res and dlg.value:
@@ -154,11 +157,42 @@ class DetailsMatherialToWhsOutTable(DetailsItemTable):
         return value
 
 
-class WhsTab(ItemTableWithDetails):
-    def __init__(self, name, main_table, details_table):
+class WhsItemTableWithDetails(QSplitter):
+    def __init__(
+            self, 
+            main_table: MainItemTable,
+            details_table: DetailsItemTable,
+            matherial_table: MatherialTab,
+            ):
+        super().__init__()
+        self.table = main_table
+        self.details = details_table
+        self.table.set_detais_table(self.details)
+        self.details.set_main_table(self.table)
+        tabs = QTabWidget()
+        tabs.addTab(self.table, "Накладна")
+        self.matherials = matherial_table
+        tabs.addTab(self.matherials, "Обрати матеріали")
+        self.addWidget(tabs)
+        self.addWidget(self.details)
+        self.table.table.table.valueSelected.connect(self.reload_details)
+        
+    def reload_details(self, value):
+        self.details.item.get_filter_w(self.table.item.name + '_id', value['id'])
+        self.details.reload(self.details.item.values)
+
+    def reload(self, values=None):
+        self.table.reload(values)
+        if values:
+            self.reload_details(values[0])
+
+
+class WhsTab(WhsItemTableWithDetails):
+    def __init__(self, main_table, details_table):
         self.main_table = main_table
         self.details_table = details_table
-        super().__init__(self.main_table, self.details_table)
+        matherials = MatherialTab()
+        super().__init__(self.main_table, self.details_table, matherials)
         self.details_table.actionResolved.connect(self.update_sum)
         self.setStretchFactor(0, 2)
         self.setStretchFactor(1, 3)
@@ -193,7 +227,7 @@ class WhsInTab(WhsTab):
         details_table = DetailsMatherialToWhsInTable(
             fields=['id', 'matherial', 'number', 'price', 'cost', 'color'],
             )
-        super().__init__('whs_in', main_table, details_table)
+        super().__init__(main_table, details_table)
 
         self.doc_table = DocsTable()
         self.main_table.add_doc_table(self.doc_table)
@@ -215,6 +249,20 @@ class WhsInTab(WhsTab):
         whs_out_btn.clicked.connect(self.create_whs_out)
         cash_out_delivery_btn.clicked.connect(self.create_cash_out_delivery)
         delivery_btn.clicked.connect(self.distrib_delivery)
+        self.matherials.remove_dblclick_cb()
+        self.matherials.set_dblclick_cb(self.add_matherial)
+
+    def add_matherial(self, value):
+        cur_value = self.main_table.table.table.get_selected_value()
+        if not cur_value:
+            error("Оберіть накладну!")
+            return
+        i = Item('matherial_to_whs_in')
+        i.create_default_w()
+        i.value['matherial_id'] = value['id']
+        i.value['price'] = value['price']
+        i.value['whs_in_id'] = cur_value['id']
+        self.details.dialog(i.value, "Додати матеріал")
 
     def calc_sum(self):
         cur_value = self.main_table.table.table.get_selected_value()
@@ -393,7 +441,21 @@ class WhsOutTab(WhsTab):
             releazed_buttons=True,
             )
         details_table = DetailsMatherialToWhsOutTable(fields=['id', 'matherial', 'number', 'price', 'cost', 'color'])
-        super().__init__('whs_out', main_table, details_table)
+        super().__init__(main_table, details_table)
+        self.matherials.remove_dblclick_cb()
+        self.matherials.set_dblclick_cb(self.add_matherial)
+
+    def add_matherial(self, value):
+        cur_value = self.main_table.table.table.get_selected_value()
+        if not cur_value:
+            error("Оберіть накладну!")
+            return
+        i = Item('matherial_to_whs_out')
+        i.create_default_w()
+        i.value['matherial_id'] = value['id']
+        i.value['price'] = value['price']
+        i.value['whs_out_id'] = cur_value['id']
+        self.details.dialog(i.value, "Додати матеріал")
         
 
 class WhsesTab(QWidget):
