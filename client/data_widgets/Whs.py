@@ -133,7 +133,7 @@ class MatherialToWhsOutForm(CustomForm):
 
 class DetailsMatherialToWhsOutTable(DetailsItemTable):
     def __init__(self, fields: list = [], values: list = None, buttons=TABLE_BUTTONS, group_id=0):
-        super().__init__('matherial_to_whs_out', 'name', fields, values, buttons, group_id)
+        super().__init__('matherial_to_whs_out', '', fields, values, buttons, group_id)
 
     def dialog(self, value, title):
         i = Item(self.item.name)

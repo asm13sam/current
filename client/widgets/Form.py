@@ -102,7 +102,7 @@ class InfoBlock(QWidget):
                     l.setToolTip(ttp)
                 self.grid.addWidget(field_name, row, col, align)
                 self.grid.addWidget(self.lables[field], row, col+1)
-                self.lables[field].setStyleSheet(f'min-width: 5em;color:{info_values_color}; padding: 2px; background-color: {info_bg_color};')
+                self.lables[field].setStyleSheet(f'min-width: 3em;color:{info_values_color}; padding: 2px; background-color: {info_bg_color};')
                 self.lables[field].setWordWrap(True)
             self.lables[field].installEventFilter(self)
             row += 1
