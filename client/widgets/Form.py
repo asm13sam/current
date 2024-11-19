@@ -906,7 +906,7 @@ class ItemTable(QSplitter):
         self.table = TableWControls(
             data_model=self.item.model_w, 
             with_search=bool(search_field),
-            table_fields=fields if fields else self.item.columns,
+            table_fields=fields if fields else self.item.columns+self.item.columns_w,
             buttons=buttons,
         )
         self.search_field = search_field
@@ -985,12 +985,16 @@ class ItemTable(QSplitter):
 
     def realized(self):
         v = self.value()
+        if not v:
+            return
         err = self.item.realize(v['id'])
         if err:
             error(err)
 
     def unrealized(self):    
         v = self.value()
+        if not v:
+            return
         err = self.item.unrealize(v['id'])
         if err:
             error(err)
