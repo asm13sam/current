@@ -22,6 +22,7 @@ class Item:
         self.model_w.update(self.model)
         # print('model_w', self.model_w)
         self.columns: list = app.model['models'][name]['columns']
+        self.columns_w: list = app.model['models'][name]['w_columns']
         if app.user:
             self.user_id = app.user['id']
             self.username = app.user['name']
