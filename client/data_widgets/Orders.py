@@ -314,7 +314,7 @@ class ProductFormDialog(PMODialog):
         rows = self.form.grid.rowCount()
         self.form.grid.addWidget(QLabel("Коментар"), rows, 0)
         self.form.grid.addWidget(self.form.widgets['info'], rows, 1)
-        self.form.grid.addWidget(self.pw, rows+1, 0, 1, 2)
+        self.form.grid.addWidget(self.pw, 0, 3, 20, 1)
         self.pw.productChanged.connect(self.product_changed)
         self.form.sizeChanged.connect(self.form_size_changed)
         

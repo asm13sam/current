@@ -1833,7 +1833,7 @@ class TreeItemToOrdering(QSplitter):
             error(err)
             return
         creator.set_ordering(ordering)
-        dlg = CustomDialog(creator, 'Додати позиції', 1000, 600)
+        dlg = CustomDialog(creator, 'Додати позиції', 1250, 600)
         res = dlg.exec()
         if res:
             creator.make_it()

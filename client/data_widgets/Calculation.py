@@ -674,7 +674,7 @@ class ProductView(QWidget):
                     self.box.addWidget(w)
                     w.productChanged.connect(self.subproduct_changed)
     
-            
+        self.box.addStretch()    
         return self.box.count()
 
     def create_color_selector(self, value):
@@ -733,7 +733,7 @@ class ProductView(QWidget):
 class ProductWidget(QWidget):
     def __init__(self, product_value: dict):
         super().__init__()
-        form_box = QVBoxLayout()
+        form_box = QHBoxLayout()
         self.setLayout(form_box)
         self.form_plaseholder = QScrollArea()
         self.form_plaseholder.setWidgetResizable(True)
@@ -756,7 +756,7 @@ class ProductWidget(QWidget):
         self.pw.productChanged.connect(self.product_changed)
 
         w = QWidget()
-        box = QVBoxLayout()
+        box = QHBoxLayout()
         w.setLayout(box)
         box.addWidget(self.pw)
         box.addWidget(self.form)
@@ -844,6 +844,10 @@ class Calculator(QSplitter):
         self.price_info = QLabel(self.price_info_text.format(mat=0.00, op=0.00, am=0.00, tot=0.00))
         form_box.addWidget(self.price_info)
 
+        self.setStretchFactor(0, 1)
+        self.setStretchFactor(1, 3)
+        self.setStretchFactor(2, 1)
+
     def reload(self):
         pass
     
@@ -896,7 +900,7 @@ class Calculator(QSplitter):
         
         if self.form:
             w = QWidget()
-            box = QVBoxLayout()
+            box = QHBoxLayout()
             w.setLayout(box)
             if self.pw:
                 box.addWidget(self.pw)
