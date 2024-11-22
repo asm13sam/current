@@ -22,7 +22,7 @@ from PyQt6.QtWidgets import (
 
 from data.model import Item
 from data.app import App
-from widgets.Dialogs import CustomDialog, error, DeleteDialog
+from widgets.Dialogs import CustomDialog, error, DeleteDialog, askdlg
 from common.params import TABLE_BUTTONS
 from widgets.Form import (
     MainItemTable, 
@@ -36,7 +36,7 @@ from widgets.Form import (
     InfoBlock,
     )
 from widgets.ButtonsBlock import ButtonsBlock
-from widgets.Table import TableWControls
+from widgets.Table import TableWControls, Table
 from widgets.Tree import Tree
 from data_widgets.Documents import DocsTable
 from common.excel import ExcelDoc
@@ -762,7 +762,55 @@ class ContragentGreateFormDialog(CustomDialog):
     def accept(self) -> None:
         if self.contragent_form.get_value() and self.contact_form.get_value():
             return super().accept()
-    
+
+
+class WhsInFormDialog(CustomFormDialog):
+    def __init__(self, cur_value, m2o_values):
+        whs_in = Item('whs_in')
+        whs_in.create_default()
+        whs_in.value["based_on"] = cur_value['document_uid']
+        whs_in.value["contragent_id"] = cur_value["contragent_id"]
+        whs_in.value["contact_id"] = cur_value["contact_id"]
+        whs_in.value["comm"] = f'авт. до {cur_value["name"]}'
+                
+        self.m2o = Item('matherial_to_ordering')
+        fields = ('matherial', 'number', 'price', 'cost', 'color')
+        self.m2o.model.update(self.m2o.model_w)
+        table = TableWControls(self.m2o.model, fields, m2o_values, {'edit':'Редагувати', 'delete':'Видалити'})
+        whs_in.value['whs_sum'] = table.table._model.calc_sum('cost')
+        table.actionInvoked.connect(self.apply)
+        form = CustomForm(whs_in.model, whs_in.columns, whs_in.value)
+        super().__init__('Створити ПН', form, table)
+
+    def apply(self, action, value):
+        if not value:
+            return
+        if action == 'delete':
+            self.table.table.delete_values()
+        elif action == 'edit':
+            new_price = askdlg('Нова ціна:')
+            if not new_price:
+                return
+            try:
+                price = float(new_price)
+            except:
+                error('Це не число, спробуйте ще!')
+                return
+            value['price'] = price
+            value['cost'] = price * value['number']
+            self.m2o.value = value
+            err = self.m2o.save()
+            if err:
+                error(err)
+                return
+            self.table.table.delete_values()
+            self.table.table._model.append(value)
+        else:
+            return
+
+        cost = self.table.table._model.calc_sum('cost')
+        self.form.widgets['whs_sum'].set_value(cost)
+
 
 class ItemsToOrdering(QSplitter):
     viewContragentReport = pyqtSignal(int)
@@ -907,7 +955,7 @@ class ItemsToOrdering(QSplitter):
         cash_out_btn.clicked.connect(self.create_cash_out)
         cash_in_btn.clicked.connect(self.create_cash_in)
         whs_out_btn.clicked.connect(self.create_whs_out)
-        whs_in_btn.clicked.connect(self.create_whs_in)
+        whs_in_btn.clicked.connect(self.create_whs_in1)
         check_btn.clicked.connect(self.create_check)
         invoice_btn.clicked.connect(self.create_invoice)
 
@@ -1243,6 +1291,47 @@ class ItemsToOrdering(QSplitter):
                 res_values[v['matherial_id']]["number"] += v["number"]
         return res_values
     
+    def create_whs_in1(self):
+        cur_value = self.orderings.table.table.get_selected_value()
+        if not cur_value:
+            return
+        m2o_values = self.m2os.table.table.get_selected_values()
+        if not m2o_values:
+            m2o_values = self.m2os.values()
+        dlg = WhsInFormDialog(cur_value, m2o_values)
+        res = dlg.exec()
+        if not res:
+            return
+        whs_in = Item('whs_in')
+        whs_in.value = dlg.value
+        whs_in.value['whs_sum'] = 0
+        err = whs_in.save()
+        if err:
+            error(f'При збереженні накладної:\n{err}')
+            return
+        m2o_values = dlg.table.table.values()
+        print(m2o_values)
+        if not m2o_values:
+            return
+        
+        for v in m2o_values:
+            m2wi = Item('matherial_to_whs_in')
+            m2wi.create_default()
+            m2wi.value["whs_in_id"] = whs_in.value['id']
+            m2wi.value["matherial_id"] = v["matherial_id"]
+            m2wi.value["number"] = v["number"]
+            price = v['price']
+            m2wi.value["price"] = price
+            m2wi.value["cost"] = round(v["number"] * price, 2)
+            m2wi.value["width"] = v["width"]
+            m2wi.value["length"] = v["length"]
+            m2wi.value["color_id"] = v["color_id"]
+            err = m2wi.save()
+            if err:
+                error(f'При збереженні матеріалу до ПН:\n{err}')
+            
+        self.doc_table.reload(cur_value)
+
     def create_whs_in(self):
         cur_value = self.orderings.table.table.get_selected_value()
         if not cur_value:
@@ -1744,7 +1833,7 @@ class TreeItemToOrdering(QSplitter):
             error(err)
             return
         creator.set_ordering(ordering)
-        dlg = CustomDialog(creator, 'Додати позиції', 1000, 600)
+        dlg = CustomDialog(creator, 'Додати позиції', 1250, 600)
         res = dlg.exec()
         if res:
             creator.make_it()

@@ -26,10 +26,12 @@ class ButtonsBlock(QWidget):
         if values:
             self.reload(values)
 
-    def reload(self, values):
+    def reload(self, values: list):
         for btn in self.buttons:
             self.box.removeWidget(btn)
         self.buttons = []
+        key = 'position' if 'position' in values[0] else 'id' 
+        values.sort(key=lambda v: v[key])
         for v in values:
             self.buttons.append(QPushButton(v['name']))
             self.buttons[-1].clicked.connect(lambda _, value=v: self.act(value))
