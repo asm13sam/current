@@ -230,7 +230,7 @@
         "total": {
           "def": 0.0,
           "hum": "В наявності",
-          "form": 0,
+          "form": 1,
           "type": "float"
         },
         "is_active": {
@@ -408,7 +408,7 @@
         "total": {
           "def": 0.0,
           "hum": "В наявності",
-          "form": 0,
+          "form": 1,
           "type": "float"
         },
         "barcode": {
@@ -497,7 +497,7 @@
         "total": {
           "def": 0.0,
           "hum": "В наявності",
-          "form": 0,
+          "form": 1,
           "type": "float"
         },
         "comm": {
@@ -1331,6 +1331,16 @@
       "registers": []
     },
     "contragent": {
+      "find": [
+        {
+          "contragent": [
+            "search"
+          ],
+          "contact": [
+            "search"
+          ]
+        }
+      ],
       "hum": "Контрагент",
       "rights": "CONTRAGENT",
       "message": 1,
@@ -1576,7 +1586,7 @@
         "total": {
           "def": 0.0,
           "hum": "Баланс",
-          "form": 0,
+          "form": 1,
           "type": "float"
         },
         "comm": {
@@ -1611,6 +1621,7 @@
       "columns": [
         "id",
         "name",
+        "position",
         "is_active"
       ],
       "w_columns": [],
@@ -1626,6 +1637,12 @@
           "hum": "Назва",
           "form": 2,
           "type": "str"
+        },
+        "position": {
+          "def": 0,
+          "hum": "Позиція",
+          "form": 1,
+          "type": "int"
         },
         "is_active": {
           "def": true,
@@ -1680,6 +1697,13 @@
           "filter": "based_on",
           "filter_value": "document_uid"
         }
+      ],
+      "between": [
+        "created_at",
+        "deadline_at"
+      ],
+      "sum": [
+        "cash_sum"
       ],
       "hum": "Замовлення",
       "rights": "DOC",
@@ -2000,6 +2024,12 @@
           "filter_value": "id"
         }
       ],
+      "between": [
+        "created_at"
+      ],
+      "sum": [
+        "cash_sum"
+      ],
       "hum": "Рахунок",
       "rights": "DOC",
       "message": 1,
@@ -2194,6 +2224,9 @@
       ]
     },
     "item_to_invoice": {
+      "sum": [
+        "cost"
+      ],
       "hum": "Позиція рахунку",
       "rights": "DOC",
       "message": 0,
@@ -2333,6 +2366,9 @@
       "registers": []
     },
     "product_to_ordering": {
+      "sum": [
+        "cost"
+      ],
       "related": [
         {
           "table": "product_to_ordering",
@@ -2550,6 +2586,9 @@
       "registers": []
     },
     "matherial_to_ordering": {
+      "sum": [
+        "cost"
+      ],
       "between_up": [
         "ordering.created_at"
       ],
@@ -2737,6 +2776,9 @@
       "registers": []
     },
     "matherial_to_product": {
+      "sum": [
+        "cost"
+      ],
       "hum": "Матеріал до виробу",
       "rights": "DOC",
       "message": 0,
@@ -2853,6 +2895,9 @@
       "registers": []
     },
     "operation_to_ordering": {
+      "sum": [
+        "cost"
+      ],
       "between_up": [
         "ordering.created_at"
       ],
@@ -3028,6 +3073,9 @@
       ]
     },
     "operation_to_product": {
+      "sum": [
+        "cost"
+      ],
       "hum": "Операція до замовлення",
       "rights": "DOC",
       "message": 0,
@@ -3187,6 +3235,9 @@
       "registers": []
     },
     "product_to_product": {
+      "sum": [
+        "cost"
+      ],
       "hum": "Операція до замовлення",
       "rights": "DOC",
       "message": 0,
@@ -3310,6 +3361,9 @@
       "registers": []
     },
     "cbox_check": {
+      "between": [
+        "created_at"
+      ],
       "hum": "Чек",
       "related": [
         {
@@ -3471,6 +3525,9 @@
       "registers": []
     },
     "item_to_cbox_check": {
+      "sum": [
+        "cost"
+      ],
       "hum": "Позиція чеку",
       "rights": "DOC",
       "message": 0,
@@ -3580,6 +3637,12 @@
       "registers": []
     },
     "cash_in": {
+      "between": [
+        "created_at"
+      ],
+      "sum": [
+        "cash_sum"
+      ],
       "hum": "ПКО",
       "rights": "DOC",
       "message": 1,
@@ -3775,6 +3838,12 @@
       ]
     },
     "cash_out": {
+      "between": [
+        "created_at"
+      ],
+      "sum": [
+        "cash_sum"
+      ],
       "hum": "ВКО",
       "rights": "DOC",
       "message": 1,
@@ -4034,6 +4103,13 @@
           "filter_value": "document_uid"
         }
       ],
+      "between": [
+        "created_at",
+        "contragent_created_at"
+      ],
+      "sum": [
+        "whs_sum"
+      ],
       "hum": "Прихідна накладна",
       "rights": "DOC",
       "message": 1,
@@ -4231,6 +4307,12 @@
           "filter": "whs_out_id",
           "filter_value": "id"
         }
+      ],
+      "between": [
+        "created_at"
+      ],
+      "sum": [
+        "whs_sum"
       ],
       "hum": "Вихідна накладна",
       "rights": "DOC",
@@ -4713,6 +4795,9 @@
       ]
     },
     "matherial_part": {
+      "between": [
+        "created_at"
+      ],
       "hum": "Матеріали за партією",
       "rights": "DOC",
       "message": 0,
@@ -4840,6 +4925,9 @@
       "registers": []
     },
     "matherial_part_slice": {
+      "between": [
+        "created_at"
+      ],
       "hum": "Зміни мат. за партією",
       "rights": "DOC",
       "message": 0,
@@ -4942,6 +5030,7 @@
       "registers": []
     },
     "project_group": {
+      "filter": [],
       "hum": "Група проекту",
       "rights": "DOC",
       "message": 0,
@@ -5089,6 +5178,22 @@
       "registers": []
     },
     "project": {
+      "find": [
+        {
+          "project": [
+            "info"
+          ],
+          "contragent": [
+            "-search"
+          ],
+          "contact": [
+            "-search"
+          ]
+        }
+      ],
+      "between": [
+        "created_at"
+      ],
       "hum": "Проект",
       "rights": "DOC",
       "message": 1,
@@ -5368,6 +5473,12 @@
       "registers": []
     },
     "record_to_counter": {
+      "between": [
+        "created_at"
+      ],
+      "sum": [
+        "number"
+      ],
       "hum": "Запис лічильника",
       "rights": "DOC",
       "message": 0,
