@@ -1025,6 +1025,9 @@ class ItemTable(QSplitter):
     def remove_dblclick_cb(self):
         self.table.table.valueDoubleCklicked.disconnect()
     
+    def show_info(self, is_visible: bool):
+        self.info.setVisible(is_visible)
+
     def make_group_selector(self, group_name, group_id):
         group = Item(group_name)
         err = group.get_all()

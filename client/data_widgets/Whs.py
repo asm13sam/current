@@ -475,11 +475,19 @@ class WhsesTab(QWidget):
         self.box = QVBoxLayout()
         self.setLayout(self.box)
         self.whs_table = MainItemTable('whs', is_info_bottom=True, is_vertical_inner=True)
-        self.whs_table.add_doc_table(DocsTable(main_key='id', doc_key='whs_id', docs=('whs_in', 'whs_out')), True)
+        docs = DocsTable(
+                main_key='id', 
+                doc_key='whs_id', 
+                docs=('whs_in', 'whs_out'),
+                controls=True,
+                )
+        self.whs_table.add_doc_table(docs, True)
+        self.whs_table.setStretchFactor(0, 1)
+        self.whs_table.setStretchFactor(2, 10)
         self.mat_table = DetailsItemTable('wmc_number')
-        
         self.main = ItemTableWithDetails(self.whs_table, self.mat_table)
         self.box.addWidget(self.main)
+        self.whs_table.show_info(False)
 
     def reload(self):
         self.main.reload()
