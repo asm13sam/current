@@ -1176,9 +1176,6 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/record_to_counter/{id:[0-9]+}",
 		WrapAuth(UpdateRecordToCounter, DOC_UPDATE)).Methods("PUT")
 
-	r.HandleFunc("/record_to_counter/{id:[0-9]+}",
-		WrapAuth(DeleteRecordToCounter, DOC_DELETE)).Methods("DELETE")
-
 	r.HandleFunc("/record_to_counter_filter_int/{fs}/{id:[0-9]+}",
 		WrapAuth(GetRecordToCounterByFilterInt, DOC_READ)).Methods("GET")
 

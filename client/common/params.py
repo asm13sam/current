@@ -4,6 +4,8 @@ SORT_ROLE = 111
 FULL_VALUE_ROLE = 112
 IS_EXT_ROLE = 113
 TABLE_BUTTONS = {'reload':'Оновити', 'create':'Створити', 'edit':'Редагувати', 'copy':'Копіювати', 'delete':'Видалити'}
+VIRTUAL = 1
+REORDERING = 2
 # access constant
 ACCESS = [
     "Авторизуватись",
