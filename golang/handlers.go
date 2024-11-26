@@ -2426,10 +2426,6 @@ func UpdateRecordToCounter(req Req) {
 	req.Respond(RecordToCounterUpdate(r, nil))
 }
 
-func DeleteRecordToCounter(req Req) {
-	req.Respond(RecordToCounterDelete(req.IntParam, nil, false))
-}
-
 func GetRecordToCounterByFilterInt(req Req) {
 	req.Respond(RecordToCounterGetByFilterInt(req.StrParam, req.IntParam, req.WithDeleted, req.DeletedOnly, nil))
 }

@@ -23,7 +23,7 @@ from PyQt6.QtWidgets import (
 from data.model import Item
 from data.app import App
 from widgets.Dialogs import CustomDialog, error, DeleteDialog, askdlg
-from common.params import TABLE_BUTTONS
+from common.params import TABLE_BUTTONS, VIRTUAL
 from widgets.Form import (
     MainItemTable, 
     DetailsItemTable, 
@@ -1256,11 +1256,13 @@ class ItemsToOrdering(QSplitter):
             m2o_values = self.m2os.values()
         grp_values = self.group_matherials(m2o_values)
         whs_sum = 0
+        mat = Item('matherial')
         for v in grp_values.values():
-            mat = Item('matherial')
             err = mat.get(v['matherial_id'])
             if err:
                 error(f'При завантаженні матеріалу:\n{err}')
+            if mat.value['count_type_id'] == VIRTUAL:
+                continue
             m2wo = Item('matherial_to_whs_out')
             m2wo.create_default()
             m2wo.value["whs_out_id"] = whs_out.value['id']
@@ -1291,6 +1293,19 @@ class ItemsToOrdering(QSplitter):
                 res_values[v['matherial_id']]["number"] += v["number"]
         return res_values
     
+    def filter_virtual_materials(self, m2o_values):
+        mat = Item('matherial')
+        res = []
+        for v in m2o_values:
+            err = mat.get(v['matherial_id'])
+            if err:
+                error(f'При завантаженні матеріалу:\n{err}')
+                continue
+            if mat.value['count_type_id'] == VIRTUAL:
+                continue
+            res.append(v)
+        return res
+
     def create_whs_in1(self):
         cur_value = self.orderings.table.table.get_selected_value()
         if not cur_value:
@@ -1298,6 +1313,7 @@ class ItemsToOrdering(QSplitter):
         m2o_values = self.m2os.table.table.get_selected_values()
         if not m2o_values:
             m2o_values = self.m2os.values()
+        m2o_values = self.filter_virtual_materials(m2o_values)
         dlg = WhsInFormDialog(cur_value, m2o_values)
         res = dlg.exec()
         if not res:

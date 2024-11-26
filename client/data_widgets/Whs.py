@@ -329,7 +329,10 @@ class WhsInTab(WhsTab):
             return
         whs_out = Item('whs_out')
         whs_out.create_default()
-        whs_out.value["based_on"] = cur_value['document_uid']
+        if cur_value['based_on']:
+            whs_out.value["based_on"] = cur_value['based_on']    
+        else:
+            whs_out.value["based_on"] = cur_value['document_uid']
         whs_out.value["contragent_id"] = cur_value["contragent_id"]
         whs_out.value["contact_id"] = cur_value["contact_id"]
         whs_out.value["comm"] = f'авт. до {cur_value["name"]}'
@@ -337,13 +340,21 @@ class WhsInTab(WhsTab):
         whs_out.value["user_id"] = app.user['id']
 
         m2wi_values = self.details_table.table.table.get_selected_values()
+        if not m2wi_values:
+            m2wi_values = self.details_table.values()
         for v in m2wi_values:
             whs_out.value["whs_sum"] += v['cost']
         
-        dlg = FormDialog('Створити ВН', whs_out.model, whs_out.value)
+        dlg = FormDialog(
+            'Створити ВН', 
+            whs_out.model, 
+            whs_out.columns, 
+            whs_out.value,
+            )
         res = dlg.exec()
         if not res:
             return
+        whs_out.value["whs_sum"] = 0
         err = whs_out.save()
         if err:
             error(err)
