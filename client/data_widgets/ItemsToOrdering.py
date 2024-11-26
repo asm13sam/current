@@ -880,10 +880,11 @@ class ItemsToOrdering(QSplitter):
         fields = [
             "id",
             "name",
-            "ordering_status",
+            "ordering_state",
             "contragent",
             "user",
             "deadline_at",
+            "ordering_status",
         ]
         self.orderings = OrderingTable(fields=fields)
         self.addWidget(self.orderings)

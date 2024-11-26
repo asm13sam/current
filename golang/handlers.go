@@ -946,6 +946,52 @@ func DecodeOrderingStatus(req Req) (OrderingStatus, error) {
 	return o, err
 }
 
+func GetOrderingState(req Req) {
+	req.Respond(OrderingStateGet(req.IntParam, nil))
+}
+
+func GetOrderingStateAll(req Req) {
+	req.Respond(OrderingStateGetAll(req.WithDeleted, req.DeletedOnly, nil))
+}
+
+func CreateOrderingState(req Req) {
+	o, err := DecodeOrderingState(req)
+	if err != nil {
+		req.Respond(nil, err)
+		return
+	}
+	req.Respond(OrderingStateCreate(o, nil))
+}
+
+func UpdateOrderingState(req Req) {
+	o, err := DecodeOrderingState(req)
+	if err != nil {
+		req.Respond(nil, err)
+		return
+	}
+	req.Respond(OrderingStateUpdate(o, nil))
+}
+
+func DeleteOrderingState(req Req) {
+	req.Respond(OrderingStateDelete(req.IntParam, nil, false))
+}
+
+func GetOrderingStateByFilterInt(req Req) {
+	req.Respond(OrderingStateGetByFilterInt(req.StrParam, req.IntParam, req.WithDeleted, req.DeletedOnly, nil))
+}
+
+func GetOrderingStateByFilterStr(req Req) {
+	req.Respond(OrderingStateGetByFilterStr(req.StrParam, req.Str2Param, req.WithDeleted, req.DeletedOnly, nil))
+}
+
+func DecodeOrderingState(req Req) (OrderingState, error) {
+	decoder := json.NewDecoder(req.R.Body)
+	defer req.R.Body.Close()
+	var o OrderingState
+	err := decoder.Decode(&o)
+	return o, err
+}
+
 func GetOrdering(req Req) {
 	req.Respond(OrderingGet(req.IntParam, nil))
 }
@@ -2868,6 +2914,22 @@ func GetWOrderingStatusByFilterInt(req Req) {
 
 func GetWOrderingStatusByFilterStr(req Req) {
 	req.Respond(WOrderingStatusGetByFilterStr(req.StrParam, req.Str2Param, req.WithDeleted, req.DeletedOnly))
+}
+
+func GetWOrderingState(req Req) {
+	req.Respond(WOrderingStateGet(req.IntParam))
+}
+
+func GetWOrderingStateAll(req Req) {
+	req.Respond(WOrderingStateGetAll(req.WithDeleted, req.DeletedOnly))
+}
+
+func GetWOrderingStateByFilterInt(req Req) {
+	req.Respond(WOrderingStateGetByFilterInt(req.StrParam, req.IntParam, req.WithDeleted, req.DeletedOnly))
+}
+
+func GetWOrderingStateByFilterStr(req Req) {
+	req.Respond(WOrderingStateGetByFilterStr(req.StrParam, req.Str2Param, req.WithDeleted, req.DeletedOnly))
 }
 
 func GetWOrdering(req Req) {

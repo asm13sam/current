@@ -199,6 +199,7 @@ class Table(QTableView):
 class TableWControls(QWidget):
     actionInvoked = pyqtSignal(str, dict)
     searchChanged = pyqtSignal(str)
+    valueDoubleCklicked = pyqtSignal(dict)
     def __init__(
             self, 
             data_model: dict, 
@@ -214,15 +215,14 @@ class TableWControls(QWidget):
         self.setLayout(self.box)
         self.table = Table(data_model, table_fields, values)
         self.box.addWidget(self.table)
+        self.table.valueDoubleCklicked.connect(lambda v: self.valueDoubleCklicked.emit(v))
         if buttons:
             self.add_buttons(buttons)
             
     def add_buttons(self, buttons):
-        controls = QWidget()
-        self.box.insertWidget(0, controls)
         self.hbox = QHBoxLayout()
         self.hbox.setContentsMargins(0,0,0,0)
-        controls.setLayout(self.hbox)
+        self.box.insertLayout(0, self.hbox)
         if self.with_search:
             self.search_entry = QLineEdit()
             self.search_entry.setPlaceholderText('Пошук')
@@ -253,4 +253,10 @@ class TableWControls(QWidget):
 
     def values(self):
         return self.table.values()
+    
+    def clear(self):
+        self.table.clear()
+
+    def reload(self, values):
+        return self.table.reload(values)
             
