@@ -438,6 +438,27 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/ordering_status_filter_str/{fs}/{fs2}",
 		WrapAuth(GetOrderingStatusByFilterStr, DOC_READ)).Methods("GET")
 
+	r.HandleFunc("/ordering_state/{id:[0-9]+}",
+		WrapAuth(GetOrderingState, DOC_READ)).Methods("GET")
+
+	r.HandleFunc("/ordering_state_get_all",
+		WrapAuth(GetOrderingStateAll, DOC_READ)).Methods("GET")
+
+	r.HandleFunc("/ordering_state",
+		WrapAuth(CreateOrderingState, DOC_CREATE)).Methods("POST")
+
+	r.HandleFunc("/ordering_state/{id:[0-9]+}",
+		WrapAuth(UpdateOrderingState, DOC_UPDATE)).Methods("PUT")
+
+	r.HandleFunc("/ordering_state/{id:[0-9]+}",
+		WrapAuth(DeleteOrderingState, DOC_DELETE)).Methods("DELETE")
+
+	r.HandleFunc("/ordering_state_filter_int/{fs}/{id:[0-9]+}",
+		WrapAuth(GetOrderingStateByFilterInt, DOC_READ)).Methods("GET")
+
+	r.HandleFunc("/ordering_state_filter_str/{fs}/{fs2}",
+		WrapAuth(GetOrderingStateByFilterStr, DOC_READ)).Methods("GET")
+
 	r.HandleFunc("/ordering/{id:[0-9]+}",
 		WrapAuth(GetOrdering, DOC_READ)).Methods("GET")
 
@@ -1475,6 +1496,18 @@ func makeRouter() *mux.Router {
 
 	r.HandleFunc("/w_ordering_status_filter_str/{fs}/{fs2}",
 		WrapAuth(GetWOrderingStatusByFilterStr, DOC_READ)).Methods("GET")
+
+	r.HandleFunc("/w_ordering_state/{id:[0-9]+}",
+		WrapAuth(GetWOrderingState, DOC_READ)).Methods("GET")
+
+	r.HandleFunc("/w_ordering_state_get_all",
+		WrapAuth(GetWOrderingStateAll, DOC_READ)).Methods("GET")
+
+	r.HandleFunc("/w_ordering_state_filter_int/{fs}/{id:[0-9]+}",
+		WrapAuth(GetWOrderingStateByFilterInt, DOC_READ)).Methods("GET")
+
+	r.HandleFunc("/w_ordering_state_filter_str/{fs}/{fs2}",
+		WrapAuth(GetWOrderingStateByFilterStr, DOC_READ)).Methods("GET")
 
 	r.HandleFunc("/w_ordering/{id:[0-9]+}",
 		WrapAuth(GetWOrdering, DOC_READ)).Methods("GET")

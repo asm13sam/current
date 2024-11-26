@@ -5494,6 +5494,7 @@ func ContactTestForExistingField(fieldName string) bool {
 type OrderingStatus struct {
 	Id       int    `json:"id"`
 	Name     string `json:"name"`
+	Position int    `json:"position"`
 	IsActive bool   `json:"is_active"`
 }
 
@@ -5509,6 +5510,7 @@ func OrderingStatusGet(id int, tx *sql.Tx) (OrderingStatus, error) {
 	err := row.Scan(
 		&o.Id,
 		&o.Name,
+		&o.Position,
 		&o.IsActive,
 	)
 	return o, err
@@ -5539,6 +5541,7 @@ func OrderingStatusGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Ord
 		if err := rows.Scan(
 			&o.Id,
 			&o.Name,
+			&o.Position,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -5562,11 +5565,12 @@ func OrderingStatusCreate(o OrderingStatus, tx *sql.Tx) (OrderingStatus, error) 
 	}
 
 	sql := `INSERT INTO ordering_status
-            (name, is_active)
-            VALUES(?, ?);`
+            (name, position, is_active)
+            VALUES(?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		o.Name,
+		o.Position,
 		o.IsActive,
 	)
 	if err != nil {
@@ -5600,12 +5604,13 @@ func OrderingStatusUpdate(o OrderingStatus, tx *sql.Tx) (OrderingStatus, error) 
 	}
 
 	sql := `UPDATE ordering_status SET
-                    name=?, is_active=?
+                    name=?, position=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
 		o.Name,
+		o.Position,
 		o.IsActive,
 		o.Id,
 	)
@@ -5685,6 +5690,7 @@ func OrderingStatusGetByFilterInt(field string, param int, withDeleted bool, del
 		if err := rows.Scan(
 			&o.Id,
 			&o.Name,
+			&o.Position,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -5724,6 +5730,7 @@ func OrderingStatusGetByFilterStr(field string, param string, withDeleted bool, 
 		if err := rows.Scan(
 			&o.Id,
 			&o.Name,
+			&o.Position,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -5735,7 +5742,267 @@ func OrderingStatusGetByFilterStr(field string, param string, withDeleted bool, 
 }
 
 func OrderingStatusTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "is_active"}
+	fields := []string{"id", "name", "position", "is_active"}
+	for _, f := range fields {
+		if fieldName == f {
+			return true
+		}
+	}
+	return false
+}
+
+type OrderingState struct {
+	Id       int    `json:"id"`
+	Name     string `json:"name"`
+	Position int    `json:"position"`
+	IsActive bool   `json:"is_active"`
+}
+
+func OrderingStateGet(id int, tx *sql.Tx) (OrderingState, error) {
+	var o OrderingState
+	var row *sql.Row
+	if tx != nil {
+		row = tx.QueryRow("SELECT * FROM ordering_state WHERE id=?", id)
+	} else {
+		row = db.QueryRow("SELECT * FROM ordering_state WHERE id=?", id)
+	}
+
+	err := row.Scan(
+		&o.Id,
+		&o.Name,
+		&o.Position,
+		&o.IsActive,
+	)
+	return o, err
+}
+
+func OrderingStateGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]OrderingState, error) {
+	var rows *sql.Rows
+	var err error
+	query := "SELECT * FROM ordering_state"
+	if deletedOnly {
+		query += " WHERE is_active = 0"
+	} else if !withDeleted {
+		query += " WHERE is_active = 1"
+	}
+
+	if tx != nil {
+		rows, err = tx.Query(query)
+	} else {
+		rows, err = db.Query(query)
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	res := []OrderingState{}
+	for rows.Next() {
+		var o OrderingState
+		if err := rows.Scan(
+			&o.Id,
+			&o.Name,
+			&o.Position,
+			&o.IsActive,
+		); err != nil {
+			return nil, err
+		}
+		res = append(res, o)
+	}
+	return res, nil
+}
+
+func OrderingStateCreate(o OrderingState, tx *sql.Tx) (OrderingState, error) {
+	var err error
+	needCommit := false
+
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return o, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+
+	sql := `INSERT INTO ordering_state
+            (name, position, is_active)
+            VALUES(?, ?, ?);`
+	res, err := tx.Exec(
+		sql,
+		o.Name,
+		o.Position,
+		o.IsActive,
+	)
+	if err != nil {
+		return o, err
+	}
+	last_id, err := res.LastInsertId()
+	if err != nil {
+		return o, err
+	}
+	o.Id = int(last_id)
+
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return o, err
+		}
+	}
+	return o, nil
+}
+
+func OrderingStateUpdate(o OrderingState, tx *sql.Tx) (OrderingState, error) {
+	var err error
+	needCommit := false
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return o, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+
+	sql := `UPDATE ordering_state SET
+                    name=?, position=?, is_active=?
+                    WHERE id=?;`
+
+	_, err = tx.Exec(
+		sql,
+		o.Name,
+		o.Position,
+		o.IsActive,
+		o.Id,
+	)
+	if err != nil {
+		return o, err
+	}
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return o, err
+		}
+	}
+	return o, nil
+}
+
+func OrderingStateDelete(id int, tx *sql.Tx, isUnRealize bool) (OrderingState, error) {
+	needCommit := false
+	var err error
+	var o OrderingState
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return o, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+	o, err = OrderingStateGet(id, tx)
+	if err != nil {
+		return o, err
+	}
+
+	if !isUnRealize {
+		sql := `UPDATE ordering_state SET is_active=0 WHERE id=?;`
+		_, err = tx.Exec(sql, o.Id)
+		if err != nil {
+			return o, err
+		}
+	}
+
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return o, err
+		}
+	}
+	o.IsActive = false
+	return o, nil
+}
+
+func OrderingStateGetByFilterInt(field string, param int, withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]OrderingState, error) {
+
+	if !OrderingStateTestForExistingField(field) {
+		return nil, errors.New("field not exist")
+	}
+	var err error
+	query := fmt.Sprintf("SELECT * FROM ordering_state WHERE %s=?", field)
+	if deletedOnly {
+		query += "  AND is_active = 0"
+	} else if !withDeleted {
+		query += "  AND is_active = 1"
+	}
+
+	var rows *sql.Rows
+	if tx != nil {
+		rows, err = tx.Query(query, param)
+	} else {
+		rows, err = db.Query(query, param)
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	res := []OrderingState{}
+	for rows.Next() {
+		var o OrderingState
+		if err := rows.Scan(
+			&o.Id,
+			&o.Name,
+			&o.Position,
+			&o.IsActive,
+		); err != nil {
+			return nil, err
+		}
+		res = append(res, o)
+	}
+	return res, nil
+
+}
+
+func OrderingStateGetByFilterStr(field string, param string, withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]OrderingState, error) {
+
+	if !OrderingStateTestForExistingField(field) {
+		return nil, errors.New("field not exist")
+	}
+	var err error
+	query := fmt.Sprintf("SELECT * FROM ordering_state WHERE %s=?", field)
+	if deletedOnly {
+		query += "  AND is_active = 0"
+	} else if !withDeleted {
+		query += "  AND is_active = 1"
+	}
+
+	var rows *sql.Rows
+	if tx != nil {
+		rows, err = tx.Query(query, param)
+	} else {
+		rows, err = db.Query(query, param)
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	res := []OrderingState{}
+	for rows.Next() {
+		var o OrderingState
+		if err := rows.Scan(
+			&o.Id,
+			&o.Name,
+			&o.Position,
+			&o.IsActive,
+		); err != nil {
+			return nil, err
+		}
+		res = append(res, o)
+	}
+	return res, nil
+
+}
+
+func OrderingStateTestForExistingField(fieldName string) bool {
+	fields := []string{"id", "name", "position", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -5760,6 +6027,7 @@ type Ordering struct {
 	Cost             float64 `json:"cost"`
 	Info             string  `json:"info"`
 	OrderingStatusId int     `json:"ordering_status_id"`
+	OrderingStateId  int     `json:"ordering_state_id"`
 	IsRealized       bool    `json:"is_realized"`
 	IsActive         bool    `json:"is_active"`
 }
@@ -5789,6 +6057,7 @@ func OrderingGet(id int, tx *sql.Tx) (Ordering, error) {
 		&o.Cost,
 		&o.Info,
 		&o.OrderingStatusId,
+		&o.OrderingStateId,
 		&o.IsRealized,
 		&o.IsActive,
 	)
@@ -5833,6 +6102,7 @@ func OrderingGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Ordering,
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.OrderingStateId,
 			&o.IsRealized,
 			&o.IsActive,
 		); err != nil {
@@ -5867,8 +6137,8 @@ func OrderingCreate(o Ordering, tx *sql.Tx) (Ordering, error) {
 	o.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO ordering
-            (document_uid, name, created_at, deadline_at, finished_at, user_id, contragent_id, contact_id, price, persent, profit, cost, info, ordering_status_id, is_realized, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, name, created_at, deadline_at, finished_at, user_id, contragent_id, contact_id, price, persent, profit, cost, info, ordering_status_id, ordering_state_id, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		o.DocumentUid,
@@ -5885,6 +6155,7 @@ func OrderingCreate(o Ordering, tx *sql.Tx) (Ordering, error) {
 		o.Cost,
 		o.Info,
 		o.OrderingStatusId,
+		o.OrderingStateId,
 		o.IsRealized,
 		o.IsActive,
 	)
@@ -5919,7 +6190,7 @@ func OrderingUpdate(o Ordering, tx *sql.Tx) (Ordering, error) {
 	}
 
 	sql := `UPDATE ordering SET
-                    document_uid=?, name=?, created_at=?, deadline_at=?, finished_at=?, user_id=?, contragent_id=?, contact_id=?, price=?, persent=?, profit=?, cost=?, info=?, ordering_status_id=?, is_realized=?, is_active=?
+                    document_uid=?, name=?, created_at=?, deadline_at=?, finished_at=?, user_id=?, contragent_id=?, contact_id=?, price=?, persent=?, profit=?, cost=?, info=?, ordering_status_id=?, ordering_state_id=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -5938,6 +6209,7 @@ func OrderingUpdate(o Ordering, tx *sql.Tx) (Ordering, error) {
 		o.Cost,
 		o.Info,
 		o.OrderingStatusId,
+		o.OrderingStateId,
 		o.IsRealized,
 		o.IsActive,
 		o.Id,
@@ -6109,6 +6381,7 @@ func OrderingGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.OrderingStateId,
 			&o.IsRealized,
 			&o.IsActive,
 		); err != nil {
@@ -6162,6 +6435,7 @@ func OrderingGetByFilterStr(field string, param string, withDeleted bool, delete
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.OrderingStateId,
 			&o.IsRealized,
 			&o.IsActive,
 		); err != nil {
@@ -6174,7 +6448,7 @@ func OrderingGetByFilterStr(field string, param string, withDeleted bool, delete
 }
 
 func OrderingTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "created_at", "deadline_at", "finished_at", "user_id", "contragent_id", "contact_id", "price", "persent", "profit", "cost", "info", "ordering_status_id", "is_realized", "is_active"}
+	fields := []string{"id", "document_uid", "name", "created_at", "deadline_at", "finished_at", "user_id", "contragent_id", "contact_id", "price", "persent", "profit", "cost", "info", "ordering_status_id", "ordering_state_id", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -6315,6 +6589,7 @@ func OrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.OrderingStateId,
 			&o.IsRealized,
 			&o.IsActive,
 		); err != nil {
@@ -6357,6 +6632,7 @@ func OrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDeleted
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.OrderingStateId,
 			&o.IsRealized,
 			&o.IsActive,
 		); err != nil {
@@ -20520,6 +20796,7 @@ func WContactGetByFilterStr(field string, param string, withDeleted bool, delete
 type WOrderingStatus struct {
 	Id       int    `json:"id"`
 	Name     string `json:"name"`
+	Position int    `json:"position"`
 	IsActive bool   `json:"is_active"`
 }
 
@@ -20529,6 +20806,7 @@ func WOrderingStatusGet(id int) (WOrderingStatus, error) {
 	err := row.Scan(
 		&o.Id,
 		&o.Name,
+		&o.Position,
 		&o.IsActive,
 	)
 	return o, err
@@ -20553,6 +20831,7 @@ func WOrderingStatusGetAll(withDeleted bool, deletedOnly bool) ([]WOrderingStatu
 		if err := rows.Scan(
 			&o.Id,
 			&o.Name,
+			&o.Position,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -20584,6 +20863,7 @@ func WOrderingStatusGetByFilterInt(field string, param int, withDeleted bool, de
 		if err := rows.Scan(
 			&o.Id,
 			&o.Name,
+			&o.Position,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -20616,6 +20896,121 @@ func WOrderingStatusGetByFilterStr(field string, param string, withDeleted bool,
 		if err := rows.Scan(
 			&o.Id,
 			&o.Name,
+			&o.Position,
+			&o.IsActive,
+		); err != nil {
+			return nil, err
+		}
+		res = append(res, o)
+	}
+	return res, nil
+
+}
+
+type WOrderingState struct {
+	Id       int    `json:"id"`
+	Name     string `json:"name"`
+	Position int    `json:"position"`
+	IsActive bool   `json:"is_active"`
+}
+
+func WOrderingStateGet(id int) (WOrderingState, error) {
+	var o WOrderingState
+	row := db.QueryRow(`SELECT ordering_state.* FROM ordering_state WHERE ordering_state.id=?`, id)
+	err := row.Scan(
+		&o.Id,
+		&o.Name,
+		&o.Position,
+		&o.IsActive,
+	)
+	return o, err
+}
+
+func WOrderingStateGetAll(withDeleted bool, deletedOnly bool) ([]WOrderingState, error) {
+	query := `SELECT ordering_state.* FROM ordering_state`
+	if deletedOnly {
+		query += "  WHERE ordering_state.is_active = 0"
+	} else if !withDeleted {
+		query += "  WHERE ordering_state.is_active = 1"
+	}
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	res := []WOrderingState{}
+	for rows.Next() {
+		var o WOrderingState
+		if err := rows.Scan(
+			&o.Id,
+			&o.Name,
+			&o.Position,
+			&o.IsActive,
+		); err != nil {
+			return nil, err
+		}
+		res = append(res, o)
+	}
+	return res, nil
+}
+
+func WOrderingStateGetByFilterInt(field string, param int, withDeleted bool, deletedOnly bool) ([]WOrderingState, error) {
+
+	if !OrderingStateTestForExistingField(field) {
+		return nil, errors.New("field not exist")
+	}
+	query := fmt.Sprintf(`SELECT ordering_state.* FROM ordering_state WHERE ordering_state.%s=?`, field)
+	if deletedOnly {
+		query += "  AND ordering_state.is_active = 0"
+	} else if !withDeleted {
+		query += "  AND ordering_state.is_active = 1"
+	}
+	rows, err := db.Query(query, param)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	res := []WOrderingState{}
+	for rows.Next() {
+		var o WOrderingState
+		if err := rows.Scan(
+			&o.Id,
+			&o.Name,
+			&o.Position,
+			&o.IsActive,
+		); err != nil {
+			return nil, err
+		}
+		res = append(res, o)
+	}
+	return res, nil
+
+}
+
+func WOrderingStateGetByFilterStr(field string, param string, withDeleted bool, deletedOnly bool) ([]WOrderingState, error) {
+
+	if !OrderingStateTestForExistingField(field) {
+		return nil, errors.New("field not exist")
+	}
+	query := fmt.Sprintf(`SELECT ordering_state.* FROM ordering_state WHERE ordering_state.%s=?`, field)
+	if deletedOnly {
+		query += "  AND ordering_state.is_active = 0"
+	} else if !withDeleted {
+		query += "  AND ordering_state.is_active = 1"
+	}
+	rows, err := db.Query(query, param)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	res := []WOrderingState{}
+	for rows.Next() {
+		var o WOrderingState
+		if err := rows.Scan(
+			&o.Id,
+			&o.Name,
+			&o.Position,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -20642,21 +21037,24 @@ type WOrdering struct {
 	Cost             float64 `json:"cost"`
 	Info             string  `json:"info"`
 	OrderingStatusId int     `json:"ordering_status_id"`
+	OrderingStateId  int     `json:"ordering_state_id"`
 	IsRealized       bool    `json:"is_realized"`
 	IsActive         bool    `json:"is_active"`
 	User             string  `json:"user"`
 	Contragent       string  `json:"contragent"`
 	Contact          string  `json:"contact"`
 	OrderingStatus   string  `json:"ordering_status"`
+	OrderingState    string  `json:"ordering_state"`
 }
 
 func WOrderingGet(id int) (WOrdering, error) {
 	var o WOrdering
-	row := db.QueryRow(`SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, "") FROM ordering
+	row := db.QueryRow(`SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
 	LEFT JOIN user ON ordering.user_id = user.id
 	LEFT JOIN contragent ON ordering.contragent_id = contragent.id
 	LEFT JOIN contact ON ordering.contact_id = contact.id
-	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id WHERE ordering.id=?`, id)
+	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id
+	LEFT JOIN ordering_state ON ordering.ordering_state_id = ordering_state.id WHERE ordering.id=?`, id)
 	err := row.Scan(
 		&o.Id,
 		&o.DocumentUid,
@@ -20673,22 +21071,25 @@ func WOrderingGet(id int) (WOrdering, error) {
 		&o.Cost,
 		&o.Info,
 		&o.OrderingStatusId,
+		&o.OrderingStateId,
 		&o.IsRealized,
 		&o.IsActive,
 		&o.User,
 		&o.Contragent,
 		&o.Contact,
 		&o.OrderingStatus,
+		&o.OrderingState,
 	)
 	return o, err
 }
 
 func WOrderingGetAll(withDeleted bool, deletedOnly bool) ([]WOrdering, error) {
-	query := `SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, "") FROM ordering
+	query := `SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
 	LEFT JOIN user ON ordering.user_id = user.id
 	LEFT JOIN contragent ON ordering.contragent_id = contragent.id
 	LEFT JOIN contact ON ordering.contact_id = contact.id
-	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id`
+	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id
+	LEFT JOIN ordering_state ON ordering.ordering_state_id = ordering_state.id`
 	if deletedOnly {
 		query += "  WHERE ordering.is_active = 0"
 	} else if !withDeleted {
@@ -20719,12 +21120,14 @@ func WOrderingGetAll(withDeleted bool, deletedOnly bool) ([]WOrdering, error) {
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.OrderingStateId,
 			&o.IsRealized,
 			&o.IsActive,
 			&o.User,
 			&o.Contragent,
 			&o.Contact,
 			&o.OrderingStatus,
+			&o.OrderingState,
 		); err != nil {
 			return nil, err
 		}
@@ -20738,11 +21141,12 @@ func WOrderingGetByFilterInt(field string, param int, withDeleted bool, deletedO
 	if !OrderingTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, "") FROM ordering
+	query := fmt.Sprintf(`SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
 	LEFT JOIN user ON ordering.user_id = user.id
 	LEFT JOIN contragent ON ordering.contragent_id = contragent.id
 	LEFT JOIN contact ON ordering.contact_id = contact.id
-	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id WHERE ordering.%s=?`, field)
+	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id
+	LEFT JOIN ordering_state ON ordering.ordering_state_id = ordering_state.id WHERE ordering.%s=?`, field)
 	if deletedOnly {
 		query += "  AND ordering.is_active = 0"
 	} else if !withDeleted {
@@ -20772,12 +21176,14 @@ func WOrderingGetByFilterInt(field string, param int, withDeleted bool, deletedO
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.OrderingStateId,
 			&o.IsRealized,
 			&o.IsActive,
 			&o.User,
 			&o.Contragent,
 			&o.Contact,
 			&o.OrderingStatus,
+			&o.OrderingState,
 		); err != nil {
 			return nil, err
 		}
@@ -20792,11 +21198,12 @@ func WOrderingGetByFilterStr(field string, param string, withDeleted bool, delet
 	if !OrderingTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, "") FROM ordering
+	query := fmt.Sprintf(`SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
 	LEFT JOIN user ON ordering.user_id = user.id
 	LEFT JOIN contragent ON ordering.contragent_id = contragent.id
 	LEFT JOIN contact ON ordering.contact_id = contact.id
-	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id WHERE ordering.%s=?`, field)
+	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id
+	LEFT JOIN ordering_state ON ordering.ordering_state_id = ordering_state.id WHERE ordering.%s=?`, field)
 	if deletedOnly {
 		query += "  AND ordering.is_active = 0"
 	} else if !withDeleted {
@@ -20826,12 +21233,14 @@ func WOrderingGetByFilterStr(field string, param string, withDeleted bool, delet
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.OrderingStateId,
 			&o.IsRealized,
 			&o.IsActive,
 			&o.User,
 			&o.Contragent,
 			&o.Contact,
 			&o.OrderingStatus,
+			&o.OrderingState,
 		); err != nil {
 			return nil, err
 		}
@@ -20842,11 +21251,12 @@ func WOrderingGetByFilterStr(field string, param string, withDeleted bool, delet
 }
 
 func WOrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool, deletedOnly bool) ([]WOrdering, error) {
-	query := `SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, "") FROM ordering
+	query := `SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
 	LEFT JOIN user ON ordering.user_id = user.id
 	LEFT JOIN contragent ON ordering.contragent_id = contragent.id
 	LEFT JOIN contact ON ordering.contact_id = contact.id
-	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id WHERE (ordering.created_at BETWEEN ? AND ?)`
+	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id
+	LEFT JOIN ordering_state ON ordering.ordering_state_id = ordering_state.id WHERE (ordering.created_at BETWEEN ? AND ?)`
 	if deletedOnly {
 		query += "  AND ordering.is_active = 0"
 	} else if !withDeleted {
@@ -20877,12 +21287,14 @@ func WOrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted b
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.OrderingStateId,
 			&o.IsRealized,
 			&o.IsActive,
 			&o.User,
 			&o.Contragent,
 			&o.Contact,
 			&o.OrderingStatus,
+			&o.OrderingState,
 		); err != nil {
 			return nil, err
 		}
@@ -20892,11 +21304,12 @@ func WOrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted b
 }
 
 func WOrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDeleted bool, deletedOnly bool) ([]WOrdering, error) {
-	query := `SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, "") FROM ordering
+	query := `SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
 	LEFT JOIN user ON ordering.user_id = user.id
 	LEFT JOIN contragent ON ordering.contragent_id = contragent.id
 	LEFT JOIN contact ON ordering.contact_id = contact.id
-	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id WHERE (ordering.deadline_at BETWEEN ? AND ?)`
+	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id
+	LEFT JOIN ordering_state ON ordering.ordering_state_id = ordering_state.id WHERE (ordering.deadline_at BETWEEN ? AND ?)`
 	if deletedOnly {
 		query += "  AND ordering.is_active = 0"
 	} else if !withDeleted {
@@ -20927,12 +21340,14 @@ func WOrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDelete
 			&o.Cost,
 			&o.Info,
 			&o.OrderingStatusId,
+			&o.OrderingStateId,
 			&o.IsRealized,
 			&o.IsActive,
 			&o.User,
 			&o.Contragent,
 			&o.Contact,
 			&o.OrderingStatus,
+			&o.OrderingState,
 		); err != nil {
 			return nil, err
 		}

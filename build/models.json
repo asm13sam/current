@@ -1576,13 +1576,14 @@
       }
     },
     "ordering_status": {
-      "hum": "Стан",
+      "hum": "Етап",
       "rights": "DOC",
       "message": 1,
       "fkeys": {},
       "columns": [
         "id",
         "name",
+        "position",
         "is_active"
       ],
       "w_columns": [],
@@ -1598,6 +1599,52 @@
           "hum": "Назва",
           "form": 2,
           "type": "str"
+        },
+        "position": {
+          "def": 0,
+          "hum": "Позиція",
+          "form": 1,
+          "type": "int"
+        },
+        "is_active": {
+          "def": true,
+          "hum": "Діючий",
+          "form": 0,
+          "type": "bool"
+        }
+      },
+      "w_model": {}
+    },
+    "ordering_state": {
+      "hum": "Стан",
+      "rights": "DOC",
+      "message": 1,
+      "fkeys": {},
+      "columns": [
+        "id",
+        "name",
+        "position",
+        "is_active"
+      ],
+      "w_columns": [],
+      "model": {
+        "id": {
+          "def": 0,
+          "hum": "Номер",
+          "form": 0,
+          "type": "int"
+        },
+        "name": {
+          "def": "",
+          "hum": "Назва",
+          "form": 2,
+          "type": "str"
+        },
+        "position": {
+          "def": 0,
+          "hum": "Позиція",
+          "form": 1,
+          "type": "int"
         },
         "is_active": {
           "def": true,
@@ -1695,6 +1742,7 @@
         "cost",
         "info",
         "ordering_status_id",
+        "ordering_state_id",
         "is_realized",
         "is_active"
       ],
@@ -1702,7 +1750,8 @@
         "user",
         "contragent",
         "contact",
-        "ordering_status"
+        "ordering_status",
+        "ordering_state"
       ],
       "model": {
         "id": {
@@ -1791,6 +1840,12 @@
         },
         "ordering_status_id": {
           "def": 1,
+          "hum": "Етап",
+          "form": 1,
+          "type": "int"
+        },
+        "ordering_state_id": {
+          "def": 1,
           "hum": "Стан",
           "form": 1,
           "type": "int"
@@ -1828,6 +1883,12 @@
           "type": "str"
         },
         "ordering_status": {
+          "def": "",
+          "hum": "Етап",
+          "form": 1,
+          "type": "str"
+        },
+        "ordering_state": {
           "def": "",
           "hum": "Стан",
           "form": 1,
