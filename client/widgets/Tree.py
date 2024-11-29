@@ -56,6 +56,8 @@ class Tree(QTreeWidget):
         self.set_current_id(id)
     
     def add_childs(self, group_id, parent_item=None):
+        if not self.dataset or not group_id in self.dataset:
+            return
         if not self.dataset[group_id]:
             return
         tds = self.dataset[group_id]
