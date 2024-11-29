@@ -33,6 +33,7 @@
         "equipment_group",
         "matherial",
         "matherial_group",
+        "count_type",
         "matherial_to_product",
         "operation",
         "operation_group",
