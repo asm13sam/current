@@ -987,7 +987,7 @@
         "cost": {
           "def": 0.0,
           "hum": "Ціна",
-          "form": 2,
+          "form": 1,
           "type": "float"
         },
         "equipment_id": {
