@@ -788,16 +788,16 @@ class WhsInFormDialog(CustomFormDialog):
         if action == 'delete':
             self.table.table.delete_values()
         elif action == 'edit':
-            new_price = askdlg('Нова ціна:')
-            if not new_price:
+            new_cost = askdlg('Вкажіть вартість:')
+            if not new_cost:
                 return
             try:
-                price = float(new_price)
+                cost = float(new_cost)
             except:
                 error('Це не число, спробуйте ще!')
                 return
-            value['price'] = price
-            value['cost'] = price * value['number']
+            value['cost'] = cost
+            value['price'] = round(cost / value['number'], 2)
             self.m2o.value = value
             err = self.m2o.save()
             if err:

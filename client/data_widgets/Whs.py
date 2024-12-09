@@ -278,7 +278,12 @@ class WhsInTab(WhsTab):
         payed = self.doc_table.calc_by_type('cash_out')
         cash_out = Item('cash_out')
         cash_out.create_default()
-        cash_out.value["based_on"] = cur_value['document_uid']
+
+        if cur_value['based_on']:
+            cash_out.value["based_on"] = cur_value['based_on']    
+        else:
+            cash_out.value["based_on"] = cur_value['document_uid']
+
         cash_out.value["contragent_id"] = cur_value["contragent_id"]
         cash_out.value["contact_id"] = cur_value["contact_id"]
         cash_out.value["cash_sum"] = cur_value["whs_sum"] - payed
@@ -287,7 +292,7 @@ class WhsInTab(WhsTab):
         cash_out.value["cash_id"] = app.config["whs_in cash id"]
         cash_out.value["user_id"] = app.user['id']
 
-        dlg = FormDialog('Створити ВКО', cash_out.model, cash_out.value)
+        dlg = FormDialog('Створити ВКО', cash_out.model, cash_out.columns, cash_out.value)
         res = dlg.exec()
         if res:
             err = cash_out.save()
@@ -314,7 +319,7 @@ class WhsInTab(WhsTab):
         for v in m2wi_values:
             cash_in.value["cash_sum"] += v['cost']
 
-        dlg = FormDialog('Створити ПКО', cash_in.model, cash_in.value)
+        dlg = FormDialog('Створити ПКО', cash_in.model, cash_in.columns, cash_in.value)
         res = dlg.exec()
         if res:
             err = cash_in.save()

@@ -17,7 +17,6 @@ from PyQt6.QtWidgets import (
     QSplitter,
     QGridLayout,
     QGroupBox,
-    
     )
 
 import time
@@ -27,7 +26,7 @@ from data.app import App
 from data_widgets.CheckBoxUa import CheckBoxFS
 from widgets.Dialogs import error, CustomDialog, ok_cansel_dlg, messbox
 from widgets.Table import Table, TableModel
-from widgets.Form import Selector, ContactSelector, TimeWidget, CustomFormDialog
+from widgets.Form import CustomFormDialog, PersentWidget, ProfitWidget
 from common.params import SORT_ROLE
 from data_widgets.Calculation import ProductExtra, ProductView, MatherialExtra, OperationExtra
 from data_widgets.ItemsToOrdering import ProductToOrderingForm
@@ -160,21 +159,42 @@ class CashForm(QWidget):
     def __init__(self, summa: float):
         super().__init__()
         self.total = summa
+        self.new_sum = summa
         self.form = QFormLayout()
         self.setLayout(self.form)
+        self.profit = ProfitWidget()
+        self.persent = PersentWidget()
         self.cash = QLineEdit()
         self.summa = QLabel()
         self.summa.setText(str(summa))
         self.left = QLabel()
+        self.form.addRow("Знижка, %", self.persent)
+        self.form.addRow("Знижка, грн.", self.profit)
         self.form.addRow("До сплати", self.summa)
         self.form.addRow("Внесено", self.cash)
         self.form.addRow("Решта", self.left)
 
         self.cash.textChanged.connect(self.calc_left)
+        self.persent.valChanged.connect(self.persent_changed)
+        self.profit.valChanged.connect(self.profit_changed)
+
+    def persent_changed(self):
+        pc = self.persent.value()
+        self.new_sum = round(self.total*(1 - pc/100), 2)
+        self.summa.setText(str(self.new_sum))
+        self.profit.set_value(self.total-self.new_sum)
+        self.calc_left()
+
+    def profit_changed(self):
+        pf = self.profit.value()
+        self.new_sum = self.total - pf
+        self.summa.setText(str(self.new_sum))
+        self.persent.set_value(pf*100/self.total)
+        self.calc_left()
 
     def calc_left(self):
         try:
-            self.left.setText(str(float(self.cash.text()) - self.total))
+            self.left.setText(str(round(float(self.cash.text()) - self.new_sum, 2)))
         except:
             return
          
@@ -182,27 +202,52 @@ class CashForm(QWidget):
 class CashQRForm(QWidget):
     def __init__(self, summa: float):
         super().__init__()
+        self.total = summa
+        self.new_sum = summa
         self.form = QFormLayout()
         self.setLayout(self.form)
+        self.profit = ProfitWidget()
+        self.persent = PersentWidget()
         self.uid = QLineEdit()
         self.summa = QLabel()
         self.summa.setText(str(summa))
+        self.form.addRow("Знижка, %", self.persent)
+        self.form.addRow("Знижка, грн.", self.profit)
         self.form.addRow("До сплати", self.summa)
         self.form.addRow("Код транзакції", self.uid)
+        self.persent.valChanged.connect(self.persent_changed)
+        self.profit.valChanged.connect(self.profit_changed)
+
+    def persent_changed(self):
+        pc = self.persent.value()
+        self.new_sum = round(self.total*(1 - pc/100), 2)
+        self.summa.setText(str(self.new_sum))
+        self.profit.set_value(self.total-self.new_sum)
+
+    def profit_changed(self):
+        pf = self.profit.value()
+        self.new_sum = self.total - pf
+        self.summa.setText(str(self.new_sum))
+        self.persent.set_value(pf*100/self.total)
 
 
 class CashPlusForm(QWidget):
     def __init__(self, summa: float):
         super().__init__()
         self.total = summa
+        self.new_sum = summa
         self.form = QFormLayout()
         self.setLayout(self.form)
+        self.profit = ProfitWidget()
+        self.persent = PersentWidget()
         self.cash = QLineEdit()
         self.qr = QLineEdit()
         self.trans_uid = QLineEdit()
         self.summa = QLabel()
         self.summa.setText(str(summa))
         self.left = QLabel()
+        self.form.addRow("Знижка, %", self.persent)
+        self.form.addRow("Знижка, грн.", self.profit)
         self.form.addRow("До сплати", self.summa)
         self.form.addRow("Карта", self.qr)
         self.form.addRow("Код транзакції", self.trans_uid)
@@ -211,11 +256,27 @@ class CashPlusForm(QWidget):
 
         self.cash.textChanged.connect(self.calc_left)
         self.qr.textChanged.connect(self.calc_left)
+        self.persent.valChanged.connect(self.persent_changed)
+        self.profit.valChanged.connect(self.profit_changed)
+
+    def persent_changed(self):
+        pc = self.persent.value()
+        self.new_sum = round(self.total*(1 - pc/100), 2)
+        self.summa.setText(str(self.new_sum))
+        self.profit.set_value(self.total-self.new_sum)
+        self.calc_left()
+
+    def profit_changed(self):
+        pf = self.profit.value()
+        self.new_sum = self.total - pf
+        self.summa.setText(str(self.new_sum))
+        self.persent.set_value(pf*100/self.total)
+        self.calc_left()
 
     def calc_left(self):
         try:
-            paid = float(self.cash.text()) + float(self.qr.text()) - self.total
-            self.left.setText(str(paid))
+            paid = float(self.cash.text()) + float(self.qr.text()) - self.new_sum
+            self.left.setText(str(round(paid, 2)))
         except:
             return
 
@@ -387,7 +448,7 @@ class CashePlusFormDialog(CustomDialog):
         except:
             error("Неправильний формат суми")
             return
-        if cash_sum + qr_sum < self.summa:
+        if cash_sum + qr_sum < self.widget.new_sum:
             error('Недостатньо коштів')
             return
         return super().accept()
@@ -406,7 +467,7 @@ class CasheFormDialog(CustomDialog):
         except:
             error("Неправильний формат суми")
             return
-        if summa < self.summa:
+        if summa < self.widget.new_sum:
             error('Недостатньо коштів')
             return
         return super().accept()
@@ -908,14 +969,20 @@ class ProductsTab(QWidget):
         res = dlg.exec()
         if res:
             summa = float(dlg.widget.cash.text())
-            if self.create_docs(summa=summa):
+            discount = dlg.widget.profit.value()
+            if self.create_docs(summa=summa, discount=discount):
                 self.remove_current_order()
         
     def pay_qr(self):
         dlg = CasheQRFormDialog(self.summa)
         res = dlg.exec()
         if res:
-            if self.create_docs(cash_qr=dlg.widget.uid.text(), summa_qr=self.summa):
+            discount = dlg.widget.profit.value()
+            if self.create_docs(
+                    cash_qr=dlg.widget.uid.text(), 
+                    summa_qr=self.summa,
+                    discount=discount,
+                ):
                 self.remove_current_order()
 
     def pay_plus(self):
@@ -925,7 +992,8 @@ class ProductsTab(QWidget):
             trans_uid=dlg.widget.trans_uid.text()
             cash_sum = float(dlg.widget.cash.text())
             qr_sum = float(dlg.widget.qr.text())
-            if self.create_docs(cash_qr=trans_uid, summa=cash_sum, summa_qr=qr_sum):
+            discount = dlg.widget.profit.value()
+            if self.create_docs(cash_qr=trans_uid, summa=cash_sum, summa_qr=qr_sum, discount=discount):
                 self.remove_current_order()
 
     def print_check(self, png):
@@ -937,7 +1005,7 @@ class ProductsTab(QWidget):
         painter.drawPixmap(0, 0, png)
         painter.end()
     
-    def create_doc_cbox_check(self, item, summa, summa_qr):
+    def create_doc_cbox_check(self, item, summa, summa_qr, discount=0):
         app = App()
         cbox_check = Item('cbox_check')
         cbox_check.create_default()
@@ -946,8 +1014,8 @@ class ProductsTab(QWidget):
         cbox_check.value["contragent_id"] = app.config["contragent copycenter default"]
         cbox_check.value["ordering_id"] = self.current_ordering.value['id']
         cbox_check.value["based_on"] = self.current_ordering.value['document_uid']
-        
-        receipt = self.create_receipt(item, summa=summa, summa_qr=summa_qr)
+        cbox_check.value["discount"] = discount
+        receipt = self.create_receipt(item, summa=summa, summa_qr=summa_qr, discount=discount)
         if receipt is None:
             return
         res = self.check.create_receipt(receipt)
@@ -956,9 +1024,10 @@ class ProductsTab(QWidget):
             return
         if 'error' in res:
             error(f"При створенні чеку в Checkbox: {res['error']}")
+            print(receipt)
             return
         cbox_check.value["checkbox_uid"] = res['id']
-        cbox_check.value["cash_sum"] = self.summa
+        cbox_check.value["cash_sum"] = self.summa - discount
         err = cbox_check.save()
         if err:
             error(err)
@@ -974,7 +1043,11 @@ class ProductsTab(QWidget):
             self.create_check_item(item.value, cbox_check)
         return cbox_check
 
-    def create_docs(self, item=None, cash_qr='', summa=0.0, summa_qr=0.0):
+    def create_docs(self, item=None, cash_qr='', summa=0.0, summa_qr=0.0, discount=0):
+        cbox_check = self.create_doc_cbox_check(item, summa, summa_qr, discount)
+        if cbox_check is None:
+            return
+        
         cin_item_qr = None
         cin_item_cash = None
         if item is None: #multiposition order
@@ -982,10 +1055,13 @@ class ProductsTab(QWidget):
             if not items_to_order:
                 return
             if summa:
-                sm = self.summa - summa_qr
+                sm = self.summa - summa_qr - discount
                 cin_item_cash = self.create_cash_in(summa=sm)
             if summa_qr:
-                cin_item_qr = self.create_cash_in(cash_qr=cash_qr, summa=summa_qr)
+                if summa:
+                    cin_item_qr = self.create_cash_in(cash_qr=cash_qr, summa=summa_qr)
+                else:
+                    cin_item_qr = self.create_cash_in(cash_qr=cash_qr, summa=summa_qr-discount)
         else: #one position order
             res = self.create_item_to_order(item.value)
             if not res:
@@ -999,16 +1075,12 @@ class ProductsTab(QWidget):
         if not cin_item_cash and not cin_item_qr:
             return
         
-        self.current_ordering.value['price'] += self.summa
-        self.current_ordering.value['cost'] += self.summa
+        self.current_ordering.value['price'] += self.summa - discount
+        self.current_ordering.value['cost'] += self.summa - discount
         err = self.current_ordering.save()
         if err:
             error(err)
         
-        cbox_check = self.create_doc_cbox_check(item, summa, summa_qr)
-        if cbox_check is None:
-            return
-
         if cin_item_cash is not None:
             cin_item_cash.value['cbox_check_id'] = cbox_check.value["id"]
             err = cin_item_cash.save()
@@ -1073,7 +1145,7 @@ class ProductsTab(QWidget):
             self.print_check(png)
         return True
 
-    def create_receipt(self, item=None, summa=0.0, summa_qr=0.0):
+    def create_receipt(self, item=None, summa=0.0, summa_qr=0.0, discount=0):
         payments = []
         if summa:
             payments.append({
@@ -1081,7 +1153,8 @@ class ProductsTab(QWidget):
                 "value": summa * 100,
                 "label": 'Готівка',
             })
-
+        if summa_qr and not summa:
+            summa_qr -= discount
         if summa_qr:
             payments.append({
                 "type": 'CASHLESS',
@@ -1124,6 +1197,8 @@ class ProductsTab(QWidget):
                 dsc = round(value['profit']*value['number'], 0)
                 good["discounts"] = self.make_discount(dsc)
             receipt['goods'].append(good)
+        if discount:
+            receipt['discounts'] = self.make_discount(-discount)
         return receipt
     
     def make_discount(self, value):
@@ -1139,7 +1214,7 @@ class ProductsTab(QWidget):
             {
                 "type": dsct_type,
                 "mode": "VALUE",
-                "value": value*100,
+                "value": int(value*100),
                 "name": dsct_name
             },
         ]
@@ -1148,13 +1223,15 @@ class ProductsTab(QWidget):
         p2o_id = value['product_extra']['product_to_ordering']['id']
         number = value['product_extra']['product_to_ordering']['number']
         status = value['product_extra']['product_to_ordering']['product_to_ordering_status_id']
+        ordering_id = value['product_extra']['product_to_ordering']['ordering_id']
         for k, val in value['matherial_extra'].items():
             for v in val:
                 if v['matherial_to_product']['is_used']:
-                    v['matherial_to_ordering']['ordering_id'] = self.current_ordering.value['id']
+                    v['matherial_to_ordering']['ordering_id'] = ordering_id
                     v['matherial_to_ordering']['number'] = number * v['matherial_to_product']['number']
                     v['matherial_to_ordering']['cost'] = number * v['matherial_to_ordering']['price']
                     v['matherial_to_ordering']['product_to_ordering_id'] = p2o_id
+                    print(v['matherial_to_ordering'])
                     m2o = Item('matherial_to_ordering')
                     m2o.value = v['matherial_to_ordering']
                     m2o.value['id'] = 0
@@ -1164,7 +1241,7 @@ class ProductsTab(QWidget):
         for k, val in value['operation_extra'].items():
             for v in val:
                 if v['operation_to_product']['is_used']:
-                    v['operation_to_ordering']['ordering_id'] = self.current_ordering.value['id']
+                    v['operation_to_ordering']['ordering_id'] = ordering_id
                     v['operation_to_ordering']['number'] = number * v['operation_to_product']['number']
                     v['operation_to_ordering']['cost'] = number * v['operation_to_ordering']['price']
                     v['operation_to_ordering']["user_sum"] = number * v['operation']['price'] * v['operation_to_product']['number']
@@ -1178,13 +1255,15 @@ class ProductsTab(QWidget):
                         error(err)
         for k, val in value['product_deep'].items():
             for v in val:
-                if v['product_extra']['product_to_product']['is_used']:
-                    v['product_extra']['product_to_ordering']['ordering_id'] = self.current_ordering.value['id']
+                if (v['product_extra']['product_to_product']['is_used'] 
+                    or v['product_extra']['product_to_product']['list_name'] == 'default'):
+                    v['product_extra']['product_to_ordering']['ordering_id'] = ordering_id
                     v['product_extra']['product_to_ordering']['number'] = number * v['product_extra']['product_to_product']['number']
                     v['product_extra']['product_to_ordering']['cost'] = number * v['product_extra']['product_to_ordering']['price']
                     v['product_extra']['product_to_ordering']['product_to_ordering_id'] = p2o_id
                     v['product_extra']['product_to_ordering']["name"] = v['product_extra']['product']['name']
                     v['product_extra']['product_to_ordering']['product_to_ordering_status_id'] = status
+                    print('p', v['product_extra']['product_to_ordering'])
                     p2o = Item('product_to_ordering')
                     p2o.value = v['product_extra']['product_to_ordering']
                     p2o.value['id'] = 0
@@ -1196,6 +1275,7 @@ class ProductsTab(QWidget):
                     self.create_used(v)
 
     def create_product_to_order(self, product_value, order_id=0):
+        # print(product_value)
         if order_id:
             product_value['product_extra']['product_to_ordering']['ordering_id'] = order_id
         else:
@@ -1358,11 +1438,8 @@ class ProductsTab(QWidget):
         cin.value["cash_id"] = self.user['cash_id']
         cin.value['based_on'] = self.current_ordering.value['document_uid']
         cin.value["user_id"] = self.user['id']
-    
-        if summa:
-            cin.value['cash_sum'] = summa
-        else:
-            cin.value['cash_sum'] = self.summa
+        cin.value['cash_sum'] = summa
+        
         cin.value['comm'] = 'Auto'
         if cash_qr:
             cash = Item('cash')

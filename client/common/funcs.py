@@ -102,7 +102,7 @@ def thousands_to_words(number):
     return result
 
 def dataiso_to_words(data_iso_str, only_year=False):
-    months = ["січня", "лютого", "березня", "квітня", "травня",
+    months = ['', "січня", "лютого", "березня", "квітня", "травня",
              "червня", "липня", "серпня", "вересня", "жовтня", "листопада", "грудня"]
     dt = datetime.fromisoformat(data_iso_str)
     if only_year:
