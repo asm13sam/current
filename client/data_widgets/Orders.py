@@ -1223,13 +1223,15 @@ class ProductsTab(QWidget):
         p2o_id = value['product_extra']['product_to_ordering']['id']
         number = value['product_extra']['product_to_ordering']['number']
         status = value['product_extra']['product_to_ordering']['product_to_ordering_status_id']
+        ordering_id = value['product_extra']['product_to_ordering']['ordering_id']
         for k, val in value['matherial_extra'].items():
             for v in val:
                 if v['matherial_to_product']['is_used']:
-                    v['matherial_to_ordering']['ordering_id'] = self.current_ordering.value['id']
+                    v['matherial_to_ordering']['ordering_id'] = ordering_id
                     v['matherial_to_ordering']['number'] = number * v['matherial_to_product']['number']
                     v['matherial_to_ordering']['cost'] = number * v['matherial_to_ordering']['price']
                     v['matherial_to_ordering']['product_to_ordering_id'] = p2o_id
+                    print(v['matherial_to_ordering'])
                     m2o = Item('matherial_to_ordering')
                     m2o.value = v['matherial_to_ordering']
                     m2o.value['id'] = 0
@@ -1239,7 +1241,7 @@ class ProductsTab(QWidget):
         for k, val in value['operation_extra'].items():
             for v in val:
                 if v['operation_to_product']['is_used']:
-                    v['operation_to_ordering']['ordering_id'] = self.current_ordering.value['id']
+                    v['operation_to_ordering']['ordering_id'] = ordering_id
                     v['operation_to_ordering']['number'] = number * v['operation_to_product']['number']
                     v['operation_to_ordering']['cost'] = number * v['operation_to_ordering']['price']
                     v['operation_to_ordering']["user_sum"] = number * v['operation']['price'] * v['operation_to_product']['number']
@@ -1253,13 +1255,15 @@ class ProductsTab(QWidget):
                         error(err)
         for k, val in value['product_deep'].items():
             for v in val:
-                if v['product_extra']['product_to_product']['is_used']:
-                    v['product_extra']['product_to_ordering']['ordering_id'] = self.current_ordering.value['id']
+                if (v['product_extra']['product_to_product']['is_used'] 
+                    or v['product_extra']['product_to_product']['list_name'] == 'default'):
+                    v['product_extra']['product_to_ordering']['ordering_id'] = ordering_id
                     v['product_extra']['product_to_ordering']['number'] = number * v['product_extra']['product_to_product']['number']
                     v['product_extra']['product_to_ordering']['cost'] = number * v['product_extra']['product_to_ordering']['price']
                     v['product_extra']['product_to_ordering']['product_to_ordering_id'] = p2o_id
                     v['product_extra']['product_to_ordering']["name"] = v['product_extra']['product']['name']
                     v['product_extra']['product_to_ordering']['product_to_ordering_status_id'] = status
+                    print('p', v['product_extra']['product_to_ordering'])
                     p2o = Item('product_to_ordering')
                     p2o.value = v['product_extra']['product_to_ordering']
                     p2o.value['id'] = 0
@@ -1271,6 +1275,7 @@ class ProductsTab(QWidget):
                     self.create_used(v)
 
     def create_product_to_order(self, product_value, order_id=0):
+        # print(product_value)
         if order_id:
             product_value['product_extra']['product_to_ordering']['ordering_id'] = order_id
         else:

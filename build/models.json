@@ -1131,6 +1131,7 @@
         "length",
         "min_cost",
         "cost",
+        "round_to",
         "user_id",
         "barcode",
         "is_active"
@@ -1192,6 +1193,12 @@
         "cost": {
           "def": 0.0,
           "hum": "Ціна",
+          "form": 1,
+          "type": "float"
+        },
+        "round_to": {
+          "def": 0.01,
+          "hum": "Округлити до",
           "form": 1,
           "type": "float"
         },
@@ -2804,6 +2811,8 @@
         "is_multiselect",
         "comm",
         "is_used",
+        "ask_num",
+        "add_to_price",
         "is_active"
       ],
       "w_columns": [
@@ -2868,6 +2877,18 @@
         "is_used": {
           "def": false,
           "hum": "Використовувати",
+          "form": 1,
+          "type": "bool"
+        },
+        "ask_num": {
+          "def": false,
+          "hum": "Запитати кількість",
+          "form": 1,
+          "type": "bool"
+        },
+        "add_to_price": {
+          "def": false,
+          "hum": "Додавати до ціни",
           "form": 1,
           "type": "bool"
         },
@@ -3108,6 +3129,8 @@
         "equipment_cost",
         "comm",
         "is_used",
+        "ask_num",
+        "add_to_price",
         "is_active"
       ],
       "w_columns": [
@@ -3195,6 +3218,18 @@
           "form": 1,
           "type": "bool"
         },
+        "ask_num": {
+          "def": false,
+          "hum": "Запитати кількість",
+          "form": 1,
+          "type": "bool"
+        },
+        "add_to_price": {
+          "def": false,
+          "hum": "Додавати до ціни",
+          "form": 1,
+          "type": "bool"
+        },
         "is_active": {
           "def": true,
           "hum": "Діючий",
@@ -3258,6 +3293,8 @@
         "list_name",
         "is_multiselect",
         "is_used",
+        "ask_num",
+        "add_to_price",
         "is_active"
       ],
       "w_columns": [
@@ -3328,6 +3365,18 @@
         "is_used": {
           "def": false,
           "hum": "Використовувати",
+          "form": 1,
+          "type": "bool"
+        },
+        "ask_num": {
+          "def": false,
+          "hum": "Запитати кількість",
+          "form": 1,
+          "type": "bool"
+        },
+        "add_to_price": {
+          "def": false,
+          "hum": "Додавати до ціни",
           "form": 1,
           "type": "bool"
         },

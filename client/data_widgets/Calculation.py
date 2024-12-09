@@ -435,14 +435,14 @@ class ProductExtra:
                     amortisation += amort
         value['product_extra']['product_to_ordering']['price'] = total
         
-        # if is_top:
-        #     if value['product_extra']['product_to_ordering']['length']:
-        #         total_price = total * number / value['product_extra']['product_to_ordering']['pieces']
-        #         if total_price < value['product_extra']['product']['min_cost']:
-        #             total_price = value['product_extra']['product']['min_cost']
-        #             cost = total_price * value['product_extra']['product_to_ordering']['pieces']
-        #             value['product_extra']['product_to_ordering']['cost'] = cost
-        #             return cost, matherials_price, operations_price, amortisation
+        if is_top:
+            if value['product_extra']['product_to_ordering']['length']:
+                total_price = total * number / value['product_extra']['product_to_ordering']['pieces']
+                if total_price < value['product_extra']['product']['min_cost']:
+                    total_price = value['product_extra']['product']['min_cost']
+                    cost = total_price * value['product_extra']['product_to_ordering']['pieces']
+                    value['product_extra']['product_to_ordering']['cost'] = cost
+                    return cost, matherials_price, operations_price, amortisation
         persent = self.get_persent_by_number()
         price = round(total + total * persent / 100, 1)
         value['product_extra']['product_to_ordering']['price'] = price
@@ -619,7 +619,8 @@ class ProductView(QWidget):
                     w = ProductView(pe)
                     n = w.reload()
                     if n:
-                        self.box.addWidget(w) 
+                        self.box.addWidget(w)
+                        w.productChanged.connect(self.subproduct_changed) 
                 continue
             if list_items[0]['product_extra']['product_to_product']['is_multiselect']:
                 self.selects[list_name] = ComplexList()

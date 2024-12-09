@@ -4189,6 +4189,7 @@ type Product struct {
 	Length         float64 `json:"length"`
 	MinCost        float64 `json:"min_cost"`
 	Cost           float64 `json:"cost"`
+	RoundTo        float64 `json:"round_to"`
 	UserId         int     `json:"user_id"`
 	Barcode        string  `json:"barcode"`
 	IsActive       bool    `json:"is_active"`
@@ -4213,6 +4214,7 @@ func ProductGet(id int, tx *sql.Tx) (Product, error) {
 		&p.Length,
 		&p.MinCost,
 		&p.Cost,
+		&p.RoundTo,
 		&p.UserId,
 		&p.Barcode,
 		&p.IsActive,
@@ -4252,6 +4254,7 @@ func ProductGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Product, e
 			&p.Length,
 			&p.MinCost,
 			&p.Cost,
+			&p.RoundTo,
 			&p.UserId,
 			&p.Barcode,
 			&p.IsActive,
@@ -4277,8 +4280,8 @@ func ProductCreate(p Product, tx *sql.Tx) (Product, error) {
 	}
 
 	sql := `INSERT INTO product
-            (name, short_name, product_group_id, measure_id, width, length, min_cost, cost, user_id, barcode, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (name, short_name, product_group_id, measure_id, width, length, min_cost, cost, round_to, user_id, barcode, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		p.Name,
@@ -4289,6 +4292,7 @@ func ProductCreate(p Product, tx *sql.Tx) (Product, error) {
 		p.Length,
 		p.MinCost,
 		p.Cost,
+		p.RoundTo,
 		p.UserId,
 		p.Barcode,
 		p.IsActive,
@@ -4324,7 +4328,7 @@ func ProductUpdate(p Product, tx *sql.Tx) (Product, error) {
 	}
 
 	sql := `UPDATE product SET
-                    name=?, short_name=?, product_group_id=?, measure_id=?, width=?, length=?, min_cost=?, cost=?, user_id=?, barcode=?, is_active=?
+                    name=?, short_name=?, product_group_id=?, measure_id=?, width=?, length=?, min_cost=?, cost=?, round_to=?, user_id=?, barcode=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -4337,6 +4341,7 @@ func ProductUpdate(p Product, tx *sql.Tx) (Product, error) {
 		p.Length,
 		p.MinCost,
 		p.Cost,
+		p.RoundTo,
 		p.UserId,
 		p.Barcode,
 		p.IsActive,
@@ -4425,6 +4430,7 @@ func ProductGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 			&p.Length,
 			&p.MinCost,
 			&p.Cost,
+			&p.RoundTo,
 			&p.UserId,
 			&p.Barcode,
 			&p.IsActive,
@@ -4473,6 +4479,7 @@ func ProductGetByFilterStr(field string, param string, withDeleted bool, deleted
 			&p.Length,
 			&p.MinCost,
 			&p.Cost,
+			&p.RoundTo,
 			&p.UserId,
 			&p.Barcode,
 			&p.IsActive,
@@ -4486,7 +4493,7 @@ func ProductGetByFilterStr(field string, param string, withDeleted bool, deleted
 }
 
 func ProductTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "short_name", "product_group_id", "measure_id", "width", "length", "min_cost", "cost", "user_id", "barcode", "is_active"}
+	fields := []string{"id", "name", "short_name", "product_group_id", "measure_id", "width", "length", "min_cost", "cost", "round_to", "user_id", "barcode", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -9073,6 +9080,8 @@ type MatherialToProduct struct {
 	IsMultiselect bool    `json:"is_multiselect"`
 	Comm          string  `json:"comm"`
 	IsUsed        bool    `json:"is_used"`
+	AskNum        bool    `json:"ask_num"`
+	AddToPrice    bool    `json:"add_to_price"`
 	IsActive      bool    `json:"is_active"`
 }
 
@@ -9096,6 +9105,8 @@ func MatherialToProductGet(id int, tx *sql.Tx) (MatherialToProduct, error) {
 		&m.IsMultiselect,
 		&m.Comm,
 		&m.IsUsed,
+		&m.AskNum,
+		&m.AddToPrice,
 		&m.IsActive,
 	)
 	return m, err
@@ -9134,6 +9145,8 @@ func MatherialToProductGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([
 			&m.IsMultiselect,
 			&m.Comm,
 			&m.IsUsed,
+			&m.AskNum,
+			&m.AddToPrice,
 			&m.IsActive,
 		); err != nil {
 			return nil, err
@@ -9157,8 +9170,8 @@ func MatherialToProductCreate(m MatherialToProduct, tx *sql.Tx) (MatherialToProd
 	}
 
 	sql := `INSERT INTO matherial_to_product
-            (product_id, matherial_id, number, coeff, cost, list_name, is_multiselect, comm, is_used, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (product_id, matherial_id, number, coeff, cost, list_name, is_multiselect, comm, is_used, ask_num, add_to_price, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		m.ProductId,
@@ -9170,6 +9183,8 @@ func MatherialToProductCreate(m MatherialToProduct, tx *sql.Tx) (MatherialToProd
 		m.IsMultiselect,
 		m.Comm,
 		m.IsUsed,
+		m.AskNum,
+		m.AddToPrice,
 		m.IsActive,
 	)
 	if err != nil {
@@ -9203,7 +9218,7 @@ func MatherialToProductUpdate(m MatherialToProduct, tx *sql.Tx) (MatherialToProd
 	}
 
 	sql := `UPDATE matherial_to_product SET
-                    product_id=?, matherial_id=?, number=?, coeff=?, cost=?, list_name=?, is_multiselect=?, comm=?, is_used=?, is_active=?
+                    product_id=?, matherial_id=?, number=?, coeff=?, cost=?, list_name=?, is_multiselect=?, comm=?, is_used=?, ask_num=?, add_to_price=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -9217,6 +9232,8 @@ func MatherialToProductUpdate(m MatherialToProduct, tx *sql.Tx) (MatherialToProd
 		m.IsMultiselect,
 		m.Comm,
 		m.IsUsed,
+		m.AskNum,
+		m.AddToPrice,
 		m.IsActive,
 		m.Id,
 	)
@@ -9304,6 +9321,8 @@ func MatherialToProductGetByFilterInt(field string, param int, withDeleted bool,
 			&m.IsMultiselect,
 			&m.Comm,
 			&m.IsUsed,
+			&m.AskNum,
+			&m.AddToPrice,
 			&m.IsActive,
 		); err != nil {
 			return nil, err
@@ -9351,6 +9370,8 @@ func MatherialToProductGetByFilterStr(field string, param string, withDeleted bo
 			&m.IsMultiselect,
 			&m.Comm,
 			&m.IsUsed,
+			&m.AskNum,
+			&m.AddToPrice,
 			&m.IsActive,
 		); err != nil {
 			return nil, err
@@ -9362,7 +9383,7 @@ func MatherialToProductGetByFilterStr(field string, param string, withDeleted bo
 }
 
 func MatherialToProductTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "product_id", "matherial_id", "number", "coeff", "cost", "list_name", "is_multiselect", "comm", "is_used", "is_active"}
+	fields := []string{"id", "product_id", "matherial_id", "number", "coeff", "cost", "list_name", "is_multiselect", "comm", "is_used", "ask_num", "add_to_price", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -9848,6 +9869,8 @@ type OperationToProduct struct {
 	EquipmentCost float64 `json:"equipment_cost"`
 	Comm          string  `json:"comm"`
 	IsUsed        bool    `json:"is_used"`
+	AskNum        bool    `json:"ask_num"`
+	AddToPrice    bool    `json:"add_to_price"`
 	IsActive      bool    `json:"is_active"`
 }
 
@@ -9874,6 +9897,8 @@ func OperationToProductGet(id int, tx *sql.Tx) (OperationToProduct, error) {
 		&o.EquipmentCost,
 		&o.Comm,
 		&o.IsUsed,
+		&o.AskNum,
+		&o.AddToPrice,
 		&o.IsActive,
 	)
 	return o, err
@@ -9915,6 +9940,8 @@ func OperationToProductGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([
 			&o.EquipmentCost,
 			&o.Comm,
 			&o.IsUsed,
+			&o.AskNum,
+			&o.AddToPrice,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -9938,8 +9965,8 @@ func OperationToProductCreate(o OperationToProduct, tx *sql.Tx) (OperationToProd
 	}
 
 	sql := `INSERT INTO operation_to_product
-            (product_id, operation_id, user_id, number, coeff, cost, list_name, is_multiselect, equipment_id, equipment_cost, comm, is_used, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (product_id, operation_id, user_id, number, coeff, cost, list_name, is_multiselect, equipment_id, equipment_cost, comm, is_used, ask_num, add_to_price, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		o.ProductId,
@@ -9954,6 +9981,8 @@ func OperationToProductCreate(o OperationToProduct, tx *sql.Tx) (OperationToProd
 		o.EquipmentCost,
 		o.Comm,
 		o.IsUsed,
+		o.AskNum,
+		o.AddToPrice,
 		o.IsActive,
 	)
 	if err != nil {
@@ -9987,7 +10016,7 @@ func OperationToProductUpdate(o OperationToProduct, tx *sql.Tx) (OperationToProd
 	}
 
 	sql := `UPDATE operation_to_product SET
-                    product_id=?, operation_id=?, user_id=?, number=?, coeff=?, cost=?, list_name=?, is_multiselect=?, equipment_id=?, equipment_cost=?, comm=?, is_used=?, is_active=?
+                    product_id=?, operation_id=?, user_id=?, number=?, coeff=?, cost=?, list_name=?, is_multiselect=?, equipment_id=?, equipment_cost=?, comm=?, is_used=?, ask_num=?, add_to_price=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -10004,6 +10033,8 @@ func OperationToProductUpdate(o OperationToProduct, tx *sql.Tx) (OperationToProd
 		o.EquipmentCost,
 		o.Comm,
 		o.IsUsed,
+		o.AskNum,
+		o.AddToPrice,
 		o.IsActive,
 		o.Id,
 	)
@@ -10094,6 +10125,8 @@ func OperationToProductGetByFilterInt(field string, param int, withDeleted bool,
 			&o.EquipmentCost,
 			&o.Comm,
 			&o.IsUsed,
+			&o.AskNum,
+			&o.AddToPrice,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -10144,6 +10177,8 @@ func OperationToProductGetByFilterStr(field string, param string, withDeleted bo
 			&o.EquipmentCost,
 			&o.Comm,
 			&o.IsUsed,
+			&o.AskNum,
+			&o.AddToPrice,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -10155,7 +10190,7 @@ func OperationToProductGetByFilterStr(field string, param string, withDeleted bo
 }
 
 func OperationToProductTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "product_id", "operation_id", "user_id", "number", "coeff", "cost", "list_name", "is_multiselect", "equipment_id", "equipment_cost", "comm", "is_used", "is_active"}
+	fields := []string{"id", "product_id", "operation_id", "user_id", "number", "coeff", "cost", "list_name", "is_multiselect", "equipment_id", "equipment_cost", "comm", "is_used", "ask_num", "add_to_price", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -10205,6 +10240,8 @@ type ProductToProduct struct {
 	ListName      string  `json:"list_name"`
 	IsMultiselect bool    `json:"is_multiselect"`
 	IsUsed        bool    `json:"is_used"`
+	AskNum        bool    `json:"ask_num"`
+	AddToPrice    bool    `json:"add_to_price"`
 	IsActive      bool    `json:"is_active"`
 }
 
@@ -10229,6 +10266,8 @@ func ProductToProductGet(id int, tx *sql.Tx) (ProductToProduct, error) {
 		&p.ListName,
 		&p.IsMultiselect,
 		&p.IsUsed,
+		&p.AskNum,
+		&p.AddToPrice,
 		&p.IsActive,
 	)
 	return p, err
@@ -10268,6 +10307,8 @@ func ProductToProductGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]P
 			&p.ListName,
 			&p.IsMultiselect,
 			&p.IsUsed,
+			&p.AskNum,
+			&p.AddToPrice,
 			&p.IsActive,
 		); err != nil {
 			return nil, err
@@ -10291,8 +10332,8 @@ func ProductToProductCreate(p ProductToProduct, tx *sql.Tx) (ProductToProduct, e
 	}
 
 	sql := `INSERT INTO product_to_product
-            (product_id, product2_id, width, length, number, coeff, cost, list_name, is_multiselect, is_used, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (product_id, product2_id, width, length, number, coeff, cost, list_name, is_multiselect, is_used, ask_num, add_to_price, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		p.ProductId,
@@ -10305,6 +10346,8 @@ func ProductToProductCreate(p ProductToProduct, tx *sql.Tx) (ProductToProduct, e
 		p.ListName,
 		p.IsMultiselect,
 		p.IsUsed,
+		p.AskNum,
+		p.AddToPrice,
 		p.IsActive,
 	)
 	if err != nil {
@@ -10338,7 +10381,7 @@ func ProductToProductUpdate(p ProductToProduct, tx *sql.Tx) (ProductToProduct, e
 	}
 
 	sql := `UPDATE product_to_product SET
-                    product_id=?, product2_id=?, width=?, length=?, number=?, coeff=?, cost=?, list_name=?, is_multiselect=?, is_used=?, is_active=?
+                    product_id=?, product2_id=?, width=?, length=?, number=?, coeff=?, cost=?, list_name=?, is_multiselect=?, is_used=?, ask_num=?, add_to_price=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -10353,6 +10396,8 @@ func ProductToProductUpdate(p ProductToProduct, tx *sql.Tx) (ProductToProduct, e
 		p.ListName,
 		p.IsMultiselect,
 		p.IsUsed,
+		p.AskNum,
+		p.AddToPrice,
 		p.IsActive,
 		p.Id,
 	)
@@ -10441,6 +10486,8 @@ func ProductToProductGetByFilterInt(field string, param int, withDeleted bool, d
 			&p.ListName,
 			&p.IsMultiselect,
 			&p.IsUsed,
+			&p.AskNum,
+			&p.AddToPrice,
 			&p.IsActive,
 		); err != nil {
 			return nil, err
@@ -10489,6 +10536,8 @@ func ProductToProductGetByFilterStr(field string, param string, withDeleted bool
 			&p.ListName,
 			&p.IsMultiselect,
 			&p.IsUsed,
+			&p.AskNum,
+			&p.AddToPrice,
 			&p.IsActive,
 		); err != nil {
 			return nil, err
@@ -10500,7 +10549,7 @@ func ProductToProductGetByFilterStr(field string, param string, withDeleted bool
 }
 
 func ProductToProductTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "product_id", "product2_id", "width", "length", "number", "coeff", "cost", "list_name", "is_multiselect", "is_used", "is_active"}
+	fields := []string{"id", "product_id", "product2_id", "width", "length", "number", "coeff", "cost", "list_name", "is_multiselect", "is_used", "ask_num", "add_to_price", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -20083,6 +20132,7 @@ type WProduct struct {
 	Length         float64 `json:"length"`
 	MinCost        float64 `json:"min_cost"`
 	Cost           float64 `json:"cost"`
+	RoundTo        float64 `json:"round_to"`
 	UserId         int     `json:"user_id"`
 	Barcode        string  `json:"barcode"`
 	IsActive       bool    `json:"is_active"`
@@ -20107,6 +20157,7 @@ func WProductGet(id int) (WProduct, error) {
 		&p.Length,
 		&p.MinCost,
 		&p.Cost,
+		&p.RoundTo,
 		&p.UserId,
 		&p.Barcode,
 		&p.IsActive,
@@ -20146,6 +20197,7 @@ func WProductGetAll(withDeleted bool, deletedOnly bool) ([]WProduct, error) {
 			&p.Length,
 			&p.MinCost,
 			&p.Cost,
+			&p.RoundTo,
 			&p.UserId,
 			&p.Barcode,
 			&p.IsActive,
@@ -20192,6 +20244,7 @@ func WProductGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 			&p.Length,
 			&p.MinCost,
 			&p.Cost,
+			&p.RoundTo,
 			&p.UserId,
 			&p.Barcode,
 			&p.IsActive,
@@ -20239,6 +20292,7 @@ func WProductGetByFilterStr(field string, param string, withDeleted bool, delete
 			&p.Length,
 			&p.MinCost,
 			&p.Cost,
+			&p.RoundTo,
 			&p.UserId,
 			&p.Barcode,
 			&p.IsActive,
@@ -22619,6 +22673,8 @@ type WMatherialToProduct struct {
 	IsMultiselect bool    `json:"is_multiselect"`
 	Comm          string  `json:"comm"`
 	IsUsed        bool    `json:"is_used"`
+	AskNum        bool    `json:"ask_num"`
+	AddToPrice    bool    `json:"add_to_price"`
 	IsActive      bool    `json:"is_active"`
 	Product       string  `json:"product"`
 	Matherial     string  `json:"matherial"`
@@ -22640,6 +22696,8 @@ func WMatherialToProductGet(id int) (WMatherialToProduct, error) {
 		&m.IsMultiselect,
 		&m.Comm,
 		&m.IsUsed,
+		&m.AskNum,
+		&m.AddToPrice,
 		&m.IsActive,
 		&m.Product,
 		&m.Matherial,
@@ -22676,6 +22734,8 @@ func WMatherialToProductGetAll(withDeleted bool, deletedOnly bool) ([]WMatherial
 			&m.IsMultiselect,
 			&m.Comm,
 			&m.IsUsed,
+			&m.AskNum,
+			&m.AddToPrice,
 			&m.IsActive,
 			&m.Product,
 			&m.Matherial,
@@ -22719,6 +22779,8 @@ func WMatherialToProductGetByFilterInt(field string, param int, withDeleted bool
 			&m.IsMultiselect,
 			&m.Comm,
 			&m.IsUsed,
+			&m.AskNum,
+			&m.AddToPrice,
 			&m.IsActive,
 			&m.Product,
 			&m.Matherial,
@@ -22763,6 +22825,8 @@ func WMatherialToProductGetByFilterStr(field string, param string, withDeleted b
 			&m.IsMultiselect,
 			&m.Comm,
 			&m.IsUsed,
+			&m.AskNum,
+			&m.AddToPrice,
 			&m.IsActive,
 			&m.Product,
 			&m.Matherial,
@@ -23042,6 +23106,8 @@ type WOperationToProduct struct {
 	EquipmentCost float64 `json:"equipment_cost"`
 	Comm          string  `json:"comm"`
 	IsUsed        bool    `json:"is_used"`
+	AskNum        bool    `json:"ask_num"`
+	AddToPrice    bool    `json:"add_to_price"`
 	IsActive      bool    `json:"is_active"`
 	Product       string  `json:"product"`
 	Operation     string  `json:"operation"`
@@ -23070,6 +23136,8 @@ func WOperationToProductGet(id int) (WOperationToProduct, error) {
 		&o.EquipmentCost,
 		&o.Comm,
 		&o.IsUsed,
+		&o.AskNum,
+		&o.AddToPrice,
 		&o.IsActive,
 		&o.Product,
 		&o.Operation,
@@ -23113,6 +23181,8 @@ func WOperationToProductGetAll(withDeleted bool, deletedOnly bool) ([]WOperation
 			&o.EquipmentCost,
 			&o.Comm,
 			&o.IsUsed,
+			&o.AskNum,
+			&o.AddToPrice,
 			&o.IsActive,
 			&o.Product,
 			&o.Operation,
@@ -23163,6 +23233,8 @@ func WOperationToProductGetByFilterInt(field string, param int, withDeleted bool
 			&o.EquipmentCost,
 			&o.Comm,
 			&o.IsUsed,
+			&o.AskNum,
+			&o.AddToPrice,
 			&o.IsActive,
 			&o.Product,
 			&o.Operation,
@@ -23214,6 +23286,8 @@ func WOperationToProductGetByFilterStr(field string, param string, withDeleted b
 			&o.EquipmentCost,
 			&o.Comm,
 			&o.IsUsed,
+			&o.AskNum,
+			&o.AddToPrice,
 			&o.IsActive,
 			&o.Product,
 			&o.Operation,
@@ -23240,6 +23314,8 @@ type WProductToProduct struct {
 	ListName      string  `json:"list_name"`
 	IsMultiselect bool    `json:"is_multiselect"`
 	IsUsed        bool    `json:"is_used"`
+	AskNum        bool    `json:"ask_num"`
+	AddToPrice    bool    `json:"add_to_price"`
 	IsActive      bool    `json:"is_active"`
 	Product       string  `json:"product"`
 	Product2      string  `json:"product2"`
@@ -23262,6 +23338,8 @@ func WProductToProductGet(id int) (WProductToProduct, error) {
 		&p.ListName,
 		&p.IsMultiselect,
 		&p.IsUsed,
+		&p.AskNum,
+		&p.AddToPrice,
 		&p.IsActive,
 		&p.Product,
 		&p.Product2,
@@ -23299,6 +23377,8 @@ func WProductToProductGetAll(withDeleted bool, deletedOnly bool) ([]WProductToPr
 			&p.ListName,
 			&p.IsMultiselect,
 			&p.IsUsed,
+			&p.AskNum,
+			&p.AddToPrice,
 			&p.IsActive,
 			&p.Product,
 			&p.Product2,
@@ -23343,6 +23423,8 @@ func WProductToProductGetByFilterInt(field string, param int, withDeleted bool, 
 			&p.ListName,
 			&p.IsMultiselect,
 			&p.IsUsed,
+			&p.AskNum,
+			&p.AddToPrice,
 			&p.IsActive,
 			&p.Product,
 			&p.Product2,
@@ -23388,6 +23470,8 @@ func WProductToProductGetByFilterStr(field string, param string, withDeleted boo
 			&p.ListName,
 			&p.IsMultiselect,
 			&p.IsUsed,
+			&p.AskNum,
+			&p.AddToPrice,
 			&p.IsActive,
 			&p.Product,
 			&p.Product2,
