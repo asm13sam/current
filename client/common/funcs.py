@@ -111,6 +111,9 @@ def dataiso_to_words(data_iso_str, only_year=False):
         date = f'{dt.day} {months[dt.month]} {dt.year}р.'
     return date
 
+def round_to(value: float, to: float):
+    res = int(value/to)*to
+    return res if to >= 1 else round(res, 2)
 
 def id_generator():
     counter = 1

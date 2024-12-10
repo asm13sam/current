@@ -1,19 +1,19 @@
 package main
 
 type MatherialExtra struct {
-	Matherial          Matherial          `json:"matherial"`
+	Matherial          WMatherial         `json:"matherial"`
 	MatherialToProduct MatherialToProduct `json:"matherial_to_product"`
 	Uid                int                `json:"uid"`
 }
 
 type OperationExtra struct {
-	Operation          Operation          `json:"operation"`
+	Operation          WOperation         `json:"operation"`
 	OperationToProduct OperationToProduct `json:"operation_to_product"`
 	Uid                int                `json:"uid"`
 }
 
 type ProductExtra struct {
-	Product          Product          `json:"product"`
+	Product          WProduct         `json:"product"`
 	ProductToProduct ProductToProduct `json:"product_to_product"`
 	Uid              int              `json:"uid"`
 }
@@ -44,7 +44,7 @@ func ProductComplexGet(productId int) (ProductComplex, error) {
 		if !ok {
 			pc.MaterialToProd[m2p.ListName] = []MatherialExtra{}
 		}
-		m, err := MatherialGet(m2p.MatherialId, nil)
+		m, err := WMatherialGet(m2p.MatherialId)
 		if err != nil {
 			return pc, err
 		}
@@ -61,7 +61,7 @@ func ProductComplexGet(productId int) (ProductComplex, error) {
 		if !ok {
 			pc.OperationToProd[o2p.ListName] = []OperationExtra{}
 		}
-		o, err := OperationGet(o2p.OperationId, nil)
+		o, err := WOperationGet(o2p.OperationId)
 		if err != nil {
 			return pc, err
 		}
@@ -78,7 +78,7 @@ func ProductComplexGet(productId int) (ProductComplex, error) {
 		if !ok {
 			pc.ProductToProd[p2p.ListName] = []ProductExtra{}
 		}
-		p, err := ProductGet(p2p.Product2Id, nil)
+		p, err := WProductGet(p2p.Product2Id)
 		if err != nil {
 			return pc, err
 		}
@@ -100,7 +100,7 @@ func ProductDeepGet(productId int, counter *int) (ProductDeep, error) {
 	var err error
 	var pd ProductDeep
 	pd.ProductExtra.ProductToProduct = ProductToProduct{}
-	pd.ProductExtra.Product, err = ProductGet(productId, nil)
+	pd.ProductExtra.Product, err = WProductGet(productId)
 	if err != nil {
 		return pd, err
 	}
@@ -118,7 +118,7 @@ func ProductDeepGet(productId int, counter *int) (ProductDeep, error) {
 		if !ok {
 			pd.MaterialToProd[m2p.ListName] = []MatherialExtra{}
 		}
-		m, err := MatherialGet(m2p.MatherialId, nil)
+		m, err := WMatherialGet(m2p.MatherialId)
 		if err != nil {
 			return pd, err
 		}
@@ -135,7 +135,7 @@ func ProductDeepGet(productId int, counter *int) (ProductDeep, error) {
 		if !ok {
 			pd.OperationToProd[o2p.ListName] = []OperationExtra{}
 		}
-		o, err := OperationGet(o2p.OperationId, nil)
+		o, err := WOperationGet(o2p.OperationId)
 		if err != nil {
 			return pd, err
 		}
