@@ -394,6 +394,8 @@ class DetailsOperationToProductTable(DetailsItemTable):
         res = dlg.exec()
         if res and dlg.value:
             i.value = dlg.value
+            i.value['is_multiselect'] = self.is_multiselect
+            print('is_multiselect', self.is_multiselect)
             err = i.save()
             if err:
                 error(err)
@@ -569,6 +571,7 @@ class DetailsToProductsTab(QWidget):
                 values=lists[list_name], 
                 list_name=list_tab_name,
                 fields=self.fields,
+                is_multiselect = list_name.startswith('[+]'),
                 )
             table.set_main_table(self.main_table)
             self.tabs.addTab(table, list_name)

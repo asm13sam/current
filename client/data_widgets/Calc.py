@@ -325,7 +325,7 @@ class ProductExtra:
                         v['matherial_to_ordering']['length'] = int(length * k)
                         v['matherial_to_ordering']['pieces'] = pieces
                     v['matherial_to_ordering']['number'] = mat_number * v['matherial_to_product']['number']
-                    v['matherial_to_ordering']['cost'] = mat_number * v['matherial_to_ordering']['price']
+                    # v['matherial_to_ordering']['cost'] = mat_number * v['matherial_to_ordering']['price']
 
         for k, val in value['operation_extra'].items():
             for v in val:
@@ -335,7 +335,7 @@ class ProductExtra:
                     else:
                         op_number = number
                     v['operation_to_ordering']['number'] = op_number * v['operation_to_product']['number']
-                    v['operation_to_ordering']['cost'] = op_number * v['operation_to_ordering']['price']
+                    # v['operation_to_ordering']['cost'] = op_number * v['operation_to_ordering']['price']
                     v['operation_to_ordering']["user_sum"] = op_number * v['operation']['price'] * v['operation_to_product']['number']
                     v['operation_to_ordering']["equipment_cost"] = op_number * v['operation_to_product']['equipment_cost']
 
@@ -352,7 +352,7 @@ class ProductExtra:
                         v['product_extra']['product_to_ordering']['length'] = int(length * k)
                         v['product_extra']['product_to_ordering']['pieces'] = pieces
                     v['product_extra']['product_to_ordering']['number'] = prod_number * v['product_extra']['product_to_product']['number']
-                    v['product_extra']['product_to_ordering']['cost'] = prod_number * v['product_extra']['product_to_ordering']['price']
+                    # v['product_extra']['product_to_ordering']['cost'] = prod_number * v['product_extra']['product_to_ordering']['price']
                     self.recalc_num(v)
 
     def get_persent_by_number(self, value=None):
