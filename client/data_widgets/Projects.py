@@ -200,15 +200,15 @@ class ProjectCurrent(QSplitter):
                     count += 1
         return count        
             
-    def doc_dblclicked(self, value):
-        app = App()
-        model = {k: v for k, v in app.model_w[value['type']].items() 
-                    if not (k.endswith('_id') or k.endswith('_uid') or k == 'comm')}
-        if value['type'].startswith('cash_'):
-            value['cash_sum'] = value['cost']
-        elif value['type'].startswith('whs_'):
-            value['whs_sum'] = value['cost']
-        info = InfoBlock(model, value=value)
-        dlg = CustomDialog(widget=info, title='Document')
-        dlg.exec()
+    # def doc_dblclicked(self, value):
+    #     app = App()
+    #     model = {k: v for k, v in app.model_w[value['type']].items() 
+    #                 if not (k.endswith('_id') or k.endswith('_uid') or k == 'comm')}
+    #     if value['type'].startswith('cash_'):
+    #         value['cash_sum'] = value['cost']
+    #     elif value['type'].startswith('whs_'):
+    #         value['whs_sum'] = value['cost']
+    #     info = InfoBlock(model, value=value)
+    #     dlg = CustomDialog(widget=info, title='Document')
+    #     dlg.exec()
 

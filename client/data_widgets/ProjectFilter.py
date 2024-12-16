@@ -113,9 +113,9 @@ class ByContragentFilter(QWidget):
         cont_table = QPushButton('Контакти')
         self.box.addWidget(cont_table)
         cont_table.clicked.connect(self.contacts_required)
-        edit_btn = QPushButton('Редагувати')
-        self.box.addWidget(edit_btn)
-        edit_btn.clicked.connect(lambda: self.action_invoked('edit'))
+        self.edit_btn = QPushButton('Редагувати')
+        self.box.addWidget(self.edit_btn)
+        self.edit_btn.clicked.connect(lambda: self.action_invoked('edit'))
         
     def contragent_group_changed(self, value):
         if not value['id']:
