@@ -19,49 +19,49 @@ from widgets.Dialogs import CustomDialog, ok_cansel_dlg, messbox
 from widgets.Form import ContactSelectDialog, FormDialog, CustomForm
 
 
-class ContragentCreateFormDialog(CustomDialog):
-    def __init__(self, contragent: Item, contact: Item) -> None:
-        self.contact_value = {}
-        self.value = {}
-        self.box = QVBoxLayout()
-        self.forms = QWidget()
-        self.forms.setLayout(self.box)
-        self.box.addWidget(QLabel('Контрагент'))
-        self.contragent = contragent
-        self.contragent_form = CustomForm(
-            data_model=self.contragent.model,
-            fields=['name', 'contragent_group_id', 'phone', 'email', 'comm', 'dir_name'],
-            value=self.contragent.value,
-            )
-        self.box.addWidget(self.contragent_form)
-        self.contragent_form.hide_save_btn()
-        self.box.addWidget(QLabel('Контакт'))
-        self.contact = contact
-        self.contact_form = CustomForm(
-            data_model=self.contact.model,
-            fields=['name', 'phone', 'email'],
-            value=self.contact.value,
-            )
-        self.box.addWidget(self.contact_form)
+# class ContragentCreateFormDialog(CustomDialog):
+#     def __init__(self, contragent: Item, contact: Item) -> None:
+#         self.contact_value = {}
+#         self.value = {}
+#         self.box = QVBoxLayout()
+#         self.forms = QWidget()
+#         self.forms.setLayout(self.box)
+#         self.box.addWidget(QLabel('Контрагент'))
+#         self.contragent = contragent
+#         self.contragent_form = CustomForm(
+#             data_model=self.contragent.model,
+#             fields=['name', 'contragent_group_id', 'phone', 'email', 'comm', 'dir_name'],
+#             value=self.contragent.value,
+#             )
+#         self.box.addWidget(self.contragent_form)
+#         self.contragent_form.hide_save_btn()
+#         self.box.addWidget(QLabel('Контакт'))
+#         self.contact = contact
+#         self.contact_form = CustomForm(
+#             data_model=self.contact.model,
+#             fields=['name', 'phone', 'email'],
+#             value=self.contact.value,
+#             )
+#         self.box.addWidget(self.contact_form)
         
-        super().__init__(self.forms, 'Створити контрагента і контакт')
-        self.contact_form.saveRequested.connect(self.get_contact_value)
-        self.contragent_form.saveRequested.connect(self.get_contragent_value)
+#         super().__init__(self.forms, 'Створити контрагента і контакт')
+#         self.contact_form.saveRequested.connect(self.get_contact_value)
+#         self.contragent_form.saveRequested.connect(self.get_contragent_value)
 
-    def get_contact_value(self, value):
-        self.contact_value = value
-        self.contragent_form.get_value()
+#     def get_contact_value(self, value):
+#         self.contact_value = value
+#         self.contragent_form.get_value()
         
-    def get_contragent_value(self, value):
-        self.value = value
-        self.contragent_form.set_changed(False)
+#     def get_contragent_value(self, value):
+#         self.value = value
+#         self.contragent_form.set_changed(False)
 
-    def accept(self) -> None:
-        if self.contragent_form.changed():
-            mess = "Відкинути не збережені зміни?"
-            if not ok_cansel_dlg(mess):
-                return
-        return super().accept()    
+#     def accept(self) -> None:
+#         if self.contragent_form.changed():
+#             mess = "Відкинути не збережені зміни?"
+#             if not ok_cansel_dlg(mess):
+#                 return
+#         return super().accept()    
 
 
 class ProjectViewer(QSplitter):
@@ -72,13 +72,14 @@ class ProjectViewer(QSplitter):
         super().__init__(Qt.Orientation.Horizontal)
         self.project = Item('project')
         self.filter = ProjectFilter()
+        self.filter.contragent_filter.edit_btn.setVisible(False)
         self.addWidget(self.filter)
         self.filter.valuesChanged.connect(self.filter_changed)
         self.filter.valuesReloaded.connect(self.filter_reloaded)
         
         self.fields = ['id', 'contragent', 'project_type', 'name', 'created_at']
         self.by_client_fields = ['id', 'project_status', 'project_type', 'name', 'created_at']
-        buttons=['create', 'copy', 'edit']
+        buttons=['reload']
         self.table = TableWControls(self.project.model_w, self.fields, buttons=buttons)
         self.addWidget(self.table)
         folder_btn = QPushButton('До теки')
@@ -96,7 +97,7 @@ class ProjectViewer(QSplitter):
         
         self.table.actionInvoked.connect(self.action)
         self.filter.contragent_filter.contactsRequired.connect(self.show_contacts)
-        self.filter.contragent_filter.actionInvoked.connect(self.act_contragent)
+        # self.filter.contragent_filter.actionInvoked.connect(self.act_contragent)
         self.setSizes([100, 400])
 
     def filter_changed(self, values):
@@ -202,20 +203,20 @@ class ProjectViewer(QSplitter):
         dlg = ContactSelectDialog(contragent_id=contragent_value['id'])
         dlg.exec()
 
-    def act_contragent(self, action, value):
-        contragent = Item('contragent')
-        if action == 'edit':
-            dlg = FormDialog('Редагувати', contragent.model, value)
-        else:
-            return
-        res = dlg.exec()
-        if not res:
-            return
+    # def act_contragent(self, action, value):
+    #     contragent = Item('contragent')
+    #     if action == 'edit':
+    #         dlg = FormDialog('Редагувати', contragent.model, value)
+    #     else:
+    #         return
+    #     res = dlg.exec()
+    #     if not res:
+    #         return
     
-        contragent.value = dlg.value
-        if not contragent.value:
-            return
-        err = contragent.save()
-        if err:
-            error(err)
+    #     contragent.value = dlg.value
+    #     if not contragent.value:
+    #         return
+    #     err = contragent.save()
+    #     if err:
+    #         error(err)
             

@@ -1605,7 +1605,7 @@ class ItemsToOrdering(QSplitter):
         self.orderings.table.table.setCurrentIndex(index)
 
     def update_sum_by_tree(self):
-        new_sum = self.details_tree.deep_calc_sum()
+        new_sum = self.details_tree.calc_sum()
         self.current_ordering_value['price'] = new_sum
         self.current_ordering_value['profit'] = round(new_sum * self.current_ordering_value['persent']/100, 2)
         self.current_ordering_value['cost'] = round(new_sum + self.current_ordering_value['profit'], 2)
@@ -2063,7 +2063,7 @@ class ToOrdering(QSplitter):
 
     def update_sum(self):
         self.details_tree.reload()
-        new_sum = self.details_tree.deep_calc_sum()
+        new_sum = self.details_tree.calc_sum()
         self.ordering.value = self.ordering_table.current_value
         self.ordering.value['price'] = new_sum
         self.ordering.value['profit'] = round(new_sum * self.ordering.value['persent']/100, 2)

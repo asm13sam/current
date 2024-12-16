@@ -18,7 +18,7 @@ from PyQt6.QtWidgets import (
 
 from data.app import App
 from data.model import Item
-from widgets.Dialogs import error
+from widgets.Dialogs import error, messbox
 from common.params import FULL_VALUE_ROLE
 from widgets.Form import CustomFormDialog, Selector
 from widgets.ButtonsBlock import ButtonsBlock
@@ -33,7 +33,7 @@ from data_widgets.Helpers import (
     ComplexList,
     OrderingForm,
     )
-from common.funcs import fake_id
+from common.funcs import fake_id, round_to
 
 
 class MatherialExtra:
@@ -324,6 +324,8 @@ class ProductExtra:
                         v['matherial_to_ordering']['width'] = int(width * k)
                         v['matherial_to_ordering']['length'] = int(length * k)
                         v['matherial_to_ordering']['pieces'] = pieces
+                    if v['matherial_to_product']['add_to_price']:
+                        mat_number = v['matherial_to_product']['number']
                     v['matherial_to_ordering']['number'] = mat_number * v['matherial_to_product']['number']
                     v['matherial_to_ordering']['cost'] = mat_number * v['matherial_to_ordering']['price']
 
@@ -334,7 +336,8 @@ class ProductExtra:
                         op_number = (width + length) * 2 * pieces / 1000
                     else:
                         op_number = number
-                    v['operation_to_ordering']['number'] = op_number * v['operation_to_product']['number']
+                    if v['operation_to_product']['add_to_price']:
+                        op_number = v['operation_to_product']['number']
                     v['operation_to_ordering']['cost'] = op_number * v['operation_to_ordering']['price']
                     v['operation_to_ordering']["user_sum"] = op_number * v['operation']['price'] * v['operation_to_product']['number']
                     v['operation_to_ordering']["equipment_cost"] = op_number * v['operation_to_product']['equipment_cost']
@@ -351,6 +354,10 @@ class ProductExtra:
                         v['product_extra']['product_to_ordering']['width'] = int(width * k)
                         v['product_extra']['product_to_ordering']['length'] = int(length * k)
                         v['product_extra']['product_to_ordering']['pieces'] = pieces
+                    
+                    if v['product_extra']['product_to_product']['add_to_price']:
+                        prod_number = v['product_extra']['product_to_product']['number']
+                    
                     v['product_extra']['product_to_ordering']['number'] = prod_number * v['product_extra']['product_to_product']['number']
                     v['product_extra']['product_to_ordering']['cost'] = prod_number * v['product_extra']['product_to_ordering']['price']
                     self.recalc_num(v)
@@ -369,7 +376,8 @@ class ProductExtra:
         app = App()
         is_linear = value['product_extra']['product']['measure_id'] == app.config['measure linear']
         is_square = value['product_extra']['product']['measure_id'] == app.config['measure square']
-        if is_linear or is_square:
+
+        if (is_linear or is_square) and numbers_to_product.values[0]['number'] == 0:
             size = 0.0
             persent = 0
             numbers_to_product.values.sort(key=lambda v: v['size'], reverse=True)
@@ -433,21 +441,48 @@ class ProductExtra:
                     matherials_price += mat_price
                     operations_price += op_price
                     amortisation += amort
-        value['product_extra']['product_to_ordering']['price'] = total
+        # value['product_extra']['product_to_ordering']['price'] = total
+        
+        # if is_top:
+        #     if value['product_extra']['product_to_ordering']['length']:
+        #         total_price = total * number / value['product_extra']['product_to_ordering']['pieces']
+        #         if total_price < value['product_extra']['product']['min_cost']:
+        #             total_price = value['product_extra']['product']['min_cost']
+        #             cost = total_price * value['product_extra']['product_to_ordering']['pieces']
+        #             value['product_extra']['product_to_ordering']['cost'] = cost
+        #             return cost, matherials_price, operations_price, amortisation
+        # persent = self.get_persent_by_number()
+        # price = round(total + total * persent / 100, 1)
+        # value['product_extra']['product_to_ordering']['price'] = price
+        # cost = price * number
+        # value['product_extra']['product_to_ordering']['cost'] = cost
+        # return cost, matherials_price, operations_price, amortisation
+
+        persent = self.get_persent_by_number()
+        price = round(total + total * persent / 100, 2)
+        
+        cost = price * number
         
         if is_top:
+            print(cost, value['product_extra']['product']['min_cost'])
             if value['product_extra']['product_to_ordering']['length']:
-                total_price = total * number / value['product_extra']['product_to_ordering']['pieces']
-                if total_price < value['product_extra']['product']['min_cost']:
-                    total_price = value['product_extra']['product']['min_cost']
-                    cost = total_price * value['product_extra']['product_to_ordering']['pieces']
-                    value['product_extra']['product_to_ordering']['cost'] = cost
-                    return cost, matherials_price, operations_price, amortisation
-        persent = self.get_persent_by_number()
-        price = round(total + total * persent / 100, 1)
+                # total_price = price * number #/ value['product_extra']['product_to_ordering']['pieces']
+                if cost < value['product_extra']['product']['min_cost']:
+                    cost = value['product_extra']['product']['min_cost']
+                    # cost = total_price #* value['product_extra']['product_to_ordering']['pieces']
+            # else: 
+            # perv_cost = cost   
+            # price = round(price, 2)
+            # perv_cost = price * number
+            # profit = perv_cost * value['product_extra']['product_to_ordering']['persent'] / 100 / number
+            # perv_cost += profit * number
+            cost = round_to(cost, value['product_extra']['product']['round_to'])
+            # profit = round(profit*number + perv_cost - cost, 2)
+            # value['product_extra']['product_to_ordering']['profit'] = profit
+            print(price, cost)
         value['product_extra']['product_to_ordering']['price'] = price
-        cost = price * number
         value['product_extra']['product_to_ordering']['cost'] = cost
+        
         return cost, matherials_price, operations_price, amortisation
     
     def save_2o(self, ordering_id, p2o_id=0):
@@ -456,11 +491,13 @@ class ProductExtra:
         self.value['product_extra']['product_to_ordering']["product_to_ordering_id"] = p2o_id
         p2o = Item('product_to_ordering')
         p2o.value = self.value['product_extra']['product_to_ordering']
+        messbox(str(p2o.value['cost']), 'before')
         err = p2o.create_p2o_defaults()
         if err:
             error(err)
             return
         self.value['product_extra']['product_to_ordering'] = p2o.value
+        messbox(str(p2o.value['cost']), 'after')
         self.create_used(ordering_id)
         return p2o.value
                     
@@ -802,6 +839,8 @@ class ProductWidget(QWidget):
     def product_changed(self):
         self.pw.reload()
         persent = self.form.widgets['persent'].value()
+        # p2o=self.product.value['product_extra']['product_to_ordering']
+        # print('prod changed', p2o['price'], p2o['cost'], p2o['profit'])
         self.form.reload(self.product.value['product_extra']['product_to_ordering'])
         self.form.widgets['persent'].set_value(persent)
         self.form.persent_changed()
