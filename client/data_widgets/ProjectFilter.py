@@ -9,7 +9,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     )
 
-from data.model import Item
+from data.model import Item, ProjectItem
 from widgets.ButtonsBlock import ButtonsBlock
 from widgets.ComboBoxSelector import ComboBoxSelector
 from widgets.SearchCBListSelector import SearchCBListSelector
@@ -180,7 +180,7 @@ class ProjectFilter(QTabWidget):
     valuesReloaded = pyqtSignal(list)
     def __init__(self) -> None:
         super().__init__()
-        self.project = Item('project')
+        self.project = ProjectItem()
         self.current_filter = {}
         
         self.project_status = Item('project_status')
