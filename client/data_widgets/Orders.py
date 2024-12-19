@@ -1231,7 +1231,6 @@ class ProductsTab(QWidget):
                     v['matherial_to_ordering']['number'] = number * v['matherial_to_product']['number']
                     v['matherial_to_ordering']['cost'] = number * v['matherial_to_ordering']['price']
                     v['matherial_to_ordering']['product_to_ordering_id'] = p2o_id
-                    print(v['matherial_to_ordering'])
                     m2o = Item('matherial_to_ordering')
                     m2o.value = v['matherial_to_ordering']
                     m2o.value['id'] = 0
@@ -1247,6 +1246,7 @@ class ProductsTab(QWidget):
                     v['operation_to_ordering']["user_sum"] = number * v['operation']['price'] * v['operation_to_product']['number']
                     v['operation_to_ordering']["equipment_cost"] = number * v['operation_to_product']['equipment_cost']
                     v['operation_to_ordering']['product_to_ordering_id'] = p2o_id
+                    v['operation_to_ordering']['is_done'] = True
                     o2o = Item('operation_to_ordering')
                     o2o.value = v['operation_to_ordering']
                     o2o.value['id'] = 0
@@ -1301,6 +1301,8 @@ class ProductsTab(QWidget):
             return self.create_product_to_order(value, order_id)
         if order_id:
             value[f'{item_type}_to_ordering']['ordering_id'] = order_id
+            if item_type == 'operation':
+                value[f'{item_type}_to_ordering']['is_done'] = False
         else:
             value[f'{item_type}_to_ordering']['ordering_id'] = self.current_ordering.value['id']
         item_to_order = Item(f'{item_type}_to_ordering')

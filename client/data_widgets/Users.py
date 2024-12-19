@@ -9,6 +9,7 @@ class UserOrderingDetailsTable(DetailsItemTable):
         fields = [
             "id",
             "ordering",
+            "is_done",
             "user_sum",
             "operation",
             "number",
@@ -42,6 +43,14 @@ class UserOrderingDetailsTable(DetailsItemTable):
         super().reload(values)
         s = round(self.calc_sum('user_sum'), 2)
         self.user_sum.setText(str(s))
+
+    def calc_sum(self, field: str):
+        res = 0
+        for i in range(self.table.table._model.rowCount()):
+            row = self.table.table._model.get_row_value(i)
+            if row['is_done']:
+                res += row[field]
+        return res
     
 
 
