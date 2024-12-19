@@ -1445,19 +1445,23 @@ finds['ProjectFindByProjectInfoContragentNoSearchContactNoSearch'] = '''
 finds['ContragentFindByContragentSearchContactSearch'] = '''
     SELECT DISTINCT contragent.* FROM contragent
     JOIN contact on contragent.id = contact.contragent_id
+    JOIN legal on contragent.id = legal.contragent_id
     WHERE
     contragent.search LIKE ?
-    OR contact.search LIKE ?;'''
+    OR contact.search LIKE ?
+    OR legal.search LIKE ?;'''
 
 
 
 finds['WContragentFindByContragentSearchContactSearch'] = '''
         SELECT DISTINCT contragent.*, contragent_group.name FROM contragent
-        JOIN contragent_group ON contragent.contragent_group_id =   contragent_group.id
+        JOIN contragent_group ON contragent.contragent_group_id = contragent_group.id
         JOIN contact on contragent.id = contact.contragent_id
+        JOIN legal on contragent.id = legal.contragent_id
         WHERE contragent.is_active=1
         AND contact.is_active=1
-        AND (contragent.search LIKE ? OR contact.search LIKE ?);'''
+        AND legal.is_active=1
+        AND (contragent.search LIKE ? OR contact.search LIKE ? OR legal.search LIKE ?);'''
 
 def create_go_find(table, keys, find, model):
     right = model['models'][table]['rights'] + '_READ'

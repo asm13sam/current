@@ -87,13 +87,29 @@ class Item:
         return res
 
     def save(self) -> str:
-        if self.name == 'contragent' or self.name == 'contact':
+        if self.name == 'contragent' or self.name == 'contact' or self.name == 'legal':
             self.update_search()
+
+        if self.name == 'legal':
+            self.update_legal_search()
 
         if self.value['id']:
             return self.update()
         else:
             return self.create()
+
+    def update_legal_search(self):
+        search_params = [
+                    self.value['name'].lower(),
+                    self.value["full_name"].lower(),
+                    self.value["edrpou"].lower(),
+                    self.value["ipn"].lower(),
+                    self.value["iban"].lower(),
+                    self.value["mfo"].lower(),
+                    self.value["address"].lower(),
+                ]
+
+        self.value['search'] = '_'.join(search_params)
 
     def update_search(self):
         search_params = [

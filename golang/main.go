@@ -396,6 +396,27 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/find_contragent_contragent_search_contact_search/{fs}",
 		WrapAuth(GetContragentFindByContragentSearchContactSearch, CONTRAGENT_READ)).Methods("GET")
 
+	r.HandleFunc("/legal/{id:[0-9]+}",
+		WrapAuth(GetLegal, CONTRAGENT_READ)).Methods("GET")
+
+	r.HandleFunc("/legal_get_all",
+		WrapAuth(GetLegalAll, CONTRAGENT_READ)).Methods("GET")
+
+	r.HandleFunc("/legal",
+		WrapAuth(CreateLegal, CONTRAGENT_CREATE)).Methods("POST")
+
+	r.HandleFunc("/legal/{id:[0-9]+}",
+		WrapAuth(UpdateLegal, CONTRAGENT_UPDATE)).Methods("PUT")
+
+	r.HandleFunc("/legal/{id:[0-9]+}",
+		WrapAuth(DeleteLegal, CONTRAGENT_DELETE)).Methods("DELETE")
+
+	r.HandleFunc("/legal_filter_int/{fs}/{id:[0-9]+}",
+		WrapAuth(GetLegalByFilterInt, CONTRAGENT_READ)).Methods("GET")
+
+	r.HandleFunc("/legal_filter_str/{fs}/{fs2}",
+		WrapAuth(GetLegalByFilterStr, CONTRAGENT_READ)).Methods("GET")
+
 	r.HandleFunc("/contact/{id:[0-9]+}",
 		WrapAuth(GetContact, CONTRAGENT_READ)).Methods("GET")
 
@@ -1472,6 +1493,18 @@ func makeRouter() *mux.Router {
 
 	r.HandleFunc("/w_find_contragent_contragent_search_contact_search/{fs}",
 		WrapAuth(GetWContragentFindByContragentSearchContactSearch, CONTRAGENT_READ)).Methods("GET")
+
+	r.HandleFunc("/w_legal/{id:[0-9]+}",
+		WrapAuth(GetWLegal, CONTRAGENT_READ)).Methods("GET")
+
+	r.HandleFunc("/w_legal_get_all",
+		WrapAuth(GetWLegalAll, CONTRAGENT_READ)).Methods("GET")
+
+	r.HandleFunc("/w_legal_filter_int/{fs}/{id:[0-9]+}",
+		WrapAuth(GetWLegalByFilterInt, CONTRAGENT_READ)).Methods("GET")
+
+	r.HandleFunc("/w_legal_filter_str/{fs}/{fs2}",
+		WrapAuth(GetWLegalByFilterStr, CONTRAGENT_READ)).Methods("GET")
 
 	r.HandleFunc("/w_contact/{id:[0-9]+}",
 		WrapAuth(GetWContact, CONTRAGENT_READ)).Methods("GET")
