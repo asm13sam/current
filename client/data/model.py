@@ -87,7 +87,7 @@ class Item:
         return res
 
     def save(self) -> str:
-        if self.name == 'contragent' or self.name == 'contact' or self.name == 'legal':
+        if self.name == 'contragent' or self.name == 'contact':
             self.update_search()
 
         if self.name == 'legal':
@@ -337,5 +337,12 @@ class ProjectItem(Item):
         self.repo = app.project_repository
         
     def get_filter_w(self, field, value):
-        res = self.repo.get_projects_by_status(value)
+        if field == 'project_status_id':
+            res = self.repo.get_projects_by_status(value)
+        elif field == 'contragent_id':
+            res = self.repo.get_projects_by_contragent(value)
+        elif field == 'project_group_id':
+            res = self.repo.get_projects_by_group(value)
+        else:
+            return 'Невірне поле фільтрації'
         return self.process_result(res)
