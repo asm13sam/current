@@ -272,6 +272,10 @@ class CustomForm(QWidget):
                 w = ContactSelector(self.widgets['contragent_id'] if 'contragent_id' in self.widgets else None)
                 w.setValue(cur_value)
                 return w
+            if field == 'legal_id':
+                w = LegalSelector(self.widgets['contragent_id'] if 'contragent_id' in self.widgets else None)
+                w.setValue(cur_value)
+                return w
             name = '_'.join(field.split('_')[:-1])   # "matherial_id" split to material and id
             # as it is foring key, need to select other item wich id is here
             w = Selector(name, group_id=group_id, form_value=self.value)
@@ -537,7 +541,25 @@ class ContactSelector(Selector):
     
     def remove_phone(self):
         self.label.hide()
-       
+
+class LegalSelector(Selector):
+    def __init__(self, contragent_widget=None, title='Обрати'):
+        self.contragent_widget = contragent_widget
+        super().__init__('legal', title)
+        
+    def act(self):
+        contragent_id = 0
+        if self.contragent_widget:
+            contragent_id = self.contragent_widget.value()
+            if not contragent_id:
+                error('Оберіть контрагента')
+                return
+        dlg = LegalSelectDialog(contragent_id)
+        res = dlg.exec()
+        if not res:
+            return
+        self.set_value(dlg.value)
+        
 
 class FormDialog(CustomDialog):
     def __init__(self, title, data_model, fields, value):
@@ -642,8 +664,51 @@ class ContactSelectDialog(SelectDialog):
         self.widget.setMinimumWidth(1000)
 
     def create_widget(self, _, values):
-        print('create_contact_item_table')
         widget = ContactItemTable(
+            contragent_id=self.contragent_id,
+            search_field=self.search_field, 
+            values=values,
+        )
+        return widget
+
+    def do_action(self, action: str, value: dict):
+        if action == 'create':
+            action = 'copy'
+            item = Item(self.item.name)
+            item.create_default()
+            item.value['contragent_id'] = self.contragent_id
+            value = item.value
+        return super().do_action(action, value)
+    
+    def set_values(self):
+        if self.contragent_id:
+            err = self.item.get_filter_w('contragent_id', self.contragent_id)
+        else:
+            err = self.item.get_all_w()
+        if err:
+            error(err)
+            return
+        return self.item.values
+    
+    def accept_value(self, value):
+        self.value = value
+        return super().accept()
+    
+    def accept(self):
+        self.value = self.widget.table.table.get_selected_value()
+        return super().accept()
+
+
+class LegalSelectDialog(SelectDialog):
+    def __init__(self, contragent_id):
+        self.contragent_id = contragent_id
+        super().__init__('legal')
+        self.widget.table.table.valueDoubleCklicked.disconnect()
+        self.widget.table.table.valueDoubleCklicked.connect(self.accept_value)
+        self.widget.setMinimumWidth(1000)
+
+    def create_widget(self, _, values):
+        widget = LegalItemTable(
             contragent_id=self.contragent_id,
             search_field=self.search_field, 
             values=values,
@@ -1203,6 +1268,17 @@ class ItemTable(QSplitter):
 class ContactItemTable(ItemTable):
     def __init__(self, contragent_id=0, search_field: str = '', fields: list = [], values: list = None, buttons=TABLE_BUTTONS, is_vertical_inner=True, is_info_bottom=False):
         super().__init__('contact', search_field, fields, values, buttons, is_vertical_inner, is_info_bottom)
+        self.contragent_id = contragent_id
+
+    def prepare_value_to_action(self):
+        value = super().prepare_value_to_action()
+        value['contragent_id'] = self.contragent_id
+        return value
+
+
+class LegalItemTable(ItemTable):
+    def __init__(self, contragent_id=0, search_field: str = '', fields: list = [], values: list = None, buttons=TABLE_BUTTONS, is_vertical_inner=True, is_info_bottom=False):
+        super().__init__('legal', search_field, fields, values, buttons, is_vertical_inner, is_info_bottom)
         self.contragent_id = contragent_id
 
     def prepare_value_to_action(self):

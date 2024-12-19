@@ -34,6 +34,7 @@ from widgets.Form import (
     ContactSelectDialog,
     CheckWidget,
     InfoBlock,
+    LegalSelectDialog,
     )
 from widgets.ButtonsBlock import ButtonsBlock
 from widgets.Table import TableWControls, Table
@@ -696,7 +697,7 @@ class InvoiceFormDialog(CustomFormDialog):
 
 
 class ContragentGreateFormDialog(CustomDialog):
-    def __init__(self, contragent: Item, contact: Item) -> None:
+    def __init__(self, contragent: Item, contact: Item, legal: Item) -> None:
         self.contact_value = {}
         self.value = {}
         self.box = QVBoxLayout()
@@ -712,14 +713,6 @@ class ContragentGreateFormDialog(CustomDialog):
             "web",
             "comm",
             "dir_name",
-            "full_name",
-            "edrpou",
-            "ipn",
-            "iban",
-            "bank",
-            "mfo",
-            "fop",
-            "address",
         ]
         self.contragent_form = CustomForm(
             data_model=self.contragent.model,
@@ -729,6 +722,7 @@ class ContragentGreateFormDialog(CustomDialog):
             )
         self.box.addWidget(self.contragent_form)
         self.contragent_form.hide_save_btn()
+        
         self.box.addWidget(QLabel('Контакт'))
         self.contact = contact
         contact_fields = [
@@ -746,20 +740,47 @@ class ContragentGreateFormDialog(CustomDialog):
             )
         self.box.addWidget(self.contact_form)
         self.contact_form.hide_save_btn()
+
+        self.box.addWidget(QLabel('Юр. особа'))
+        self.legal = legal
+        legal_fields = [
+            "name",
+            "full_name",
+            "edrpou",
+            "ipn",
+            "iban",
+            "bank",
+            "mfo",
+            "fop",
+            "address",
+        ]
+        self.legal_form = CustomForm(
+            data_model=self.legal.model,
+            fields=legal_fields,
+            value=self.legal.value,
+            )
+        self.box.addWidget(self.legal_form)
+        self.legal_form.hide_save_btn()
         
         super().__init__(self.forms, 'Створити контрагента і контакт')
         self.contact_form.saveRequested.connect(self.get_contact_value)
+        self.legal_form.saveRequested.connect(self.get_legal_value)
         self.contragent_form.saveRequested.connect(self.get_contragent_value)
 
     def get_contact_value(self, value):
         self.contact_value = value
         self.contact_form.set_changed(False)
-        
+
+    def get_legal_value(self, value):
+        self.legal_value = value
+        self.contact_form.set_changed(False)
+    
     def get_contragent_value(self, value):
         self.value = value
         self.contragent_form.set_changed(False)
 
     def accept(self) -> None:
+        self.legal_form.get_value()
         if self.contragent_form.get_value() and self.contact_form.get_value():
             return super().accept()
 
@@ -820,6 +841,7 @@ class ItemsToOrdering(QSplitter):
         self.current_ordering_value = {}
         self.current_contragent = {}
         self.current_contact = {}
+        self.current_legal = {}
         self.ordering = Item('ordering')
         order_state = Item('ordering_status')
         err = order_state.get_all_w()
@@ -842,6 +864,7 @@ class ItemsToOrdering(QSplitter):
         self.side_controls.addTab(self.contragent_filter, "За контрагентом")
         self.contragent_filter.contragentChanged.connect(self.current_contragent_changed)
         self.contragent_filter.contactChanged.connect(self.current_contact_changed)
+        self.contragent_filter.legalChanged.connect(self.current_legal_changed)
         
         to_folder = QPushButton('До теки')
         self.buttons.box.addWidget(to_folder)
@@ -858,6 +881,9 @@ class ItemsToOrdering(QSplitter):
         contact_plus_btn = QPushButton('+Контакт')
         cont_box.addWidget(contact_plus_btn)
         contact_plus_btn.clicked.connect(self.add_contact)
+        legal_plus_btn = QPushButton('+Юр.особа')
+        cont_box.addWidget(legal_plus_btn)
+        legal_plus_btn.clicked.connect(self.add_legal)
         
         messengers_box = QHBoxLayout()
         self.aside_box.addLayout(messengers_box)
@@ -1069,7 +1095,9 @@ class ItemsToOrdering(QSplitter):
         contragent.create_default()
         contact = Item('contact')
         contact.create_default()
-        dlg = ContragentGreateFormDialog(contragent, contact)
+        legal = Item('legal')
+        legal.create_default()
+        dlg = ContragentGreateFormDialog(contragent, contact, legal)
         res = dlg.exec()
         if not res:
             return
@@ -1088,6 +1116,13 @@ class ItemsToOrdering(QSplitter):
         if err:
             error(err)
             return
+        legal.value = dlg.legal_value
+        if legal.value['name']:
+            legal.value['contragent_id'] = contragent.value['id']  
+            err = legal.save()
+            if err:
+                error(err)
+                return
         self.contragent_filter.set_contragent_by_id(contragent.value['id'])
 
     def add_contact(self):
@@ -1097,9 +1132,21 @@ class ItemsToOrdering(QSplitter):
         dlg = ContactSelectDialog(contragent_id=contragent_id)
         dlg.exec()
 
+    def add_legal(self):
+        contragent_id = self.get_current_contragent_id()
+        if not contragent_id:
+            return
+        dlg = LegalSelectDialog(contragent_id=contragent_id)
+        dlg.exec()
+
     def current_contact_changed(self, contact_value):
         self.current_contact = contact_value
         self.ordering.get_filter_w('contact_id', contact_value['id'])
+        self.reload(self.ordering.values)
+
+    def current_legal_changed(self, legal_value):
+        self.current_legal = legal_value
+        self.ordering.get_filter_w('legal_id', legal_value['id'])
         self.reload(self.ordering.values)
     
     def current_contragent_changed(self, contragent_value):
