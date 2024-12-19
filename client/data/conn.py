@@ -252,3 +252,9 @@ class Data:
         print('DELETE_BCKP', url)
         response = requests.get(url, cookies=self.cookie_jar)
         return self.format_response(response)
+
+    def get_projects_by_status(self, id:int) -> dict:
+        url = f'{self.base_url}w_project_by_project_status_id/{id}'
+        print('GET PROJECTS', url)
+        response = requests.get(url, cookies=self.cookie_jar)
+        return self.format_response(response)

@@ -312,3 +312,14 @@ class Item:
     #         return {'error': res['detail'][0]['msg']}
     #     else:
     #         return res
+
+
+class ProjectItem(Item):
+    def __init__(self):
+        super().__init__('project')
+        app = App()
+        self.repo = app.project_repository
+        
+    def get_filter_w(self, field, value):
+        res = self.repo.get_projects_by_status(value)
+        return self.process_result(res)

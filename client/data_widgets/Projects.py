@@ -11,11 +11,10 @@ from PyQt6.QtWidgets import (
     QLabel
     )
 
-from data.model import Item
-from data.app import App
+from data.model import Item, ProjectItem
 from data_widgets.ProjectViewer import ProjectViewer
 from widgets.Form import InfoBlock
-from widgets.Dialogs import error, CustomDialog
+from widgets.Dialogs import error
 
 
 class Projects(QSplitter):
@@ -55,13 +54,12 @@ class ProjectTabs(QTabWidget):
 
 
 class ProjectCurrent(QSplitter):
-    def __init__(self, project_viewer):
+    def __init__(self, project_viewer: ProjectViewer):
         super().__init__(Qt.Orientation.Horizontal)
-        self.project = Item('project')
+        self.project = ProjectItem()
         self.project_viewer = project_viewer
         info_fields = [
             "id",
-        #    "document_uid",
             "name",
             "project_group",
             "user",
@@ -73,13 +71,9 @@ class ProjectCurrent(QSplitter):
             "cash_sum",
             "whs_sum",
             "project_type",
-        #    "type_dir",
             "project_status",
-        #    "number_dir",
-        #    "info",
             "created_at",
             "is_in_work",
-        #    "is_active",
         ]
         data_model = self.project.model_w.copy()
         contact = Item('contact')
@@ -200,15 +194,3 @@ class ProjectCurrent(QSplitter):
                     count += 1
         return count        
             
-    # def doc_dblclicked(self, value):
-    #     app = App()
-    #     model = {k: v for k, v in app.model_w[value['type']].items() 
-    #                 if not (k.endswith('_id') or k.endswith('_uid') or k == 'comm')}
-    #     if value['type'].startswith('cash_'):
-    #         value['cash_sum'] = value['cost']
-    #     elif value['type'].startswith('whs_'):
-    #         value['whs_sum'] = value['cost']
-    #     info = InfoBlock(model, value=value)
-    #     dlg = CustomDialog(widget=info, title='Document')
-    #     dlg.exec()
-
