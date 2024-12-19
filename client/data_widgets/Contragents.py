@@ -45,10 +45,10 @@ class ContragentFilter(ByContragentFilter):
     def append_widget(self):
         self.contacts_list = QListWidget()
         self.contacts_list.currentItemChanged.connect(self.contact_selection_changed)
-        self.box.addWidget(self.contacts_list)
+        self.box.addWidget(self.contacts_list, 2)
         self.legals_list = QListWidget()
         self.legals_list.currentItemChanged.connect(self.legal_selection_changed)
-        self.box.addWidget(self.legals_list)
+        self.box.addWidget(self.legals_list, 1)
 
     def reload(self, values: list, list_widget: QListWidget):    
         list_widget.clear()
