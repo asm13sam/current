@@ -854,6 +854,52 @@ func GetContragentFindByContragentSearchContactSearch(req Req) {
 	req.Respond(ContragentFindByContragentSearchContactSearch(req.StrParam))
 }
 
+func GetLegal(req Req) {
+	req.Respond(LegalGet(req.IntParam, nil))
+}
+
+func GetLegalAll(req Req) {
+	req.Respond(LegalGetAll(req.WithDeleted, req.DeletedOnly, nil))
+}
+
+func CreateLegal(req Req) {
+	l, err := DecodeLegal(req)
+	if err != nil {
+		req.Respond(nil, err)
+		return
+	}
+	req.Respond(LegalCreate(l, nil))
+}
+
+func UpdateLegal(req Req) {
+	l, err := DecodeLegal(req)
+	if err != nil {
+		req.Respond(nil, err)
+		return
+	}
+	req.Respond(LegalUpdate(l, nil))
+}
+
+func DeleteLegal(req Req) {
+	req.Respond(LegalDelete(req.IntParam, nil, false))
+}
+
+func GetLegalByFilterInt(req Req) {
+	req.Respond(LegalGetByFilterInt(req.StrParam, req.IntParam, req.WithDeleted, req.DeletedOnly, nil))
+}
+
+func GetLegalByFilterStr(req Req) {
+	req.Respond(LegalGetByFilterStr(req.StrParam, req.Str2Param, req.WithDeleted, req.DeletedOnly, nil))
+}
+
+func DecodeLegal(req Req) (Legal, error) {
+	decoder := json.NewDecoder(req.R.Body)
+	defer req.R.Body.Close()
+	var l Legal
+	err := decoder.Decode(&l)
+	return l, err
+}
+
 func GetContact(req Req) {
 	req.Respond(ContactGet(req.IntParam, nil))
 }
@@ -2882,6 +2928,22 @@ func GetWContragentByFilterStr(req Req) {
 
 func GetWContragentFindByContragentSearchContactSearch(req Req) {
 	req.Respond(WContragentFindByContragentSearchContactSearch(req.StrParam))
+}
+
+func GetWLegal(req Req) {
+	req.Respond(WLegalGet(req.IntParam))
+}
+
+func GetWLegalAll(req Req) {
+	req.Respond(WLegalGetAll(req.WithDeleted, req.DeletedOnly))
+}
+
+func GetWLegalByFilterInt(req Req) {
+	req.Respond(WLegalGetByFilterInt(req.StrParam, req.IntParam, req.WithDeleted, req.DeletedOnly))
+}
+
+func GetWLegalByFilterStr(req Req) {
+	req.Respond(WLegalGetByFilterStr(req.StrParam, req.Str2Param, req.WithDeleted, req.DeletedOnly))
 }
 
 func GetWContact(req Req) {

@@ -1311,6 +1311,9 @@
           ],
           "contact": [
             "search"
+          ],
+          "legal": [
+            "search"
           ]
         }
       ],
@@ -1334,14 +1337,6 @@
         "dir_name",
         "search",
         "total",
-        "full_name",
-        "edrpou",
-        "ipn",
-        "iban",
-        "bank",
-        "mfo",
-        "fop",
-        "address",
         "is_active"
       ],
       "w_columns": [
@@ -1394,6 +1389,89 @@
           "def": "",
           "hum": "Назва теки",
           "form": 2,
+          "type": "str"
+        },
+        "search": {
+          "def": "",
+          "hum": "Пошук",
+          "form": 0,
+          "type": "str"
+        },
+        "total": {
+          "def": 0.0,
+          "hum": "Баланс",
+          "form": 1,
+          "type": "float"
+        },
+        "is_active": {
+          "def": true,
+          "hum": "Діючий",
+          "form": 0,
+          "type": "bool"
+        }
+      },
+      "w_model": {
+        "contragent_group": {
+          "def": "",
+          "hum": "Група контрагента",
+          "form": 1,
+          "type": "str"
+        }
+      }
+    },
+    "legal": {
+      "hum": "Юр. особа",
+      "rights": "CONTRAGENT",
+      "message": 1,
+      "fkeys": {
+        "contragent_id": [
+          "contragent",
+          "id"
+        ]
+      },
+      "columns": [
+        "id",
+        "contragent_id",
+        "name",
+        "comm",
+        "search",
+        "total",
+        "full_name",
+        "edrpou",
+        "ipn",
+        "iban",
+        "bank",
+        "mfo",
+        "fop",
+        "address",
+        "is_active"
+      ],
+      "w_columns": [
+        "contragent"
+      ],
+      "model": {
+        "id": {
+          "def": 0,
+          "hum": "Номер",
+          "form": 0,
+          "type": "int"
+        },
+        "contragent_id": {
+          "def": 0,
+          "hum": "Контрагент",
+          "form": 2,
+          "type": "int"
+        },
+        "name": {
+          "def": "",
+          "hum": "Назва",
+          "form": 2,
+          "type": "str"
+        },
+        "comm": {
+          "def": "",
+          "hum": "Коментар",
+          "form": 1,
           "type": "str"
         },
         "search": {
@@ -1464,10 +1542,10 @@
         }
       },
       "w_model": {
-        "contragent_group": {
+        "contragent": {
           "def": "",
-          "hum": "Група контрагента",
-          "form": 1,
+          "hum": "Контрагент",
+          "form": 2,
           "type": "str"
         }
       }
@@ -1728,6 +1806,10 @@
           "contact",
           "id"
         ],
+        "legal_id": [
+          "contact",
+          "id"
+        ],
         "ordering_status_id": [
           "ordering_status",
           "id"
@@ -1743,6 +1825,7 @@
         "user_id",
         "contragent_id",
         "contact_id",
+        "legal_id",
         "price",
         "persent",
         "profit",
@@ -1757,6 +1840,7 @@
         "user",
         "contragent",
         "contact",
+        "legal",
         "ordering_status",
         "ordering_state"
       ],
@@ -1813,6 +1897,12 @@
           "def": 0,
           "hum": "Контакт",
           "form": 2,
+          "type": "int"
+        },
+        "legal_id": {
+          "def": 0,
+          "hum": "Юр. особа",
+          "form": 1,
           "type": "int"
         },
         "price": {
@@ -1887,6 +1977,12 @@
           "def": "",
           "hum": "Контакт",
           "form": 2,
+          "type": "str"
+        },
+        "legal": {
+          "def": "",
+          "hum": "Юр. особа",
+          "form": 1,
           "type": "str"
         },
         "ordering_status": {
@@ -2051,6 +2147,13 @@
           "func": "-"
         },
         {
+          "reg_field": "legal.total",
+          "val_field": [
+            "cash_sum"
+          ],
+          "func": "-"
+        },
+        {
           "reg_field": "owner.total",
           "val_field": [
             "cash_sum"
@@ -2094,6 +2197,10 @@
         "contact_id": [
           "contact",
           "id"
+        ],
+        "legal_id": [
+          "contact",
+          "id"
         ]
       },
       "columns": [
@@ -2107,6 +2214,7 @@
         "user_id",
         "contragent_id",
         "contact_id",
+        "legal_id",
         "cash_sum",
         "comm",
         "is_realized",
@@ -2117,7 +2225,8 @@
         "owner",
         "user",
         "contragent",
-        "contact"
+        "contact",
+        "legal"
       ],
       "model": {
         "id": {
@@ -2180,6 +2289,12 @@
           "form": 2,
           "type": "int"
         },
+        "legal_id": {
+          "def": 0,
+          "hum": "Юр. особа",
+          "form": 1,
+          "type": "int"
+        },
         "cash_sum": {
           "def": 0.0,
           "hum": "Вартість",
@@ -2234,6 +2349,12 @@
           "def": "",
           "hum": "Контакт",
           "form": 2,
+          "type": "str"
+        },
+        "legal": {
+          "def": "",
+          "hum": "Юр. особа",
+          "form": 1,
           "type": "str"
         }
       }
@@ -3697,6 +3818,13 @@
             "cash_sum"
           ],
           "func": "+"
+        },
+        {
+          "reg_field": "legal.total",
+          "val_field": [
+            "cash_sum"
+          ],
+          "func": "+"
         }
       ],
       "between": [
@@ -3728,6 +3856,10 @@
         "contact_id": [
           "contact",
           "id"
+        ],
+        "legal_id": [
+          "contact",
+          "id"
         ]
       },
       "columns": [
@@ -3740,6 +3872,7 @@
         "cbox_check_id",
         "contragent_id",
         "contact_id",
+        "legal_id",
         "created_at",
         "cash_sum",
         "comm",
@@ -3751,7 +3884,8 @@
         "user",
         "cbox_check",
         "contragent",
-        "contact"
+        "contact",
+        "legal"
       ],
       "model": {
         "id": {
@@ -3808,6 +3942,12 @@
           "form": 2,
           "type": "int"
         },
+        "legal_id": {
+          "def": 0,
+          "hum": "Юр. особа",
+          "form": 1,
+          "type": "int"
+        },
         "created_at": {
           "def": "date",
           "hum": "Дата",
@@ -3869,6 +4009,12 @@
           "hum": "Контакт",
           "form": 2,
           "type": "str"
+        },
+        "legal": {
+          "def": "",
+          "hum": "Юр. особа",
+          "form": 1,
+          "type": "str"
         }
       }
     },
@@ -3894,6 +4040,13 @@
             "cash_sum"
           ],
           "func": "-"
+        },
+        {
+          "reg_field": "legal.total",
+          "val_field": [
+            "cash_sum"
+          ],
+          "func": "+"
         }
       ],
       "between": [
@@ -3925,6 +4078,10 @@
         "contact_id": [
           "contact",
           "id"
+        ],
+        "legal_id": [
+          "contact",
+          "id"
         ]
       },
       "columns": [
@@ -3937,6 +4094,7 @@
         "cbox_check_id",
         "contragent_id",
         "contact_id",
+        "legal_id",
         "created_at",
         "cash_sum",
         "comm",
@@ -3948,7 +4106,8 @@
         "user",
         "cbox_check",
         "contragent",
-        "contact"
+        "contact",
+        "legal"
       ],
       "model": {
         "id": {
@@ -4005,6 +4164,12 @@
           "form": 2,
           "type": "int"
         },
+        "legal_id": {
+          "def": 0,
+          "hum": "Юр. особа",
+          "form": 1,
+          "type": "int"
+        },
         "created_at": {
           "def": "date",
           "hum": "Дата",
@@ -4065,6 +4230,12 @@
           "def": "",
           "hum": "Контакт",
           "form": 2,
+          "type": "str"
+        },
+        "legal": {
+          "def": "",
+          "hum": "Юр. особа",
+          "form": 1,
           "type": "str"
         }
       }
@@ -4126,6 +4297,13 @@
             "delivery"
           ],
           "func": "+"
+        },
+        {
+          "reg_field": "legal.total",
+          "val_field": [
+            "whs_sum"
+          ],
+          "func": "+"
         }
       ],
       "related": [
@@ -4176,6 +4354,10 @@
         "contact_id": [
           "contact",
           "id"
+        ],
+        "legal_id": [
+          "contact",
+          "id"
         ]
       },
       "columns": [
@@ -4187,6 +4369,7 @@
         "user_id",
         "contragent_id",
         "contact_id",
+        "legal_id",
         "contragent_doc_uid",
         "contragent_created_at",
         "created_at",
@@ -4200,7 +4383,8 @@
         "whs",
         "user",
         "contragent",
-        "contact"
+        "contact",
+        "legal"
       ],
       "model": {
         "id": {
@@ -4249,6 +4433,12 @@
           "def": 0,
           "hum": "Контакт",
           "form": 2,
+          "type": "int"
+        },
+        "legal_id": {
+          "def": 0,
+          "hum": "Юр. особа",
+          "form": 1,
           "type": "int"
         },
         "contragent_doc_uid": {
@@ -4324,6 +4514,12 @@
           "hum": "Контакт",
           "form": 2,
           "type": "str"
+        },
+        "legal": {
+          "def": "",
+          "hum": "Юр. особа",
+          "form": 1,
+          "type": "str"
         }
       }
     },
@@ -4342,6 +4538,13 @@
             "whs_sum"
           ],
           "func": "-"
+        },
+        {
+          "reg_field": "legal.total",
+          "val_field": [
+            "whs_sum"
+          ],
+          "func": "+"
         }
       ],
       "related": [
@@ -4376,6 +4579,10 @@
         "contact_id": [
           "contact",
           "id"
+        ],
+        "legal_id": [
+          "contact",
+          "id"
         ]
       },
       "columns": [
@@ -4387,6 +4594,7 @@
         "user_id",
         "contragent_id",
         "contact_id",
+        "legal_id",
         "created_at",
         "whs_sum",
         "comm",
@@ -4397,7 +4605,8 @@
         "whs",
         "user",
         "contragent",
-        "contact"
+        "contact",
+        "legal"
       ],
       "model": {
         "id": {
@@ -4446,6 +4655,12 @@
           "def": 0,
           "hum": "Контакт",
           "form": 2,
+          "type": "int"
+        },
+        "legal_id": {
+          "def": 0,
+          "hum": "Юр. особа",
+          "form": 1,
           "type": "int"
         },
         "created_at": {
@@ -4502,6 +4717,12 @@
           "def": "",
           "hum": "Контакт",
           "form": 2,
+          "type": "str"
+        },
+        "legal": {
+          "def": "",
+          "hum": "Юр. особа",
+          "form": 1,
           "type": "str"
         }
       }

@@ -255,6 +255,18 @@ class Data:
 
     def get_projects_by_status(self, id:int) -> dict:
         url = f'{self.base_url}w_project_by_project_status_id/{id}'
-        print('GET PROJECTS', url)
+        print('GET PROJECTS BY STATUS', url)
+        response = requests.get(url, cookies=self.cookie_jar)
+        return self.format_response(response)
+    
+    def get_projects_by_contragent(self, id:int) -> dict:
+        url = f'{self.base_url}w_project_by_contragent_id/{id}'
+        print('GET PROJECTS BY CONTRAGENT', url)
+        response = requests.get(url, cookies=self.cookie_jar)
+        return self.format_response(response)
+    
+    def get_projects_by_group(self, id:int) -> dict:
+        url = f'{self.base_url}w_project_by_project_group_id/{id}'
+        print('GET PROJECTS BY GROUP', url)
         response = requests.get(url, cookies=self.cookie_jar)
         return self.format_response(response)

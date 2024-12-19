@@ -103,7 +103,7 @@ class ByContragentFilter(QWidget):
         self.contragent_id.returnPressed.connect(self.contragent_id_entered)
         
         self.contragent_selector = SearchCBListSelector(cb_title='Група', cb_values=group_values)
-        self.box.addWidget(self.contragent_selector)
+        self.box.addWidget(self.contragent_selector, 10)
         self.contragent_selector.cbSelectionChanged.connect(self.contragent_group_changed)
         self.contragent_selector.searchStringChanged.connect(self.contragent_search_changed)
         self.contragent_selector.selectionChanged.connect(self.contragent_changed)

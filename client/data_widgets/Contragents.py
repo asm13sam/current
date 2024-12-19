@@ -23,10 +23,12 @@ from common.params import FULL_VALUE_ROLE
 
 class ContragentFilter(ByContragentFilter):
     contactChanged = pyqtSignal(dict)
+    legalChanged = pyqtSignal(dict)
     def __init__(self, title: str = ''):
         self.contragent_group = Item('contragent_group')
         self.contragent_group.get_all_w()
         self.contact = Item('contact')
+        self.legal = Item('legal')
         super().__init__(title, self.contragent_group.values)
         self.contragent_selector.valueDoubleClicked.connect(self.edit_contragent)
 
@@ -43,23 +45,34 @@ class ContragentFilter(ByContragentFilter):
     def append_widget(self):
         self.contacts_list = QListWidget()
         self.contacts_list.currentItemChanged.connect(self.contact_selection_changed)
-        self.box.addWidget(self.contacts_list)
+        self.box.addWidget(self.contacts_list, 2)
+        self.legals_list = QListWidget()
+        self.legals_list.currentItemChanged.connect(self.legal_selection_changed)
+        self.box.addWidget(self.legals_list, 1)
 
-    def reload(self, values: list):    
-        self.contacts_list.clear()
+    def reload(self, values: list, list_widget: QListWidget):    
+        list_widget.clear()
         for v in values:
-            fi = QListWidgetItem(v['name'], self.contacts_list)
+            fi = QListWidgetItem(v['name'], list_widget)
             fi.setData(FULL_VALUE_ROLE, v)
-        
+
     def contact_selection_changed(self, current, previous):
         if current is None:
             return
         value = current.data(FULL_VALUE_ROLE)
         self.contactChanged.emit(value)
 
+    def legal_selection_changed(self, current, previous):
+        if current is None:
+            return
+        value = current.data(FULL_VALUE_ROLE)
+        self.legalChanged.emit(value)
+
     def contragent_changed(self, value):
         self.contact.get_filter_w('contragent_id', value['id'])
-        self.reload(self.contact.values)
+        self.reload(self.contact.values, self.contacts_list)
+        self.legal.get_filter_w('contragent_id', value['id'])
+        self.reload(self.legal.values, self.legals_list)
         return super().contragent_changed(value)
 
 
@@ -68,6 +81,7 @@ class ContragentsTab(QWidget):
         super().__init__()
         self.current_contragent = {}
         self.current_contact = {}
+        self.current_legal = {}
         self.date_from = ''
         self.date_to = ''
         self.box = QVBoxLayout()
@@ -121,6 +135,7 @@ class ContragentsTab(QWidget):
         self.splitter.addWidget(self.contragent_filter)
         self.contragent_filter.contragentChanged.connect(self.current_contragent_changed)
         self.contragent_filter.contactChanged.connect(self.current_contact_changed)
+        self.contragent_filter.legalChanged.connect(self.current_legal_changed)
 
         self.ordering = Item('ordering')
         self.orderings = ItemTable('ordering', buttons=[], show_period=False, is_info_bottom=True)
@@ -133,7 +148,6 @@ class ContragentsTab(QWidget):
             "created_at": {"def": "date", "hum": "Створений"},
             "cost": {"def": 0.0, "hum": "Вартість"},
             "type_hum": {"def": "", "hum": "Тип"},
-            
         }
         self.docs_in_table = Table(model)
         self.splitter.addWidget(self.docs_in_table)
@@ -148,6 +162,10 @@ class ContragentsTab(QWidget):
             
     def current_contact_changed(self, contact_value):
         self.current_contact = contact_value
+        self.period_selected()
+
+    def current_legal_changed(self, legal_value):
+        self.current_legal = legal_value
         self.period_selected()
     
     def current_contragent_changed(self, contragent_value):
@@ -170,6 +188,8 @@ class ContragentsTab(QWidget):
                 cash_in_values = [v for v in cash_in_values if v['contragent_id'] == self.current_contragent['id']]
             if self.current_contact:
                 cash_in_values = [v for v in cash_in_values if v['contact_id'] == self.current_contact['id']]
+            if self.current_legal:
+                cash_in_values = [v for v in cash_in_values if v['legal_id'] == self.current_legal['id']]
         self.whs_in.get_between_w('created_at', self.date_from, self.date_to)
         whs_in_values = self.whs_in.values
         if not all_contragents:
@@ -182,6 +202,11 @@ class ContragentsTab(QWidget):
                 whs_in_values = [
                     v for v in whs_in_values 
                     if v['contact_id'] == self.current_contact['id']
+                    ]
+            if self.current_legal:
+                whs_in_values = [
+                    v for v in whs_in_values 
+                    if v['legal_id'] == self.current_legal['id']
                     ]
 
         for v in cash_in_values:
@@ -210,6 +235,8 @@ class ContragentsTab(QWidget):
                 cash_out_values = [v for v in cash_out_values if v['contragent_id'] == self.current_contragent['id']]
             if self.current_contact:
                 cash_out_values = [v for v in cash_out_values if v['contact_id'] == self.current_contact['id']]
+            if self.current_legal:
+                cash_out_values = [v for v in cash_out_values if v['legal_id'] == self.current_legal['id']]
         
         self.invoice.get_between_w('created_at', self.date_from, self.date_to)
         invoice_values = self.invoice.values
@@ -218,6 +245,8 @@ class ContragentsTab(QWidget):
                 invoice_values = [v for v in invoice_values if v['contragent_id'] == self.current_contragent['id']]
             if self.current_contact:
                 invoice_values = [v for v in invoice_values if v['contact_id'] == self.current_contact['id']]
+            if self.current_legal:
+                invoice_values = [v for v in invoice_values if v['legal_id'] == self.current_legal['id']]
 
         self.whs_out.get_between_w('created_at', self.date_from,self. date_to)
         whs_out_values = self.whs_out.values
@@ -226,7 +255,8 @@ class ContragentsTab(QWidget):
                 whs_out_values = [v for v in whs_out_values if v['contragent_id'] == self.current_contragent['id']]
             if self.current_contact:
                 whs_out_values = [v for v in whs_out_values if v['contact_id'] == self.current_contact['id']]
-
+            if self.current_legal:
+                whs_out_values = [v for v in whs_out_values if v['legal_id'] == self.current_legal['id']]
 
         for v in cash_out_values:
             v['cost'] = v['cash_sum']
@@ -256,6 +286,8 @@ class ContragentsTab(QWidget):
         if not all_contragents:
             if self.current_contact:
                 sum_in_before, sum_out_before = self.calc_sums("contact_id", self.current_contact['id'], self.date_from)
+            elif self.current_legal:
+                sum_in_before, sum_out_before = self.calc_sums("legal_id", self.current_legal['id'], self.date_from)
             elif self.current_contragent:
                 sum_in_before, sum_out_before = self.calc_sums("contragent_id", self.current_contragent['id'], self.date_from)
             else:
@@ -271,6 +303,8 @@ class ContragentsTab(QWidget):
                 ordering_values = [v for v in ordering_values if v['contragent_id'] == self.current_contragent['id']]
             if self.current_contact:
                 ordering_values = [v for v in ordering_values if v['contact_id'] == self.current_contact['id']]
+            if self.current_legal:
+                ordering_values = [v for v in ordering_values if v['legal_id'] == self.current_legal['id']]
         self.orderings.reload(ordering_values)
     
     def calc_sums(self, field, id, date_from):

@@ -4780,14 +4780,6 @@ type Contragent struct {
 	DirName           string  `json:"dir_name"`
 	Search            string  `json:"search"`
 	Total             float64 `json:"total"`
-	FullName          string  `json:"full_name"`
-	Edrpou            string  `json:"edrpou"`
-	Ipn               string  `json:"ipn"`
-	Iban              string  `json:"iban"`
-	Bank              string  `json:"bank"`
-	Mfo               string  `json:"mfo"`
-	Fop               string  `json:"fop"`
-	Address           string  `json:"address"`
 	IsActive          bool    `json:"is_active"`
 }
 
@@ -4811,14 +4803,6 @@ func ContragentGet(id int, tx *sql.Tx) (Contragent, error) {
 		&c.DirName,
 		&c.Search,
 		&c.Total,
-		&c.FullName,
-		&c.Edrpou,
-		&c.Ipn,
-		&c.Iban,
-		&c.Bank,
-		&c.Mfo,
-		&c.Fop,
-		&c.Address,
 		&c.IsActive,
 	)
 	return c, err
@@ -4857,14 +4841,6 @@ func ContragentGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Contrag
 			&c.DirName,
 			&c.Search,
 			&c.Total,
-			&c.FullName,
-			&c.Edrpou,
-			&c.Ipn,
-			&c.Iban,
-			&c.Bank,
-			&c.Mfo,
-			&c.Fop,
-			&c.Address,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -4888,8 +4864,8 @@ func ContragentCreate(c Contragent, tx *sql.Tx) (Contragent, error) {
 	}
 
 	sql := `INSERT INTO contragent
-            (name, contragent_group_id, phone, email, web, comm, dir_name, search, total, full_name, edrpou, ipn, iban, bank, mfo, fop, address, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (name, contragent_group_id, phone, email, web, comm, dir_name, search, total, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		c.Name,
@@ -4901,14 +4877,6 @@ func ContragentCreate(c Contragent, tx *sql.Tx) (Contragent, error) {
 		c.DirName,
 		c.Search,
 		c.Total,
-		c.FullName,
-		c.Edrpou,
-		c.Ipn,
-		c.Iban,
-		c.Bank,
-		c.Mfo,
-		c.Fop,
-		c.Address,
 		c.IsActive,
 	)
 	if err != nil {
@@ -4942,7 +4910,7 @@ func ContragentUpdate(c Contragent, tx *sql.Tx) (Contragent, error) {
 	}
 
 	sql := `UPDATE contragent SET
-                    name=?, contragent_group_id=?, phone=?, email=?, web=?, comm=?, dir_name=?, search=?, total=?, full_name=?, edrpou=?, ipn=?, iban=?, bank=?, mfo=?, fop=?, address=?, is_active=?
+                    name=?, contragent_group_id=?, phone=?, email=?, web=?, comm=?, dir_name=?, search=?, total=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -4956,14 +4924,6 @@ func ContragentUpdate(c Contragent, tx *sql.Tx) (Contragent, error) {
 		c.DirName,
 		c.Search,
 		c.Total,
-		c.FullName,
-		c.Edrpou,
-		c.Ipn,
-		c.Iban,
-		c.Bank,
-		c.Mfo,
-		c.Fop,
-		c.Address,
 		c.IsActive,
 		c.Id,
 	)
@@ -5051,14 +5011,6 @@ func ContragentGetByFilterInt(field string, param int, withDeleted bool, deleted
 			&c.DirName,
 			&c.Search,
 			&c.Total,
-			&c.FullName,
-			&c.Edrpou,
-			&c.Ipn,
-			&c.Iban,
-			&c.Bank,
-			&c.Mfo,
-			&c.Fop,
-			&c.Address,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -5106,14 +5058,6 @@ func ContragentGetByFilterStr(field string, param string, withDeleted bool, dele
 			&c.DirName,
 			&c.Search,
 			&c.Total,
-			&c.FullName,
-			&c.Edrpou,
-			&c.Ipn,
-			&c.Iban,
-			&c.Bank,
-			&c.Mfo,
-			&c.Fop,
-			&c.Address,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -5125,7 +5069,7 @@ func ContragentGetByFilterStr(field string, param string, withDeleted bool, dele
 }
 
 func ContragentTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "contragent_group_id", "phone", "email", "web", "comm", "dir_name", "search", "total", "full_name", "edrpou", "ipn", "iban", "bank", "mfo", "fop", "address", "is_active"}
+	fields := []string{"id", "name", "contragent_group_id", "phone", "email", "web", "comm", "dir_name", "search", "total", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -5139,12 +5083,14 @@ func ContragentFindByContragentSearchContactSearch(fs string) ([]Contragent, err
 
 	query := `
     SELECT DISTINCT contragent.* FROM contragent
-    JOIN contact on contragent.id = contact.contragent_id
+    JOIN contact ON contragent.id = contact.contragent_id
+    LEFT JOIN legal ON contragent.id = legal.contragent_id
     WHERE
     contragent.search LIKE ?
-    OR contact.search LIKE ?;;`
+    OR contact.search LIKE ?
+    OR legal.search LIKE ?;;`
 
-	rows, err := db.Query(query, fs, fs)
+	rows, err := db.Query(query, fs, fs, fs)
 
 	if err != nil {
 		return nil, err
@@ -5165,14 +5111,6 @@ func ContragentFindByContragentSearchContactSearch(fs string) ([]Contragent, err
 			&c.DirName,
 			&c.Search,
 			&c.Total,
-			&c.FullName,
-			&c.Edrpou,
-			&c.Ipn,
-			&c.Iban,
-			&c.Bank,
-			&c.Mfo,
-			&c.Fop,
-			&c.Address,
 			&c.IsActive,
 		); err != nil {
 			return nil, err
@@ -5180,6 +5118,343 @@ func ContragentFindByContragentSearchContactSearch(fs string) ([]Contragent, err
 		res = append(res, c)
 	}
 	return res, nil
+}
+
+type Legal struct {
+	Id           int     `json:"id"`
+	ContragentId int     `json:"contragent_id"`
+	Name         string  `json:"name"`
+	Comm         string  `json:"comm"`
+	Search       string  `json:"search"`
+	Total        float64 `json:"total"`
+	FullName     string  `json:"full_name"`
+	Edrpou       string  `json:"edrpou"`
+	Ipn          string  `json:"ipn"`
+	Iban         string  `json:"iban"`
+	Bank         string  `json:"bank"`
+	Mfo          string  `json:"mfo"`
+	Fop          string  `json:"fop"`
+	Address      string  `json:"address"`
+	IsActive     bool    `json:"is_active"`
+}
+
+func LegalGet(id int, tx *sql.Tx) (Legal, error) {
+	var l Legal
+	var row *sql.Row
+	if tx != nil {
+		row = tx.QueryRow("SELECT * FROM legal WHERE id=?", id)
+	} else {
+		row = db.QueryRow("SELECT * FROM legal WHERE id=?", id)
+	}
+
+	err := row.Scan(
+		&l.Id,
+		&l.ContragentId,
+		&l.Name,
+		&l.Comm,
+		&l.Search,
+		&l.Total,
+		&l.FullName,
+		&l.Edrpou,
+		&l.Ipn,
+		&l.Iban,
+		&l.Bank,
+		&l.Mfo,
+		&l.Fop,
+		&l.Address,
+		&l.IsActive,
+	)
+	return l, err
+}
+
+func LegalGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Legal, error) {
+	var rows *sql.Rows
+	var err error
+	query := "SELECT * FROM legal"
+	if deletedOnly {
+		query += " WHERE is_active = 0"
+	} else if !withDeleted {
+		query += " WHERE is_active = 1"
+	}
+
+	if tx != nil {
+		rows, err = tx.Query(query)
+	} else {
+		rows, err = db.Query(query)
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	res := []Legal{}
+	for rows.Next() {
+		var l Legal
+		if err := rows.Scan(
+			&l.Id,
+			&l.ContragentId,
+			&l.Name,
+			&l.Comm,
+			&l.Search,
+			&l.Total,
+			&l.FullName,
+			&l.Edrpou,
+			&l.Ipn,
+			&l.Iban,
+			&l.Bank,
+			&l.Mfo,
+			&l.Fop,
+			&l.Address,
+			&l.IsActive,
+		); err != nil {
+			return nil, err
+		}
+		res = append(res, l)
+	}
+	return res, nil
+}
+
+func LegalCreate(l Legal, tx *sql.Tx) (Legal, error) {
+	var err error
+	needCommit := false
+
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return l, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+
+	sql := `INSERT INTO legal
+            (contragent_id, name, comm, search, total, full_name, edrpou, ipn, iban, bank, mfo, fop, address, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+	res, err := tx.Exec(
+		sql,
+		l.ContragentId,
+		l.Name,
+		l.Comm,
+		l.Search,
+		l.Total,
+		l.FullName,
+		l.Edrpou,
+		l.Ipn,
+		l.Iban,
+		l.Bank,
+		l.Mfo,
+		l.Fop,
+		l.Address,
+		l.IsActive,
+	)
+	if err != nil {
+		return l, err
+	}
+	last_id, err := res.LastInsertId()
+	if err != nil {
+		return l, err
+	}
+	l.Id = int(last_id)
+
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return l, err
+		}
+	}
+	return l, nil
+}
+
+func LegalUpdate(l Legal, tx *sql.Tx) (Legal, error) {
+	var err error
+	needCommit := false
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return l, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+
+	sql := `UPDATE legal SET
+                    contragent_id=?, name=?, comm=?, search=?, total=?, full_name=?, edrpou=?, ipn=?, iban=?, bank=?, mfo=?, fop=?, address=?, is_active=?
+                    WHERE id=?;`
+
+	_, err = tx.Exec(
+		sql,
+		l.ContragentId,
+		l.Name,
+		l.Comm,
+		l.Search,
+		l.Total,
+		l.FullName,
+		l.Edrpou,
+		l.Ipn,
+		l.Iban,
+		l.Bank,
+		l.Mfo,
+		l.Fop,
+		l.Address,
+		l.IsActive,
+		l.Id,
+	)
+	if err != nil {
+		return l, err
+	}
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return l, err
+		}
+	}
+	return l, nil
+}
+
+func LegalDelete(id int, tx *sql.Tx, isUnRealize bool) (Legal, error) {
+	needCommit := false
+	var err error
+	var l Legal
+	if tx == nil {
+		tx, err = db.Begin()
+		if err != nil {
+			return l, err
+		}
+		needCommit = true
+		defer tx.Rollback()
+	}
+	l, err = LegalGet(id, tx)
+	if err != nil {
+		return l, err
+	}
+
+	if !isUnRealize {
+		sql := `UPDATE legal SET is_active=0 WHERE id=?;`
+		_, err = tx.Exec(sql, l.Id)
+		if err != nil {
+			return l, err
+		}
+	}
+
+	if needCommit {
+		err = tx.Commit()
+		if err != nil {
+			return l, err
+		}
+	}
+	l.IsActive = false
+	return l, nil
+}
+
+func LegalGetByFilterInt(field string, param int, withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Legal, error) {
+
+	if !LegalTestForExistingField(field) {
+		return nil, errors.New("field not exist")
+	}
+	var err error
+	query := fmt.Sprintf("SELECT * FROM legal WHERE %s=?", field)
+	if deletedOnly {
+		query += "  AND is_active = 0"
+	} else if !withDeleted {
+		query += "  AND is_active = 1"
+	}
+
+	var rows *sql.Rows
+	if tx != nil {
+		rows, err = tx.Query(query, param)
+	} else {
+		rows, err = db.Query(query, param)
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	res := []Legal{}
+	for rows.Next() {
+		var l Legal
+		if err := rows.Scan(
+			&l.Id,
+			&l.ContragentId,
+			&l.Name,
+			&l.Comm,
+			&l.Search,
+			&l.Total,
+			&l.FullName,
+			&l.Edrpou,
+			&l.Ipn,
+			&l.Iban,
+			&l.Bank,
+			&l.Mfo,
+			&l.Fop,
+			&l.Address,
+			&l.IsActive,
+		); err != nil {
+			return nil, err
+		}
+		res = append(res, l)
+	}
+	return res, nil
+
+}
+
+func LegalGetByFilterStr(field string, param string, withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Legal, error) {
+
+	if !LegalTestForExistingField(field) {
+		return nil, errors.New("field not exist")
+	}
+	var err error
+	query := fmt.Sprintf("SELECT * FROM legal WHERE %s=?", field)
+	if deletedOnly {
+		query += "  AND is_active = 0"
+	} else if !withDeleted {
+		query += "  AND is_active = 1"
+	}
+
+	var rows *sql.Rows
+	if tx != nil {
+		rows, err = tx.Query(query, param)
+	} else {
+		rows, err = db.Query(query, param)
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	res := []Legal{}
+	for rows.Next() {
+		var l Legal
+		if err := rows.Scan(
+			&l.Id,
+			&l.ContragentId,
+			&l.Name,
+			&l.Comm,
+			&l.Search,
+			&l.Total,
+			&l.FullName,
+			&l.Edrpou,
+			&l.Ipn,
+			&l.Iban,
+			&l.Bank,
+			&l.Mfo,
+			&l.Fop,
+			&l.Address,
+			&l.IsActive,
+		); err != nil {
+			return nil, err
+		}
+		res = append(res, l)
+	}
+	return res, nil
+
+}
+
+func LegalTestForExistingField(fieldName string) bool {
+	fields := []string{"id", "contragent_id", "name", "comm", "search", "total", "full_name", "edrpou", "ipn", "iban", "bank", "mfo", "fop", "address", "is_active"}
+	for _, f := range fields {
+		if fieldName == f {
+			return true
+		}
+	}
+	return false
 }
 
 type Contact struct {
@@ -6028,6 +6303,7 @@ type Ordering struct {
 	UserId           int     `json:"user_id"`
 	ContragentId     int     `json:"contragent_id"`
 	ContactId        int     `json:"contact_id"`
+	LegalId          int     `json:"legal_id"`
 	Price            float64 `json:"price"`
 	Persent          float64 `json:"persent"`
 	Profit           float64 `json:"profit"`
@@ -6058,6 +6334,7 @@ func OrderingGet(id int, tx *sql.Tx) (Ordering, error) {
 		&o.UserId,
 		&o.ContragentId,
 		&o.ContactId,
+		&o.LegalId,
 		&o.Price,
 		&o.Persent,
 		&o.Profit,
@@ -6103,6 +6380,7 @@ func OrderingGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Ordering,
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
+			&o.LegalId,
 			&o.Price,
 			&o.Persent,
 			&o.Profit,
@@ -6144,8 +6422,8 @@ func OrderingCreate(o Ordering, tx *sql.Tx) (Ordering, error) {
 	o.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO ordering
-            (document_uid, name, created_at, deadline_at, finished_at, user_id, contragent_id, contact_id, price, persent, profit, cost, info, ordering_status_id, ordering_state_id, is_realized, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, name, created_at, deadline_at, finished_at, user_id, contragent_id, contact_id, legal_id, price, persent, profit, cost, info, ordering_status_id, ordering_state_id, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		o.DocumentUid,
@@ -6156,6 +6434,7 @@ func OrderingCreate(o Ordering, tx *sql.Tx) (Ordering, error) {
 		o.UserId,
 		o.ContragentId,
 		o.ContactId,
+		o.LegalId,
 		o.Price,
 		o.Persent,
 		o.Profit,
@@ -6197,7 +6476,7 @@ func OrderingUpdate(o Ordering, tx *sql.Tx) (Ordering, error) {
 	}
 
 	sql := `UPDATE ordering SET
-                    document_uid=?, name=?, created_at=?, deadline_at=?, finished_at=?, user_id=?, contragent_id=?, contact_id=?, price=?, persent=?, profit=?, cost=?, info=?, ordering_status_id=?, ordering_state_id=?, is_realized=?, is_active=?
+                    document_uid=?, name=?, created_at=?, deadline_at=?, finished_at=?, user_id=?, contragent_id=?, contact_id=?, legal_id=?, price=?, persent=?, profit=?, cost=?, info=?, ordering_status_id=?, ordering_state_id=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -6210,6 +6489,7 @@ func OrderingUpdate(o Ordering, tx *sql.Tx) (Ordering, error) {
 		o.UserId,
 		o.ContragentId,
 		o.ContactId,
+		o.LegalId,
 		o.Price,
 		o.Persent,
 		o.Profit,
@@ -6382,6 +6662,7 @@ func OrderingGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
+			&o.LegalId,
 			&o.Price,
 			&o.Persent,
 			&o.Profit,
@@ -6436,6 +6717,7 @@ func OrderingGetByFilterStr(field string, param string, withDeleted bool, delete
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
+			&o.LegalId,
 			&o.Price,
 			&o.Persent,
 			&o.Profit,
@@ -6455,7 +6737,7 @@ func OrderingGetByFilterStr(field string, param string, withDeleted bool, delete
 }
 
 func OrderingTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "created_at", "deadline_at", "finished_at", "user_id", "contragent_id", "contact_id", "price", "persent", "profit", "cost", "info", "ordering_status_id", "ordering_state_id", "is_realized", "is_active"}
+	fields := []string{"id", "document_uid", "name", "created_at", "deadline_at", "finished_at", "user_id", "contragent_id", "contact_id", "legal_id", "price", "persent", "profit", "cost", "info", "ordering_status_id", "ordering_state_id", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -6590,6 +6872,7 @@ func OrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
+			&o.LegalId,
 			&o.Price,
 			&o.Persent,
 			&o.Profit,
@@ -6633,6 +6916,7 @@ func OrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDeleted
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
+			&o.LegalId,
 			&o.Price,
 			&o.Persent,
 			&o.Profit,
@@ -7041,6 +7325,7 @@ type Invoice struct {
 	UserId       int     `json:"user_id"`
 	ContragentId int     `json:"contragent_id"`
 	ContactId    int     `json:"contact_id"`
+	LegalId      int     `json:"legal_id"`
 	CashSum      float64 `json:"cash_sum"`
 	Comm         string  `json:"comm"`
 	IsRealized   bool    `json:"is_realized"`
@@ -7067,6 +7352,7 @@ func InvoiceGet(id int, tx *sql.Tx) (Invoice, error) {
 		&i.UserId,
 		&i.ContragentId,
 		&i.ContactId,
+		&i.LegalId,
 		&i.CashSum,
 		&i.Comm,
 		&i.IsRealized,
@@ -7108,6 +7394,7 @@ func InvoiceGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Invoice, e
 			&i.UserId,
 			&i.ContragentId,
 			&i.ContactId,
+			&i.LegalId,
 			&i.CashSum,
 			&i.Comm,
 			&i.IsRealized,
@@ -7144,8 +7431,8 @@ func InvoiceCreate(i Invoice, tx *sql.Tx) (Invoice, error) {
 	i.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO invoice
-            (document_uid, ordering_id, based_on, owner_id, name, created_at, user_id, contragent_id, contact_id, cash_sum, comm, is_realized, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, ordering_id, based_on, owner_id, name, created_at, user_id, contragent_id, contact_id, legal_id, cash_sum, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		i.DocumentUid,
@@ -7157,6 +7444,7 @@ func InvoiceCreate(i Invoice, tx *sql.Tx) (Invoice, error) {
 		i.UserId,
 		i.ContragentId,
 		i.ContactId,
+		i.LegalId,
 		i.CashSum,
 		i.Comm,
 		i.IsRealized,
@@ -7251,6 +7539,29 @@ func InvoiceUpdate(i Invoice, tx *sql.Tx) (Invoice, error) {
 			return i, err
 		}
 
+		legal, err := LegalGet(invoice.LegalId, tx)
+		if err == nil {
+			legal.Total += invoice.CashSum
+
+		}
+
+		if invoice.LegalId != i.LegalId {
+			_, err = LegalUpdate(legal, tx)
+			if err != nil {
+				return i, err
+			}
+			legal, err = LegalGet(i.LegalId, tx)
+			if err != nil {
+				return i, err
+			}
+		}
+		legal.Total -= i.CashSum
+
+		_, err = LegalUpdate(legal, tx)
+		if err != nil {
+			return i, err
+		}
+
 		owner, err := OwnerGet(invoice.OwnerId, tx)
 		if err == nil {
 			owner.Total -= invoice.CashSum
@@ -7277,7 +7588,7 @@ func InvoiceUpdate(i Invoice, tx *sql.Tx) (Invoice, error) {
 	}
 
 	sql := `UPDATE invoice SET
-                    document_uid=?, ordering_id=?, based_on=?, owner_id=?, name=?, created_at=?, user_id=?, contragent_id=?, contact_id=?, cash_sum=?, comm=?, is_realized=?, is_active=?
+                    document_uid=?, ordering_id=?, based_on=?, owner_id=?, name=?, created_at=?, user_id=?, contragent_id=?, contact_id=?, legal_id=?, cash_sum=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -7291,6 +7602,7 @@ func InvoiceUpdate(i Invoice, tx *sql.Tx) (Invoice, error) {
 		i.UserId,
 		i.ContragentId,
 		i.ContactId,
+		i.LegalId,
 		i.CashSum,
 		i.Comm,
 		i.IsRealized,
@@ -7341,6 +7653,16 @@ func InvoiceDelete(id int, tx *sql.Tx, isUnRealize bool) (Invoice, error) {
 		contact.Total += i.CashSum
 
 		_, err = ContactUpdate(contact, tx)
+		if err != nil {
+			return i, err
+		}
+	}
+
+	legal, err := LegalGet(i.LegalId, tx)
+	if err == nil {
+		legal.Total += i.CashSum
+
+		_, err = LegalUpdate(legal, tx)
 		if err != nil {
 			return i, err
 		}
@@ -7423,6 +7745,7 @@ func InvoiceGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 			&i.UserId,
 			&i.ContragentId,
 			&i.ContactId,
+			&i.LegalId,
 			&i.CashSum,
 			&i.Comm,
 			&i.IsRealized,
@@ -7473,6 +7796,7 @@ func InvoiceGetByFilterStr(field string, param string, withDeleted bool, deleted
 			&i.UserId,
 			&i.ContragentId,
 			&i.ContactId,
+			&i.LegalId,
 			&i.CashSum,
 			&i.Comm,
 			&i.IsRealized,
@@ -7487,7 +7811,7 @@ func InvoiceGetByFilterStr(field string, param string, withDeleted bool, deleted
 }
 
 func InvoiceTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "ordering_id", "based_on", "owner_id", "name", "created_at", "user_id", "contragent_id", "contact_id", "cash_sum", "comm", "is_realized", "is_active"}
+	fields := []string{"id", "document_uid", "ordering_id", "based_on", "owner_id", "name", "created_at", "user_id", "contragent_id", "contact_id", "legal_id", "cash_sum", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -7531,6 +7855,16 @@ func InvoiceRealized(id int, tx *sql.Tx) (Invoice, error) {
 		contact.Total -= i.CashSum
 
 		_, err = ContactUpdate(contact, tx)
+		if err != nil {
+			return i, err
+		}
+	}
+
+	legal, err := LegalGet(i.LegalId, tx)
+	if err == nil {
+		legal.Total -= i.CashSum
+
+		_, err = LegalUpdate(legal, tx)
 		if err != nil {
 			return i, err
 		}
@@ -7587,6 +7921,7 @@ func InvoiceGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 			&i.UserId,
 			&i.ContragentId,
 			&i.ContactId,
+			&i.LegalId,
 			&i.CashSum,
 			&i.Comm,
 			&i.IsRealized,
@@ -11319,6 +11654,7 @@ type CashIn struct {
 	CboxCheckId  int     `json:"cbox_check_id"`
 	ContragentId int     `json:"contragent_id"`
 	ContactId    int     `json:"contact_id"`
+	LegalId      int     `json:"legal_id"`
 	CreatedAt    string  `json:"created_at"`
 	CashSum      float64 `json:"cash_sum"`
 	Comm         string  `json:"comm"`
@@ -11345,6 +11681,7 @@ func CashInGet(id int, tx *sql.Tx) (CashIn, error) {
 		&c.CboxCheckId,
 		&c.ContragentId,
 		&c.ContactId,
+		&c.LegalId,
 		&c.CreatedAt,
 		&c.CashSum,
 		&c.Comm,
@@ -11386,6 +11723,7 @@ func CashInGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]CashIn, err
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -11423,8 +11761,8 @@ func CashInCreate(c CashIn, tx *sql.Tx) (CashIn, error) {
 	c.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO cash_in
-            (document_uid, name, cash_id, user_id, based_on, cbox_check_id, contragent_id, contact_id, created_at, cash_sum, comm, is_realized, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, name, cash_id, user_id, based_on, cbox_check_id, contragent_id, contact_id, legal_id, created_at, cash_sum, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		c.DocumentUid,
@@ -11435,6 +11773,7 @@ func CashInCreate(c CashIn, tx *sql.Tx) (CashIn, error) {
 		c.CboxCheckId,
 		c.ContragentId,
 		c.ContactId,
+		c.LegalId,
 		c.CreatedAt,
 		c.CashSum,
 		c.Comm,
@@ -11553,10 +11892,33 @@ func CashInUpdate(c CashIn, tx *sql.Tx) (CashIn, error) {
 			return c, err
 		}
 
+		legal, err := LegalGet(cash_in.LegalId, tx)
+		if err == nil {
+			legal.Total -= cash_in.CashSum
+
+		}
+
+		if cash_in.LegalId != c.LegalId {
+			_, err = LegalUpdate(legal, tx)
+			if err != nil {
+				return c, err
+			}
+			legal, err = LegalGet(c.LegalId, tx)
+			if err != nil {
+				return c, err
+			}
+		}
+		legal.Total += c.CashSum
+
+		_, err = LegalUpdate(legal, tx)
+		if err != nil {
+			return c, err
+		}
+
 	}
 
 	sql := `UPDATE cash_in SET
-                    document_uid=?, name=?, cash_id=?, user_id=?, based_on=?, cbox_check_id=?, contragent_id=?, contact_id=?, created_at=?, cash_sum=?, comm=?, is_realized=?, is_active=?
+                    document_uid=?, name=?, cash_id=?, user_id=?, based_on=?, cbox_check_id=?, contragent_id=?, contact_id=?, legal_id=?, created_at=?, cash_sum=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -11569,6 +11931,7 @@ func CashInUpdate(c CashIn, tx *sql.Tx) (CashIn, error) {
 		c.CboxCheckId,
 		c.ContragentId,
 		c.ContactId,
+		c.LegalId,
 		c.CreatedAt,
 		c.CashSum,
 		c.Comm,
@@ -11635,6 +11998,16 @@ func CashInDelete(id int, tx *sql.Tx, isUnRealize bool) (CashIn, error) {
 		}
 	}
 
+	legal, err := LegalGet(c.LegalId, tx)
+	if err == nil {
+		legal.Total -= c.CashSum
+
+		_, err = LegalUpdate(legal, tx)
+		if err != nil {
+			return c, err
+		}
+	}
+
 	sql := `UPDATE cash_in SET is_active=0 WHERE id=?;`
 	if isUnRealize {
 		sql = `UPDATE cash_in SET is_realized=0 WHERE id=?;`
@@ -11690,6 +12063,7 @@ func CashInGetByFilterInt(field string, param int, withDeleted bool, deletedOnly
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -11740,6 +12114,7 @@ func CashInGetByFilterStr(field string, param string, withDeleted bool, deletedO
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -11755,7 +12130,7 @@ func CashInGetByFilterStr(field string, param string, withDeleted bool, deletedO
 }
 
 func CashInTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "cash_id", "user_id", "based_on", "cbox_check_id", "contragent_id", "contact_id", "created_at", "cash_sum", "comm", "is_realized", "is_active"}
+	fields := []string{"id", "document_uid", "name", "cash_id", "user_id", "based_on", "cbox_check_id", "contragent_id", "contact_id", "legal_id", "created_at", "cash_sum", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -11814,6 +12189,16 @@ func CashInRealized(id int, tx *sql.Tx) (CashIn, error) {
 		}
 	}
 
+	legal, err := LegalGet(c.LegalId, tx)
+	if err == nil {
+		legal.Total += c.CashSum
+
+		_, err = LegalUpdate(legal, tx)
+		if err != nil {
+			return c, err
+		}
+	}
+
 	sql := `UPDATE cash_in SET is_realized=1 WHERE id=?;`
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
@@ -11854,6 +12239,7 @@ func CashInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -11906,6 +12292,7 @@ type CashOut struct {
 	CboxCheckId  int     `json:"cbox_check_id"`
 	ContragentId int     `json:"contragent_id"`
 	ContactId    int     `json:"contact_id"`
+	LegalId      int     `json:"legal_id"`
 	CreatedAt    string  `json:"created_at"`
 	CashSum      float64 `json:"cash_sum"`
 	Comm         string  `json:"comm"`
@@ -11932,6 +12319,7 @@ func CashOutGet(id int, tx *sql.Tx) (CashOut, error) {
 		&c.CboxCheckId,
 		&c.ContragentId,
 		&c.ContactId,
+		&c.LegalId,
 		&c.CreatedAt,
 		&c.CashSum,
 		&c.Comm,
@@ -11973,6 +12361,7 @@ func CashOutGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]CashOut, e
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -12010,8 +12399,8 @@ func CashOutCreate(c CashOut, tx *sql.Tx) (CashOut, error) {
 	c.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO cash_out
-            (document_uid, name, cash_id, user_id, based_on, cbox_check_id, contragent_id, contact_id, created_at, cash_sum, comm, is_realized, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, name, cash_id, user_id, based_on, cbox_check_id, contragent_id, contact_id, legal_id, created_at, cash_sum, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		c.DocumentUid,
@@ -12022,6 +12411,7 @@ func CashOutCreate(c CashOut, tx *sql.Tx) (CashOut, error) {
 		c.CboxCheckId,
 		c.ContragentId,
 		c.ContactId,
+		c.LegalId,
 		c.CreatedAt,
 		c.CashSum,
 		c.Comm,
@@ -12140,10 +12530,33 @@ func CashOutUpdate(c CashOut, tx *sql.Tx) (CashOut, error) {
 			return c, err
 		}
 
+		legal, err := LegalGet(cash_out.LegalId, tx)
+		if err == nil {
+			legal.Total -= cash_out.CashSum
+
+		}
+
+		if cash_out.LegalId != c.LegalId {
+			_, err = LegalUpdate(legal, tx)
+			if err != nil {
+				return c, err
+			}
+			legal, err = LegalGet(c.LegalId, tx)
+			if err != nil {
+				return c, err
+			}
+		}
+		legal.Total += c.CashSum
+
+		_, err = LegalUpdate(legal, tx)
+		if err != nil {
+			return c, err
+		}
+
 	}
 
 	sql := `UPDATE cash_out SET
-                    document_uid=?, name=?, cash_id=?, user_id=?, based_on=?, cbox_check_id=?, contragent_id=?, contact_id=?, created_at=?, cash_sum=?, comm=?, is_realized=?, is_active=?
+                    document_uid=?, name=?, cash_id=?, user_id=?, based_on=?, cbox_check_id=?, contragent_id=?, contact_id=?, legal_id=?, created_at=?, cash_sum=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -12156,6 +12569,7 @@ func CashOutUpdate(c CashOut, tx *sql.Tx) (CashOut, error) {
 		c.CboxCheckId,
 		c.ContragentId,
 		c.ContactId,
+		c.LegalId,
 		c.CreatedAt,
 		c.CashSum,
 		c.Comm,
@@ -12222,6 +12636,16 @@ func CashOutDelete(id int, tx *sql.Tx, isUnRealize bool) (CashOut, error) {
 		}
 	}
 
+	legal, err := LegalGet(c.LegalId, tx)
+	if err == nil {
+		legal.Total -= c.CashSum
+
+		_, err = LegalUpdate(legal, tx)
+		if err != nil {
+			return c, err
+		}
+	}
+
 	sql := `UPDATE cash_out SET is_active=0 WHERE id=?;`
 	if isUnRealize {
 		sql = `UPDATE cash_out SET is_realized=0 WHERE id=?;`
@@ -12277,6 +12701,7 @@ func CashOutGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -12327,6 +12752,7 @@ func CashOutGetByFilterStr(field string, param string, withDeleted bool, deleted
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -12342,7 +12768,7 @@ func CashOutGetByFilterStr(field string, param string, withDeleted bool, deleted
 }
 
 func CashOutTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "cash_id", "user_id", "based_on", "cbox_check_id", "contragent_id", "contact_id", "created_at", "cash_sum", "comm", "is_realized", "is_active"}
+	fields := []string{"id", "document_uid", "name", "cash_id", "user_id", "based_on", "cbox_check_id", "contragent_id", "contact_id", "legal_id", "created_at", "cash_sum", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -12401,6 +12827,16 @@ func CashOutRealized(id int, tx *sql.Tx) (CashOut, error) {
 		}
 	}
 
+	legal, err := LegalGet(c.LegalId, tx)
+	if err == nil {
+		legal.Total += c.CashSum
+
+		_, err = LegalUpdate(legal, tx)
+		if err != nil {
+			return c, err
+		}
+	}
+
 	sql := `UPDATE cash_out SET is_realized=1 WHERE id=?;`
 	_, err = tx.Exec(sql, c.Id)
 	if err != nil {
@@ -12441,6 +12877,7 @@ func CashOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -12752,6 +13189,7 @@ type WhsIn struct {
 	UserId              int     `json:"user_id"`
 	ContragentId        int     `json:"contragent_id"`
 	ContactId           int     `json:"contact_id"`
+	LegalId             int     `json:"legal_id"`
 	ContragentDocUid    string  `json:"contragent_doc_uid"`
 	ContragentCreatedAt string  `json:"contragent_created_at"`
 	CreatedAt           string  `json:"created_at"`
@@ -12780,6 +13218,7 @@ func WhsInGet(id int, tx *sql.Tx) (WhsIn, error) {
 		&w.UserId,
 		&w.ContragentId,
 		&w.ContactId,
+		&w.LegalId,
 		&w.ContragentDocUid,
 		&w.ContragentCreatedAt,
 		&w.CreatedAt,
@@ -12823,6 +13262,7 @@ func WhsInGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]WhsIn, error
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.ContragentDocUid,
 			&w.ContragentCreatedAt,
 			&w.CreatedAt,
@@ -12863,8 +13303,8 @@ func WhsInCreate(w WhsIn, tx *sql.Tx) (WhsIn, error) {
 	w.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO whs_in
-            (document_uid, name, based_on, whs_id, user_id, contragent_id, contact_id, contragent_doc_uid, contragent_created_at, created_at, whs_sum, delivery, comm, is_realized, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, name, based_on, whs_id, user_id, contragent_id, contact_id, legal_id, contragent_doc_uid, contragent_created_at, created_at, whs_sum, delivery, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		w.DocumentUid,
@@ -12874,6 +13314,7 @@ func WhsInCreate(w WhsIn, tx *sql.Tx) (WhsIn, error) {
 		w.UserId,
 		w.ContragentId,
 		w.ContactId,
+		w.LegalId,
 		w.ContragentDocUid,
 		w.ContragentCreatedAt,
 		w.CreatedAt,
@@ -12976,10 +13417,33 @@ func WhsInUpdate(w WhsIn, tx *sql.Tx) (WhsIn, error) {
 			return w, err
 		}
 
+		legal, err := LegalGet(whs_in.LegalId, tx)
+		if err == nil {
+			legal.Total -= whs_in.WhsSum
+
+		}
+
+		if whs_in.LegalId != w.LegalId {
+			_, err = LegalUpdate(legal, tx)
+			if err != nil {
+				return w, err
+			}
+			legal, err = LegalGet(w.LegalId, tx)
+			if err != nil {
+				return w, err
+			}
+		}
+		legal.Total += w.WhsSum
+
+		_, err = LegalUpdate(legal, tx)
+		if err != nil {
+			return w, err
+		}
+
 	}
 
 	sql := `UPDATE whs_in SET
-                    document_uid=?, name=?, based_on=?, whs_id=?, user_id=?, contragent_id=?, contact_id=?, contragent_doc_uid=?, contragent_created_at=?, created_at=?, whs_sum=?, delivery=?, comm=?, is_realized=?, is_active=?
+                    document_uid=?, name=?, based_on=?, whs_id=?, user_id=?, contragent_id=?, contact_id=?, legal_id=?, contragent_doc_uid=?, contragent_created_at=?, created_at=?, whs_sum=?, delivery=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -12991,6 +13455,7 @@ func WhsInUpdate(w WhsIn, tx *sql.Tx) (WhsIn, error) {
 		w.UserId,
 		w.ContragentId,
 		w.ContactId,
+		w.LegalId,
 		w.ContragentDocUid,
 		w.ContragentCreatedAt,
 		w.CreatedAt,
@@ -13047,6 +13512,16 @@ func WhsInDelete(id int, tx *sql.Tx, isUnRealize bool) (WhsIn, error) {
 		contact.Total -= w.Delivery
 
 		_, err = ContactUpdate(contact, tx)
+		if err != nil {
+			return w, err
+		}
+	}
+
+	legal, err := LegalGet(w.LegalId, tx)
+	if err == nil {
+		legal.Total -= w.WhsSum
+
+		_, err = LegalUpdate(legal, tx)
 		if err != nil {
 			return w, err
 		}
@@ -13150,6 +13625,7 @@ func WhsInGetByFilterInt(field string, param int, withDeleted bool, deletedOnly 
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.ContragentDocUid,
 			&w.ContragentCreatedAt,
 			&w.CreatedAt,
@@ -13202,6 +13678,7 @@ func WhsInGetByFilterStr(field string, param string, withDeleted bool, deletedOn
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.ContragentDocUid,
 			&w.ContragentCreatedAt,
 			&w.CreatedAt,
@@ -13220,7 +13697,7 @@ func WhsInGetByFilterStr(field string, param string, withDeleted bool, deletedOn
 }
 
 func WhsInTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "based_on", "whs_id", "user_id", "contragent_id", "contact_id", "contragent_doc_uid", "contragent_created_at", "created_at", "whs_sum", "delivery", "comm", "is_realized", "is_active"}
+	fields := []string{"id", "document_uid", "name", "based_on", "whs_id", "user_id", "contragent_id", "contact_id", "legal_id", "contragent_doc_uid", "contragent_created_at", "created_at", "whs_sum", "delivery", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -13266,6 +13743,16 @@ func WhsInRealized(id int, tx *sql.Tx) (WhsIn, error) {
 		contact.Total += w.Delivery
 
 		_, err = ContactUpdate(contact, tx)
+		if err != nil {
+			return w, err
+		}
+	}
+
+	legal, err := LegalGet(w.LegalId, tx)
+	if err == nil {
+		legal.Total += w.WhsSum
+
+		_, err = LegalUpdate(legal, tx)
 		if err != nil {
 			return w, err
 		}
@@ -13354,6 +13841,7 @@ func WhsInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool,
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.ContragentDocUid,
 			&w.ContragentCreatedAt,
 			&w.CreatedAt,
@@ -13395,6 +13883,7 @@ func WhsInGetBetweenContragentCreatedAt(contragent_created_at1, contragent_creat
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.ContragentDocUid,
 			&w.ContragentCreatedAt,
 			&w.CreatedAt,
@@ -13449,6 +13938,7 @@ type WhsOut struct {
 	UserId       int     `json:"user_id"`
 	ContragentId int     `json:"contragent_id"`
 	ContactId    int     `json:"contact_id"`
+	LegalId      int     `json:"legal_id"`
 	CreatedAt    string  `json:"created_at"`
 	WhsSum       float64 `json:"whs_sum"`
 	Comm         string  `json:"comm"`
@@ -13474,6 +13964,7 @@ func WhsOutGet(id int, tx *sql.Tx) (WhsOut, error) {
 		&w.UserId,
 		&w.ContragentId,
 		&w.ContactId,
+		&w.LegalId,
 		&w.CreatedAt,
 		&w.WhsSum,
 		&w.Comm,
@@ -13514,6 +14005,7 @@ func WhsOutGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]WhsOut, err
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
@@ -13551,8 +14043,8 @@ func WhsOutCreate(w WhsOut, tx *sql.Tx) (WhsOut, error) {
 	w.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO whs_out
-            (document_uid, name, based_on, whs_id, user_id, contragent_id, contact_id, created_at, whs_sum, comm, is_realized, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (document_uid, name, based_on, whs_id, user_id, contragent_id, contact_id, legal_id, created_at, whs_sum, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		w.DocumentUid,
@@ -13562,6 +14054,7 @@ func WhsOutCreate(w WhsOut, tx *sql.Tx) (WhsOut, error) {
 		w.UserId,
 		w.ContragentId,
 		w.ContactId,
+		w.LegalId,
 		w.CreatedAt,
 		w.WhsSum,
 		w.Comm,
@@ -13657,10 +14150,33 @@ func WhsOutUpdate(w WhsOut, tx *sql.Tx) (WhsOut, error) {
 			return w, err
 		}
 
+		legal, err := LegalGet(whs_out.LegalId, tx)
+		if err == nil {
+			legal.Total -= whs_out.WhsSum
+
+		}
+
+		if whs_out.LegalId != w.LegalId {
+			_, err = LegalUpdate(legal, tx)
+			if err != nil {
+				return w, err
+			}
+			legal, err = LegalGet(w.LegalId, tx)
+			if err != nil {
+				return w, err
+			}
+		}
+		legal.Total += w.WhsSum
+
+		_, err = LegalUpdate(legal, tx)
+		if err != nil {
+			return w, err
+		}
+
 	}
 
 	sql := `UPDATE whs_out SET
-                    document_uid=?, name=?, based_on=?, whs_id=?, user_id=?, contragent_id=?, contact_id=?, created_at=?, whs_sum=?, comm=?, is_realized=?, is_active=?
+                    document_uid=?, name=?, based_on=?, whs_id=?, user_id=?, contragent_id=?, contact_id=?, legal_id=?, created_at=?, whs_sum=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -13672,6 +14188,7 @@ func WhsOutUpdate(w WhsOut, tx *sql.Tx) (WhsOut, error) {
 		w.UserId,
 		w.ContragentId,
 		w.ContactId,
+		w.LegalId,
 		w.CreatedAt,
 		w.WhsSum,
 		w.Comm,
@@ -13723,6 +14240,16 @@ func WhsOutDelete(id int, tx *sql.Tx, isUnRealize bool) (WhsOut, error) {
 		contact.Total += w.WhsSum
 
 		_, err = ContactUpdate(contact, tx)
+		if err != nil {
+			return w, err
+		}
+	}
+
+	legal, err := LegalGet(w.LegalId, tx)
+	if err == nil {
+		legal.Total -= w.WhsSum
+
+		_, err = LegalUpdate(legal, tx)
 		if err != nil {
 			return w, err
 		}
@@ -13793,6 +14320,7 @@ func WhsOutGetByFilterInt(field string, param int, withDeleted bool, deletedOnly
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
@@ -13842,6 +14370,7 @@ func WhsOutGetByFilterStr(field string, param string, withDeleted bool, deletedO
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
@@ -13857,7 +14386,7 @@ func WhsOutGetByFilterStr(field string, param string, withDeleted bool, deletedO
 }
 
 func WhsOutTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "based_on", "whs_id", "user_id", "contragent_id", "contact_id", "created_at", "whs_sum", "comm", "is_realized", "is_active"}
+	fields := []string{"id", "document_uid", "name", "based_on", "whs_id", "user_id", "contragent_id", "contact_id", "legal_id", "created_at", "whs_sum", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -13901,6 +14430,16 @@ func WhsOutRealized(id int, tx *sql.Tx) (WhsOut, error) {
 		contact.Total -= w.WhsSum
 
 		_, err = ContactUpdate(contact, tx)
+		if err != nil {
+			return w, err
+		}
+	}
+
+	legal, err := LegalGet(w.LegalId, tx)
+	if err == nil {
+		legal.Total += w.WhsSum
+
+		_, err = LegalUpdate(legal, tx)
 		if err != nil {
 			return w, err
 		}
@@ -13956,6 +14495,7 @@ func WhsOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
@@ -20447,14 +20987,6 @@ type WContragent struct {
 	DirName           string  `json:"dir_name"`
 	Search            string  `json:"search"`
 	Total             float64 `json:"total"`
-	FullName          string  `json:"full_name"`
-	Edrpou            string  `json:"edrpou"`
-	Ipn               string  `json:"ipn"`
-	Iban              string  `json:"iban"`
-	Bank              string  `json:"bank"`
-	Mfo               string  `json:"mfo"`
-	Fop               string  `json:"fop"`
-	Address           string  `json:"address"`
 	IsActive          bool    `json:"is_active"`
 	ContragentGroup   string  `json:"contragent_group"`
 }
@@ -20474,14 +21006,6 @@ func WContragentGet(id int) (WContragent, error) {
 		&c.DirName,
 		&c.Search,
 		&c.Total,
-		&c.FullName,
-		&c.Edrpou,
-		&c.Ipn,
-		&c.Iban,
-		&c.Bank,
-		&c.Mfo,
-		&c.Fop,
-		&c.Address,
 		&c.IsActive,
 		&c.ContragentGroup,
 	)
@@ -20516,14 +21040,6 @@ func WContragentGetAll(withDeleted bool, deletedOnly bool) ([]WContragent, error
 			&c.DirName,
 			&c.Search,
 			&c.Total,
-			&c.FullName,
-			&c.Edrpou,
-			&c.Ipn,
-			&c.Iban,
-			&c.Bank,
-			&c.Mfo,
-			&c.Fop,
-			&c.Address,
 			&c.IsActive,
 			&c.ContragentGroup,
 		); err != nil {
@@ -20565,14 +21081,6 @@ func WContragentGetByFilterInt(field string, param int, withDeleted bool, delete
 			&c.DirName,
 			&c.Search,
 			&c.Total,
-			&c.FullName,
-			&c.Edrpou,
-			&c.Ipn,
-			&c.Iban,
-			&c.Bank,
-			&c.Mfo,
-			&c.Fop,
-			&c.Address,
 			&c.IsActive,
 			&c.ContragentGroup,
 		); err != nil {
@@ -20615,14 +21123,6 @@ func WContragentGetByFilterStr(field string, param string, withDeleted bool, del
 			&c.DirName,
 			&c.Search,
 			&c.Total,
-			&c.FullName,
-			&c.Edrpou,
-			&c.Ipn,
-			&c.Iban,
-			&c.Bank,
-			&c.Mfo,
-			&c.Fop,
-			&c.Address,
 			&c.IsActive,
 			&c.ContragentGroup,
 		); err != nil {
@@ -20639,13 +21139,13 @@ func WContragentFindByContragentSearchContactSearch(fs string) ([]WContragent, e
 
 	query := `
         SELECT DISTINCT contragent.*, contragent_group.name FROM contragent
-        JOIN contragent_group ON contragent.contragent_group_id =   contragent_group.id
-        JOIN contact on contragent.id = contact.contragent_id
+        JOIN contragent_group ON contragent.contragent_group_id = contragent_group.id
+        JOIN contact ON contragent.id = contact.contragent_id
+        LEFT JOIN legal ON contragent.id = legal.contragent_id
         WHERE contragent.is_active=1
-        AND contact.is_active=1
-        AND (contragent.search LIKE ? OR contact.search LIKE ?);`
+        AND (contragent.search LIKE ? OR contact.search LIKE ? OR legal.search LIKE ?);`
 
-	rows, err := db.Query(query, fs, fs)
+	rows, err := db.Query(query, fs, fs, fs)
 
 	if err != nil {
 		return nil, err
@@ -20666,14 +21166,6 @@ func WContragentFindByContragentSearchContactSearch(fs string) ([]WContragent, e
 			&c.DirName,
 			&c.Search,
 			&c.Total,
-			&c.FullName,
-			&c.Edrpou,
-			&c.Ipn,
-			&c.Iban,
-			&c.Bank,
-			&c.Mfo,
-			&c.Fop,
-			&c.Address,
 			&c.IsActive,
 			&c.ContragentGroup,
 		); err != nil {
@@ -20682,6 +21174,184 @@ func WContragentFindByContragentSearchContactSearch(fs string) ([]WContragent, e
 		res = append(res, c)
 	}
 	return res, nil
+}
+
+type WLegal struct {
+	Id           int     `json:"id"`
+	ContragentId int     `json:"contragent_id"`
+	Name         string  `json:"name"`
+	Comm         string  `json:"comm"`
+	Search       string  `json:"search"`
+	Total        float64 `json:"total"`
+	FullName     string  `json:"full_name"`
+	Edrpou       string  `json:"edrpou"`
+	Ipn          string  `json:"ipn"`
+	Iban         string  `json:"iban"`
+	Bank         string  `json:"bank"`
+	Mfo          string  `json:"mfo"`
+	Fop          string  `json:"fop"`
+	Address      string  `json:"address"`
+	IsActive     bool    `json:"is_active"`
+	Contragent   string  `json:"contragent"`
+}
+
+func WLegalGet(id int) (WLegal, error) {
+	var l WLegal
+	row := db.QueryRow(`SELECT legal.*, IFNULL(contragent.name, "") FROM legal
+	LEFT JOIN contragent ON legal.contragent_id = contragent.id WHERE legal.id=?`, id)
+	err := row.Scan(
+		&l.Id,
+		&l.ContragentId,
+		&l.Name,
+		&l.Comm,
+		&l.Search,
+		&l.Total,
+		&l.FullName,
+		&l.Edrpou,
+		&l.Ipn,
+		&l.Iban,
+		&l.Bank,
+		&l.Mfo,
+		&l.Fop,
+		&l.Address,
+		&l.IsActive,
+		&l.Contragent,
+	)
+	return l, err
+}
+
+func WLegalGetAll(withDeleted bool, deletedOnly bool) ([]WLegal, error) {
+	query := `SELECT legal.*, IFNULL(contragent.name, "") FROM legal
+	LEFT JOIN contragent ON legal.contragent_id = contragent.id`
+	if deletedOnly {
+		query += "  WHERE legal.is_active = 0"
+	} else if !withDeleted {
+		query += "  WHERE legal.is_active = 1"
+	}
+
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	res := []WLegal{}
+	for rows.Next() {
+		var l WLegal
+		if err := rows.Scan(
+			&l.Id,
+			&l.ContragentId,
+			&l.Name,
+			&l.Comm,
+			&l.Search,
+			&l.Total,
+			&l.FullName,
+			&l.Edrpou,
+			&l.Ipn,
+			&l.Iban,
+			&l.Bank,
+			&l.Mfo,
+			&l.Fop,
+			&l.Address,
+			&l.IsActive,
+			&l.Contragent,
+		); err != nil {
+			return nil, err
+		}
+		res = append(res, l)
+	}
+	return res, nil
+}
+
+func WLegalGetByFilterInt(field string, param int, withDeleted bool, deletedOnly bool) ([]WLegal, error) {
+
+	if !LegalTestForExistingField(field) {
+		return nil, errors.New("field not exist")
+	}
+	query := fmt.Sprintf(`SELECT legal.*, IFNULL(contragent.name, "") FROM legal
+	LEFT JOIN contragent ON legal.contragent_id = contragent.id WHERE legal.%s=?`, field)
+	if deletedOnly {
+		query += "  AND legal.is_active = 0"
+	} else if !withDeleted {
+		query += "  AND legal.is_active = 1"
+	}
+	rows, err := db.Query(query, param)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	res := []WLegal{}
+	for rows.Next() {
+		var l WLegal
+		if err := rows.Scan(
+			&l.Id,
+			&l.ContragentId,
+			&l.Name,
+			&l.Comm,
+			&l.Search,
+			&l.Total,
+			&l.FullName,
+			&l.Edrpou,
+			&l.Ipn,
+			&l.Iban,
+			&l.Bank,
+			&l.Mfo,
+			&l.Fop,
+			&l.Address,
+			&l.IsActive,
+			&l.Contragent,
+		); err != nil {
+			return nil, err
+		}
+		res = append(res, l)
+	}
+	return res, nil
+
+}
+
+func WLegalGetByFilterStr(field string, param string, withDeleted bool, deletedOnly bool) ([]WLegal, error) {
+
+	if !LegalTestForExistingField(field) {
+		return nil, errors.New("field not exist")
+	}
+	query := fmt.Sprintf(`SELECT legal.*, IFNULL(contragent.name, "") FROM legal
+	LEFT JOIN contragent ON legal.contragent_id = contragent.id WHERE legal.%s=?`, field)
+	if deletedOnly {
+		query += "  AND legal.is_active = 0"
+	} else if !withDeleted {
+		query += "  AND legal.is_active = 1"
+	}
+	rows, err := db.Query(query, param)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	res := []WLegal{}
+	for rows.Next() {
+		var l WLegal
+		if err := rows.Scan(
+			&l.Id,
+			&l.ContragentId,
+			&l.Name,
+			&l.Comm,
+			&l.Search,
+			&l.Total,
+			&l.FullName,
+			&l.Edrpou,
+			&l.Ipn,
+			&l.Iban,
+			&l.Bank,
+			&l.Mfo,
+			&l.Fop,
+			&l.Address,
+			&l.IsActive,
+			&l.Contragent,
+		); err != nil {
+			return nil, err
+		}
+		res = append(res, l)
+	}
+	return res, nil
+
 }
 
 type WContact struct {
@@ -21085,6 +21755,7 @@ type WOrdering struct {
 	UserId           int     `json:"user_id"`
 	ContragentId     int     `json:"contragent_id"`
 	ContactId        int     `json:"contact_id"`
+	LegalId          int     `json:"legal_id"`
 	Price            float64 `json:"price"`
 	Persent          float64 `json:"persent"`
 	Profit           float64 `json:"profit"`
@@ -21097,16 +21768,18 @@ type WOrdering struct {
 	User             string  `json:"user"`
 	Contragent       string  `json:"contragent"`
 	Contact          string  `json:"contact"`
+	Legal            string  `json:"legal"`
 	OrderingStatus   string  `json:"ordering_status"`
 	OrderingState    string  `json:"ordering_state"`
 }
 
 func WOrderingGet(id int) (WOrdering, error) {
 	var o WOrdering
-	row := db.QueryRow(`SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
+	row := db.QueryRow(`SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
 	LEFT JOIN user ON ordering.user_id = user.id
 	LEFT JOIN contragent ON ordering.contragent_id = contragent.id
 	LEFT JOIN contact ON ordering.contact_id = contact.id
+	LEFT JOIN legal ON ordering.legal_id = legal.id
 	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id
 	LEFT JOIN ordering_state ON ordering.ordering_state_id = ordering_state.id WHERE ordering.id=?`, id)
 	err := row.Scan(
@@ -21119,6 +21792,7 @@ func WOrderingGet(id int) (WOrdering, error) {
 		&o.UserId,
 		&o.ContragentId,
 		&o.ContactId,
+		&o.LegalId,
 		&o.Price,
 		&o.Persent,
 		&o.Profit,
@@ -21131,6 +21805,7 @@ func WOrderingGet(id int) (WOrdering, error) {
 		&o.User,
 		&o.Contragent,
 		&o.Contact,
+		&o.Legal,
 		&o.OrderingStatus,
 		&o.OrderingState,
 	)
@@ -21138,10 +21813,11 @@ func WOrderingGet(id int) (WOrdering, error) {
 }
 
 func WOrderingGetAll(withDeleted bool, deletedOnly bool) ([]WOrdering, error) {
-	query := `SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
+	query := `SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
 	LEFT JOIN user ON ordering.user_id = user.id
 	LEFT JOIN contragent ON ordering.contragent_id = contragent.id
 	LEFT JOIN contact ON ordering.contact_id = contact.id
+	LEFT JOIN legal ON ordering.legal_id = legal.id
 	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id
 	LEFT JOIN ordering_state ON ordering.ordering_state_id = ordering_state.id`
 	if deletedOnly {
@@ -21168,6 +21844,7 @@ func WOrderingGetAll(withDeleted bool, deletedOnly bool) ([]WOrdering, error) {
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
+			&o.LegalId,
 			&o.Price,
 			&o.Persent,
 			&o.Profit,
@@ -21180,6 +21857,7 @@ func WOrderingGetAll(withDeleted bool, deletedOnly bool) ([]WOrdering, error) {
 			&o.User,
 			&o.Contragent,
 			&o.Contact,
+			&o.Legal,
 			&o.OrderingStatus,
 			&o.OrderingState,
 		); err != nil {
@@ -21195,10 +21873,11 @@ func WOrderingGetByFilterInt(field string, param int, withDeleted bool, deletedO
 	if !OrderingTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
+	query := fmt.Sprintf(`SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
 	LEFT JOIN user ON ordering.user_id = user.id
 	LEFT JOIN contragent ON ordering.contragent_id = contragent.id
 	LEFT JOIN contact ON ordering.contact_id = contact.id
+	LEFT JOIN legal ON ordering.legal_id = legal.id
 	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id
 	LEFT JOIN ordering_state ON ordering.ordering_state_id = ordering_state.id WHERE ordering.%s=?`, field)
 	if deletedOnly {
@@ -21224,6 +21903,7 @@ func WOrderingGetByFilterInt(field string, param int, withDeleted bool, deletedO
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
+			&o.LegalId,
 			&o.Price,
 			&o.Persent,
 			&o.Profit,
@@ -21236,6 +21916,7 @@ func WOrderingGetByFilterInt(field string, param int, withDeleted bool, deletedO
 			&o.User,
 			&o.Contragent,
 			&o.Contact,
+			&o.Legal,
 			&o.OrderingStatus,
 			&o.OrderingState,
 		); err != nil {
@@ -21252,10 +21933,11 @@ func WOrderingGetByFilterStr(field string, param string, withDeleted bool, delet
 	if !OrderingTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
+	query := fmt.Sprintf(`SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
 	LEFT JOIN user ON ordering.user_id = user.id
 	LEFT JOIN contragent ON ordering.contragent_id = contragent.id
 	LEFT JOIN contact ON ordering.contact_id = contact.id
+	LEFT JOIN legal ON ordering.legal_id = legal.id
 	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id
 	LEFT JOIN ordering_state ON ordering.ordering_state_id = ordering_state.id WHERE ordering.%s=?`, field)
 	if deletedOnly {
@@ -21281,6 +21963,7 @@ func WOrderingGetByFilterStr(field string, param string, withDeleted bool, delet
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
+			&o.LegalId,
 			&o.Price,
 			&o.Persent,
 			&o.Profit,
@@ -21293,6 +21976,7 @@ func WOrderingGetByFilterStr(field string, param string, withDeleted bool, delet
 			&o.User,
 			&o.Contragent,
 			&o.Contact,
+			&o.Legal,
 			&o.OrderingStatus,
 			&o.OrderingState,
 		); err != nil {
@@ -21305,10 +21989,11 @@ func WOrderingGetByFilterStr(field string, param string, withDeleted bool, delet
 }
 
 func WOrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool, deletedOnly bool) ([]WOrdering, error) {
-	query := `SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
+	query := `SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
 	LEFT JOIN user ON ordering.user_id = user.id
 	LEFT JOIN contragent ON ordering.contragent_id = contragent.id
 	LEFT JOIN contact ON ordering.contact_id = contact.id
+	LEFT JOIN legal ON ordering.legal_id = legal.id
 	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id
 	LEFT JOIN ordering_state ON ordering.ordering_state_id = ordering_state.id WHERE (ordering.created_at BETWEEN ? AND ?)`
 	if deletedOnly {
@@ -21335,6 +22020,7 @@ func WOrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted b
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
+			&o.LegalId,
 			&o.Price,
 			&o.Persent,
 			&o.Profit,
@@ -21347,6 +22033,7 @@ func WOrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted b
 			&o.User,
 			&o.Contragent,
 			&o.Contact,
+			&o.Legal,
 			&o.OrderingStatus,
 			&o.OrderingState,
 		); err != nil {
@@ -21358,10 +22045,11 @@ func WOrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted b
 }
 
 func WOrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDeleted bool, deletedOnly bool) ([]WOrdering, error) {
-	query := `SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
+	query := `SELECT ordering.*, IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, ""), IFNULL(ordering_status.name, ""), IFNULL(ordering_state.name, "") FROM ordering
 	LEFT JOIN user ON ordering.user_id = user.id
 	LEFT JOIN contragent ON ordering.contragent_id = contragent.id
 	LEFT JOIN contact ON ordering.contact_id = contact.id
+	LEFT JOIN legal ON ordering.legal_id = legal.id
 	LEFT JOIN ordering_status ON ordering.ordering_status_id = ordering_status.id
 	LEFT JOIN ordering_state ON ordering.ordering_state_id = ordering_state.id WHERE (ordering.deadline_at BETWEEN ? AND ?)`
 	if deletedOnly {
@@ -21388,6 +22076,7 @@ func WOrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDelete
 			&o.UserId,
 			&o.ContragentId,
 			&o.ContactId,
+			&o.LegalId,
 			&o.Price,
 			&o.Persent,
 			&o.Profit,
@@ -21400,6 +22089,7 @@ func WOrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDelete
 			&o.User,
 			&o.Contragent,
 			&o.Contact,
+			&o.Legal,
 			&o.OrderingStatus,
 			&o.OrderingState,
 		); err != nil {
@@ -21600,6 +22290,7 @@ type WInvoice struct {
 	UserId       int     `json:"user_id"`
 	ContragentId int     `json:"contragent_id"`
 	ContactId    int     `json:"contact_id"`
+	LegalId      int     `json:"legal_id"`
 	CashSum      float64 `json:"cash_sum"`
 	Comm         string  `json:"comm"`
 	IsRealized   bool    `json:"is_realized"`
@@ -21609,16 +22300,18 @@ type WInvoice struct {
 	User         string  `json:"user"`
 	Contragent   string  `json:"contragent"`
 	Contact      string  `json:"contact"`
+	Legal        string  `json:"legal"`
 }
 
 func WInvoiceGet(id int) (WInvoice, error) {
 	var i WInvoice
-	row := db.QueryRow(`SELECT invoice.*, IFNULL(ordering.name, ""), IFNULL(owner.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM invoice
+	row := db.QueryRow(`SELECT invoice.*, IFNULL(ordering.name, ""), IFNULL(owner.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM invoice
 	LEFT JOIN ordering ON invoice.ordering_id = ordering.id
 	LEFT JOIN owner ON invoice.owner_id = owner.id
 	LEFT JOIN user ON invoice.user_id = user.id
 	LEFT JOIN contragent ON invoice.contragent_id = contragent.id
-	LEFT JOIN contact ON invoice.contact_id = contact.id WHERE invoice.id=?`, id)
+	LEFT JOIN contact ON invoice.contact_id = contact.id
+	LEFT JOIN legal ON invoice.legal_id = legal.id WHERE invoice.id=?`, id)
 	err := row.Scan(
 		&i.Id,
 		&i.DocumentUid,
@@ -21630,6 +22323,7 @@ func WInvoiceGet(id int) (WInvoice, error) {
 		&i.UserId,
 		&i.ContragentId,
 		&i.ContactId,
+		&i.LegalId,
 		&i.CashSum,
 		&i.Comm,
 		&i.IsRealized,
@@ -21639,17 +22333,19 @@ func WInvoiceGet(id int) (WInvoice, error) {
 		&i.User,
 		&i.Contragent,
 		&i.Contact,
+		&i.Legal,
 	)
 	return i, err
 }
 
 func WInvoiceGetAll(withDeleted bool, deletedOnly bool) ([]WInvoice, error) {
-	query := `SELECT invoice.*, IFNULL(ordering.name, ""), IFNULL(owner.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM invoice
+	query := `SELECT invoice.*, IFNULL(ordering.name, ""), IFNULL(owner.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM invoice
 	LEFT JOIN ordering ON invoice.ordering_id = ordering.id
 	LEFT JOIN owner ON invoice.owner_id = owner.id
 	LEFT JOIN user ON invoice.user_id = user.id
 	LEFT JOIN contragent ON invoice.contragent_id = contragent.id
-	LEFT JOIN contact ON invoice.contact_id = contact.id`
+	LEFT JOIN contact ON invoice.contact_id = contact.id
+	LEFT JOIN legal ON invoice.legal_id = legal.id`
 	if deletedOnly {
 		query += "  WHERE invoice.is_active = 0"
 	} else if !withDeleted {
@@ -21675,6 +22371,7 @@ func WInvoiceGetAll(withDeleted bool, deletedOnly bool) ([]WInvoice, error) {
 			&i.UserId,
 			&i.ContragentId,
 			&i.ContactId,
+			&i.LegalId,
 			&i.CashSum,
 			&i.Comm,
 			&i.IsRealized,
@@ -21684,6 +22381,7 @@ func WInvoiceGetAll(withDeleted bool, deletedOnly bool) ([]WInvoice, error) {
 			&i.User,
 			&i.Contragent,
 			&i.Contact,
+			&i.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -21697,12 +22395,13 @@ func WInvoiceGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 	if !InvoiceTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT invoice.*, IFNULL(ordering.name, ""), IFNULL(owner.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM invoice
+	query := fmt.Sprintf(`SELECT invoice.*, IFNULL(ordering.name, ""), IFNULL(owner.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM invoice
 	LEFT JOIN ordering ON invoice.ordering_id = ordering.id
 	LEFT JOIN owner ON invoice.owner_id = owner.id
 	LEFT JOIN user ON invoice.user_id = user.id
 	LEFT JOIN contragent ON invoice.contragent_id = contragent.id
-	LEFT JOIN contact ON invoice.contact_id = contact.id WHERE invoice.%s=?`, field)
+	LEFT JOIN contact ON invoice.contact_id = contact.id
+	LEFT JOIN legal ON invoice.legal_id = legal.id WHERE invoice.%s=?`, field)
 	if deletedOnly {
 		query += "  AND invoice.is_active = 0"
 	} else if !withDeleted {
@@ -21727,6 +22426,7 @@ func WInvoiceGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 			&i.UserId,
 			&i.ContragentId,
 			&i.ContactId,
+			&i.LegalId,
 			&i.CashSum,
 			&i.Comm,
 			&i.IsRealized,
@@ -21736,6 +22436,7 @@ func WInvoiceGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 			&i.User,
 			&i.Contragent,
 			&i.Contact,
+			&i.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -21750,12 +22451,13 @@ func WInvoiceGetByFilterStr(field string, param string, withDeleted bool, delete
 	if !InvoiceTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT invoice.*, IFNULL(ordering.name, ""), IFNULL(owner.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM invoice
+	query := fmt.Sprintf(`SELECT invoice.*, IFNULL(ordering.name, ""), IFNULL(owner.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM invoice
 	LEFT JOIN ordering ON invoice.ordering_id = ordering.id
 	LEFT JOIN owner ON invoice.owner_id = owner.id
 	LEFT JOIN user ON invoice.user_id = user.id
 	LEFT JOIN contragent ON invoice.contragent_id = contragent.id
-	LEFT JOIN contact ON invoice.contact_id = contact.id WHERE invoice.%s=?`, field)
+	LEFT JOIN contact ON invoice.contact_id = contact.id
+	LEFT JOIN legal ON invoice.legal_id = legal.id WHERE invoice.%s=?`, field)
 	if deletedOnly {
 		query += "  AND invoice.is_active = 0"
 	} else if !withDeleted {
@@ -21780,6 +22482,7 @@ func WInvoiceGetByFilterStr(field string, param string, withDeleted bool, delete
 			&i.UserId,
 			&i.ContragentId,
 			&i.ContactId,
+			&i.LegalId,
 			&i.CashSum,
 			&i.Comm,
 			&i.IsRealized,
@@ -21789,6 +22492,7 @@ func WInvoiceGetByFilterStr(field string, param string, withDeleted bool, delete
 			&i.User,
 			&i.Contragent,
 			&i.Contact,
+			&i.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -21799,12 +22503,13 @@ func WInvoiceGetByFilterStr(field string, param string, withDeleted bool, delete
 }
 
 func WInvoiceGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool, deletedOnly bool) ([]WInvoice, error) {
-	query := `SELECT invoice.*, IFNULL(ordering.name, ""), IFNULL(owner.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM invoice
+	query := `SELECT invoice.*, IFNULL(ordering.name, ""), IFNULL(owner.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM invoice
 	LEFT JOIN ordering ON invoice.ordering_id = ordering.id
 	LEFT JOIN owner ON invoice.owner_id = owner.id
 	LEFT JOIN user ON invoice.user_id = user.id
 	LEFT JOIN contragent ON invoice.contragent_id = contragent.id
-	LEFT JOIN contact ON invoice.contact_id = contact.id WHERE (invoice.created_at BETWEEN ? AND ?)`
+	LEFT JOIN contact ON invoice.contact_id = contact.id
+	LEFT JOIN legal ON invoice.legal_id = legal.id WHERE (invoice.created_at BETWEEN ? AND ?)`
 	if deletedOnly {
 		query += "  AND invoice.is_active = 0"
 	} else if !withDeleted {
@@ -21830,6 +22535,7 @@ func WInvoiceGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 			&i.UserId,
 			&i.ContragentId,
 			&i.ContactId,
+			&i.LegalId,
 			&i.CashSum,
 			&i.Comm,
 			&i.IsRealized,
@@ -21839,6 +22545,7 @@ func WInvoiceGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 			&i.User,
 			&i.Contragent,
 			&i.Contact,
+			&i.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -23898,6 +24605,7 @@ type WCashIn struct {
 	CboxCheckId  int     `json:"cbox_check_id"`
 	ContragentId int     `json:"contragent_id"`
 	ContactId    int     `json:"contact_id"`
+	LegalId      int     `json:"legal_id"`
 	CreatedAt    string  `json:"created_at"`
 	CashSum      float64 `json:"cash_sum"`
 	Comm         string  `json:"comm"`
@@ -23908,16 +24616,18 @@ type WCashIn struct {
 	CboxCheck    string  `json:"cbox_check"`
 	Contragent   string  `json:"contragent"`
 	Contact      string  `json:"contact"`
+	Legal        string  `json:"legal"`
 }
 
 func WCashInGet(id int) (WCashIn, error) {
 	var c WCashIn
-	row := db.QueryRow(`SELECT cash_in.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM cash_in
+	row := db.QueryRow(`SELECT cash_in.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM cash_in
 	LEFT JOIN cash ON cash_in.cash_id = cash.id
 	LEFT JOIN user ON cash_in.user_id = user.id
 	LEFT JOIN cbox_check ON cash_in.cbox_check_id = cbox_check.id
 	LEFT JOIN contragent ON cash_in.contragent_id = contragent.id
-	LEFT JOIN contact ON cash_in.contact_id = contact.id WHERE cash_in.id=?`, id)
+	LEFT JOIN contact ON cash_in.contact_id = contact.id
+	LEFT JOIN legal ON cash_in.legal_id = legal.id WHERE cash_in.id=?`, id)
 	err := row.Scan(
 		&c.Id,
 		&c.DocumentUid,
@@ -23928,6 +24638,7 @@ func WCashInGet(id int) (WCashIn, error) {
 		&c.CboxCheckId,
 		&c.ContragentId,
 		&c.ContactId,
+		&c.LegalId,
 		&c.CreatedAt,
 		&c.CashSum,
 		&c.Comm,
@@ -23938,17 +24649,19 @@ func WCashInGet(id int) (WCashIn, error) {
 		&c.CboxCheck,
 		&c.Contragent,
 		&c.Contact,
+		&c.Legal,
 	)
 	return c, err
 }
 
 func WCashInGetAll(withDeleted bool, deletedOnly bool) ([]WCashIn, error) {
-	query := `SELECT cash_in.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM cash_in
+	query := `SELECT cash_in.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM cash_in
 	LEFT JOIN cash ON cash_in.cash_id = cash.id
 	LEFT JOIN user ON cash_in.user_id = user.id
 	LEFT JOIN cbox_check ON cash_in.cbox_check_id = cbox_check.id
 	LEFT JOIN contragent ON cash_in.contragent_id = contragent.id
-	LEFT JOIN contact ON cash_in.contact_id = contact.id`
+	LEFT JOIN contact ON cash_in.contact_id = contact.id
+	LEFT JOIN legal ON cash_in.legal_id = legal.id`
 	if deletedOnly {
 		query += "  WHERE cash_in.is_active = 0"
 	} else if !withDeleted {
@@ -23973,6 +24686,7 @@ func WCashInGetAll(withDeleted bool, deletedOnly bool) ([]WCashIn, error) {
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -23983,6 +24697,7 @@ func WCashInGetAll(withDeleted bool, deletedOnly bool) ([]WCashIn, error) {
 			&c.CboxCheck,
 			&c.Contragent,
 			&c.Contact,
+			&c.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -23996,12 +24711,13 @@ func WCashInGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 	if !CashInTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT cash_in.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM cash_in
+	query := fmt.Sprintf(`SELECT cash_in.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM cash_in
 	LEFT JOIN cash ON cash_in.cash_id = cash.id
 	LEFT JOIN user ON cash_in.user_id = user.id
 	LEFT JOIN cbox_check ON cash_in.cbox_check_id = cbox_check.id
 	LEFT JOIN contragent ON cash_in.contragent_id = contragent.id
-	LEFT JOIN contact ON cash_in.contact_id = contact.id WHERE cash_in.%s=?`, field)
+	LEFT JOIN contact ON cash_in.contact_id = contact.id
+	LEFT JOIN legal ON cash_in.legal_id = legal.id WHERE cash_in.%s=?`, field)
 	if deletedOnly {
 		query += "  AND cash_in.is_active = 0"
 	} else if !withDeleted {
@@ -24025,6 +24741,7 @@ func WCashInGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -24035,6 +24752,7 @@ func WCashInGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 			&c.CboxCheck,
 			&c.Contragent,
 			&c.Contact,
+			&c.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24049,12 +24767,13 @@ func WCashInGetByFilterStr(field string, param string, withDeleted bool, deleted
 	if !CashInTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT cash_in.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM cash_in
+	query := fmt.Sprintf(`SELECT cash_in.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM cash_in
 	LEFT JOIN cash ON cash_in.cash_id = cash.id
 	LEFT JOIN user ON cash_in.user_id = user.id
 	LEFT JOIN cbox_check ON cash_in.cbox_check_id = cbox_check.id
 	LEFT JOIN contragent ON cash_in.contragent_id = contragent.id
-	LEFT JOIN contact ON cash_in.contact_id = contact.id WHERE cash_in.%s=?`, field)
+	LEFT JOIN contact ON cash_in.contact_id = contact.id
+	LEFT JOIN legal ON cash_in.legal_id = legal.id WHERE cash_in.%s=?`, field)
 	if deletedOnly {
 		query += "  AND cash_in.is_active = 0"
 	} else if !withDeleted {
@@ -24078,6 +24797,7 @@ func WCashInGetByFilterStr(field string, param string, withDeleted bool, deleted
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -24088,6 +24808,7 @@ func WCashInGetByFilterStr(field string, param string, withDeleted bool, deleted
 			&c.CboxCheck,
 			&c.Contragent,
 			&c.Contact,
+			&c.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24098,12 +24819,13 @@ func WCashInGetByFilterStr(field string, param string, withDeleted bool, deleted
 }
 
 func WCashInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool, deletedOnly bool) ([]WCashIn, error) {
-	query := `SELECT cash_in.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM cash_in
+	query := `SELECT cash_in.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM cash_in
 	LEFT JOIN cash ON cash_in.cash_id = cash.id
 	LEFT JOIN user ON cash_in.user_id = user.id
 	LEFT JOIN cbox_check ON cash_in.cbox_check_id = cbox_check.id
 	LEFT JOIN contragent ON cash_in.contragent_id = contragent.id
-	LEFT JOIN contact ON cash_in.contact_id = contact.id WHERE (cash_in.created_at BETWEEN ? AND ?)`
+	LEFT JOIN contact ON cash_in.contact_id = contact.id
+	LEFT JOIN legal ON cash_in.legal_id = legal.id WHERE (cash_in.created_at BETWEEN ? AND ?)`
 	if deletedOnly {
 		query += "  AND cash_in.is_active = 0"
 	} else if !withDeleted {
@@ -24128,6 +24850,7 @@ func WCashInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -24138,6 +24861,7 @@ func WCashInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 			&c.CboxCheck,
 			&c.Contragent,
 			&c.Contact,
+			&c.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24156,6 +24880,7 @@ type WCashOut struct {
 	CboxCheckId  int     `json:"cbox_check_id"`
 	ContragentId int     `json:"contragent_id"`
 	ContactId    int     `json:"contact_id"`
+	LegalId      int     `json:"legal_id"`
 	CreatedAt    string  `json:"created_at"`
 	CashSum      float64 `json:"cash_sum"`
 	Comm         string  `json:"comm"`
@@ -24166,16 +24891,18 @@ type WCashOut struct {
 	CboxCheck    string  `json:"cbox_check"`
 	Contragent   string  `json:"contragent"`
 	Contact      string  `json:"contact"`
+	Legal        string  `json:"legal"`
 }
 
 func WCashOutGet(id int) (WCashOut, error) {
 	var c WCashOut
-	row := db.QueryRow(`SELECT cash_out.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM cash_out
+	row := db.QueryRow(`SELECT cash_out.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM cash_out
 	LEFT JOIN cash ON cash_out.cash_id = cash.id
 	LEFT JOIN user ON cash_out.user_id = user.id
 	LEFT JOIN cbox_check ON cash_out.cbox_check_id = cbox_check.id
 	LEFT JOIN contragent ON cash_out.contragent_id = contragent.id
-	LEFT JOIN contact ON cash_out.contact_id = contact.id WHERE cash_out.id=?`, id)
+	LEFT JOIN contact ON cash_out.contact_id = contact.id
+	LEFT JOIN legal ON cash_out.legal_id = legal.id WHERE cash_out.id=?`, id)
 	err := row.Scan(
 		&c.Id,
 		&c.DocumentUid,
@@ -24186,6 +24913,7 @@ func WCashOutGet(id int) (WCashOut, error) {
 		&c.CboxCheckId,
 		&c.ContragentId,
 		&c.ContactId,
+		&c.LegalId,
 		&c.CreatedAt,
 		&c.CashSum,
 		&c.Comm,
@@ -24196,17 +24924,19 @@ func WCashOutGet(id int) (WCashOut, error) {
 		&c.CboxCheck,
 		&c.Contragent,
 		&c.Contact,
+		&c.Legal,
 	)
 	return c, err
 }
 
 func WCashOutGetAll(withDeleted bool, deletedOnly bool) ([]WCashOut, error) {
-	query := `SELECT cash_out.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM cash_out
+	query := `SELECT cash_out.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM cash_out
 	LEFT JOIN cash ON cash_out.cash_id = cash.id
 	LEFT JOIN user ON cash_out.user_id = user.id
 	LEFT JOIN cbox_check ON cash_out.cbox_check_id = cbox_check.id
 	LEFT JOIN contragent ON cash_out.contragent_id = contragent.id
-	LEFT JOIN contact ON cash_out.contact_id = contact.id`
+	LEFT JOIN contact ON cash_out.contact_id = contact.id
+	LEFT JOIN legal ON cash_out.legal_id = legal.id`
 	if deletedOnly {
 		query += "  WHERE cash_out.is_active = 0"
 	} else if !withDeleted {
@@ -24231,6 +24961,7 @@ func WCashOutGetAll(withDeleted bool, deletedOnly bool) ([]WCashOut, error) {
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -24241,6 +24972,7 @@ func WCashOutGetAll(withDeleted bool, deletedOnly bool) ([]WCashOut, error) {
 			&c.CboxCheck,
 			&c.Contragent,
 			&c.Contact,
+			&c.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24254,12 +24986,13 @@ func WCashOutGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 	if !CashOutTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT cash_out.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM cash_out
+	query := fmt.Sprintf(`SELECT cash_out.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM cash_out
 	LEFT JOIN cash ON cash_out.cash_id = cash.id
 	LEFT JOIN user ON cash_out.user_id = user.id
 	LEFT JOIN cbox_check ON cash_out.cbox_check_id = cbox_check.id
 	LEFT JOIN contragent ON cash_out.contragent_id = contragent.id
-	LEFT JOIN contact ON cash_out.contact_id = contact.id WHERE cash_out.%s=?`, field)
+	LEFT JOIN contact ON cash_out.contact_id = contact.id
+	LEFT JOIN legal ON cash_out.legal_id = legal.id WHERE cash_out.%s=?`, field)
 	if deletedOnly {
 		query += "  AND cash_out.is_active = 0"
 	} else if !withDeleted {
@@ -24283,6 +25016,7 @@ func WCashOutGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -24293,6 +25027,7 @@ func WCashOutGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 			&c.CboxCheck,
 			&c.Contragent,
 			&c.Contact,
+			&c.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24307,12 +25042,13 @@ func WCashOutGetByFilterStr(field string, param string, withDeleted bool, delete
 	if !CashOutTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT cash_out.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM cash_out
+	query := fmt.Sprintf(`SELECT cash_out.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM cash_out
 	LEFT JOIN cash ON cash_out.cash_id = cash.id
 	LEFT JOIN user ON cash_out.user_id = user.id
 	LEFT JOIN cbox_check ON cash_out.cbox_check_id = cbox_check.id
 	LEFT JOIN contragent ON cash_out.contragent_id = contragent.id
-	LEFT JOIN contact ON cash_out.contact_id = contact.id WHERE cash_out.%s=?`, field)
+	LEFT JOIN contact ON cash_out.contact_id = contact.id
+	LEFT JOIN legal ON cash_out.legal_id = legal.id WHERE cash_out.%s=?`, field)
 	if deletedOnly {
 		query += "  AND cash_out.is_active = 0"
 	} else if !withDeleted {
@@ -24336,6 +25072,7 @@ func WCashOutGetByFilterStr(field string, param string, withDeleted bool, delete
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -24346,6 +25083,7 @@ func WCashOutGetByFilterStr(field string, param string, withDeleted bool, delete
 			&c.CboxCheck,
 			&c.Contragent,
 			&c.Contact,
+			&c.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24356,12 +25094,13 @@ func WCashOutGetByFilterStr(field string, param string, withDeleted bool, delete
 }
 
 func WCashOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool, deletedOnly bool) ([]WCashOut, error) {
-	query := `SELECT cash_out.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM cash_out
+	query := `SELECT cash_out.*, IFNULL(cash.name, ""), IFNULL(user.name, ""), IFNULL(cbox_check.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM cash_out
 	LEFT JOIN cash ON cash_out.cash_id = cash.id
 	LEFT JOIN user ON cash_out.user_id = user.id
 	LEFT JOIN cbox_check ON cash_out.cbox_check_id = cbox_check.id
 	LEFT JOIN contragent ON cash_out.contragent_id = contragent.id
-	LEFT JOIN contact ON cash_out.contact_id = contact.id WHERE (cash_out.created_at BETWEEN ? AND ?)`
+	LEFT JOIN contact ON cash_out.contact_id = contact.id
+	LEFT JOIN legal ON cash_out.legal_id = legal.id WHERE (cash_out.created_at BETWEEN ? AND ?)`
 	if deletedOnly {
 		query += "  AND cash_out.is_active = 0"
 	} else if !withDeleted {
@@ -24386,6 +25125,7 @@ func WCashOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 			&c.CboxCheckId,
 			&c.ContragentId,
 			&c.ContactId,
+			&c.LegalId,
 			&c.CreatedAt,
 			&c.CashSum,
 			&c.Comm,
@@ -24396,6 +25136,7 @@ func WCashOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 			&c.CboxCheck,
 			&c.Contragent,
 			&c.Contact,
+			&c.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24527,6 +25268,7 @@ type WWhsIn struct {
 	UserId              int     `json:"user_id"`
 	ContragentId        int     `json:"contragent_id"`
 	ContactId           int     `json:"contact_id"`
+	LegalId             int     `json:"legal_id"`
 	ContragentDocUid    string  `json:"contragent_doc_uid"`
 	ContragentCreatedAt string  `json:"contragent_created_at"`
 	CreatedAt           string  `json:"created_at"`
@@ -24539,15 +25281,17 @@ type WWhsIn struct {
 	User                string  `json:"user"`
 	Contragent          string  `json:"contragent"`
 	Contact             string  `json:"contact"`
+	Legal               string  `json:"legal"`
 }
 
 func WWhsInGet(id int) (WWhsIn, error) {
 	var w WWhsIn
-	row := db.QueryRow(`SELECT whs_in.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM whs_in
+	row := db.QueryRow(`SELECT whs_in.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM whs_in
 	LEFT JOIN whs ON whs_in.whs_id = whs.id
 	LEFT JOIN user ON whs_in.user_id = user.id
 	LEFT JOIN contragent ON whs_in.contragent_id = contragent.id
-	LEFT JOIN contact ON whs_in.contact_id = contact.id WHERE whs_in.id=?`, id)
+	LEFT JOIN contact ON whs_in.contact_id = contact.id
+	LEFT JOIN legal ON whs_in.legal_id = legal.id WHERE whs_in.id=?`, id)
 	err := row.Scan(
 		&w.Id,
 		&w.DocumentUid,
@@ -24557,6 +25301,7 @@ func WWhsInGet(id int) (WWhsIn, error) {
 		&w.UserId,
 		&w.ContragentId,
 		&w.ContactId,
+		&w.LegalId,
 		&w.ContragentDocUid,
 		&w.ContragentCreatedAt,
 		&w.CreatedAt,
@@ -24569,16 +25314,18 @@ func WWhsInGet(id int) (WWhsIn, error) {
 		&w.User,
 		&w.Contragent,
 		&w.Contact,
+		&w.Legal,
 	)
 	return w, err
 }
 
 func WWhsInGetAll(withDeleted bool, deletedOnly bool) ([]WWhsIn, error) {
-	query := `SELECT whs_in.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM whs_in
+	query := `SELECT whs_in.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM whs_in
 	LEFT JOIN whs ON whs_in.whs_id = whs.id
 	LEFT JOIN user ON whs_in.user_id = user.id
 	LEFT JOIN contragent ON whs_in.contragent_id = contragent.id
-	LEFT JOIN contact ON whs_in.contact_id = contact.id`
+	LEFT JOIN contact ON whs_in.contact_id = contact.id
+	LEFT JOIN legal ON whs_in.legal_id = legal.id`
 	if deletedOnly {
 		query += "  WHERE whs_in.is_active = 0"
 	} else if !withDeleted {
@@ -24602,6 +25349,7 @@ func WWhsInGetAll(withDeleted bool, deletedOnly bool) ([]WWhsIn, error) {
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.ContragentDocUid,
 			&w.ContragentCreatedAt,
 			&w.CreatedAt,
@@ -24614,6 +25362,7 @@ func WWhsInGetAll(withDeleted bool, deletedOnly bool) ([]WWhsIn, error) {
 			&w.User,
 			&w.Contragent,
 			&w.Contact,
+			&w.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24627,11 +25376,12 @@ func WWhsInGetByFilterInt(field string, param int, withDeleted bool, deletedOnly
 	if !WhsInTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT whs_in.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM whs_in
+	query := fmt.Sprintf(`SELECT whs_in.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM whs_in
 	LEFT JOIN whs ON whs_in.whs_id = whs.id
 	LEFT JOIN user ON whs_in.user_id = user.id
 	LEFT JOIN contragent ON whs_in.contragent_id = contragent.id
-	LEFT JOIN contact ON whs_in.contact_id = contact.id WHERE whs_in.%s=?`, field)
+	LEFT JOIN contact ON whs_in.contact_id = contact.id
+	LEFT JOIN legal ON whs_in.legal_id = legal.id WHERE whs_in.%s=?`, field)
 	if deletedOnly {
 		query += "  AND whs_in.is_active = 0"
 	} else if !withDeleted {
@@ -24654,6 +25404,7 @@ func WWhsInGetByFilterInt(field string, param int, withDeleted bool, deletedOnly
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.ContragentDocUid,
 			&w.ContragentCreatedAt,
 			&w.CreatedAt,
@@ -24666,6 +25417,7 @@ func WWhsInGetByFilterInt(field string, param int, withDeleted bool, deletedOnly
 			&w.User,
 			&w.Contragent,
 			&w.Contact,
+			&w.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24680,11 +25432,12 @@ func WWhsInGetByFilterStr(field string, param string, withDeleted bool, deletedO
 	if !WhsInTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT whs_in.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM whs_in
+	query := fmt.Sprintf(`SELECT whs_in.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM whs_in
 	LEFT JOIN whs ON whs_in.whs_id = whs.id
 	LEFT JOIN user ON whs_in.user_id = user.id
 	LEFT JOIN contragent ON whs_in.contragent_id = contragent.id
-	LEFT JOIN contact ON whs_in.contact_id = contact.id WHERE whs_in.%s=?`, field)
+	LEFT JOIN contact ON whs_in.contact_id = contact.id
+	LEFT JOIN legal ON whs_in.legal_id = legal.id WHERE whs_in.%s=?`, field)
 	if deletedOnly {
 		query += "  AND whs_in.is_active = 0"
 	} else if !withDeleted {
@@ -24707,6 +25460,7 @@ func WWhsInGetByFilterStr(field string, param string, withDeleted bool, deletedO
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.ContragentDocUid,
 			&w.ContragentCreatedAt,
 			&w.CreatedAt,
@@ -24719,6 +25473,7 @@ func WWhsInGetByFilterStr(field string, param string, withDeleted bool, deletedO
 			&w.User,
 			&w.Contragent,
 			&w.Contact,
+			&w.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24729,11 +25484,12 @@ func WWhsInGetByFilterStr(field string, param string, withDeleted bool, deletedO
 }
 
 func WWhsInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool, deletedOnly bool) ([]WWhsIn, error) {
-	query := `SELECT whs_in.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM whs_in
+	query := `SELECT whs_in.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM whs_in
 	LEFT JOIN whs ON whs_in.whs_id = whs.id
 	LEFT JOIN user ON whs_in.user_id = user.id
 	LEFT JOIN contragent ON whs_in.contragent_id = contragent.id
-	LEFT JOIN contact ON whs_in.contact_id = contact.id WHERE (whs_in.created_at BETWEEN ? AND ?)`
+	LEFT JOIN contact ON whs_in.contact_id = contact.id
+	LEFT JOIN legal ON whs_in.legal_id = legal.id WHERE (whs_in.created_at BETWEEN ? AND ?)`
 	if deletedOnly {
 		query += "  AND whs_in.is_active = 0"
 	} else if !withDeleted {
@@ -24757,6 +25513,7 @@ func WWhsInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.ContragentDocUid,
 			&w.ContragentCreatedAt,
 			&w.CreatedAt,
@@ -24769,6 +25526,7 @@ func WWhsInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool
 			&w.User,
 			&w.Contragent,
 			&w.Contact,
+			&w.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24778,11 +25536,12 @@ func WWhsInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool
 }
 
 func WWhsInGetBetweenContragentCreatedAt(contragent_created_at1, contragent_created_at2 string, withDeleted bool, deletedOnly bool) ([]WWhsIn, error) {
-	query := `SELECT whs_in.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM whs_in
+	query := `SELECT whs_in.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM whs_in
 	LEFT JOIN whs ON whs_in.whs_id = whs.id
 	LEFT JOIN user ON whs_in.user_id = user.id
 	LEFT JOIN contragent ON whs_in.contragent_id = contragent.id
-	LEFT JOIN contact ON whs_in.contact_id = contact.id WHERE (whs_in.contragent_created_at BETWEEN ? AND ?)`
+	LEFT JOIN contact ON whs_in.contact_id = contact.id
+	LEFT JOIN legal ON whs_in.legal_id = legal.id WHERE (whs_in.contragent_created_at BETWEEN ? AND ?)`
 	if deletedOnly {
 		query += "  AND whs_in.is_active = 0"
 	} else if !withDeleted {
@@ -24806,6 +25565,7 @@ func WWhsInGetBetweenContragentCreatedAt(contragent_created_at1, contragent_crea
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.ContragentDocUid,
 			&w.ContragentCreatedAt,
 			&w.CreatedAt,
@@ -24818,6 +25578,7 @@ func WWhsInGetBetweenContragentCreatedAt(contragent_created_at1, contragent_crea
 			&w.User,
 			&w.Contragent,
 			&w.Contact,
+			&w.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24835,6 +25596,7 @@ type WWhsOut struct {
 	UserId       int     `json:"user_id"`
 	ContragentId int     `json:"contragent_id"`
 	ContactId    int     `json:"contact_id"`
+	LegalId      int     `json:"legal_id"`
 	CreatedAt    string  `json:"created_at"`
 	WhsSum       float64 `json:"whs_sum"`
 	Comm         string  `json:"comm"`
@@ -24844,15 +25606,17 @@ type WWhsOut struct {
 	User         string  `json:"user"`
 	Contragent   string  `json:"contragent"`
 	Contact      string  `json:"contact"`
+	Legal        string  `json:"legal"`
 }
 
 func WWhsOutGet(id int) (WWhsOut, error) {
 	var w WWhsOut
-	row := db.QueryRow(`SELECT whs_out.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM whs_out
+	row := db.QueryRow(`SELECT whs_out.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM whs_out
 	LEFT JOIN whs ON whs_out.whs_id = whs.id
 	LEFT JOIN user ON whs_out.user_id = user.id
 	LEFT JOIN contragent ON whs_out.contragent_id = contragent.id
-	LEFT JOIN contact ON whs_out.contact_id = contact.id WHERE whs_out.id=?`, id)
+	LEFT JOIN contact ON whs_out.contact_id = contact.id
+	LEFT JOIN legal ON whs_out.legal_id = legal.id WHERE whs_out.id=?`, id)
 	err := row.Scan(
 		&w.Id,
 		&w.DocumentUid,
@@ -24862,6 +25626,7 @@ func WWhsOutGet(id int) (WWhsOut, error) {
 		&w.UserId,
 		&w.ContragentId,
 		&w.ContactId,
+		&w.LegalId,
 		&w.CreatedAt,
 		&w.WhsSum,
 		&w.Comm,
@@ -24871,16 +25636,18 @@ func WWhsOutGet(id int) (WWhsOut, error) {
 		&w.User,
 		&w.Contragent,
 		&w.Contact,
+		&w.Legal,
 	)
 	return w, err
 }
 
 func WWhsOutGetAll(withDeleted bool, deletedOnly bool) ([]WWhsOut, error) {
-	query := `SELECT whs_out.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM whs_out
+	query := `SELECT whs_out.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM whs_out
 	LEFT JOIN whs ON whs_out.whs_id = whs.id
 	LEFT JOIN user ON whs_out.user_id = user.id
 	LEFT JOIN contragent ON whs_out.contragent_id = contragent.id
-	LEFT JOIN contact ON whs_out.contact_id = contact.id`
+	LEFT JOIN contact ON whs_out.contact_id = contact.id
+	LEFT JOIN legal ON whs_out.legal_id = legal.id`
 	if deletedOnly {
 		query += "  WHERE whs_out.is_active = 0"
 	} else if !withDeleted {
@@ -24904,6 +25671,7 @@ func WWhsOutGetAll(withDeleted bool, deletedOnly bool) ([]WWhsOut, error) {
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
@@ -24913,6 +25681,7 @@ func WWhsOutGetAll(withDeleted bool, deletedOnly bool) ([]WWhsOut, error) {
 			&w.User,
 			&w.Contragent,
 			&w.Contact,
+			&w.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24926,11 +25695,12 @@ func WWhsOutGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 	if !WhsOutTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT whs_out.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM whs_out
+	query := fmt.Sprintf(`SELECT whs_out.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM whs_out
 	LEFT JOIN whs ON whs_out.whs_id = whs.id
 	LEFT JOIN user ON whs_out.user_id = user.id
 	LEFT JOIN contragent ON whs_out.contragent_id = contragent.id
-	LEFT JOIN contact ON whs_out.contact_id = contact.id WHERE whs_out.%s=?`, field)
+	LEFT JOIN contact ON whs_out.contact_id = contact.id
+	LEFT JOIN legal ON whs_out.legal_id = legal.id WHERE whs_out.%s=?`, field)
 	if deletedOnly {
 		query += "  AND whs_out.is_active = 0"
 	} else if !withDeleted {
@@ -24953,6 +25723,7 @@ func WWhsOutGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
@@ -24962,6 +25733,7 @@ func WWhsOutGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 			&w.User,
 			&w.Contragent,
 			&w.Contact,
+			&w.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -24976,11 +25748,12 @@ func WWhsOutGetByFilterStr(field string, param string, withDeleted bool, deleted
 	if !WhsOutTestForExistingField(field) {
 		return nil, errors.New("field not exist")
 	}
-	query := fmt.Sprintf(`SELECT whs_out.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM whs_out
+	query := fmt.Sprintf(`SELECT whs_out.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM whs_out
 	LEFT JOIN whs ON whs_out.whs_id = whs.id
 	LEFT JOIN user ON whs_out.user_id = user.id
 	LEFT JOIN contragent ON whs_out.contragent_id = contragent.id
-	LEFT JOIN contact ON whs_out.contact_id = contact.id WHERE whs_out.%s=?`, field)
+	LEFT JOIN contact ON whs_out.contact_id = contact.id
+	LEFT JOIN legal ON whs_out.legal_id = legal.id WHERE whs_out.%s=?`, field)
 	if deletedOnly {
 		query += "  AND whs_out.is_active = 0"
 	} else if !withDeleted {
@@ -25003,6 +25776,7 @@ func WWhsOutGetByFilterStr(field string, param string, withDeleted bool, deleted
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
@@ -25012,6 +25786,7 @@ func WWhsOutGetByFilterStr(field string, param string, withDeleted bool, deleted
 			&w.User,
 			&w.Contragent,
 			&w.Contact,
+			&w.Legal,
 		); err != nil {
 			return nil, err
 		}
@@ -25022,11 +25797,12 @@ func WWhsOutGetByFilterStr(field string, param string, withDeleted bool, deleted
 }
 
 func WWhsOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool, deletedOnly bool) ([]WWhsOut, error) {
-	query := `SELECT whs_out.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, "") FROM whs_out
+	query := `SELECT whs_out.*, IFNULL(whs.name, ""), IFNULL(user.name, ""), IFNULL(contragent.name, ""), IFNULL(contact.name, ""), IFNULL(legal.name, "") FROM whs_out
 	LEFT JOIN whs ON whs_out.whs_id = whs.id
 	LEFT JOIN user ON whs_out.user_id = user.id
 	LEFT JOIN contragent ON whs_out.contragent_id = contragent.id
-	LEFT JOIN contact ON whs_out.contact_id = contact.id WHERE (whs_out.created_at BETWEEN ? AND ?)`
+	LEFT JOIN contact ON whs_out.contact_id = contact.id
+	LEFT JOIN legal ON whs_out.legal_id = legal.id WHERE (whs_out.created_at BETWEEN ? AND ?)`
 	if deletedOnly {
 		query += "  AND whs_out.is_active = 0"
 	} else if !withDeleted {
@@ -25050,6 +25826,7 @@ func WWhsOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 			&w.UserId,
 			&w.ContragentId,
 			&w.ContactId,
+			&w.LegalId,
 			&w.CreatedAt,
 			&w.WhsSum,
 			&w.Comm,
@@ -25059,6 +25836,7 @@ func WWhsOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 			&w.User,
 			&w.Contragent,
 			&w.Contact,
+			&w.Legal,
 		); err != nil {
 			return nil, err
 		}
