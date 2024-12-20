@@ -166,7 +166,7 @@ func ProductDeepGet(productId int, counter *int) (ProductDeep, error) {
 	return pd, nil
 }
 
-func ProductToOrderingCreateDefault(p ProductToOrdering) (ProductToOrdering, error) {
+func ProductToOrderingCreateDefault(p ProductToOrdering, isCopyCenter bool) (ProductToOrdering, error) {
 	p, err := ProductToOrderingCreate(p, nil)
 	if err != nil {
 		return p, err
@@ -227,6 +227,7 @@ func ProductToOrderingCreateDefault(p ProductToOrdering) (ProductToOrdering, err
 			EquipmentCost:       o2p.EquipmentCost * p.Number,
 			Comm:                "",
 			ProductToOrderingId: p.Id,
+			IsDone:              isCopyCenter,
 			IsActive:            true,
 		}
 		_, err = OperationToOrderingCreate(o2o, nil)

@@ -1267,7 +1267,7 @@ class ProductsTab(QWidget):
                     p2o = Item('product_to_ordering')
                     p2o.value = v['product_extra']['product_to_ordering']
                     p2o.value['id'] = 0
-                    err = p2o.create_p2o_defaults()
+                    err = p2o.create_p2o_defaults(is_copycenter=True)
                     if err:
                         error(err)
                         return
@@ -1284,7 +1284,7 @@ class ProductsTab(QWidget):
         product_to_order.value = product_value['product_extra']['product_to_ordering']
         product_to_order.value['product_to_ordering_status_id'] = self.p2o_ready_status
 
-        err = product_to_order.create_p2o_defaults()
+        err = product_to_order.create_p2o_defaults(is_copycenter=True)
         if err:
             error(err)
             return

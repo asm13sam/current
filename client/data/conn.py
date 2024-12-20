@@ -143,8 +143,10 @@ class Data:
         response = requests.put(url, json=data, cookies=self.cookie_jar)
         return self.format_response(response)
 
-    def create_default(self, data: dict) -> dict:
+    def create_default(self, data: dict, is_copycenter: bool) -> dict:
         url = f'{self.base_url}product_to_ordering_default'
+        if is_copycenter:
+            url += '_cc'
         print('CREATE_DEFAULT', url)
         response = requests.post(url, json=data, cookies=self.cookie_jar)
         return self.format_response(response)

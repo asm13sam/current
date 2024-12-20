@@ -19,7 +19,16 @@ func CreateProductToOrderingDefault(req Req) {
 		req.Respond(nil, err)
 		return
 	}
-	req.Respond(ProductToOrderingCreateDefault(p))
+	req.Respond(ProductToOrderingCreateDefault(p, false))
+}
+
+func CreateProductToOrderingDefaultCC(req Req) {
+	p, err := DecodeProductToOrdering(req)
+	if err != nil {
+		req.Respond(nil, err)
+		return
+	}
+	req.Respond(ProductToOrderingCreateDefault(p, true))
 }
 
 func GetDocument(req Req) {

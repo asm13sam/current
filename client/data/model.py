@@ -164,8 +164,8 @@ class Item:
             self.repo.send_ws_message(json.dumps({'user_id': self.user_id, 'username': self.username, 'message': mess}))
         return self.process_result(res)
 
-    def create_p2o_defaults(self) -> str:
-        res = self.repo.create_default(self.value)
+    def create_p2o_defaults(self, is_copycenter=False) -> str:
+        res = self.repo.create_default(self.value, is_copycenter)
         return self.process_result(res)
 
     def delete(self, id: int, cause: str='') -> str:

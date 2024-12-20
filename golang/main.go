@@ -1959,6 +1959,9 @@ func makeRouter() *mux.Router {
 	r.HandleFunc("/product_to_ordering_default",
 		WrapAuth(CreateProductToOrderingDefault, DOC_READ)).Methods("POST")
 
+	r.HandleFunc("/product_to_ordering_default_cc",
+		WrapAuth(CreateProductToOrderingDefaultCC, DOC_READ)).Methods("POST")
+
 	r.HandleFunc("/product_deep/{id:[0-9]+}",
 		WrapAuth(GetProductDeep, DOC_READ)).Methods("GET")
 

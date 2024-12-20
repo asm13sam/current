@@ -1,5 +1,6 @@
-from PyQt6.QtWidgets import QLabel
+from PyQt6.QtWidgets import QLabel, QPushButton, QStyle
 
+from data.model import Item
 from widgets.Dialogs import error
 from widgets.Form import DetailsItemTable
 
@@ -22,6 +23,13 @@ class UserOrderingDetailsTable(DetailsItemTable):
         self.table.hbox.insertWidget(1, user_sum_caption)
         self.user_sum = QLabel("0.00")
         self.table.hbox.insertWidget(2, self.user_sum)
+        rel_btn = QPushButton()
+        pixmapi = QStyle.StandardPixmap.SP_DialogApplyButton
+        icon = self.style().standardIcon(pixmapi)
+        rel_btn.setIcon(icon)
+        rel_btn.setToolTip('Відмітити як зроблені')
+        self.table.hbox.addWidget(rel_btn)
+        rel_btn.clicked.connect(self.set_done)
     
     def period_changed(self, date_from, date_to):
         err = self.item.get_between_up_w('created_at', date_from, date_to)
@@ -51,6 +59,17 @@ class UserOrderingDetailsTable(DetailsItemTable):
             if row['is_done']:
                 res += row[field]
         return res
+    
+    def set_done(self):
+        values = self.table.table.get_selected_values()
+        i = Item('operation_to_ordering')
+        for v in values:
+            i.value = v
+            i.value['is_done'] = True
+            err = i.save()
+            if err:
+                error(err)
+        self.reload()
     
 
 

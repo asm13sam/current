@@ -62,6 +62,9 @@ def create_go_main_footer():
     r.HandleFunc("/product_to_ordering_default",
         WrapAuth(CreateProductToOrderingDefault, DOC_READ)).Methods("POST")
 
+    r.HandleFunc("/product_to_ordering_default_cc",
+        WrapAuth(CreateProductToOrderingDefaultCC, DOC_READ)).Methods("POST")
+
     r.HandleFunc("/product_deep/{id:[0-9]+}",
         WrapAuth(GetProductDeep, DOC_READ)).Methods("GET")
 
@@ -183,7 +186,16 @@ func CreateProductToOrderingDefault(req Req) {
         req.Respond(nil, err)
         return
     }
-    req.Respond(ProductToOrderingCreateDefault(p))
+    req.Respond(ProductToOrderingCreateDefault(p, false))
+}
+
+func CreateProductToOrderingDefaultCC(req Req) {
+    p, err := DecodeProductToOrdering(req)
+    if err != nil {
+        req.Respond(nil, err)
+        return
+    }
+    req.Respond(ProductToOrderingCreateDefault(p, true))
 }
 
     '''
