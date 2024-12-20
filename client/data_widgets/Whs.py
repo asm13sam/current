@@ -229,7 +229,7 @@ class WhsInTab(WhsTab):
             )
         super().__init__(main_table, details_table)
 
-        self.doc_table = DocsTable()
+        self.doc_table = DocsTable('whs_in')
         self.main_table.add_doc_table(self.doc_table)
 
         cash_out_btn = QPushButton('Створити ВКО')
@@ -282,7 +282,7 @@ class WhsInTab(WhsTab):
         if cur_value['based_on']:
             cash_out.value["based_on"] = cur_value['based_on']    
         else:
-            cash_out.value["based_on"] = cur_value['document_uid']
+            cash_out.value["based_on"] = f"whs_in.{cur_value['id']}"
 
         cash_out.value["contragent_id"] = cur_value["contragent_id"]
         cash_out.value["contact_id"] = cur_value["contact_id"]
@@ -307,7 +307,7 @@ class WhsInTab(WhsTab):
             return
         cash_in = Item('cash_in')
         cash_in.create_default()
-        cash_in.value["based_on"] = cur_value['document_uid']
+        cash_in.value["based_on"] = f"whs_in.{cur_value['id']}"
         cash_in.value["contragent_id"] = cur_value["contragent_id"]
         cash_in.value["contact_id"] = cur_value["contact_id"]
         cash_in.value["comm"] = f'авт. до {cur_value["name"]}'
@@ -337,7 +337,7 @@ class WhsInTab(WhsTab):
         if cur_value['based_on']:
             whs_out.value["based_on"] = cur_value['based_on']    
         else:
-            whs_out.value["based_on"] = cur_value['document_uid']
+            whs_out.value["based_on"] = f"whs_in.{cur_value['id']}"
         whs_out.value["contragent_id"] = cur_value["contragent_id"]
         whs_out.value["contact_id"] = cur_value["contact_id"]
         whs_out.value["comm"] = f'авт. до {cur_value["name"]}'
@@ -388,7 +388,7 @@ class WhsInTab(WhsTab):
         app = App()
         cash_out = Item('cash_out')
         cash_out.create_default()
-        cash_out.value["based_on"] = cur_value['document_uid']
+        cash_out.value["based_on"] = f"whs_in.{cur_value['id']}"
         cash_out.value["contragent_id"] = app.config["contragent for delivery"]
         cash_out.value["contact_id"] = app.config["contact for delivery"]
         cash_out.value["cash_sum"] = cur_value["delivery"]
@@ -481,8 +481,9 @@ class WhsesTab(QWidget):
         self.setLayout(self.box)
         self.whs_table = MainItemTable('whs', is_info_bottom=True, is_vertical_inner=True)
         docs = DocsTable(
-                main_key='id', 
-                doc_key='whs_id', 
+                'whs',
+                # main_key='id', 
+                # doc_key='whs_id', 
                 docs=('whs_in', 'whs_out'),
                 controls=True,
                 )

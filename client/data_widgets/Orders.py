@@ -1013,7 +1013,7 @@ class ProductsTab(QWidget):
         cbox_check.value["created_at"] = datetime.now().isoformat(timespec='seconds')
         cbox_check.value["contragent_id"] = app.config["contragent copycenter default"]
         cbox_check.value["ordering_id"] = self.current_ordering.value['id']
-        cbox_check.value["based_on"] = self.current_ordering.value['document_uid']
+        cbox_check.value["based_on"] = f"ordering.{self.current_ordering.value['id']}"
         cbox_check.value["discount"] = discount
         receipt = self.create_receipt(item, summa=summa, summa_qr=summa_qr, discount=discount)
         if receipt is None:
@@ -1387,7 +1387,7 @@ class ProductsTab(QWidget):
         wo_item.create_default()
         wo_item.value["name"] = f"ВН по замовленню {self.current_ordering.value['id']}"
         wo_item.value["whs_id"] = app.config["contragent copycenter default"]
-        wo_item.value['based_on'] = self.current_ordering.value['document_uid']
+        wo_item.value['based_on'] = f"ordering.{self.current_ordering.value['id']}"
         wo_item.value["contragent_id"] = app.config["contragent copycenter default"]
         wo_item.value["contact_id"] = app.config["contact copycenter default"]
         wo_item.value["user_id"] = self.user['id']
@@ -1438,7 +1438,7 @@ class ProductsTab(QWidget):
         cin.value["contact_id"] = app.config["contact copycenter default"]
         cin.value["name"] = f"ПКО до Замовлення {order_id}"
         cin.value["cash_id"] = self.user['cash_id']
-        cin.value['based_on'] = self.current_ordering.value['document_uid']
+        cin.value['based_on'] = f"ordering.{self.current_ordering.value['id']}"
         cin.value["user_id"] = self.user['id']
         cin.value['cash_sum'] = summa
         

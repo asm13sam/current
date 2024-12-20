@@ -562,18 +562,9 @@ def create_go_create(table, keys, model):
         for register in registers:
             reg_get += create_go_create_registers(register, gv)
 
-    create_doc = ''
     doc_update_name = ''
     doc_update_name_tx = ''
     if table in model['documents']:
-        create_doc = f'''
-            doc := Document{{Id:0, DocType: "{table}", IsActive:true}}
-            doc, err = DocumentCreate(doc, tx)
-            if err != nil {{
-                return {gv}, err
-            }}
-            {gv}.DocumentUid = doc.Id
-        '''
         if table != 'ordering':
             doc_update_name = f'''
                 {gv}, err = {gtype}Update({gv}, tx)
@@ -604,7 +595,7 @@ def create_go_create(table, keys, model):
             needCommit = true
             defer tx.Rollback()
         }}
-        {reg_get}{create_doc}{created_at}
+        {reg_get}{created_at}
         sql := `INSERT INTO {table}
             ({', '.join(list(keys)[1:])})
             VALUES({('?, '*(len(keys)-1))[:-2]});`
@@ -632,13 +623,19 @@ def create_go_create(table, keys, model):
     '''
     return g, h, m
 
-def create_go_realized_relateds(related, gv):
+def create_go_realized_relateds(related, gv, table_name):
     table = related['table']
     gtable = to_go(table)
     val = related['filter_value']
     gval = to_go(val)
+    if related['filter'] == 'based_on':
+        filter_val = f'fmt.Sprintf("{table_name}.%d", {gv}.{gval})'
+        filter_prefix = 'Str'
+    else:
+        filter_val = f'{gv}.{gval}'
+        filter_prefix = 'Int'
     r = f'''
-    {table}s, err := {gtable}GetByFilterInt("{related['filter']}", {gv}.{gval}, false, false, tx)
+    {table}s, err := {gtable}GetByFilter{filter_prefix}("{related['filter']}", {filter_val}, false, false, tx)
     if err != nil {{
         return {gv}, err
     }}
@@ -682,7 +679,7 @@ def create_go_realized(table, keys, model):
         relateds = model['models'][table]['related']
         for related in relateds:
             if related['table'] in model['documents'] or related['table'] in model['doc_table_items']: 
-                r = create_go_realized_relateds(related, gv)
+                r = create_go_realized_relateds(related, gv, table)
                 rel_realized += r
     
     g = f'''
@@ -742,7 +739,7 @@ def create_go_realized_item(table, keys, model):
     if 'related' in model['models'][table]:
         relateds = model['models'][table]['related']
         for related in relateds:
-            r = create_go_realized_relateds(related, gv)
+            r = create_go_realized_relateds(related, gv, table)
             rel_realized += r
     
     g = f'''
@@ -968,13 +965,19 @@ def create_go_delete_complex_registers(register, gv, table):
     return reg
 
 
-def create_go_delete_relateds(related, gv):
+def create_go_delete_relateds(related, gv, table):
     table = related['table']
     gtable = to_go(table)
     val = related['filter_value']
     gval = to_go(val)
+    if related['filter'] == 'based_on':
+        filter_val = f'fmt.Sprintf("{table}.%d", {gv}.{gval})'
+        filter_prefix = 'Str'
+    else:
+        filter_val = f'{gv}.{gval}'
+        filter_prefix = 'Int'
     r = f'''
-        {table}s, err := {gtable}GetByFilterInt("{related['filter']}", {gv}.{gval}, false, false, tx)
+        {table}s, err := {gtable}GetByFilter{filter_prefix}("{related['filter']}", {filter_val}, false, false, tx)
         if err != nil {{
             return {gv}, err
         }}
@@ -1086,7 +1089,7 @@ def create_go_delete(table, keys, model):
             if table == 'ordering' and related['table'] == 'operation_to_ordering':
                 continue
 
-            r = create_go_delete_relateds(related, gv)
+            r = create_go_delete_relateds(related, gv, table)
             rel_delete += r
 
     if table in model['doc_table_items'] or model == 'item_to_invoice':

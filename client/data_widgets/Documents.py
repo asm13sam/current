@@ -5,9 +5,8 @@ from widgets.Form import PeriodWidget
 
 
 class DocsTable(TableWControls):
-    def __init__(self, 
-                 main_key='document_uid',
-                 doc_key='based_on',
+    def __init__(self,
+                 name, 
                  values=[],
                  docs=('cash_in', 'cash_out', 'whs_in', 'whs_out', 'invoice', 'cbox_check'),
                  controls=False,
@@ -23,8 +22,7 @@ class DocsTable(TableWControls):
             "type_hum": {"def": "", "hum": "Тип"},
             "comm": {"def": "", "hum": "Коментар"},
         }
-        self.main_key = main_key
-        self.doc_key = doc_key
+        self.name = name
         self.docs = docs
         self.cur_value = {}
         btns = {}
@@ -44,12 +42,12 @@ class DocsTable(TableWControls):
             self.cur_value = {}
             return
         self.cur_value = value
+        parent_uid = f"{self.name}.{value['id']}"
         for doc_name in self.docs:
             doc = Item(doc_name)
-            if not value[self.main_key]:
-                continue
+            
             if not self.period:
-                err = doc.get_filter_w(self.doc_key, value[self.main_key])
+                err = doc.get_filter_w('based_on', parent_uid)
                 if err:
                     error(err)
                     continue
@@ -59,7 +57,7 @@ class DocsTable(TableWControls):
                 if err:
                     error(err)
                     continue
-                doc.values = [v for v in doc.values if v[self.doc_key]==value[self.main_key]]
+                doc.values = [v for v in doc.values if v['based_on']==parent_uid]
             if not doc.values:
                 continue
             for val in doc.values:

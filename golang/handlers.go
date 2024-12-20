@@ -31,52 +31,6 @@ func CreateProductToOrderingDefaultCC(req Req) {
 	req.Respond(ProductToOrderingCreateDefault(p, true))
 }
 
-func GetDocument(req Req) {
-	req.Respond(DocumentGet(req.IntParam, nil))
-}
-
-func GetDocumentAll(req Req) {
-	req.Respond(DocumentGetAll(req.WithDeleted, req.DeletedOnly, nil))
-}
-
-func CreateDocument(req Req) {
-	d, err := DecodeDocument(req)
-	if err != nil {
-		req.Respond(nil, err)
-		return
-	}
-	req.Respond(DocumentCreate(d, nil))
-}
-
-func UpdateDocument(req Req) {
-	d, err := DecodeDocument(req)
-	if err != nil {
-		req.Respond(nil, err)
-		return
-	}
-	req.Respond(DocumentUpdate(d, nil))
-}
-
-func DeleteDocument(req Req) {
-	req.Respond(DocumentDelete(req.IntParam, nil, false))
-}
-
-func GetDocumentByFilterInt(req Req) {
-	req.Respond(DocumentGetByFilterInt(req.StrParam, req.IntParam, req.WithDeleted, req.DeletedOnly, nil))
-}
-
-func GetDocumentByFilterStr(req Req) {
-	req.Respond(DocumentGetByFilterStr(req.StrParam, req.Str2Param, req.WithDeleted, req.DeletedOnly, nil))
-}
-
-func DecodeDocument(req Req) (Document, error) {
-	decoder := json.NewDecoder(req.R.Body)
-	defer req.R.Body.Close()
-	var d Document
-	err := decoder.Decode(&d)
-	return d, err
-}
-
 func GetMeasure(req Req) {
 	req.Respond(MeasureGet(req.IntParam, nil))
 }
@@ -2645,22 +2599,6 @@ func DecodeNumbersToProduct(req Req) (NumbersToProduct, error) {
 	var n NumbersToProduct
 	err := decoder.Decode(&n)
 	return n, err
-}
-
-func GetWDocument(req Req) {
-	req.Respond(WDocumentGet(req.IntParam))
-}
-
-func GetWDocumentAll(req Req) {
-	req.Respond(WDocumentGetAll(req.WithDeleted, req.DeletedOnly))
-}
-
-func GetWDocumentByFilterInt(req Req) {
-	req.Respond(WDocumentGetByFilterInt(req.StrParam, req.IntParam, req.WithDeleted, req.DeletedOnly))
-}
-
-func GetWDocumentByFilterStr(req Req) {
-	req.Respond(WDocumentGetByFilterStr(req.StrParam, req.Str2Param, req.WithDeleted, req.DeletedOnly))
 }
 
 func GetWMeasure(req Req) {

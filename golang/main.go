@@ -15,27 +15,6 @@ import (
 func makeRouter() *mux.Router {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/document/{id:[0-9]+}",
-		WrapAuth(GetDocument, DOC_READ)).Methods("GET")
-
-	r.HandleFunc("/document_get_all",
-		WrapAuth(GetDocumentAll, DOC_READ)).Methods("GET")
-
-	r.HandleFunc("/document",
-		WrapAuth(CreateDocument, DOC_CREATE)).Methods("POST")
-
-	r.HandleFunc("/document/{id:[0-9]+}",
-		WrapAuth(UpdateDocument, DOC_UPDATE)).Methods("PUT")
-
-	r.HandleFunc("/document/{id:[0-9]+}",
-		WrapAuth(DeleteDocument, DOC_DELETE)).Methods("DELETE")
-
-	r.HandleFunc("/document_filter_int/{fs}/{id:[0-9]+}",
-		WrapAuth(GetDocumentByFilterInt, DOC_READ)).Methods("GET")
-
-	r.HandleFunc("/document_filter_str/{fs}/{fs2}",
-		WrapAuth(GetDocumentByFilterStr, DOC_READ)).Methods("GET")
-
 	r.HandleFunc("/measure/{id:[0-9]+}",
 		WrapAuth(GetMeasure, CATALOG_READ)).Methods("GET")
 
@@ -1274,18 +1253,6 @@ func makeRouter() *mux.Router {
 
 	r.HandleFunc("/numbers_to_product_filter_str/{fs}/{fs2}",
 		WrapAuth(GetNumbersToProductByFilterStr, DOC_READ)).Methods("GET")
-
-	r.HandleFunc("/w_document/{id:[0-9]+}",
-		WrapAuth(GetWDocument, DOC_READ)).Methods("GET")
-
-	r.HandleFunc("/w_document_get_all",
-		WrapAuth(GetWDocumentAll, DOC_READ)).Methods("GET")
-
-	r.HandleFunc("/w_document_filter_int/{fs}/{id:[0-9]+}",
-		WrapAuth(GetWDocumentByFilterInt, DOC_READ)).Methods("GET")
-
-	r.HandleFunc("/w_document_filter_str/{fs}/{fs2}",
-		WrapAuth(GetWDocumentByFilterStr, DOC_READ)).Methods("GET")
 
 	r.HandleFunc("/w_measure/{id:[0-9]+}",
 		WrapAuth(GetWMeasure, CATALOG_READ)).Methods("GET")

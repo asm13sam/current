@@ -20,259 +20,6 @@ func DbClose() error {
 	return db.Close()
 }
 
-type Document struct {
-	Id       int    `json:"id"`
-	DocType  string `json:"doc_type"`
-	IsActive bool   `json:"is_active"`
-}
-
-func DocumentGet(id int, tx *sql.Tx) (Document, error) {
-	var d Document
-	var row *sql.Row
-	if tx != nil {
-		row = tx.QueryRow("SELECT * FROM document WHERE id=?", id)
-	} else {
-		row = db.QueryRow("SELECT * FROM document WHERE id=?", id)
-	}
-
-	err := row.Scan(
-		&d.Id,
-		&d.DocType,
-		&d.IsActive,
-	)
-	return d, err
-}
-
-func DocumentGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Document, error) {
-	var rows *sql.Rows
-	var err error
-	query := "SELECT * FROM document"
-	if deletedOnly {
-		query += " WHERE is_active = 0"
-	} else if !withDeleted {
-		query += " WHERE is_active = 1"
-	}
-
-	if tx != nil {
-		rows, err = tx.Query(query)
-	} else {
-		rows, err = db.Query(query)
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	res := []Document{}
-	for rows.Next() {
-		var d Document
-		if err := rows.Scan(
-			&d.Id,
-			&d.DocType,
-			&d.IsActive,
-		); err != nil {
-			return nil, err
-		}
-		res = append(res, d)
-	}
-	return res, nil
-}
-
-func DocumentCreate(d Document, tx *sql.Tx) (Document, error) {
-	var err error
-	needCommit := false
-
-	if tx == nil {
-		tx, err = db.Begin()
-		if err != nil {
-			return d, err
-		}
-		needCommit = true
-		defer tx.Rollback()
-	}
-
-	sql := `INSERT INTO document
-            (doc_type, is_active)
-            VALUES(?, ?);`
-	res, err := tx.Exec(
-		sql,
-		d.DocType,
-		d.IsActive,
-	)
-	if err != nil {
-		return d, err
-	}
-	last_id, err := res.LastInsertId()
-	if err != nil {
-		return d, err
-	}
-	d.Id = int(last_id)
-
-	if needCommit {
-		err = tx.Commit()
-		if err != nil {
-			return d, err
-		}
-	}
-	return d, nil
-}
-
-func DocumentUpdate(d Document, tx *sql.Tx) (Document, error) {
-	var err error
-	needCommit := false
-	if tx == nil {
-		tx, err = db.Begin()
-		if err != nil {
-			return d, err
-		}
-		needCommit = true
-		defer tx.Rollback()
-	}
-
-	sql := `UPDATE document SET
-                    doc_type=?, is_active=?
-                    WHERE id=?;`
-
-	_, err = tx.Exec(
-		sql,
-		d.DocType,
-		d.IsActive,
-		d.Id,
-	)
-	if err != nil {
-		return d, err
-	}
-	if needCommit {
-		err = tx.Commit()
-		if err != nil {
-			return d, err
-		}
-	}
-	return d, nil
-}
-
-func DocumentDelete(id int, tx *sql.Tx, isUnRealize bool) (Document, error) {
-	needCommit := false
-	var err error
-	var d Document
-	if tx == nil {
-		tx, err = db.Begin()
-		if err != nil {
-			return d, err
-		}
-		needCommit = true
-		defer tx.Rollback()
-	}
-	d, err = DocumentGet(id, tx)
-	if err != nil {
-		return d, err
-	}
-
-	if !isUnRealize {
-		sql := `UPDATE document SET is_active=0 WHERE id=?;`
-		_, err = tx.Exec(sql, d.Id)
-		if err != nil {
-			return d, err
-		}
-	}
-
-	if needCommit {
-		err = tx.Commit()
-		if err != nil {
-			return d, err
-		}
-	}
-	d.IsActive = false
-	return d, nil
-}
-
-func DocumentGetByFilterInt(field string, param int, withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Document, error) {
-
-	if !DocumentTestForExistingField(field) {
-		return nil, errors.New("field not exist")
-	}
-	var err error
-	query := fmt.Sprintf("SELECT * FROM document WHERE %s=?", field)
-	if deletedOnly {
-		query += "  AND is_active = 0"
-	} else if !withDeleted {
-		query += "  AND is_active = 1"
-	}
-
-	var rows *sql.Rows
-	if tx != nil {
-		rows, err = tx.Query(query, param)
-	} else {
-		rows, err = db.Query(query, param)
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	res := []Document{}
-	for rows.Next() {
-		var d Document
-		if err := rows.Scan(
-			&d.Id,
-			&d.DocType,
-			&d.IsActive,
-		); err != nil {
-			return nil, err
-		}
-		res = append(res, d)
-	}
-	return res, nil
-
-}
-
-func DocumentGetByFilterStr(field string, param string, withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Document, error) {
-
-	if !DocumentTestForExistingField(field) {
-		return nil, errors.New("field not exist")
-	}
-	var err error
-	query := fmt.Sprintf("SELECT * FROM document WHERE %s=?", field)
-	if deletedOnly {
-		query += "  AND is_active = 0"
-	} else if !withDeleted {
-		query += "  AND is_active = 1"
-	}
-
-	var rows *sql.Rows
-	if tx != nil {
-		rows, err = tx.Query(query, param)
-	} else {
-		rows, err = db.Query(query, param)
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	res := []Document{}
-	for rows.Next() {
-		var d Document
-		if err := rows.Scan(
-			&d.Id,
-			&d.DocType,
-			&d.IsActive,
-		); err != nil {
-			return nil, err
-		}
-		res = append(res, d)
-	}
-	return res, nil
-
-}
-
-func DocumentTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "doc_type", "is_active"}
-	for _, f := range fields {
-		if fieldName == f {
-			return true
-		}
-	}
-	return false
-}
-
 type Measure struct {
 	Id       int    `json:"id"`
 	Name     string `json:"name"`
@@ -6295,7 +6042,6 @@ func OrderingStateTestForExistingField(fieldName string) bool {
 
 type Ordering struct {
 	Id               int     `json:"id"`
-	DocumentUid      int     `json:"document_uid"`
 	Name             string  `json:"name"`
 	CreatedAt        string  `json:"created_at"`
 	DeadlineAt       string  `json:"deadline_at"`
@@ -6326,7 +6072,6 @@ func OrderingGet(id int, tx *sql.Tx) (Ordering, error) {
 
 	err := row.Scan(
 		&o.Id,
-		&o.DocumentUid,
 		&o.Name,
 		&o.CreatedAt,
 		&o.DeadlineAt,
@@ -6372,7 +6117,6 @@ func OrderingGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Ordering,
 		var o Ordering
 		if err := rows.Scan(
 			&o.Id,
-			&o.DocumentUid,
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
@@ -6411,22 +6155,14 @@ func OrderingCreate(o Ordering, tx *sql.Tx) (Ordering, error) {
 		defer tx.Rollback()
 	}
 
-	doc := Document{Id: 0, DocType: "ordering", IsActive: true}
-	doc, err = DocumentCreate(doc, tx)
-	if err != nil {
-		return o, err
-	}
-	o.DocumentUid = doc.Id
-
 	t := time.Now()
 	o.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO ordering
-            (document_uid, name, created_at, deadline_at, finished_at, user_id, contragent_id, contact_id, legal_id, price, persent, profit, cost, info, ordering_status_id, ordering_state_id, is_realized, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (name, created_at, deadline_at, finished_at, user_id, contragent_id, contact_id, legal_id, price, persent, profit, cost, info, ordering_status_id, ordering_state_id, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
-		o.DocumentUid,
 		o.Name,
 		o.CreatedAt,
 		o.DeadlineAt,
@@ -6476,12 +6212,11 @@ func OrderingUpdate(o Ordering, tx *sql.Tx) (Ordering, error) {
 	}
 
 	sql := `UPDATE ordering SET
-                    document_uid=?, name=?, created_at=?, deadline_at=?, finished_at=?, user_id=?, contragent_id=?, contact_id=?, legal_id=?, price=?, persent=?, profit=?, cost=?, info=?, ordering_status_id=?, ordering_state_id=?, is_realized=?, is_active=?
+                    name=?, created_at=?, deadline_at=?, finished_at=?, user_id=?, contragent_id=?, contact_id=?, legal_id=?, price=?, persent=?, profit=?, cost=?, info=?, ordering_status_id=?, ordering_state_id=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
-		o.DocumentUid,
 		o.Name,
 		o.CreatedAt,
 		o.DeadlineAt,
@@ -6563,7 +6298,7 @@ func OrderingDelete(id int, tx *sql.Tx, isUnRealize bool) (Ordering, error) {
 		}
 	}
 
-	cash_outs, err := CashOutGetByFilterInt("based_on", o.DocumentUid, false, false, tx)
+	cash_outs, err := CashOutGetByFilterStr("based_on", fmt.Sprintf("cash_out.%d", o.Id), false, false, tx)
 	if err != nil {
 		return o, err
 	}
@@ -6574,7 +6309,7 @@ func OrderingDelete(id int, tx *sql.Tx, isUnRealize bool) (Ordering, error) {
 		}
 	}
 
-	cash_ins, err := CashInGetByFilterInt("based_on", o.DocumentUid, false, false, tx)
+	cash_ins, err := CashInGetByFilterStr("based_on", fmt.Sprintf("cash_in.%d", o.Id), false, false, tx)
 	if err != nil {
 		return o, err
 	}
@@ -6585,7 +6320,7 @@ func OrderingDelete(id int, tx *sql.Tx, isUnRealize bool) (Ordering, error) {
 		}
 	}
 
-	whs_outs, err := WhsOutGetByFilterInt("based_on", o.DocumentUid, false, false, tx)
+	whs_outs, err := WhsOutGetByFilterStr("based_on", fmt.Sprintf("whs_out.%d", o.Id), false, false, tx)
 	if err != nil {
 		return o, err
 	}
@@ -6596,7 +6331,7 @@ func OrderingDelete(id int, tx *sql.Tx, isUnRealize bool) (Ordering, error) {
 		}
 	}
 
-	whs_ins, err := WhsInGetByFilterInt("based_on", o.DocumentUid, false, false, tx)
+	whs_ins, err := WhsInGetByFilterStr("based_on", fmt.Sprintf("whs_in.%d", o.Id), false, false, tx)
 	if err != nil {
 		return o, err
 	}
@@ -6654,7 +6389,6 @@ func OrderingGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 		var o Ordering
 		if err := rows.Scan(
 			&o.Id,
-			&o.DocumentUid,
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
@@ -6709,7 +6443,6 @@ func OrderingGetByFilterStr(field string, param string, withDeleted bool, delete
 		var o Ordering
 		if err := rows.Scan(
 			&o.Id,
-			&o.DocumentUid,
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
@@ -6737,7 +6470,7 @@ func OrderingGetByFilterStr(field string, param string, withDeleted bool, delete
 }
 
 func OrderingTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "created_at", "deadline_at", "finished_at", "user_id", "contragent_id", "contact_id", "legal_id", "price", "persent", "profit", "cost", "info", "ordering_status_id", "ordering_state_id", "is_realized", "is_active"}
+	fields := []string{"id", "name", "created_at", "deadline_at", "finished_at", "user_id", "contragent_id", "contact_id", "legal_id", "price", "persent", "profit", "cost", "info", "ordering_status_id", "ordering_state_id", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -6788,7 +6521,7 @@ func OrderingRealized(id int, tx *sql.Tx) (Ordering, error) {
 		}
 	}
 
-	cash_outs, err := CashOutGetByFilterInt("based_on", o.DocumentUid, false, false, tx)
+	cash_outs, err := CashOutGetByFilterStr("based_on", fmt.Sprintf("ordering.%d", o.Id), false, false, tx)
 	if err != nil {
 		return o, err
 	}
@@ -6799,7 +6532,7 @@ func OrderingRealized(id int, tx *sql.Tx) (Ordering, error) {
 		}
 	}
 
-	cash_ins, err := CashInGetByFilterInt("based_on", o.DocumentUid, false, false, tx)
+	cash_ins, err := CashInGetByFilterStr("based_on", fmt.Sprintf("ordering.%d", o.Id), false, false, tx)
 	if err != nil {
 		return o, err
 	}
@@ -6810,7 +6543,7 @@ func OrderingRealized(id int, tx *sql.Tx) (Ordering, error) {
 		}
 	}
 
-	whs_outs, err := WhsOutGetByFilterInt("based_on", o.DocumentUid, false, false, tx)
+	whs_outs, err := WhsOutGetByFilterStr("based_on", fmt.Sprintf("ordering.%d", o.Id), false, false, tx)
 	if err != nil {
 		return o, err
 	}
@@ -6821,7 +6554,7 @@ func OrderingRealized(id int, tx *sql.Tx) (Ordering, error) {
 		}
 	}
 
-	whs_ins, err := WhsInGetByFilterInt("based_on", o.DocumentUid, false, false, tx)
+	whs_ins, err := WhsInGetByFilterStr("based_on", fmt.Sprintf("ordering.%d", o.Id), false, false, tx)
 	if err != nil {
 		return o, err
 	}
@@ -6864,7 +6597,6 @@ func OrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 		var o Ordering
 		if err := rows.Scan(
 			&o.Id,
-			&o.DocumentUid,
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
@@ -6908,7 +6640,6 @@ func OrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDeleted
 		var o Ordering
 		if err := rows.Scan(
 			&o.Id,
-			&o.DocumentUid,
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
@@ -7316,9 +7047,8 @@ func OwnerTestForExistingField(fieldName string) bool {
 
 type Invoice struct {
 	Id           int     `json:"id"`
-	DocumentUid  int     `json:"document_uid"`
 	OrderingId   int     `json:"ordering_id"`
-	BasedOn      int     `json:"based_on"`
+	BasedOn      string  `json:"based_on"`
 	OwnerId      int     `json:"owner_id"`
 	Name         string  `json:"name"`
 	CreatedAt    string  `json:"created_at"`
@@ -7343,7 +7073,6 @@ func InvoiceGet(id int, tx *sql.Tx) (Invoice, error) {
 
 	err := row.Scan(
 		&i.Id,
-		&i.DocumentUid,
 		&i.OrderingId,
 		&i.BasedOn,
 		&i.OwnerId,
@@ -7385,7 +7114,6 @@ func InvoiceGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Invoice, e
 		var i Invoice
 		if err := rows.Scan(
 			&i.Id,
-			&i.DocumentUid,
 			&i.OrderingId,
 			&i.BasedOn,
 			&i.OwnerId,
@@ -7420,22 +7148,14 @@ func InvoiceCreate(i Invoice, tx *sql.Tx) (Invoice, error) {
 		defer tx.Rollback()
 	}
 
-	doc := Document{Id: 0, DocType: "invoice", IsActive: true}
-	doc, err = DocumentCreate(doc, tx)
-	if err != nil {
-		return i, err
-	}
-	i.DocumentUid = doc.Id
-
 	t := time.Now()
 	i.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO invoice
-            (document_uid, ordering_id, based_on, owner_id, name, created_at, user_id, contragent_id, contact_id, legal_id, cash_sum, comm, is_realized, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (ordering_id, based_on, owner_id, name, created_at, user_id, contragent_id, contact_id, legal_id, cash_sum, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
-		i.DocumentUid,
 		i.OrderingId,
 		i.BasedOn,
 		i.OwnerId,
@@ -7588,12 +7308,11 @@ func InvoiceUpdate(i Invoice, tx *sql.Tx) (Invoice, error) {
 	}
 
 	sql := `UPDATE invoice SET
-                    document_uid=?, ordering_id=?, based_on=?, owner_id=?, name=?, created_at=?, user_id=?, contragent_id=?, contact_id=?, legal_id=?, cash_sum=?, comm=?, is_realized=?, is_active=?
+                    ordering_id=?, based_on=?, owner_id=?, name=?, created_at=?, user_id=?, contragent_id=?, contact_id=?, legal_id=?, cash_sum=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
-		i.DocumentUid,
 		i.OrderingId,
 		i.BasedOn,
 		i.OwnerId,
@@ -7736,7 +7455,6 @@ func InvoiceGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 		var i Invoice
 		if err := rows.Scan(
 			&i.Id,
-			&i.DocumentUid,
 			&i.OrderingId,
 			&i.BasedOn,
 			&i.OwnerId,
@@ -7787,7 +7505,6 @@ func InvoiceGetByFilterStr(field string, param string, withDeleted bool, deleted
 		var i Invoice
 		if err := rows.Scan(
 			&i.Id,
-			&i.DocumentUid,
 			&i.OrderingId,
 			&i.BasedOn,
 			&i.OwnerId,
@@ -7811,7 +7528,7 @@ func InvoiceGetByFilterStr(field string, param string, withDeleted bool, deleted
 }
 
 func InvoiceTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "ordering_id", "based_on", "owner_id", "name", "created_at", "user_id", "contragent_id", "contact_id", "legal_id", "cash_sum", "comm", "is_realized", "is_active"}
+	fields := []string{"id", "ordering_id", "based_on", "owner_id", "name", "created_at", "user_id", "contragent_id", "contact_id", "legal_id", "cash_sum", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -7912,7 +7629,6 @@ func InvoiceGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 		var i Invoice
 		if err := rows.Scan(
 			&i.Id,
-			&i.DocumentUid,
 			&i.OrderingId,
 			&i.BasedOn,
 			&i.OwnerId,
@@ -10936,9 +10652,8 @@ type CboxCheck struct {
 	CheckboxUid  string  `json:"checkbox_uid"`
 	UserId       int     `json:"user_id"`
 	ContragentId int     `json:"contragent_id"`
-	DocumentUid  int     `json:"document_uid"`
 	OrderingId   int     `json:"ordering_id"`
-	BasedOn      int     `json:"based_on"`
+	BasedOn      string  `json:"based_on"`
 	CreatedAt    string  `json:"created_at"`
 	CashSum      float64 `json:"cash_sum"`
 	Discount     float64 `json:"discount"`
@@ -10963,7 +10678,6 @@ func CboxCheckGet(id int, tx *sql.Tx) (CboxCheck, error) {
 		&c.CheckboxUid,
 		&c.UserId,
 		&c.ContragentId,
-		&c.DocumentUid,
 		&c.OrderingId,
 		&c.BasedOn,
 		&c.CreatedAt,
@@ -11005,7 +10719,6 @@ func CboxCheckGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]CboxChec
 			&c.CheckboxUid,
 			&c.UserId,
 			&c.ContragentId,
-			&c.DocumentUid,
 			&c.OrderingId,
 			&c.BasedOn,
 			&c.CreatedAt,
@@ -11039,8 +10752,8 @@ func CboxCheckCreate(c CboxCheck, tx *sql.Tx) (CboxCheck, error) {
 	c.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO cbox_check
-            (name, fs_uid, checkbox_uid, user_id, contragent_id, document_uid, ordering_id, based_on, created_at, cash_sum, discount, comm, is_cash, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (name, fs_uid, checkbox_uid, user_id, contragent_id, ordering_id, based_on, created_at, cash_sum, discount, comm, is_cash, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		c.Name,
@@ -11048,7 +10761,6 @@ func CboxCheckCreate(c CboxCheck, tx *sql.Tx) (CboxCheck, error) {
 		c.CheckboxUid,
 		c.UserId,
 		c.ContragentId,
-		c.DocumentUid,
 		c.OrderingId,
 		c.BasedOn,
 		c.CreatedAt,
@@ -11089,7 +10801,7 @@ func CboxCheckUpdate(c CboxCheck, tx *sql.Tx) (CboxCheck, error) {
 	}
 
 	sql := `UPDATE cbox_check SET
-                    name=?, fs_uid=?, checkbox_uid=?, user_id=?, contragent_id=?, document_uid=?, ordering_id=?, based_on=?, created_at=?, cash_sum=?, discount=?, comm=?, is_cash=?, is_active=?
+                    name=?, fs_uid=?, checkbox_uid=?, user_id=?, contragent_id=?, ordering_id=?, based_on=?, created_at=?, cash_sum=?, discount=?, comm=?, is_cash=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -11099,7 +10811,6 @@ func CboxCheckUpdate(c CboxCheck, tx *sql.Tx) (CboxCheck, error) {
 		c.CheckboxUid,
 		c.UserId,
 		c.ContragentId,
-		c.DocumentUid,
 		c.OrderingId,
 		c.BasedOn,
 		c.CreatedAt,
@@ -11201,7 +10912,6 @@ func CboxCheckGetByFilterInt(field string, param int, withDeleted bool, deletedO
 			&c.CheckboxUid,
 			&c.UserId,
 			&c.ContragentId,
-			&c.DocumentUid,
 			&c.OrderingId,
 			&c.BasedOn,
 			&c.CreatedAt,
@@ -11252,7 +10962,6 @@ func CboxCheckGetByFilterStr(field string, param string, withDeleted bool, delet
 			&c.CheckboxUid,
 			&c.UserId,
 			&c.ContragentId,
-			&c.DocumentUid,
 			&c.OrderingId,
 			&c.BasedOn,
 			&c.CreatedAt,
@@ -11271,7 +10980,7 @@ func CboxCheckGetByFilterStr(field string, param string, withDeleted bool, delet
 }
 
 func CboxCheckTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "name", "fs_uid", "checkbox_uid", "user_id", "contragent_id", "document_uid", "ordering_id", "based_on", "created_at", "cash_sum", "discount", "comm", "is_cash", "is_active"}
+	fields := []string{"id", "name", "fs_uid", "checkbox_uid", "user_id", "contragent_id", "ordering_id", "based_on", "created_at", "cash_sum", "discount", "comm", "is_cash", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -11303,7 +11012,6 @@ func CboxCheckGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted b
 			&c.CheckboxUid,
 			&c.UserId,
 			&c.ContragentId,
-			&c.DocumentUid,
 			&c.OrderingId,
 			&c.BasedOn,
 			&c.CreatedAt,
@@ -11653,11 +11361,10 @@ func ItemToCboxCheckGetSumByFilter(field string, id int, field2 string, id2 int)
 
 type CashIn struct {
 	Id           int     `json:"id"`
-	DocumentUid  int     `json:"document_uid"`
 	Name         string  `json:"name"`
 	CashId       int     `json:"cash_id"`
 	UserId       int     `json:"user_id"`
-	BasedOn      int     `json:"based_on"`
+	BasedOn      string  `json:"based_on"`
 	CboxCheckId  int     `json:"cbox_check_id"`
 	ContragentId int     `json:"contragent_id"`
 	ContactId    int     `json:"contact_id"`
@@ -11680,7 +11387,6 @@ func CashInGet(id int, tx *sql.Tx) (CashIn, error) {
 
 	err := row.Scan(
 		&c.Id,
-		&c.DocumentUid,
 		&c.Name,
 		&c.CashId,
 		&c.UserId,
@@ -11722,7 +11428,6 @@ func CashInGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]CashIn, err
 		var c CashIn
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -11757,22 +11462,14 @@ func CashInCreate(c CashIn, tx *sql.Tx) (CashIn, error) {
 		defer tx.Rollback()
 	}
 
-	doc := Document{Id: 0, DocType: "cash_in", IsActive: true}
-	doc, err = DocumentCreate(doc, tx)
-	if err != nil {
-		return c, err
-	}
-	c.DocumentUid = doc.Id
-
 	t := time.Now()
 	c.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO cash_in
-            (document_uid, name, cash_id, user_id, based_on, cbox_check_id, contragent_id, contact_id, legal_id, created_at, cash_sum, comm, is_realized, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (name, cash_id, user_id, based_on, cbox_check_id, contragent_id, contact_id, legal_id, created_at, cash_sum, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
-		c.DocumentUid,
 		c.Name,
 		c.CashId,
 		c.UserId,
@@ -11925,12 +11622,11 @@ func CashInUpdate(c CashIn, tx *sql.Tx) (CashIn, error) {
 	}
 
 	sql := `UPDATE cash_in SET
-                    document_uid=?, name=?, cash_id=?, user_id=?, based_on=?, cbox_check_id=?, contragent_id=?, contact_id=?, legal_id=?, created_at=?, cash_sum=?, comm=?, is_realized=?, is_active=?
+                    name=?, cash_id=?, user_id=?, based_on=?, cbox_check_id=?, contragent_id=?, contact_id=?, legal_id=?, created_at=?, cash_sum=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
-		c.DocumentUid,
 		c.Name,
 		c.CashId,
 		c.UserId,
@@ -12062,7 +11758,6 @@ func CashInGetByFilterInt(field string, param int, withDeleted bool, deletedOnly
 		var c CashIn
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -12113,7 +11808,6 @@ func CashInGetByFilterStr(field string, param string, withDeleted bool, deletedO
 		var c CashIn
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -12137,7 +11831,7 @@ func CashInGetByFilterStr(field string, param string, withDeleted bool, deletedO
 }
 
 func CashInTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "cash_id", "user_id", "based_on", "cbox_check_id", "contragent_id", "contact_id", "legal_id", "created_at", "cash_sum", "comm", "is_realized", "is_active"}
+	fields := []string{"id", "name", "cash_id", "user_id", "based_on", "cbox_check_id", "contragent_id", "contact_id", "legal_id", "created_at", "cash_sum", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -12238,7 +11932,6 @@ func CashInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool
 		var c CashIn
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -12291,11 +11984,10 @@ func CashInGetSumByFilter(field string, id int, field2 string, id2 int) (map[str
 
 type CashOut struct {
 	Id           int     `json:"id"`
-	DocumentUid  int     `json:"document_uid"`
 	Name         string  `json:"name"`
 	CashId       int     `json:"cash_id"`
 	UserId       int     `json:"user_id"`
-	BasedOn      int     `json:"based_on"`
+	BasedOn      string  `json:"based_on"`
 	CboxCheckId  int     `json:"cbox_check_id"`
 	ContragentId int     `json:"contragent_id"`
 	ContactId    int     `json:"contact_id"`
@@ -12318,7 +12010,6 @@ func CashOutGet(id int, tx *sql.Tx) (CashOut, error) {
 
 	err := row.Scan(
 		&c.Id,
-		&c.DocumentUid,
 		&c.Name,
 		&c.CashId,
 		&c.UserId,
@@ -12360,7 +12051,6 @@ func CashOutGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]CashOut, e
 		var c CashOut
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -12395,22 +12085,14 @@ func CashOutCreate(c CashOut, tx *sql.Tx) (CashOut, error) {
 		defer tx.Rollback()
 	}
 
-	doc := Document{Id: 0, DocType: "cash_out", IsActive: true}
-	doc, err = DocumentCreate(doc, tx)
-	if err != nil {
-		return c, err
-	}
-	c.DocumentUid = doc.Id
-
 	t := time.Now()
 	c.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO cash_out
-            (document_uid, name, cash_id, user_id, based_on, cbox_check_id, contragent_id, contact_id, legal_id, created_at, cash_sum, comm, is_realized, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (name, cash_id, user_id, based_on, cbox_check_id, contragent_id, contact_id, legal_id, created_at, cash_sum, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
-		c.DocumentUid,
 		c.Name,
 		c.CashId,
 		c.UserId,
@@ -12563,12 +12245,11 @@ func CashOutUpdate(c CashOut, tx *sql.Tx) (CashOut, error) {
 	}
 
 	sql := `UPDATE cash_out SET
-                    document_uid=?, name=?, cash_id=?, user_id=?, based_on=?, cbox_check_id=?, contragent_id=?, contact_id=?, legal_id=?, created_at=?, cash_sum=?, comm=?, is_realized=?, is_active=?
+                    name=?, cash_id=?, user_id=?, based_on=?, cbox_check_id=?, contragent_id=?, contact_id=?, legal_id=?, created_at=?, cash_sum=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
-		c.DocumentUid,
 		c.Name,
 		c.CashId,
 		c.UserId,
@@ -12700,7 +12381,6 @@ func CashOutGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 		var c CashOut
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -12751,7 +12431,6 @@ func CashOutGetByFilterStr(field string, param string, withDeleted bool, deleted
 		var c CashOut
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -12775,7 +12454,7 @@ func CashOutGetByFilterStr(field string, param string, withDeleted bool, deleted
 }
 
 func CashOutTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "cash_id", "user_id", "based_on", "cbox_check_id", "contragent_id", "contact_id", "legal_id", "created_at", "cash_sum", "comm", "is_realized", "is_active"}
+	fields := []string{"id", "name", "cash_id", "user_id", "based_on", "cbox_check_id", "contragent_id", "contact_id", "legal_id", "created_at", "cash_sum", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -12876,7 +12555,6 @@ func CashOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 		var c CashOut
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -13189,9 +12867,8 @@ func WhsTestForExistingField(fieldName string) bool {
 
 type WhsIn struct {
 	Id                  int     `json:"id"`
-	DocumentUid         int     `json:"document_uid"`
 	Name                string  `json:"name"`
-	BasedOn             int     `json:"based_on"`
+	BasedOn             string  `json:"based_on"`
 	WhsId               int     `json:"whs_id"`
 	UserId              int     `json:"user_id"`
 	ContragentId        int     `json:"contragent_id"`
@@ -13218,7 +12895,6 @@ func WhsInGet(id int, tx *sql.Tx) (WhsIn, error) {
 
 	err := row.Scan(
 		&w.Id,
-		&w.DocumentUid,
 		&w.Name,
 		&w.BasedOn,
 		&w.WhsId,
@@ -13262,7 +12938,6 @@ func WhsInGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]WhsIn, error
 		var w WhsIn
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -13299,22 +12974,14 @@ func WhsInCreate(w WhsIn, tx *sql.Tx) (WhsIn, error) {
 		defer tx.Rollback()
 	}
 
-	doc := Document{Id: 0, DocType: "whs_in", IsActive: true}
-	doc, err = DocumentCreate(doc, tx)
-	if err != nil {
-		return w, err
-	}
-	w.DocumentUid = doc.Id
-
 	t := time.Now()
 	w.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO whs_in
-            (document_uid, name, based_on, whs_id, user_id, contragent_id, contact_id, legal_id, contragent_doc_uid, contragent_created_at, created_at, whs_sum, delivery, comm, is_realized, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (name, based_on, whs_id, user_id, contragent_id, contact_id, legal_id, contragent_doc_uid, contragent_created_at, created_at, whs_sum, delivery, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
-		w.DocumentUid,
 		w.Name,
 		w.BasedOn,
 		w.WhsId,
@@ -13450,12 +13117,11 @@ func WhsInUpdate(w WhsIn, tx *sql.Tx) (WhsIn, error) {
 	}
 
 	sql := `UPDATE whs_in SET
-                    document_uid=?, name=?, based_on=?, whs_id=?, user_id=?, contragent_id=?, contact_id=?, legal_id=?, contragent_doc_uid=?, contragent_created_at=?, created_at=?, whs_sum=?, delivery=?, comm=?, is_realized=?, is_active=?
+                    name=?, based_on=?, whs_id=?, user_id=?, contragent_id=?, contact_id=?, legal_id=?, contragent_doc_uid=?, contragent_created_at=?, created_at=?, whs_sum=?, delivery=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
-		w.DocumentUid,
 		w.Name,
 		w.BasedOn,
 		w.WhsId,
@@ -13545,7 +13211,7 @@ func WhsInDelete(id int, tx *sql.Tx, isUnRealize bool) (WhsIn, error) {
 		}
 	}
 
-	cash_outs, err := CashOutGetByFilterInt("based_on", w.DocumentUid, false, false, tx)
+	cash_outs, err := CashOutGetByFilterStr("based_on", fmt.Sprintf("cash_out.%d", w.Id), false, false, tx)
 	if err != nil {
 		return w, err
 	}
@@ -13556,7 +13222,7 @@ func WhsInDelete(id int, tx *sql.Tx, isUnRealize bool) (WhsIn, error) {
 		}
 	}
 
-	cash_ins, err := CashInGetByFilterInt("based_on", w.DocumentUid, false, false, tx)
+	cash_ins, err := CashInGetByFilterStr("based_on", fmt.Sprintf("cash_in.%d", w.Id), false, false, tx)
 	if err != nil {
 		return w, err
 	}
@@ -13567,7 +13233,7 @@ func WhsInDelete(id int, tx *sql.Tx, isUnRealize bool) (WhsIn, error) {
 		}
 	}
 
-	whs_outs, err := WhsOutGetByFilterInt("based_on", w.DocumentUid, false, false, tx)
+	whs_outs, err := WhsOutGetByFilterStr("based_on", fmt.Sprintf("whs_out.%d", w.Id), false, false, tx)
 	if err != nil {
 		return w, err
 	}
@@ -13625,7 +13291,6 @@ func WhsInGetByFilterInt(field string, param int, withDeleted bool, deletedOnly 
 		var w WhsIn
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -13678,7 +13343,6 @@ func WhsInGetByFilterStr(field string, param string, withDeleted bool, deletedOn
 		var w WhsIn
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -13704,7 +13368,7 @@ func WhsInGetByFilterStr(field string, param string, withDeleted bool, deletedOn
 }
 
 func WhsInTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "based_on", "whs_id", "user_id", "contragent_id", "contact_id", "legal_id", "contragent_doc_uid", "contragent_created_at", "created_at", "whs_sum", "delivery", "comm", "is_realized", "is_active"}
+	fields := []string{"id", "name", "based_on", "whs_id", "user_id", "contragent_id", "contact_id", "legal_id", "contragent_doc_uid", "contragent_created_at", "created_at", "whs_sum", "delivery", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -13776,7 +13440,7 @@ func WhsInRealized(id int, tx *sql.Tx) (WhsIn, error) {
 		}
 	}
 
-	cash_outs, err := CashOutGetByFilterInt("based_on", w.DocumentUid, false, false, tx)
+	cash_outs, err := CashOutGetByFilterStr("based_on", fmt.Sprintf("whs_in.%d", w.Id), false, false, tx)
 	if err != nil {
 		return w, err
 	}
@@ -13787,7 +13451,7 @@ func WhsInRealized(id int, tx *sql.Tx) (WhsIn, error) {
 		}
 	}
 
-	cash_ins, err := CashInGetByFilterInt("based_on", w.DocumentUid, false, false, tx)
+	cash_ins, err := CashInGetByFilterStr("based_on", fmt.Sprintf("whs_in.%d", w.Id), false, false, tx)
 	if err != nil {
 		return w, err
 	}
@@ -13798,7 +13462,7 @@ func WhsInRealized(id int, tx *sql.Tx) (WhsIn, error) {
 		}
 	}
 
-	whs_outs, err := WhsOutGetByFilterInt("based_on", w.DocumentUid, false, false, tx)
+	whs_outs, err := WhsOutGetByFilterStr("based_on", fmt.Sprintf("whs_in.%d", w.Id), false, false, tx)
 	if err != nil {
 		return w, err
 	}
@@ -13841,7 +13505,6 @@ func WhsInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool,
 		var w WhsIn
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -13883,7 +13546,6 @@ func WhsInGetBetweenContragentCreatedAt(contragent_created_at1, contragent_creat
 		var w WhsIn
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -13938,9 +13600,8 @@ func WhsInGetSumByFilter(field string, id int, field2 string, id2 int) (map[stri
 
 type WhsOut struct {
 	Id           int     `json:"id"`
-	DocumentUid  int     `json:"document_uid"`
 	Name         string  `json:"name"`
-	BasedOn      int     `json:"based_on"`
+	BasedOn      string  `json:"based_on"`
 	WhsId        int     `json:"whs_id"`
 	UserId       int     `json:"user_id"`
 	ContragentId int     `json:"contragent_id"`
@@ -13964,7 +13625,6 @@ func WhsOutGet(id int, tx *sql.Tx) (WhsOut, error) {
 
 	err := row.Scan(
 		&w.Id,
-		&w.DocumentUid,
 		&w.Name,
 		&w.BasedOn,
 		&w.WhsId,
@@ -14005,7 +13665,6 @@ func WhsOutGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]WhsOut, err
 		var w WhsOut
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -14039,22 +13698,14 @@ func WhsOutCreate(w WhsOut, tx *sql.Tx) (WhsOut, error) {
 		defer tx.Rollback()
 	}
 
-	doc := Document{Id: 0, DocType: "whs_out", IsActive: true}
-	doc, err = DocumentCreate(doc, tx)
-	if err != nil {
-		return w, err
-	}
-	w.DocumentUid = doc.Id
-
 	t := time.Now()
 	w.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO whs_out
-            (document_uid, name, based_on, whs_id, user_id, contragent_id, contact_id, legal_id, created_at, whs_sum, comm, is_realized, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (name, based_on, whs_id, user_id, contragent_id, contact_id, legal_id, created_at, whs_sum, comm, is_realized, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
-		w.DocumentUid,
 		w.Name,
 		w.BasedOn,
 		w.WhsId,
@@ -14183,12 +13834,11 @@ func WhsOutUpdate(w WhsOut, tx *sql.Tx) (WhsOut, error) {
 	}
 
 	sql := `UPDATE whs_out SET
-                    document_uid=?, name=?, based_on=?, whs_id=?, user_id=?, contragent_id=?, contact_id=?, legal_id=?, created_at=?, whs_sum=?, comm=?, is_realized=?, is_active=?
+                    name=?, based_on=?, whs_id=?, user_id=?, contragent_id=?, contact_id=?, legal_id=?, created_at=?, whs_sum=?, comm=?, is_realized=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
-		w.DocumentUid,
 		w.Name,
 		w.BasedOn,
 		w.WhsId,
@@ -14320,7 +13970,6 @@ func WhsOutGetByFilterInt(field string, param int, withDeleted bool, deletedOnly
 		var w WhsOut
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -14370,7 +14019,6 @@ func WhsOutGetByFilterStr(field string, param string, withDeleted bool, deletedO
 		var w WhsOut
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -14393,7 +14041,7 @@ func WhsOutGetByFilterStr(field string, param string, withDeleted bool, deletedO
 }
 
 func WhsOutTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "based_on", "whs_id", "user_id", "contragent_id", "contact_id", "legal_id", "created_at", "whs_sum", "comm", "is_realized", "is_active"}
+	fields := []string{"id", "name", "based_on", "whs_id", "user_id", "contragent_id", "contact_id", "legal_id", "created_at", "whs_sum", "comm", "is_realized", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -14495,7 +14143,6 @@ func WhsOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool
 		var w WhsOut
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -16999,7 +16646,6 @@ func ProjectTypeTestForExistingField(fieldName string) bool {
 
 type Project struct {
 	Id              int     `json:"id"`
-	DocumentUid     int     `json:"document_uid"`
 	Name            string  `json:"name"`
 	ProjectGroupId  int     `json:"project_group_id"`
 	UserId          int     `json:"user_id"`
@@ -17029,7 +16675,6 @@ func ProjectGet(id int, tx *sql.Tx) (Project, error) {
 
 	err := row.Scan(
 		&p.Id,
-		&p.DocumentUid,
 		&p.Name,
 		&p.ProjectGroupId,
 		&p.UserId,
@@ -17074,7 +16719,6 @@ func ProjectGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) ([]Project, e
 		var p Project
 		if err := rows.Scan(
 			&p.Id,
-			&p.DocumentUid,
 			&p.Name,
 			&p.ProjectGroupId,
 			&p.UserId,
@@ -17116,11 +16760,10 @@ func ProjectCreate(p Project, tx *sql.Tx) (Project, error) {
 	p.CreatedAt = t.Format("2006-01-02T15:04:05")
 
 	sql := `INSERT INTO project
-            (document_uid, name, project_group_id, user_id, contragent_id, contact_id, cost, cash_sum, whs_sum, project_type_id, type_dir, project_status_id, number_dir, info, created_at, is_in_work, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (name, project_group_id, user_id, contragent_id, contact_id, cost, cash_sum, whs_sum, project_type_id, type_dir, project_status_id, number_dir, info, created_at, is_in_work, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
-		p.DocumentUid,
 		p.Name,
 		p.ProjectGroupId,
 		p.UserId,
@@ -17169,12 +16812,11 @@ func ProjectUpdate(p Project, tx *sql.Tx) (Project, error) {
 	}
 
 	sql := `UPDATE project SET
-                    document_uid=?, name=?, project_group_id=?, user_id=?, contragent_id=?, contact_id=?, cost=?, cash_sum=?, whs_sum=?, project_type_id=?, type_dir=?, project_status_id=?, number_dir=?, info=?, created_at=?, is_in_work=?, is_active=?
+                    name=?, project_group_id=?, user_id=?, contragent_id=?, contact_id=?, cost=?, cash_sum=?, whs_sum=?, project_type_id=?, type_dir=?, project_status_id=?, number_dir=?, info=?, created_at=?, is_in_work=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
 		sql,
-		p.DocumentUid,
 		p.Name,
 		p.ProjectGroupId,
 		p.UserId,
@@ -17268,7 +16910,6 @@ func ProjectGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 		var p Project
 		if err := rows.Scan(
 			&p.Id,
-			&p.DocumentUid,
 			&p.Name,
 			&p.ProjectGroupId,
 			&p.UserId,
@@ -17322,7 +16963,6 @@ func ProjectGetByFilterStr(field string, param string, withDeleted bool, deleted
 		var p Project
 		if err := rows.Scan(
 			&p.Id,
-			&p.DocumentUid,
 			&p.Name,
 			&p.ProjectGroupId,
 			&p.UserId,
@@ -17349,7 +16989,7 @@ func ProjectGetByFilterStr(field string, param string, withDeleted bool, deleted
 }
 
 func ProjectTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "document_uid", "name", "project_group_id", "user_id", "contragent_id", "contact_id", "cost", "cash_sum", "whs_sum", "project_type_id", "type_dir", "project_status_id", "number_dir", "info", "created_at", "is_in_work", "is_active"}
+	fields := []string{"id", "name", "project_group_id", "user_id", "contragent_id", "contact_id", "cost", "cash_sum", "whs_sum", "project_type_id", "type_dir", "project_status_id", "number_dir", "info", "created_at", "is_in_work", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -17380,7 +17020,6 @@ func ProjectFindByProjectInfoContragentNoSearchContactNoSearch(fs string) ([]Pro
 		var p Project
 		if err := rows.Scan(
 			&p.Id,
-			&p.DocumentUid,
 			&p.Name,
 			&p.ProjectGroupId,
 			&p.UserId,
@@ -17423,7 +17062,6 @@ func ProjectGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 		var p Project
 		if err := rows.Scan(
 			&p.Id,
-			&p.DocumentUid,
 			&p.Name,
 			&p.ProjectGroupId,
 			&p.UserId,
@@ -18610,115 +18248,6 @@ func NumbersToProductTestForExistingField(fieldName string) bool {
 		}
 	}
 	return false
-}
-
-type WDocument struct {
-	Id       int    `json:"id"`
-	DocType  string `json:"doc_type"`
-	IsActive bool   `json:"is_active"`
-}
-
-func WDocumentGet(id int) (WDocument, error) {
-	var d WDocument
-	row := db.QueryRow(`SELECT document.* FROM document WHERE document.id=?`, id)
-	err := row.Scan(
-		&d.Id,
-		&d.DocType,
-		&d.IsActive,
-	)
-	return d, err
-}
-
-func WDocumentGetAll(withDeleted bool, deletedOnly bool) ([]WDocument, error) {
-	query := `SELECT document.* FROM document`
-	if deletedOnly {
-		query += "  WHERE document.is_active = 0"
-	} else if !withDeleted {
-		query += "  WHERE document.is_active = 1"
-	}
-
-	rows, err := db.Query(query)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	res := []WDocument{}
-	for rows.Next() {
-		var d WDocument
-		if err := rows.Scan(
-			&d.Id,
-			&d.DocType,
-			&d.IsActive,
-		); err != nil {
-			return nil, err
-		}
-		res = append(res, d)
-	}
-	return res, nil
-}
-
-func WDocumentGetByFilterInt(field string, param int, withDeleted bool, deletedOnly bool) ([]WDocument, error) {
-
-	if !DocumentTestForExistingField(field) {
-		return nil, errors.New("field not exist")
-	}
-	query := fmt.Sprintf(`SELECT document.* FROM document WHERE document.%s=?`, field)
-	if deletedOnly {
-		query += "  AND document.is_active = 0"
-	} else if !withDeleted {
-		query += "  AND document.is_active = 1"
-	}
-	rows, err := db.Query(query, param)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	res := []WDocument{}
-	for rows.Next() {
-		var d WDocument
-		if err := rows.Scan(
-			&d.Id,
-			&d.DocType,
-			&d.IsActive,
-		); err != nil {
-			return nil, err
-		}
-		res = append(res, d)
-	}
-	return res, nil
-
-}
-
-func WDocumentGetByFilterStr(field string, param string, withDeleted bool, deletedOnly bool) ([]WDocument, error) {
-
-	if !DocumentTestForExistingField(field) {
-		return nil, errors.New("field not exist")
-	}
-	query := fmt.Sprintf(`SELECT document.* FROM document WHERE document.%s=?`, field)
-	if deletedOnly {
-		query += "  AND document.is_active = 0"
-	} else if !withDeleted {
-		query += "  AND document.is_active = 1"
-	}
-	rows, err := db.Query(query, param)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	res := []WDocument{}
-	for rows.Next() {
-		var d WDocument
-		if err := rows.Scan(
-			&d.Id,
-			&d.DocType,
-			&d.IsActive,
-		); err != nil {
-			return nil, err
-		}
-		res = append(res, d)
-	}
-	return res, nil
-
 }
 
 type WMeasure struct {
@@ -21754,7 +21283,6 @@ func WOrderingStateGetByFilterStr(field string, param string, withDeleted bool, 
 
 type WOrdering struct {
 	Id               int     `json:"id"`
-	DocumentUid      int     `json:"document_uid"`
 	Name             string  `json:"name"`
 	CreatedAt        string  `json:"created_at"`
 	DeadlineAt       string  `json:"deadline_at"`
@@ -21791,7 +21319,6 @@ func WOrderingGet(id int) (WOrdering, error) {
 	LEFT JOIN ordering_state ON ordering.ordering_state_id = ordering_state.id WHERE ordering.id=?`, id)
 	err := row.Scan(
 		&o.Id,
-		&o.DocumentUid,
 		&o.Name,
 		&o.CreatedAt,
 		&o.DeadlineAt,
@@ -21843,7 +21370,6 @@ func WOrderingGetAll(withDeleted bool, deletedOnly bool) ([]WOrdering, error) {
 		var o WOrdering
 		if err := rows.Scan(
 			&o.Id,
-			&o.DocumentUid,
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
@@ -21902,7 +21428,6 @@ func WOrderingGetByFilterInt(field string, param int, withDeleted bool, deletedO
 		var o WOrdering
 		if err := rows.Scan(
 			&o.Id,
-			&o.DocumentUid,
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
@@ -21962,7 +21487,6 @@ func WOrderingGetByFilterStr(field string, param string, withDeleted bool, delet
 		var o WOrdering
 		if err := rows.Scan(
 			&o.Id,
-			&o.DocumentUid,
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
@@ -22019,7 +21543,6 @@ func WOrderingGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted b
 		var o WOrdering
 		if err := rows.Scan(
 			&o.Id,
-			&o.DocumentUid,
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
@@ -22075,7 +21598,6 @@ func WOrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDelete
 		var o WOrdering
 		if err := rows.Scan(
 			&o.Id,
-			&o.DocumentUid,
 			&o.Name,
 			&o.CreatedAt,
 			&o.DeadlineAt,
@@ -22288,9 +21810,8 @@ func WOwnerGetByFilterStr(field string, param string, withDeleted bool, deletedO
 
 type WInvoice struct {
 	Id           int     `json:"id"`
-	DocumentUid  int     `json:"document_uid"`
 	OrderingId   int     `json:"ordering_id"`
-	BasedOn      int     `json:"based_on"`
+	BasedOn      string  `json:"based_on"`
 	OwnerId      int     `json:"owner_id"`
 	Name         string  `json:"name"`
 	CreatedAt    string  `json:"created_at"`
@@ -22321,7 +21842,6 @@ func WInvoiceGet(id int) (WInvoice, error) {
 	LEFT JOIN legal ON invoice.legal_id = legal.id WHERE invoice.id=?`, id)
 	err := row.Scan(
 		&i.Id,
-		&i.DocumentUid,
 		&i.OrderingId,
 		&i.BasedOn,
 		&i.OwnerId,
@@ -22369,7 +21889,6 @@ func WInvoiceGetAll(withDeleted bool, deletedOnly bool) ([]WInvoice, error) {
 		var i WInvoice
 		if err := rows.Scan(
 			&i.Id,
-			&i.DocumentUid,
 			&i.OrderingId,
 			&i.BasedOn,
 			&i.OwnerId,
@@ -22424,7 +21943,6 @@ func WInvoiceGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 		var i WInvoice
 		if err := rows.Scan(
 			&i.Id,
-			&i.DocumentUid,
 			&i.OrderingId,
 			&i.BasedOn,
 			&i.OwnerId,
@@ -22480,7 +21998,6 @@ func WInvoiceGetByFilterStr(field string, param string, withDeleted bool, delete
 		var i WInvoice
 		if err := rows.Scan(
 			&i.Id,
-			&i.DocumentUid,
 			&i.OrderingId,
 			&i.BasedOn,
 			&i.OwnerId,
@@ -22533,7 +22050,6 @@ func WInvoiceGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 		var i WInvoice
 		if err := rows.Scan(
 			&i.Id,
-			&i.DocumentUid,
 			&i.OrderingId,
 			&i.BasedOn,
 			&i.OwnerId,
@@ -24211,9 +23727,8 @@ type WCboxCheck struct {
 	CheckboxUid  string  `json:"checkbox_uid"`
 	UserId       int     `json:"user_id"`
 	ContragentId int     `json:"contragent_id"`
-	DocumentUid  int     `json:"document_uid"`
 	OrderingId   int     `json:"ordering_id"`
-	BasedOn      int     `json:"based_on"`
+	BasedOn      string  `json:"based_on"`
 	CreatedAt    string  `json:"created_at"`
 	CashSum      float64 `json:"cash_sum"`
 	Discount     float64 `json:"discount"`
@@ -24238,7 +23753,6 @@ func WCboxCheckGet(id int) (WCboxCheck, error) {
 		&c.CheckboxUid,
 		&c.UserId,
 		&c.ContragentId,
-		&c.DocumentUid,
 		&c.OrderingId,
 		&c.BasedOn,
 		&c.CreatedAt,
@@ -24280,7 +23794,6 @@ func WCboxCheckGetAll(withDeleted bool, deletedOnly bool) ([]WCboxCheck, error) 
 			&c.CheckboxUid,
 			&c.UserId,
 			&c.ContragentId,
-			&c.DocumentUid,
 			&c.OrderingId,
 			&c.BasedOn,
 			&c.CreatedAt,
@@ -24329,7 +23842,6 @@ func WCboxCheckGetByFilterInt(field string, param int, withDeleted bool, deleted
 			&c.CheckboxUid,
 			&c.UserId,
 			&c.ContragentId,
-			&c.DocumentUid,
 			&c.OrderingId,
 			&c.BasedOn,
 			&c.CreatedAt,
@@ -24379,7 +23891,6 @@ func WCboxCheckGetByFilterStr(field string, param string, withDeleted bool, dele
 			&c.CheckboxUid,
 			&c.UserId,
 			&c.ContragentId,
-			&c.DocumentUid,
 			&c.OrderingId,
 			&c.BasedOn,
 			&c.CreatedAt,
@@ -24426,7 +23937,6 @@ func WCboxCheckGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted 
 			&c.CheckboxUid,
 			&c.UserId,
 			&c.ContragentId,
-			&c.DocumentUid,
 			&c.OrderingId,
 			&c.BasedOn,
 			&c.CreatedAt,
@@ -24610,11 +24120,10 @@ func WItemToCboxCheckGetByFilterStr(field string, param string, withDeleted bool
 
 type WCashIn struct {
 	Id           int     `json:"id"`
-	DocumentUid  int     `json:"document_uid"`
 	Name         string  `json:"name"`
 	CashId       int     `json:"cash_id"`
 	UserId       int     `json:"user_id"`
-	BasedOn      int     `json:"based_on"`
+	BasedOn      string  `json:"based_on"`
 	CboxCheckId  int     `json:"cbox_check_id"`
 	ContragentId int     `json:"contragent_id"`
 	ContactId    int     `json:"contact_id"`
@@ -24643,7 +24152,6 @@ func WCashInGet(id int) (WCashIn, error) {
 	LEFT JOIN legal ON cash_in.legal_id = legal.id WHERE cash_in.id=?`, id)
 	err := row.Scan(
 		&c.Id,
-		&c.DocumentUid,
 		&c.Name,
 		&c.CashId,
 		&c.UserId,
@@ -24691,7 +24199,6 @@ func WCashInGetAll(withDeleted bool, deletedOnly bool) ([]WCashIn, error) {
 		var c WCashIn
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -24746,7 +24253,6 @@ func WCashInGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 		var c WCashIn
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -24802,7 +24308,6 @@ func WCashInGetByFilterStr(field string, param string, withDeleted bool, deleted
 		var c WCashIn
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -24855,7 +24360,6 @@ func WCashInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 		var c WCashIn
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -24885,11 +24389,10 @@ func WCashInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 
 type WCashOut struct {
 	Id           int     `json:"id"`
-	DocumentUid  int     `json:"document_uid"`
 	Name         string  `json:"name"`
 	CashId       int     `json:"cash_id"`
 	UserId       int     `json:"user_id"`
-	BasedOn      int     `json:"based_on"`
+	BasedOn      string  `json:"based_on"`
 	CboxCheckId  int     `json:"cbox_check_id"`
 	ContragentId int     `json:"contragent_id"`
 	ContactId    int     `json:"contact_id"`
@@ -24918,7 +24421,6 @@ func WCashOutGet(id int) (WCashOut, error) {
 	LEFT JOIN legal ON cash_out.legal_id = legal.id WHERE cash_out.id=?`, id)
 	err := row.Scan(
 		&c.Id,
-		&c.DocumentUid,
 		&c.Name,
 		&c.CashId,
 		&c.UserId,
@@ -24966,7 +24468,6 @@ func WCashOutGetAll(withDeleted bool, deletedOnly bool) ([]WCashOut, error) {
 		var c WCashOut
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -25021,7 +24522,6 @@ func WCashOutGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 		var c WCashOut
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -25077,7 +24577,6 @@ func WCashOutGetByFilterStr(field string, param string, withDeleted bool, delete
 		var c WCashOut
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -25130,7 +24629,6 @@ func WCashOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 		var c WCashOut
 		if err := rows.Scan(
 			&c.Id,
-			&c.DocumentUid,
 			&c.Name,
 			&c.CashId,
 			&c.UserId,
@@ -25274,9 +24772,8 @@ func WWhsGetByFilterStr(field string, param string, withDeleted bool, deletedOnl
 
 type WWhsIn struct {
 	Id                  int     `json:"id"`
-	DocumentUid         int     `json:"document_uid"`
 	Name                string  `json:"name"`
-	BasedOn             int     `json:"based_on"`
+	BasedOn             string  `json:"based_on"`
 	WhsId               int     `json:"whs_id"`
 	UserId              int     `json:"user_id"`
 	ContragentId        int     `json:"contragent_id"`
@@ -25307,7 +24804,6 @@ func WWhsInGet(id int) (WWhsIn, error) {
 	LEFT JOIN legal ON whs_in.legal_id = legal.id WHERE whs_in.id=?`, id)
 	err := row.Scan(
 		&w.Id,
-		&w.DocumentUid,
 		&w.Name,
 		&w.BasedOn,
 		&w.WhsId,
@@ -25355,7 +24851,6 @@ func WWhsInGetAll(withDeleted bool, deletedOnly bool) ([]WWhsIn, error) {
 		var w WWhsIn
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -25410,7 +24905,6 @@ func WWhsInGetByFilterInt(field string, param int, withDeleted bool, deletedOnly
 		var w WWhsIn
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -25466,7 +24960,6 @@ func WWhsInGetByFilterStr(field string, param string, withDeleted bool, deletedO
 		var w WWhsIn
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -25519,7 +25012,6 @@ func WWhsInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool
 		var w WWhsIn
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -25571,7 +25063,6 @@ func WWhsInGetBetweenContragentCreatedAt(contragent_created_at1, contragent_crea
 		var w WWhsIn
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -25602,9 +25093,8 @@ func WWhsInGetBetweenContragentCreatedAt(contragent_created_at1, contragent_crea
 
 type WWhsOut struct {
 	Id           int     `json:"id"`
-	DocumentUid  int     `json:"document_uid"`
 	Name         string  `json:"name"`
-	BasedOn      int     `json:"based_on"`
+	BasedOn      string  `json:"based_on"`
 	WhsId        int     `json:"whs_id"`
 	UserId       int     `json:"user_id"`
 	ContragentId int     `json:"contragent_id"`
@@ -25632,7 +25122,6 @@ func WWhsOutGet(id int) (WWhsOut, error) {
 	LEFT JOIN legal ON whs_out.legal_id = legal.id WHERE whs_out.id=?`, id)
 	err := row.Scan(
 		&w.Id,
-		&w.DocumentUid,
 		&w.Name,
 		&w.BasedOn,
 		&w.WhsId,
@@ -25677,7 +25166,6 @@ func WWhsOutGetAll(withDeleted bool, deletedOnly bool) ([]WWhsOut, error) {
 		var w WWhsOut
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -25729,7 +25217,6 @@ func WWhsOutGetByFilterInt(field string, param int, withDeleted bool, deletedOnl
 		var w WWhsOut
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -25782,7 +25269,6 @@ func WWhsOutGetByFilterStr(field string, param string, withDeleted bool, deleted
 		var w WWhsOut
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -25832,7 +25318,6 @@ func WWhsOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 		var w WWhsOut
 		if err := rows.Scan(
 			&w.Id,
-			&w.DocumentUid,
 			&w.Name,
 			&w.BasedOn,
 			&w.WhsId,
@@ -26976,7 +26461,6 @@ func WProjectTypeGetByFilterStr(field string, param string, withDeleted bool, de
 
 type WProject struct {
 	Id              int     `json:"id"`
-	DocumentUid     int     `json:"document_uid"`
 	Name            string  `json:"name"`
 	ProjectGroupId  int     `json:"project_group_id"`
 	UserId          int     `json:"user_id"`
@@ -27012,7 +26496,6 @@ func WProjectGet(id int) (WProject, error) {
 	LEFT JOIN project_status ON project.project_status_id = project_status.id WHERE project.id=?`, id)
 	err := row.Scan(
 		&p.Id,
-		&p.DocumentUid,
 		&p.Name,
 		&p.ProjectGroupId,
 		&p.UserId,
@@ -27063,7 +26546,6 @@ func WProjectGetAll(withDeleted bool, deletedOnly bool) ([]WProject, error) {
 		var p WProject
 		if err := rows.Scan(
 			&p.Id,
-			&p.DocumentUid,
 			&p.Name,
 			&p.ProjectGroupId,
 			&p.UserId,
@@ -27121,7 +26603,6 @@ func WProjectGetByFilterInt(field string, param int, withDeleted bool, deletedOn
 		var p WProject
 		if err := rows.Scan(
 			&p.Id,
-			&p.DocumentUid,
 			&p.Name,
 			&p.ProjectGroupId,
 			&p.UserId,
@@ -27180,7 +26661,6 @@ func WProjectGetByFilterStr(field string, param string, withDeleted bool, delete
 		var p WProject
 		if err := rows.Scan(
 			&p.Id,
-			&p.DocumentUid,
 			&p.Name,
 			&p.ProjectGroupId,
 			&p.UserId,
@@ -27246,7 +26726,6 @@ SELECT project.*, project_group.name, user.name, contragent.name, contact.name, 
 		var p WProject
 		if err := rows.Scan(
 			&p.Id,
-			&p.DocumentUid,
 			&p.Name,
 			&p.ProjectGroupId,
 			&p.UserId,
@@ -27301,7 +26780,6 @@ func WProjectGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bo
 		var p WProject
 		if err := rows.Scan(
 			&p.Id,
-			&p.DocumentUid,
 			&p.Name,
 			&p.ProjectGroupId,
 			&p.UserId,

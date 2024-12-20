@@ -1,6 +1,5 @@
 {
     "tables_for_clearing": [
-        "document",
         "ordering",
         "product_to_ordering",
         "cash_in",
