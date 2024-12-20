@@ -18,7 +18,7 @@ from PyQt6.QtWidgets import (
 
 from data.app import App
 from data.model import Item
-from widgets.Dialogs import error, messbox
+from widgets.Dialogs import error
 from common.params import FULL_VALUE_ROLE
 from widgets.Form import CustomFormDialog, Selector
 from widgets.ButtonsBlock import ButtonsBlock
@@ -491,13 +491,11 @@ class ProductExtra:
         self.value['product_extra']['product_to_ordering']["product_to_ordering_id"] = p2o_id
         p2o = Item('product_to_ordering')
         p2o.value = self.value['product_extra']['product_to_ordering']
-        messbox(str(p2o.value['cost']), 'before')
         err = p2o.create_p2o_defaults()
         if err:
             error(err)
             return
         self.value['product_extra']['product_to_ordering'] = p2o.value
-        messbox(str(p2o.value['cost']), 'after')
         self.create_used(ordering_id)
         return p2o.value
                     

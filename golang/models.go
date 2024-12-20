@@ -9769,6 +9769,7 @@ type OperationToOrdering struct {
 	EquipmentCost       float64 `json:"equipment_cost"`
 	Comm                string  `json:"comm"`
 	ProductToOrderingId int     `json:"product_to_ordering_id"`
+	IsDone              bool    `json:"is_done"`
 	IsActive            bool    `json:"is_active"`
 }
 
@@ -9794,6 +9795,7 @@ func OperationToOrderingGet(id int, tx *sql.Tx) (OperationToOrdering, error) {
 		&o.EquipmentCost,
 		&o.Comm,
 		&o.ProductToOrderingId,
+		&o.IsDone,
 		&o.IsActive,
 	)
 	return o, err
@@ -9834,6 +9836,7 @@ func OperationToOrderingGetAll(withDeleted bool, deletedOnly bool, tx *sql.Tx) (
 			&o.EquipmentCost,
 			&o.Comm,
 			&o.ProductToOrderingId,
+			&o.IsDone,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -9857,8 +9860,8 @@ func OperationToOrderingCreate(o OperationToOrdering, tx *sql.Tx) (OperationToOr
 	}
 
 	sql := `INSERT INTO operation_to_ordering
-            (ordering_id, operation_id, user_id, number, price, user_sum, cost, equipment_id, equipment_cost, comm, product_to_ordering_id, is_active)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
+            (ordering_id, operation_id, user_id, number, price, user_sum, cost, equipment_id, equipment_cost, comm, product_to_ordering_id, is_done, is_active)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 	res, err := tx.Exec(
 		sql,
 		o.OrderingId,
@@ -9872,6 +9875,7 @@ func OperationToOrderingCreate(o OperationToOrdering, tx *sql.Tx) (OperationToOr
 		o.EquipmentCost,
 		o.Comm,
 		o.ProductToOrderingId,
+		o.IsDone,
 		o.IsActive,
 	)
 	if err != nil {
@@ -9941,7 +9945,7 @@ func OperationToOrderingUpdate(o OperationToOrdering, tx *sql.Tx) (OperationToOr
 	}
 
 	sql := `UPDATE operation_to_ordering SET
-                    ordering_id=?, operation_id=?, user_id=?, number=?, price=?, user_sum=?, cost=?, equipment_id=?, equipment_cost=?, comm=?, product_to_ordering_id=?, is_active=?
+                    ordering_id=?, operation_id=?, user_id=?, number=?, price=?, user_sum=?, cost=?, equipment_id=?, equipment_cost=?, comm=?, product_to_ordering_id=?, is_done=?, is_active=?
                     WHERE id=?;`
 
 	_, err = tx.Exec(
@@ -9957,6 +9961,7 @@ func OperationToOrderingUpdate(o OperationToOrdering, tx *sql.Tx) (OperationToOr
 		o.EquipmentCost,
 		o.Comm,
 		o.ProductToOrderingId,
+		o.IsDone,
 		o.IsActive,
 		o.Id,
 	)
@@ -10056,6 +10061,7 @@ func OperationToOrderingGetByFilterInt(field string, param int, withDeleted bool
 			&o.EquipmentCost,
 			&o.Comm,
 			&o.ProductToOrderingId,
+			&o.IsDone,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -10105,6 +10111,7 @@ func OperationToOrderingGetByFilterStr(field string, param string, withDeleted b
 			&o.EquipmentCost,
 			&o.Comm,
 			&o.ProductToOrderingId,
+			&o.IsDone,
 			&o.IsActive,
 		); err != nil {
 			return nil, err
@@ -10116,7 +10123,7 @@ func OperationToOrderingGetByFilterStr(field string, param string, withDeleted b
 }
 
 func OperationToOrderingTestForExistingField(fieldName string) bool {
-	fields := []string{"id", "ordering_id", "operation_id", "user_id", "number", "price", "user_sum", "cost", "equipment_id", "equipment_cost", "comm", "product_to_ordering_id", "is_active"}
+	fields := []string{"id", "ordering_id", "operation_id", "user_id", "number", "price", "user_sum", "cost", "equipment_id", "equipment_cost", "comm", "product_to_ordering_id", "is_done", "is_active"}
 	for _, f := range fields {
 		if fieldName == f {
 			return true
@@ -23559,6 +23566,7 @@ type WOperationToOrdering struct {
 	EquipmentCost       float64 `json:"equipment_cost"`
 	Comm                string  `json:"comm"`
 	ProductToOrderingId int     `json:"product_to_ordering_id"`
+	IsDone              bool    `json:"is_done"`
 	IsActive            bool    `json:"is_active"`
 	Ordering            string  `json:"ordering"`
 	Operation           string  `json:"operation"`
@@ -23588,6 +23596,7 @@ func WOperationToOrderingGet(id int) (WOperationToOrdering, error) {
 		&o.EquipmentCost,
 		&o.Comm,
 		&o.ProductToOrderingId,
+		&o.IsDone,
 		&o.IsActive,
 		&o.Ordering,
 		&o.Operation,
@@ -23632,6 +23641,7 @@ func WOperationToOrderingGetAll(withDeleted bool, deletedOnly bool) ([]WOperatio
 			&o.EquipmentCost,
 			&o.Comm,
 			&o.ProductToOrderingId,
+			&o.IsDone,
 			&o.IsActive,
 			&o.Ordering,
 			&o.Operation,
@@ -23683,6 +23693,7 @@ func WOperationToOrderingGetByFilterInt(field string, param int, withDeleted boo
 			&o.EquipmentCost,
 			&o.Comm,
 			&o.ProductToOrderingId,
+			&o.IsDone,
 			&o.IsActive,
 			&o.Ordering,
 			&o.Operation,
@@ -23735,6 +23746,7 @@ func WOperationToOrderingGetByFilterStr(field string, param string, withDeleted 
 			&o.EquipmentCost,
 			&o.Comm,
 			&o.ProductToOrderingId,
+			&o.IsDone,
 			&o.IsActive,
 			&o.Ordering,
 			&o.Operation,
@@ -23785,6 +23797,7 @@ func WOperationToOrderingGetBetweenUpCreatedAt(created_at1, created_at2 string, 
 			&o.EquipmentCost,
 			&o.Comm,
 			&o.ProductToOrderingId,
+			&o.IsDone,
 			&o.IsActive,
 			&o.Ordering,
 			&o.Operation,

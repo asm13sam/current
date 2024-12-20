@@ -3089,6 +3089,7 @@
         "equipment_cost",
         "comm",
         "product_to_ordering_id",
+        "is_done",
         "is_active"
       ],
       "w_columns": [
@@ -3170,6 +3171,12 @@
           "hum": "Виріб до замовлення",
           "form": 1,
           "type": "int"
+        },
+        "is_done": {
+          "def": false,
+          "hum": "Зроблено",
+          "form": 1,
+          "type": "bool"
         },
         "is_active": {
           "def": true,

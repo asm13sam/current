@@ -17,6 +17,7 @@ from PyQt6.QtWidgets import (
     QSplitter,
     QTabWidget,
     QGridLayout,
+    QStyle,
     )
 
 
@@ -155,6 +156,13 @@ class DetailsMatherialToOrderingTable(DetailsItemTable):
 class DetailsOperationToOrderingTable(DetailsItemTable):
     def __init__(self, fields: list = [], values: list = None, buttons=TABLE_BUTTONS, group_id=0):
         super().__init__('operation_to_ordering', '', fields, values, buttons, group_id)
+        rel_btn = QPushButton()
+        pixmapi = QStyle.StandardPixmap.SP_DialogApplyButton
+        icon = self.style().standardIcon(pixmapi)
+        rel_btn.setIcon(icon)
+        rel_btn.setToolTip('Відмітити як зроблені')
+        self.table.hbox.addWidget(rel_btn)
+        rel_btn.clicked.connect(self.set_done)
         
     def dialog(self, value, title):
         i = Item(self.item.name)
@@ -169,6 +177,17 @@ class DetailsOperationToOrderingTable(DetailsItemTable):
                 return
             self.reload()
             self.actionResolved.emit()
+
+    def set_done(self):
+        values = self.table.table.get_selected_values()
+        i = Item('operation_to_ordering')
+        for v in values:
+            i.value = v
+            i.value['is_done'] = True
+            err = i.save()
+            if err:
+                error(err)
+        self.reload()
 
 
 class ProductView(QWidget):
