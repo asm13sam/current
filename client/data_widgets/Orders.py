@@ -1295,6 +1295,7 @@ class ProductsTab(QWidget):
     
     def create_item_to_order(self, value, order_id=0):
         item_type = self.get_type_of_value(value)
+        print('creating', item_type)
         if not item_type:
             return
         if item_type == 'product':
@@ -1307,9 +1308,10 @@ class ProductsTab(QWidget):
             value[f'{item_type}_to_ordering']['ordering_id'] = self.current_ordering.value['id']
         item_to_order = Item(f'{item_type}_to_ordering')
         item_to_order.value = value[f'{item_type}_to_ordering']
+        item_to_order.value['id'] = 0
         err = item_to_order.save()
         if err:
-            error(err)
+            error(f"При створенні {value[f'{item_type}_to_ordering'][item_type]}: {err}")
             return
         value[f'{item_type}_to_ordering'] = item_to_order.value
         return value
