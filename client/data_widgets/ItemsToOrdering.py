@@ -417,7 +417,7 @@ class CheckFormDialog(CustomFormDialog):
         cbox_check.value['cash_sum'] = price
         cbox_check.value['contragent_id'] = self.ordering_value['contragent_id']
         cbox_check.value['ordering_id'] = self.ordering_value['id']
-        cbox_check.value['based_on'] = self.ordering_value['document_uid']
+        cbox_check.value['based_on'] = f"ordering.{self.ordering_value['id']}"
         cbox_check.value['name'] = f'Чек до зам. {self.ordering_value["id"]}'
         cbox_check.value['discount'] = discount
         check_form = CustomForm(cbox_check.model, value=cbox_check.value, fields=cbox_check.columns)
@@ -606,7 +606,7 @@ class InvoiceFormDialog(CustomFormDialog):
         invoice.value['cash_sum'] = round(self.ordering_value['cost'])
         invoice.value['contragent_id'] = self.ordering_value['contragent_id']
         invoice.value['contact_id'] = self.ordering_value['contact_id']
-        invoice.value['based_on'] = self.ordering_value['document_uid']
+        invoice.value['based_on'] = f"ordering.{self.ordering_value['id']}"
         invoice.value['ordering_id'] = self.ordering_value['id']
         invoice.value['name'] = f'Рахунок до зам. {self.ordering_value["id"]}'
         invoice.value['discount'] = -self.ordering_value['profit']
@@ -808,7 +808,7 @@ class WhsInFormDialog(CustomFormDialog):
     def __init__(self, cur_value, m2o_values):
         whs_in = Item('whs_in')
         whs_in.create_default()
-        whs_in.value["based_on"] = cur_value['document_uid']
+        whs_in.value["based_on"] = f"ordering.{cur_value['id']}"
         whs_in.value["contragent_id"] = cur_value["contragent_id"]
         whs_in.value["contact_id"] = cur_value["contact_id"]
         whs_in.value["comm"] = f'авт. до {cur_value["name"]}'
@@ -983,7 +983,7 @@ class ItemsToOrdering(QSplitter):
         self.o2os.actionResolved.connect(self.update_sum)
         self.p2os.actionResolved.connect(self.on_product_changed)
 
-        self.doc_table = DocsTable()
+        self.doc_table = DocsTable('ordering')
         self.orderings.add_doc_table(self.doc_table)
 
         cash_out_btn = QPushButton('Створити ВКО')
@@ -1262,7 +1262,7 @@ class ItemsToOrdering(QSplitter):
         
         cash_out = Item('cash_out')
         cash_out.create_default()
-        cash_out.value["based_on"] = cur_value['document_uid']
+        cash_out.value["based_on"] = f"ordering.{cur_value['id']}"
         cash_out.value["contragent_id"] = cur_value["contragent_id"]
         cash_out.value["contact_id"] = cur_value["contact_id"]
         cash_out.value["cash_sum"] = cur_value["cost"]
@@ -1284,7 +1284,7 @@ class ItemsToOrdering(QSplitter):
         payed = self.doc_table.calc_by_type('cash_in')
         cash_in = Item('cash_in')
         cash_in.create_default()
-        cash_in.value["based_on"] = cur_value['document_uid']
+        cash_in.value["based_on"] = f"ordering.{cur_value['id']}"
         cash_in.value["contragent_id"] = cur_value["contragent_id"]
         cash_in.value["contact_id"] = cur_value["contact_id"]
         cash_in.value["comm"] = f'авт. до {cur_value["name"]}'
@@ -1306,7 +1306,7 @@ class ItemsToOrdering(QSplitter):
             return
         whs_out = Item('whs_out')
         whs_out.create_default()
-        whs_out.value["based_on"] = cur_value['document_uid']
+        whs_out.value["based_on"] = f"ordering.{cur_value['id']}"
         whs_out.value["contragent_id"] = app.config["contragent to production"]
         whs_out.value["contact_id"] = app.config["contact to production"]
         whs_out.value["comm"] = f'авт. до {cur_value["name"]}'
@@ -1422,7 +1422,7 @@ class ItemsToOrdering(QSplitter):
 
         whs_in = Item('whs_in')
         whs_in.create_default()
-        whs_in.value["based_on"] = cur_value['document_uid']
+        whs_in.value["based_on"] = f"ordering.{cur_value['id']}"
         whs_in.value["contragent_id"] = cur_value["contragent_id"]
         whs_in.value["contact_id"] = cur_value["contact_id"]
         whs_in.value["comm"] = f'авт. до {cur_value["name"]}'
@@ -2102,7 +2102,7 @@ class ToOrdering(QSplitter):
         self.details_tree.orderingChanged.connect(self.update_sum)
         self.ordering_table.actionResolved.connect(self.reload)
         
-        self.doc_table = DocsTable()
+        self.doc_table = DocsTable('ordering')
         self.ordering_table.add_doc_table(self.doc_table)
 
     def reload(self, values=None):

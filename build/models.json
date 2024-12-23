@@ -13,39 +13,6 @@
     "operation_to_ordering"
   ],
   "models": {
-    "document": {
-      "hum": "Документ",
-      "rights": "DOC",
-      "message": 0,
-      "fkeys": {},
-      "columns": [
-        "id",
-        "doc_type",
-        "is_active"
-      ],
-      "w_columns": [],
-      "model": {
-        "id": {
-          "def": 0,
-          "hum": "Номер",
-          "form": 0,
-          "type": "int"
-        },
-        "doc_type": {
-          "def": "",
-          "hum": "Тип",
-          "form": 0,
-          "type": "str"
-        },
-        "is_active": {
-          "def": true,
-          "hum": "Діючий",
-          "form": 0,
-          "type": "bool"
-        }
-      },
-      "w_model": {}
-    },
     "measure": {
       "hum": "Од. виміру",
       "rights": "CATALOG",
@@ -1765,22 +1732,22 @@
         {
           "table": "cash_out",
           "filter": "based_on",
-          "filter_value": "document_uid"
+          "filter_value": "id"
         },
         {
           "table": "cash_in",
           "filter": "based_on",
-          "filter_value": "document_uid"
+          "filter_value": "id"
         },
         {
           "table": "whs_out",
           "filter": "based_on",
-          "filter_value": "document_uid"
+          "filter_value": "id"
         },
         {
           "table": "whs_in",
           "filter": "based_on",
-          "filter_value": "document_uid"
+          "filter_value": "id"
         }
       ],
       "between": [
@@ -1817,7 +1784,6 @@
       },
       "columns": [
         "id",
-        "document_uid",
         "name",
         "created_at",
         "deadline_at",
@@ -1848,12 +1814,6 @@
         "id": {
           "def": 0,
           "hum": "Номер",
-          "form": 0,
-          "type": "int"
-        },
-        "document_uid": {
-          "def": 0,
-          "hum": "Код документа",
           "form": 0,
           "type": "int"
         },
@@ -2205,7 +2165,6 @@
       },
       "columns": [
         "id",
-        "document_uid",
         "ordering_id",
         "based_on",
         "owner_id",
@@ -2235,12 +2194,6 @@
           "form": 0,
           "type": "int"
         },
-        "document_uid": {
-          "def": 0,
-          "hum": "Код документа",
-          "form": 0,
-          "type": "int"
-        },
         "ordering_id": {
           "def": 0,
           "hum": "Замовлення",
@@ -2248,10 +2201,10 @@
           "type": "int"
         },
         "based_on": {
-          "def": 0,
+          "def": "",
           "hum": "За документом",
           "form": 0,
-          "type": "int"
+          "type": "str"
         },
         "owner_id": {
           "def": 0,
@@ -3565,7 +3518,6 @@
         "checkbox_uid",
         "user_id",
         "contragent_id",
-        "document_uid",
         "ordering_id",
         "based_on",
         "created_at",
@@ -3617,12 +3569,6 @@
           "form": 2,
           "type": "int"
         },
-        "document_uid": {
-          "def": 0,
-          "hum": "Код документа",
-          "form": 0,
-          "type": "int"
-        },
         "ordering_id": {
           "def": 0,
           "hum": "Замовлення",
@@ -3630,10 +3576,10 @@
           "type": "int"
         },
         "based_on": {
-          "def": 0,
+          "def": "",
           "hum": "За документом",
           "form": 0,
-          "type": "int"
+          "type": "str"
         },
         "created_at": {
           "def": "date",
@@ -3871,7 +3817,6 @@
       },
       "columns": [
         "id",
-        "document_uid",
         "name",
         "cash_id",
         "user_id",
@@ -3901,12 +3846,6 @@
           "form": 0,
           "type": "int"
         },
-        "document_uid": {
-          "def": 0,
-          "hum": "Код документа",
-          "form": 0,
-          "type": "int"
-        },
         "name": {
           "def": "ПКО",
           "hum": "Назва",
@@ -3926,10 +3865,10 @@
           "type": "int"
         },
         "based_on": {
-          "def": 0,
+          "def": "",
           "hum": "За документом",
           "form": 0,
-          "type": "int"
+          "type": "str"
         },
         "cbox_check_id": {
           "def": 0,
@@ -4093,7 +4032,6 @@
       },
       "columns": [
         "id",
-        "document_uid",
         "name",
         "cash_id",
         "user_id",
@@ -4123,12 +4061,6 @@
           "form": 0,
           "type": "int"
         },
-        "document_uid": {
-          "def": 0,
-          "hum": "Код документа",
-          "form": 0,
-          "type": "int"
-        },
         "name": {
           "def": "ВКО",
           "hum": "Назва",
@@ -4148,10 +4080,10 @@
           "type": "int"
         },
         "based_on": {
-          "def": 0,
+          "def": "",
           "hum": "За документом",
           "form": 0,
-          "type": "int"
+          "type": "str"
         },
         "cbox_check_id": {
           "def": 0,
@@ -4322,17 +4254,17 @@
         {
           "table": "cash_out",
           "filter": "based_on",
-          "filter_value": "document_uid"
+          "filter_value": "id"
         },
         {
           "table": "cash_in",
           "filter": "based_on",
-          "filter_value": "document_uid"
+          "filter_value": "id"
         },
         {
           "table": "whs_out",
           "filter": "based_on",
-          "filter_value": "document_uid"
+          "filter_value": "id"
         }
       ],
       "between": [
@@ -4369,7 +4301,6 @@
       },
       "columns": [
         "id",
-        "document_uid",
         "name",
         "based_on",
         "whs_id",
@@ -4400,12 +4331,6 @@
           "form": 0,
           "type": "int"
         },
-        "document_uid": {
-          "def": 0,
-          "hum": "Код документа",
-          "form": 0,
-          "type": "int"
-        },
         "name": {
           "def": "ПН",
           "hum": "Назва",
@@ -4413,10 +4338,10 @@
           "type": "str"
         },
         "based_on": {
-          "def": 0,
+          "def": "",
           "hum": "За документом",
-          "form": 1,
-          "type": "int"
+          "form": 0,
+          "type": "str"
         },
         "whs_id": {
           "def": 0,
@@ -4594,7 +4519,6 @@
       },
       "columns": [
         "id",
-        "document_uid",
         "name",
         "based_on",
         "whs_id",
@@ -4622,12 +4546,6 @@
           "form": 0,
           "type": "int"
         },
-        "document_uid": {
-          "def": 0,
-          "hum": "Код документа",
-          "form": 0,
-          "type": "int"
-        },
         "name": {
           "def": "ВН",
           "hum": "Назва",
@@ -4635,10 +4553,10 @@
           "type": "str"
         },
         "based_on": {
-          "def": 0,
+          "def": "",
           "hum": "За документом",
           "form": 0,
-          "type": "int"
+          "type": "str"
         },
         "whs_id": {
           "def": 0,
@@ -5484,7 +5402,6 @@
       },
       "columns": [
         "id",
-        "document_uid",
         "name",
         "project_group_id",
         "user_id",
@@ -5514,12 +5431,6 @@
         "id": {
           "def": 0,
           "hum": "Номер",
-          "form": 0,
-          "type": "int"
-        },
-        "document_uid": {
-          "def": 0,
-          "hum": "Код документа",
           "form": 0,
           "type": "int"
         },
