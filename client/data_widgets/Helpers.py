@@ -255,6 +255,10 @@ class ProductToOrderingForm(CustomForm):
         if value:
             self.product_selected(is_new=False)
 
+    def reload(self, value):
+        print('before reload')
+        return super().reload(value)
+    
     def size_changed(self):
         self.product_value = self.widgets['product_id'].full_value()
         self.numbers_to_product.values.sort(key=lambda v: v['size'], reverse=True)

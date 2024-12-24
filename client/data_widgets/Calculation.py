@@ -20,7 +20,7 @@ from data.app import App
 from data.model import Item
 from widgets.Dialogs import error
 from common.params import FULL_VALUE_ROLE
-from widgets.Form import CustomFormDialog, Selector
+from widgets.Form import CustomFormDialog, Selector, NumWidget
 from widgets.ButtonsBlock import ButtonsBlock
 from widgets.Tree import Tree
 from data_widgets.Helpers import (
@@ -422,7 +422,9 @@ class ProductExtra:
         for k, val in value['matherial_extra'].items():
             for v in val:
                 if k == 'default' or v['matherial_to_product']['is_used']:
-                    total += v['matherial_to_ordering']['price'] 
+                    print('mn>>>', v['matherial_to_product']['number'], v['matherial_to_ordering']['number'])
+                    pk = v['matherial_to_product']['number'] / v['matherial_to_ordering']['number']
+                    total += v['matherial_to_ordering']['price'] / pk 
                     matherials_price += v['matherial']['price'] * number * v['matherial_to_product']['number']
         for k, val in value['operation_extra'].items():
             for v in val:
@@ -566,6 +568,9 @@ class ProductView(QWidget):
                     if v['matherial']['color_group_id']:
                         w = self.create_color_selector(v)
                         self.box.addWidget(w)
+                    if v['matherial_to_product']['ask_num']:
+                        nw = self.create_number_widget(v, 'matherial')
+                        self.box.addWidget(nw)
                 continue
             # matherial multiselect
             if list_items[0]['matherial_to_product']['is_multiselect']:
@@ -730,6 +735,28 @@ class ProductView(QWidget):
         color = w.full_value()
         value['matherial_to_ordering']['color_id'] = color['id']
         value['matherial_to_ordering']['color'] = color['name']
+
+    def create_number_widget(self, value, name):
+        w = QWidget()
+        l = QHBoxLayout()
+        w.setLayout(l)
+        l.addWidget(QLabel(value[name]['name']))
+        nw = NumWidget(value[name]['measure'])
+        l.addWidget(nw)
+        nw.set_value(value[f'{name}_to_ordering']['number'])
+        nw.valChanged.connect(
+            lambda w=nw, value=value, name=name: 
+                self.number_changed(w, value, name)
+            )
+        return w
+    
+    def number_changed(self, w:NumWidget, value: dict, name: str):
+        value[f'{name}_to_ordering']['number'] = w.value()
+        # self.product.recalc_num()
+        self.product.recalc()
+        print('pw', self.product.value['product_extra']['product_to_ordering']['cost'])
+        # self.reload()
+        self.productChanged.emit()
 
     def multilist_changed(self, item, name):
         v_uid = item.data(FULL_VALUE_ROLE)
@@ -973,6 +1000,7 @@ class Calculator(QSplitter):
             )
 
     def form_size_changed(self, width, length, pieces, number):
+        print('call form size changed')
         p2o = self.current_item.value['product_extra']['product_to_ordering']
         p2o['width'] = width
         p2o['length'] = length
@@ -992,8 +1020,10 @@ class Calculator(QSplitter):
 
     def product_changed(self):
         self.pw.reload()
+        print('pw reloaded')
         persent = self.form.widgets['persent'].value()
         self.form.reload(self.current_item.value['product_extra']['product_to_ordering'])
+        print('form reloaded')
         self.form.widgets['persent'].set_value(persent)
         self.form.persent_changed()
 
