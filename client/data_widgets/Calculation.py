@@ -428,8 +428,8 @@ class ProductExtra:
             for v in val:
                 if k == 'default' or v['matherial_to_product']['is_used']:
                     print('mn>>>', v['matherial_to_product']['number'], v['matherial_to_ordering']['number'])
-                    pk = v['matherial_to_product']['number'] / v['matherial_to_ordering']['number']
-                    total += v['matherial_to_ordering']['price'] / pk 
+                    # pk = v['matherial_to_product']['number'] / v['matherial_to_ordering']['number']
+                    total += v['matherial_to_ordering']['price'] *v['matherial_to_product']['number'] #/ pk 
                     matherials_price += v['matherial']['price'] * number * v['matherial_to_product']['number']
         for k, val in value['operation_extra'].items():
             for v in val:
@@ -748,7 +748,7 @@ class ProductView(QWidget):
         l.addWidget(QLabel(value[name]['name']))
         nw = NumWidget(value[name]['measure'])
         l.addWidget(nw)
-        nw.set_value(value[f'{name}_to_ordering']['number'])
+        nw.set_value(value[f'{name}_to_product']['number'])
         nw.valChanged.connect(
             lambda w=nw, value=value, name=name: 
                 self.number_changed(w, value, name)
@@ -756,8 +756,8 @@ class ProductView(QWidget):
         return w
     
     def number_changed(self, w:NumWidget, value: dict, name: str):
-        value[f'{name}_to_ordering']['number'] = w.value()
-        # self.product.recalc_num()
+        value[f'{name}_to_product']['number'] = w.value()
+        self.product.recalc_num()
         self.product.recalc()
         print('pw', self.product.value['product_extra']['product_to_ordering']['cost'])
         # self.reload()
