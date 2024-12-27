@@ -320,9 +320,11 @@ class ProductExtra:
                     else:
                         mat_number = number
                     if v['matherial']['measure_id'] == app.config["measure square"] and width:
-                        k = math.sqrt(v['matherial_to_product']['number'])
-                        v['matherial_to_ordering']['width'] = int(width * k)
-                        v['matherial_to_ordering']['length'] = int(length * k)
+                        # k = math.sqrt(v['matherial_to_product']['number'])
+                        # v['matherial_to_ordering']['width'] = int(width * k)
+                        # v['matherial_to_ordering']['length'] = int(length * k)
+                        v['matherial_to_ordering']['width'] = width
+                        v['matherial_to_ordering']['length'] = length
                         v['matherial_to_ordering']['pieces'] = pieces
                     if v['matherial_to_product']['add_to_price']:
                         mat_number = v['matherial_to_product']['number']
@@ -341,6 +343,7 @@ class ProductExtra:
                     v['operation_to_ordering']['cost'] = op_number * v['operation_to_ordering']['price']
                     v['operation_to_ordering']["user_sum"] = op_number * v['operation']['price'] * v['operation_to_product']['number']
                     v['operation_to_ordering']["equipment_cost"] = op_number * v['operation_to_product']['equipment_cost']
+                    v['operation_to_ordering']["number"] = op_number * v['operation_to_product']['number']
 
         for k, val in value['product_deep'].items():
             for v in val:
@@ -350,9 +353,11 @@ class ProductExtra:
                     else:
                         prod_number = number
                     if v['product_extra']['product']['measure_id'] == app.config["measure square"] and width:
-                        k = math.sqrt(v['product_extra']['product_to_product']['number'])
-                        v['product_extra']['product_to_ordering']['width'] = int(width * k)
-                        v['product_extra']['product_to_ordering']['length'] = int(length * k)
+                        # k = math.sqrt(v['product_extra']['product_to_product']['number'])
+                        # v['product_extra']['product_to_ordering']['width'] = int(width * k)
+                        # v['product_extra']['product_to_ordering']['length'] = int(length * k)
+                        v['product_extra']['product_to_ordering']['width'] = width
+                        v['product_extra']['product_to_ordering']['length'] = length
                         v['product_extra']['product_to_ordering']['pieces'] = pieces
                     
                     if v['product_extra']['product_to_product']['add_to_price']:

@@ -647,7 +647,7 @@ class InvoiceFormDialog(CustomFormDialog):
                 v["measure_id"] = m.value['measure_id']
                 v["measure"] = m.value['measure']
             v["cost"] = round(m2o['cost'] * k)
-            v["price"] = round(v['cost'] / v['number'], 3)
+            v["price"] = round(v['cost'] / v['number'], 2)
             v["is_active"] = True
             values.append(v)
 
@@ -697,7 +697,7 @@ class InvoiceFormDialog(CustomFormDialog):
                 v["measure"] = p.value['measure']
                 v["measure_id"] = p.value['measure_id']
             v["cost"] = p2o['cost'] * k
-            v["price"] = round(v['cost'] / v['number'], 3)
+            v["price"] = round(v['cost'] / v['number'], 2)
             v["is_active"] = True
             values.append(v)
                     
@@ -705,7 +705,7 @@ class InvoiceFormDialog(CustomFormDialog):
             cost -= v['cost']
         if cost:
             values[-1]['cost'] += cost
-            values[-1]['price'] = round(values[-1]['cost'] / values[-1]['number'], 3)
+            values[-1]['price'] = round(values[-1]['cost'] / values[-1]['number'], 2)
         table = TableWControls(
             invoice_item.model_w, 
             values=values, 
@@ -1966,7 +1966,7 @@ class TreeItemToOrdering(QSplitter):
                 "id": item.value["id"],
                 "product_to_ordering_id": item.value['product_to_ordering_id'],
                 "name": item.value['name'] if 'name' in item.value else item.value[name],
-                "cost": item.value["cost"],
+                "cost": round(item.value["cost"], 2),
                 "type": item.name,
                 "type_hum": item.hum,
                 "value": item.value,
@@ -2047,6 +2047,8 @@ class TreeItemToOrdering(QSplitter):
 
     def calc_sum(self):
         total = 0
+        if not self.tree.dataset:
+            return total
         for child in self.tree.dataset[0]:
             total += child['cost']
         return total
