@@ -26,6 +26,11 @@ type ProductComplex struct {
 	Uid             int                         `json:"uid"`
 }
 
+const (
+	LINEAR_MEASURE_ID = 6
+	SQUARE_MEASURE_ID = 5
+)
+
 func ProductComplexGet(productId int) (ProductComplex, error) {
 	var err error
 	var pc ProductComplex
@@ -179,24 +184,48 @@ func ProductToOrderingCreateDefault(p ProductToOrdering, isCopyCenter bool) (Pro
 		if m2p.ListName != "default" {
 			continue
 		}
+		mat_num := 0.0
+		m2oWidth := 0.0
+		m2oLength := 0.0
+		m2oPieces := 1
+		if p.Width > 0 {
+			m, err := MatherialGet(m2p.MatherialId, nil)
+			if err != nil {
+				return p, err
+			}
+			if m.MeasureId == LINEAR_MEASURE_ID {
+				mat_num = (p.Width + p.Length) * 2.0 * float64(p.Pieces) / 1000
+			} else {
+				mat_num = p.Number
+			}
+			if m.MeasureId == SQUARE_MEASURE_ID {
+				m2oWidth = p.Width
+				m2oLength = p.Length
+				m2oPieces = p.Pieces
+			}
+		}
+		if m2p.AddToPrice {
+			mat_num = m2p.Number
+		}
 		m2o := MatherialToOrdering{
 			Id:                  0,
 			OrderingId:          p.OrderingId,
 			MatherialId:         m2p.MatherialId,
-			Width:               0.0,
-			Length:              0.0,
-			Pieces:              1,
+			Width:               m2oWidth,
+			Length:              m2oLength,
+			Pieces:              m2oPieces,
 			ColorId:             0,
 			UserId:              p.UserId,
-			Number:              p.Number * m2p.Number,
+			Number:              mat_num * m2p.Number,
 			Price:               m2p.Cost,
 			Persent:             0.0,
 			Profit:              0.0,
-			Cost:                p.Number * m2p.Cost,
+			Cost:                mat_num * m2p.Cost,
 			Comm:                "",
 			ProductToOrderingId: p.Id,
 			IsActive:            true,
 		}
+
 		_, err = MatherialToOrderingCreate(m2o, nil)
 		if err != nil {
 			return p, err
@@ -214,22 +243,34 @@ func ProductToOrderingCreateDefault(p ProductToOrdering, isCopyCenter bool) (Pro
 		if err != nil {
 			return p, err
 		}
+		op_num := 0.0
+		if p.Width > 0 {
+			if o.MeasureId == LINEAR_MEASURE_ID {
+				op_num = (p.Width + p.Length) * 2.0 * float64(p.Pieces) / 1000
+			}
+		} else {
+			op_num = p.Number
+		}
+		if o2p.AddToPrice {
+			op_num = o2p.Number
+		}
 		o2o := OperationToOrdering{
 			Id:                  0,
 			OrderingId:          p.OrderingId,
 			OperationId:         o2p.OperationId,
 			UserId:              p.UserId,
-			Number:              p.Number * o2p.Number,
+			Number:              op_num * o2p.Number,
 			Price:               o2p.Cost,
-			UserSum:             o.Price * p.Number,
-			Cost:                p.Number * o2p.Cost,
+			UserSum:             op_num * o.Price * p.Number,
+			Cost:                op_num * o2p.Cost,
 			EquipmentId:         o2p.EquipmentId,
-			EquipmentCost:       o2p.EquipmentCost * p.Number,
+			EquipmentCost:       op_num * o2p.EquipmentCost,
 			Comm:                "",
 			ProductToOrderingId: p.Id,
 			IsDone:              isCopyCenter,
 			IsActive:            true,
 		}
+
 		_, err = OperationToOrderingCreate(o2o, nil)
 		if err != nil {
 			return p, err
