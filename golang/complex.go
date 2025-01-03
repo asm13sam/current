@@ -184,7 +184,7 @@ func ProductToOrderingCreateDefault(p ProductToOrdering, isCopyCenter bool) (Pro
 		if m2p.ListName != "default" {
 			continue
 		}
-		mat_num := 0.0
+		mat_num := p.Number
 		m2oWidth := 0.0
 		m2oLength := 0.0
 		m2oPieces := 1
@@ -195,8 +195,6 @@ func ProductToOrderingCreateDefault(p ProductToOrdering, isCopyCenter bool) (Pro
 			}
 			if m.MeasureId == LINEAR_MEASURE_ID {
 				mat_num = (p.Width + p.Length) * 2.0 * float64(p.Pieces) / 1000
-			} else {
-				mat_num = p.Number
 			}
 			if m.MeasureId == SQUARE_MEASURE_ID {
 				m2oWidth = p.Width
