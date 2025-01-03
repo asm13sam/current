@@ -259,7 +259,7 @@ func ProductToOrderingCreateDefault(p ProductToOrdering, isCopyCenter bool) (Pro
 			UserId:              p.UserId,
 			Number:              op_num * o2p.Number,
 			Price:               o2p.Cost,
-			UserSum:             op_num * o.Price * p.Number,
+			UserSum:             op_num * o.Price,
 			Cost:                op_num * o2p.Cost,
 			EquipmentId:         o2p.EquipmentId,
 			EquipmentCost:       op_num * o2p.EquipmentCost,
