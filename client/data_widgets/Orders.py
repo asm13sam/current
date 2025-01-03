@@ -1018,17 +1018,18 @@ class ProductsTab(QWidget):
         receipt = self.create_receipt(item, summa=summa, summa_qr=summa_qr, discount=discount)
         if receipt is None:
             return
-        print(receipt)
         res = self.check.create_receipt(receipt)
         if not res:
             error("Помилка при створенні чеку в Checkbox")
             return
         if 'error' in res:
             error(f"При створенні чеку в Checkbox: {res['error']}")
-            print(receipt)
             return
         cbox_check.value["checkbox_uid"] = res['id']
-        cbox_check.value["cash_sum"] = self.summa - discount
+        # if item is not None:
+        #     cbox_check.value["cash_sum"] = summa - discount
+        # else:
+        #     cbox_check.value["cash_sum"] = self.summa - discount
         err = cbox_check.save()
         if err:
             error(err)
@@ -1075,6 +1076,10 @@ class ProductsTab(QWidget):
             
         if not cin_item_cash and not cin_item_qr:
             return
+        cbox_check.value["cash_sum"] = self.summa - discount
+        err = cbox_check.save()
+        if err:
+            error(err)
         
         self.current_ordering.value['price'] += self.summa - discount
         self.current_ordering.value['cost'] += self.summa - discount
