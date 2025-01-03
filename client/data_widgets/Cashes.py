@@ -9,6 +9,8 @@ from PyQt6.QtWidgets import (
     QSplitter,
     )
 
+from datetime import datetime
+
 from data.model import Item
 from data.app import App
 from widgets.Dialogs import error
@@ -47,6 +49,9 @@ class CashesTab(QWidget):
         cashes_move = QPushButton('Перевести до каси')
         self.hbox.addWidget(cashes_move)
         cashes_move.clicked.connect(self.cash_move)
+        cash_recalc = QPushButton('Оновити баланс')
+        self.hbox.addWidget(cash_recalc)
+        cash_recalc.clicked.connect(self.cash_recalc)
         self.hbox.addStretch()
         
         self.hbox.addWidget(QLabel('Залишок'))
@@ -151,8 +156,22 @@ class CashesTab(QWidget):
             error(err)
             return
         self.cash_table.reload()
+
+    def cash_recalc(self):
+        cur_id = self.current_cash['id']
+        cash_in = Item('cash_in')
+        cash_out = Item('cash_out')
+        total_in = cash_in.get_sum_filter('cash_id', cur_id, 'is_realized', 1)
+        total_out = cash_out.get_sum_filter('cash_id', cur_id, 'is_realized', 1)        
+        self.current_cash['total'] = total_in['value']['sum'] - total_out['value']['sum']
+        cash = Item('cash')
+        cash.value = self.current_cash
+        err = cash.save()
+        if err:
+            error(err)
+            return
+        self.cash_table.reload()
         
-    
     def current_cash_changed(self, cash_value):
         self.current_cash = cash_value
         self.period_selected()

@@ -6665,18 +6665,18 @@ func OrderingGetBetweenDeadlineAt(deadline_at1, deadline_at2 string, withDeleted
 	return res, nil
 }
 
-func OrderingCashSumGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func OrderingCashSumGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(cash_sum) FROM ordering WHERE is_active = 1 AND is_realized = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func OrderingGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func OrderingGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -6686,12 +6686,12 @@ func OrderingGetSumByFilter(field string, id int, field2 string, id2 int) (map[s
 		query = fmt.Sprintf("SELECT SUM(cash_sum) FROM ordering WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type Owner struct {
@@ -7650,18 +7650,18 @@ func InvoiceGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 	return res, nil
 }
 
-func InvoiceCashSumGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func InvoiceCashSumGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(cash_sum) FROM invoice WHERE is_active = 1 AND is_realized = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func InvoiceGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func InvoiceGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -7671,12 +7671,12 @@ func InvoiceGetSumByFilter(field string, id int, field2 string, id2 int) (map[st
 		query = fmt.Sprintf("SELECT SUM(cash_sum) FROM invoice WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type ItemToInvoice struct {
@@ -8045,18 +8045,18 @@ func ItemToInvoiceRealized(id int, tx *sql.Tx) (ItemToInvoice, error) {
 	return i, nil
 }
 
-func ItemToInvoiceCostGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func ItemToInvoiceCostGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(cost) FROM item_to_invoice WHERE is_active = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func ItemToInvoiceGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func ItemToInvoiceGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -8066,12 +8066,12 @@ func ItemToInvoiceGetSumByFilter(field string, id int, field2 string, id2 int) (
 		query = fmt.Sprintf("SELECT SUM(cost) FROM item_to_invoice WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type ProductToOrderingStatus struct {
@@ -8718,18 +8718,18 @@ func ProductToOrderingTestForExistingField(fieldName string) bool {
 	return false
 }
 
-func ProductToOrderingCostGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func ProductToOrderingCostGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(cost) FROM product_to_ordering WHERE is_active = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func ProductToOrderingGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func ProductToOrderingGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -8739,12 +8739,12 @@ func ProductToOrderingGetSumByFilter(field string, id int, field2 string, id2 in
 		query = fmt.Sprintf("SELECT SUM(cost) FROM product_to_ordering WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type MatherialToOrdering struct {
@@ -9091,18 +9091,18 @@ func MatherialToOrderingTestForExistingField(fieldName string) bool {
 	return false
 }
 
-func MatherialToOrderingCostGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func MatherialToOrderingCostGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(cost) FROM matherial_to_ordering WHERE is_active = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func MatherialToOrderingGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func MatherialToOrderingGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -9112,12 +9112,12 @@ func MatherialToOrderingGetSumByFilter(field string, id int, field2 string, id2 
 		query = fmt.Sprintf("SELECT SUM(cost) FROM matherial_to_ordering WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type MatherialToProduct struct {
@@ -9443,18 +9443,18 @@ func MatherialToProductTestForExistingField(fieldName string) bool {
 	return false
 }
 
-func MatherialToProductCostGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func MatherialToProductCostGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(cost) FROM matherial_to_product WHERE is_active = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func MatherialToProductGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func MatherialToProductGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -9464,12 +9464,12 @@ func MatherialToProductGetSumByFilter(field string, id int, field2 string, id2 i
 		query = fmt.Sprintf("SELECT SUM(cost) FROM matherial_to_product WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type OperationToOrdering struct {
@@ -9884,18 +9884,18 @@ func OperationToOrderingRealized(id int, tx *sql.Tx) (OperationToOrdering, error
 	return o, nil
 }
 
-func OperationToOrderingCostGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func OperationToOrderingCostGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(cost) FROM operation_to_ordering WHERE is_active = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func OperationToOrderingGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func OperationToOrderingGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -9905,12 +9905,12 @@ func OperationToOrderingGetSumByFilter(field string, id int, field2 string, id2 
 		query = fmt.Sprintf("SELECT SUM(cost) FROM operation_to_ordering WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type OperationToProduct struct {
@@ -10257,18 +10257,18 @@ func OperationToProductTestForExistingField(fieldName string) bool {
 	return false
 }
 
-func OperationToProductCostGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func OperationToProductCostGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(cost) FROM operation_to_product WHERE is_active = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func OperationToProductGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func OperationToProductGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -10278,12 +10278,12 @@ func OperationToProductGetSumByFilter(field string, id int, field2 string, id2 i
 		query = fmt.Sprintf("SELECT SUM(cost) FROM operation_to_product WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type ProductToProduct struct {
@@ -10616,18 +10616,18 @@ func ProductToProductTestForExistingField(fieldName string) bool {
 	return false
 }
 
-func ProductToProductCostGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func ProductToProductCostGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(cost) FROM product_to_product WHERE is_active = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func ProductToProductGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func ProductToProductGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -10637,12 +10637,12 @@ func ProductToProductGetSumByFilter(field string, id int, field2 string, id2 int
 		query = fmt.Sprintf("SELECT SUM(cost) FROM product_to_product WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type CboxCheck struct {
@@ -11330,18 +11330,18 @@ func ItemToCboxCheckTestForExistingField(fieldName string) bool {
 	return false
 }
 
-func ItemToCboxCheckCostGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func ItemToCboxCheckCostGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(cost) FROM item_to_cbox_check WHERE is_active = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func ItemToCboxCheckGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func ItemToCboxCheckGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -11351,12 +11351,12 @@ func ItemToCboxCheckGetSumByFilter(field string, id int, field2 string, id2 int)
 		query = fmt.Sprintf("SELECT SUM(cost) FROM item_to_cbox_check WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type CashIn struct {
@@ -11953,18 +11953,18 @@ func CashInGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool
 	return res, nil
 }
 
-func CashInCashSumGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func CashInCashSumGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(cash_sum) FROM cash_in WHERE is_active = 1 AND is_realized = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func CashInGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func CashInGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -11974,12 +11974,12 @@ func CashInGetSumByFilter(field string, id int, field2 string, id2 int) (map[str
 		query = fmt.Sprintf("SELECT SUM(cash_sum) FROM cash_in WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type CashOut struct {
@@ -12576,18 +12576,18 @@ func CashOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted boo
 	return res, nil
 }
 
-func CashOutCashSumGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func CashOutCashSumGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(cash_sum) FROM cash_out WHERE is_active = 1 AND is_realized = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func CashOutGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func CashOutGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -12597,12 +12597,12 @@ func CashOutGetSumByFilter(field string, id int, field2 string, id2 int) (map[st
 		query = fmt.Sprintf("SELECT SUM(cash_sum) FROM cash_out WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type Whs struct {
@@ -13569,18 +13569,18 @@ func WhsInGetBetweenContragentCreatedAt(contragent_created_at1, contragent_creat
 	return res, nil
 }
 
-func WhsInWhsSumGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func WhsInWhsSumGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(whs_sum) FROM whs_in WHERE is_active = 1 AND is_realized = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func WhsInGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func WhsInGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -13590,12 +13590,12 @@ func WhsInGetSumByFilter(field string, id int, field2 string, id2 int) (map[stri
 		query = fmt.Sprintf("SELECT SUM(whs_sum) FROM whs_in WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type WhsOut struct {
@@ -14163,18 +14163,18 @@ func WhsOutGetBetweenCreatedAt(created_at1, created_at2 string, withDeleted bool
 	return res, nil
 }
 
-func WhsOutWhsSumGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func WhsOutWhsSumGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(whs_sum) FROM whs_out WHERE is_active = 1 AND is_realized = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func WhsOutGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func WhsOutGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -14184,12 +14184,12 @@ func WhsOutGetSumByFilter(field string, id int, field2 string, id2 int) (map[str
 		query = fmt.Sprintf("SELECT SUM(whs_sum) FROM whs_out WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type MatherialToWhsIn struct {
@@ -17666,18 +17666,18 @@ func RecordToCounterGetBetweenCreatedAt(created_at1, created_at2 string, withDel
 	return res, nil
 }
 
-func RecordToCounterNumberGetSumBefore(field string, id int, date string) (map[string]int, error) {
+func RecordToCounterNumberGetSumBefore(field string, id int, date string) (map[string]float64, error) {
 	query := fmt.Sprintf("SELECT SUM(number) FROM record_to_counter WHERE is_active = 1 AND %s = ? AND created_at <= ?", field)
-	var sum int
+	var sum float64
 	row := db.QueryRow(query, id, date)
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
-func RecordToCounterGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {
+func RecordToCounterGetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {
 	query := ""
 	var row *sql.Row
 	if field2 == "-" && id2 == 0 {
@@ -17687,12 +17687,12 @@ func RecordToCounterGetSumByFilter(field string, id int, field2 string, id2 int)
 		query = fmt.Sprintf("SELECT SUM(number) FROM record_to_counter WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
 		row = db.QueryRow(query, id, id2)
 	}
-	var sum int
+	var sum float64
 	err := row.Scan(&sum)
 	if err != nil {
-		return map[string]int{"sum": 0}, nil
+		return map[string]float64{"sum": 0.0}, nil
 	}
-	return map[string]int{"sum": sum}, nil
+	return map[string]float64{"sum": sum}, nil
 }
 
 type WmcNumber struct {

@@ -63,6 +63,8 @@ class Window(QWidget):
             {'id': 2, 'login': 'Serhii' , 'name': 'Сергій'},
             {'id': 3, 'login': 'Svitlana' , 'name': 'Світлана'},
             {'id': 5, 'login': 'Vadim' , 'name': 'Вадим'},
+            {'id': 8, 'login': 'Lana' , 'name': 'Лана'},
+            {'id': 9, 'login': 'Admin' , 'name': 'Адмін'},
         ]
         self.users = ComboBoxSelector(values=user_values)
         self.users.selectionChanged.connect(self.change_user)

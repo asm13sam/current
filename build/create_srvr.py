@@ -1267,15 +1267,15 @@ func Get{gtype}{gsum_field}SumBefore(req Req) {{
         check_realiz = ' AND is_realized = 1'
 
     g = f'''
-func {gtype}{gsum_field}GetSumBefore(field string, id int, date string) (map[string]int, error) {{
+func {gtype}{gsum_field}GetSumBefore(field string, id int, date string) (map[string]float64, error) {{
     query := fmt.Sprintf("SELECT SUM({sum_field}) FROM {table} WHERE is_active = 1{check_realiz} AND %s = ? AND created_at <= ?", field)
-    var sum int
+    var sum float64
     row := db.QueryRow(query, id, date)
     err := row.Scan(&sum)
     if err != nil {{
-        return map[string]int{{"sum": 0}}, nil
+        return map[string]float64{{"sum": 0.0}}, nil
     }}
-    return map[string]int{{"sum": sum}}, nil
+    return map[string]float64{{"sum": sum}}, nil
 }}
 '''
     return g, h, m
@@ -1299,7 +1299,7 @@ func Get{gtype}SumByFilter(req Req) {{
     '''
 
     g = f'''
-func {gtype}GetSumByFilter(field string, id int, field2 string, id2 int) (map[string]int, error) {{
+func {gtype}GetSumByFilter(field string, id int, field2 string, id2 int) (map[string]float64, error) {{
     query := ""
     var row *sql.Row
     if field2 == "-" && id2 == 0 {{
@@ -1309,12 +1309,12 @@ func {gtype}GetSumByFilter(field string, id int, field2 string, id2 int) (map[st
         query = fmt.Sprintf("SELECT SUM({sum_field}) FROM {table} WHERE is_active = 1 AND %s = ? AND %s = ?", field, field2)
         row = db.QueryRow(query, id, id2)
     }}
-    var sum int
+    var sum float64
     err := row.Scan(&sum)
     if err != nil {{
-        return map[string]int{{"sum": 0}}, nil
+        return map[string]float64{{"sum": 0.0}}, nil
     }}
-    return map[string]int{{"sum": sum}}, nil
+    return map[string]float64{{"sum": sum}}, nil
 }}
 '''
     return g, h, m

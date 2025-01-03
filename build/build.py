@@ -39,7 +39,7 @@ if len(sys.argv) == 1 or sys.argv[1] == 'tables':
     shutil.copyfile('base.db', '../server/base.db')
     shutil.copyfile('models.json', '../server/models.json')
 
-if len(sys.argv) == 1 or sys.argv[1] == 'srv':
+if len(sys.argv) > 1 and sys.argv[1] == 'srv':
     create_srvr.create_go_models(model, tables)
 
     os.chdir('../golang')

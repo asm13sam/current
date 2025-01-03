@@ -1018,6 +1018,7 @@ class ProductsTab(QWidget):
         receipt = self.create_receipt(item, summa=summa, summa_qr=summa_qr, discount=discount)
         if receipt is None:
             return
+        print(receipt)
         res = self.check.create_receipt(receipt)
         if not res:
             error("Помилка при створенні чеку в Checkbox")
@@ -1193,9 +1194,16 @@ class ProductsTab(QWidget):
                         },
                         "quantity": int(value['number']*1000),
                     }
-            if 'profit' in value and value['profit']:
-                dsc = round(value['profit']*value['number'], 0)
+            if int(value['number']*1000)*price > int(value['cost']*100000):
+                print(int(value['number']*1000)*price, int(value['cost']*100000))
+                dsc = -(int(value['number']*1000)*price-int(value['cost']*100000))/100000
                 good["discounts"] = self.make_discount(dsc)
+            elif 'profit' in value and value['profit']:
+                dsc = round(value['profit']*value['number'], 0)
+                if "discounts" in good:
+                    good["discounts"].append(self.make_discount(dsc)[0])
+                else:    
+                    good["discounts"] = self.make_discount(dsc)
             receipt['goods'].append(good)
         if discount:
             receipt['discounts'] = self.make_discount(-discount)
@@ -1464,6 +1472,10 @@ class ProductsTab(QWidget):
         if err:
             error(err)
             return
+        # cin.realize(cin.value['id'])
+        # if err:
+        #     error(err)
+        #     return
         return cin
     
     def to_ordering(self):
